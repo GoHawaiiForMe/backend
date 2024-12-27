@@ -12,7 +12,7 @@ jobs:
       uses: 8398a7/action-slack@v3
       with:
         status: ${{ job.status }}
-        author_name: Slack
+        author_name: 새로운 PR이 도착했습니다!
         fields: repo,author,message,pullRequest
         if_mention: failure,cancelled
       env:
