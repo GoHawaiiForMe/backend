@@ -12,8 +12,8 @@ jobs:
       uses: 8398a7/action-slack@v3
       with:
         status: ${{ job.status }}
-        author_name: www-be
-        fields: repo,author,ref,pullRequest
+        author_name: Slack
+        fields: repo,author,message,pullRequest
         if_mention: failure,cancelled
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_BE }}
