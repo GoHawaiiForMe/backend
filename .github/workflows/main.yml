@@ -13,7 +13,7 @@ jobs:
       with:
         status: ${{ job.status }}
         author_name: 새로운 PR이 도착했습니다!
-        fields: repo,author,message,pullRequest
+        fields: author,pullRequest
         if_mention: failure,cancelled
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_BE }}
