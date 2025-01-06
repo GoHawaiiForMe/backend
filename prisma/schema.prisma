@@ -1,0 +1,175 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  isDeletedAt DateTime?
+
+  email       String @unique
+  nickName    String @unique
+  phoneNumber String
+  password    String
+
+  role            Role
+  receivedReviews Review[] @relation("owner")
+  writtenReviews  Review[] @relation("writer")
+  followers       Follow[] @relation("maker")
+  followees       Follow[] @relation("dreamer")
+  quotes          Quote[]
+  plans           Plan[]   @relation("isFinal") // 메이커입장: 내가 수행하고 있는, 완료한 플랜 + 지정플랜
+  assignPlans     Plan[]   @relation("isAssign")
+
+  dreamerProfile DreamerProfile?
+  makerProfile   MakerProfile?
+}
+
+model DreamerProfile {
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  isDeletedAt DateTime?
+  tripTypes   TripType[]
+  serviceArea ServiceArea[]
+  image       ProfileImage
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String        @unique
+}
+
+model MakerProfile {
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  isDeletedAt       DateTime?
+  image             ProfileImage
+  serviceTypes      TripType[] //메이커용 트립타입
+  serviceArea       ServiceArea[] //메이커용 서비스 지역
+  gallery           String
+  description       String
+  detailDescription String
+  user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            String        @unique
+}
+
+model Review {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  isDeletedAt DateTime?
+
+  writer   User?   @relation("writer", fields: [writerId], references: [id])
+  writerId String? //연결이 아닌 string으로 받을지 고민
+  owner    User?   @relation("owner", fields: [ownerId], references: [id])
+  ownerId  String?
+
+  rating  Int
+  content String
+  plan    Plan   @relation(fields: [planId], references: [id])
+  planId  String @unique
+}
+
+model Follow {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  isDeletedAt DateTime?
+
+  maker     User?   @relation("maker", fields: [makerId], references: [id], onDelete: SetNull)
+  makerId   String?
+  dreamer   User?   @relation("dreamer", fields: [dreamerId], references: [id], onDelete: SetNull)
+  dreamerId String?
+}
+
+model Plan {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  isDeletedAt DateTime?
+
+  startDate   DateTime
+  endDate     DateTime
+  tripType    TripType
+  serviceArea ServiceArea
+  details     String
+  address     String?
+  status      Status
+  quotes      Quote[]
+  assignees   User[]      @relation("isAssign")
+  dreamer     User?       @relation("isFinal", fields: [dreamerId], references: [id], onDelete: SetNull)
+  dreamerId   String?
+  review      Review?
+}
+
+model Quote {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  isDeletedAt DateTime?
+
+  price       Int
+  content     String
+  plan        Plan    @relation(fields: [planId], references: [id])
+  planId      String
+  maker       User?   @relation(fields: [makerId], references: [id])
+  makerId     String?
+  isConfirmed Boolean @default(false)
+  isAssigned  Boolean @default(false)
+}
+
+enum ProfileImage {
+  DEFAULT_1
+  DEFAULT_2
+  DEFAULT_3
+  DEFAULT_4
+}
+
+enum TripType {
+  FOOD_TOUR
+  SHOPPING
+  RELAXATION
+  CULTURE
+  ACTIVITY
+  FESTIVAL
+}
+
+enum ServiceArea {
+  SEOUL
+  BUSAN
+  INCHEON
+  DAEGU
+  DAEJEON
+  GWANGJU
+  ULSAN
+  SEJONG
+  GYEONGGI
+  GANGWON
+  CHUNGBUK
+  CHUNGNAM
+  JEONBUK
+  JEONNAM
+  GYEONGBUK
+  GYEONGNAM
+  JEJU
+}
+
+enum Role {
+  DREAMER
+  MAKER
+}
+
+enum Status {
+  PENDING
+  CONFIRMED
+  COMPLETED
+}
