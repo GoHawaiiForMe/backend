@@ -6,6 +6,7 @@ import getMongoConfig from '../config/mongo.config';
 import UserModule from './user/user.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtGuard } from './guard/login.guard';
+import FollowModule from './follow/follow.module';
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import { JwtGuard } from './guard/login.guard';
       connectionName: process.env.CONNECTION_NAME
     }),
     PrismaModule,
-    UserModule
+    UserModule,
+    FollowModule
   ],
   controllers: [],
   providers: [
