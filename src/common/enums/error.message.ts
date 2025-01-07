@@ -5,7 +5,9 @@ const enum ErrorMessage {
   USER_UNAUTHORIZED_ID = '존재하지 않는 email 입니다.',
   USER_UNAUTHORIZED_PW = '비밀번호가 일치하지 않습니다.',
   USER_UNAUTHORIZED_TOKEN = '토큰의 유효기간이 만료되었습니다. 로그인이 필요합니다',
-  INVALID_COCONUT = '포인트는 0코코넛 이상이어야 합니다.',
+  USER_FORBIDDEN_NOT_DREAMER = 'DREAMER 역할을 가진 사용자만 이 리소스에 접근할 수 있습니다. 권한을 확인해 주세요.',
+
+  COCONUT_INVALID = '포인트는 0코코넛 이상이어야 합니다.',
 
   TOKEN_UNAUTHORIZED_NOTFOUND = '토큰이 없습니다. 로그인이 필요합니다',
   TOKEN_UNAUTHORIZED_VALIDATION = '유효하지 않은 토큰입니다',
