@@ -2,6 +2,8 @@ import { Role } from 'src/common/types/role.type';
 import { FilteredUserProperties, UserProperties } from '../type/user.types';
 import { ComparePassword, HashingPassword } from '../../common/utility/hashingPassword';
 import { IUser } from './user.interface';
+import BadRequestError from 'src/common/errors/badRequestError';
+import ErrorMessage from 'src/common/enums/error.message';
 
 export default class User implements IUser {
   private readonly id?: string;
@@ -36,6 +38,10 @@ export default class User implements IUser {
   }
 
   update(data: Partial<UserProperties>): Partial<UserProperties> {
+    if (data.coconut < 0) {
+      throw new BadRequestError(ErrorMessage.INVALID_COCONUT);
+    }
+
     this.nickName = data.nickName || this.nickName;
     this.password = data.email || this.password;
     this.phoneNumber = data.phoneNumber || this.phoneNumber;
