@@ -2,11 +2,11 @@ import { FollowProperties } from '../type/follow.types';
 import IFollow from './follow.interface';
 
 export default class Follow implements IFollow {
-  readonly id?: string;
-  makerId: string;
-  dreamerId: string;
-  readonly createdAt?: Date;
-  readonly updatedAt?: Date;
+  private readonly id?: string;
+  private makerId: string;
+  private dreamerId: string;
+  private readonly createdAt?: Date;
+  private readonly updatedAt?: Date;
 
   constructor(follow: FollowProperties) {
     this.id = follow?.id;

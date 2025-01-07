@@ -3,10 +3,9 @@ import FollowRepository from './follow.repository';
 import BadRequestError from 'src/common/errors/badRequestError';
 import ErrorMessage from 'src/common/enums/error.message';
 import Follow from './domain/follow.domain';
-import IFollowService from './interface/follow.service.interface';
 
 @Injectable()
-export default class FollowService implements IFollowService {
+export default class FollowService {
   constructor(private readonly repository: FollowRepository) {}
 
   // 찜 기능: Dreamer -> Maker
@@ -18,7 +17,7 @@ export default class FollowService implements IFollowService {
     }
 
     const data = new Follow({ dreamerId, makerId });
-    return await this.repository.create(data);
+    return await this.repository.create(data.get());
   }
 
   async delete(dreamerId: string, makerId: string): Promise<null> {
@@ -28,6 +27,6 @@ export default class FollowService implements IFollowService {
       throw new BadRequestError(ErrorMessage.FOLLOW_NOT_FOUND);
     }
 
-    return await this.repository.delete(follow[0].id);
+    return await this.repository.delete(follow[0].get().id);
   }
 }
