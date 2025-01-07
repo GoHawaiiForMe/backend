@@ -12,10 +12,10 @@ export default class PlanController {
 
   @Get()
   async getPlans(
-    @User() dreamerId: string,
+    @User() makerId: string,
     @Query() options: PlanQueryOptionDTO
   ): Promise<{ totalCount: number; list: Plan[] }> {
-    const serviceOption: PlanQueryOptions = { ...options, dreamerId };
+    const serviceOption: PlanQueryOptions = { ...options, makerId };
     const { totalCount, list } = await this.planService.getPlans(serviceOption);
     return { totalCount, list };
   }

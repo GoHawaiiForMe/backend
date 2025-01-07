@@ -3,7 +3,7 @@ import { Plan, Role, ServiceArea } from '@prisma/client';
 import PlanRepository from './plan.repository';
 import PlanQueryOptions from './type/planQueryOptions';
 import UserRepository from 'src/user/user.repository';
-import { IDreamerProfile } from 'src/user/domain/profile.interface';
+import { IDreamerProfile, IMakerProfile } from 'src/user/domain/profile.interface';
 import { IUser } from 'src/user/domain/user.interface';
 import ForbiddenError from 'src/common/errors/forbiddenError';
 import ErrorMessage from 'src/common/enums/error.message';
@@ -16,14 +16,14 @@ export default class PlanService {
   ) {}
 
   async getPlans(options: PlanQueryOptions): Promise<{ list: Plan[]; totalCount: number }> {
-    const requestUser: IUser = await this.userRepository.findById(options.dreamerId);
+    const requestUser: IUser = await this.userRepository.findById(options.makerId);
     const requestUserRole = requestUser.get().role;
-    if (requestUserRole !== Role.DREAMER) {
-      throw new ForbiddenError(ErrorMessage.USER_FORBIDDEN_NOT_DREAMER);
+    if (requestUserRole !== Role.MAKER) {
+      console.log('여기서에러');
+      throw new ForbiddenError(ErrorMessage.USER_FORBIDDEN_NOT_MAKER);
     }
-
-    const dreamerProfile: IDreamerProfile = await this.userRepository.findDreamerProfile(options.dreamerId);
-    const serviceArea: ServiceArea[] = dreamerProfile.get().serviceArea;
+    const makerProfile: IMakerProfile = await this.userRepository.findMakerProfile(options.makerId);
+    const serviceArea: ServiceArea[] = makerProfile.get().serviceArea;
     options.serviceArea = serviceArea;
 
     const [totalCount, list] = await Promise.all([
