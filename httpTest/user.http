@@ -1,0 +1,26 @@
+POST http://localhost:3100/user/signup
+Content-Type: application/json
+
+{
+	"user": {
+		"role": "DREAMER",
+	"nickName": "bfdb",
+	"email": "bfbda@naver.com",
+	"password": "123456789",
+	"phoneNumber": "01012345678"
+	},
+	"profile": {
+		"image": "DEFAULT_1",
+		"tripTypes": ["FOOD_TOUR"],
+		"serviceArea": ["SEOUL", "INCHEON"]
+	}
+}
+
+###
+POST http://localhost:3100/user/login
+Content-Type: application/json
+
+{
+	"email": "bfbda@naver.com",
+	"password": "123456789"
+}

@@ -3,6 +3,9 @@ import { ConfigModule } from '@nestjs/config';
 import PrismaModule from 'prisma/prisma.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import getMongoConfig from '../config/mongo.config';
+import UserModule from './user/user.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtGuard } from './guard/login.guard';
 
 @Module({
   imports: [
@@ -11,9 +14,15 @@ import getMongoConfig from '../config/mongo.config';
       useFactory: async () => getMongoConfig(process.env.MONGO_URI),
       connectionName: process.env.CONNECTION_NAME
     }),
-    PrismaModule
+    PrismaModule,
+    UserModule
   ],
   controllers: [],
-  providers: []
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtGuard
+    }
+  ]
 })
 export default class AppModule {}

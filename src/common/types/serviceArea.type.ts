@@ -1,0 +1,18 @@
+export type ServiceArea =
+  | 'SEOUL'
+  | 'BUSAN'
+  | 'INCHEON'
+  | 'DAEGU'
+  | 'DAEJEON'
+  | 'GWANGJU'
+  | 'ULSAN'
+  | 'SEJONG'
+  | 'GYEONGGI'
+  | 'GANGWON'
+  | 'CHUNGBUK'
+  | 'CHUNGNAM'
+  | 'JEONBUK'
+  | 'JEONNAM'
+  | 'GYEONGBUK'
+  | 'GYEONGNAM'
+  | 'JEJU';

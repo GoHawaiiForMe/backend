@@ -38,6 +38,11 @@ module.exports = {
         ts: 'never', // TypeScript 파일에 대해 확장자 생략
         js: 'never' // JavaScript 파일에 대해 확장자 생략
       }
+    ],
+    'lines-between-class-members': [
+      {
+        exceptBetweenFields: true // class 내 빈줄 강제 비활성화
+      }
     ]
   }
 };
