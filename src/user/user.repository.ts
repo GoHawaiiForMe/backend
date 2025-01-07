@@ -4,13 +4,11 @@ import UserMapper from './domain/user.mapper';
 import { UserProperties } from './type/user.types';
 import { DreamerProfileProperties, MakerProfileProperties } from './type/profile.types';
 import { DreamerProfileMapper, MakerProfileMapper } from './domain/profile.mapper';
-import IUserRepository from './interface/user.repository.interface';
 import { IUser } from './domain/user.interface';
 import { IDreamerProfile, IMakerProfile } from './domain/profile.interface';
-import User from './domain/user.domain';
 
 @Injectable()
-export default class UserRepository implements IUserRepository {
+export default class UserRepository {
   constructor(private readonly db: DBClient) {}
 
   async findByEmail(email: string): Promise<IUser> {
@@ -37,7 +35,7 @@ export default class UserRepository implements IUserRepository {
     }
   }
 
-  async findById(id: string): Promise<User> {
+  async findById(id: string): Promise<IUser> {
     const data = await this.db.user.findUnique({
       where: {
         id
@@ -63,15 +61,16 @@ export default class UserRepository implements IUserRepository {
     return new UserMapper(data).toDomain();
   }
 
-  async update(id: string, data: Partial<UserProperties>): Promise<null> {
-    await this.db.user.update({
+  async update(id: string, data: Partial<UserProperties>): Promise<IUser> {
+    const user = await this.db.user.update({
       where: {
         id
       },
       data
     });
 
-    return;
+    console.log('database:', user);
+    return new UserMapper(user).toDomain();
   }
 
   async createDreamer(user: Partial<DreamerProfileProperties>): Promise<IDreamerProfile> {
@@ -127,25 +126,25 @@ export default class UserRepository implements IUserRepository {
     }
   }
 
-  async updateDreamerProfile(userId: string, data: Partial<DreamerProfileProperties>): Promise<null> {
-    await this.db.dreamerProfile.update({
+  async updateDreamerProfile(userId: string, data: Partial<DreamerProfileProperties>): Promise<IDreamerProfile> {
+    const profile = await this.db.dreamerProfile.update({
       where: {
         userId
       },
       data
     });
 
-    return;
+    return new DreamerProfileMapper(profile).toDomain();
   }
 
-  async updateMakerProfile(userId: string, data: Partial<MakerProfileProperties>) {
-    await this.db.makerProfile.update({
+  async updateMakerProfile(userId: string, data: Partial<MakerProfileProperties>): Promise<IMakerProfile> {
+    const profile = await this.db.makerProfile.update({
       where: {
         userId
       },
       data
     });
 
-    return;
+    return new MakerProfileMapper(profile).toDomain();
   }
 }

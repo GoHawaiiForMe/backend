@@ -33,10 +33,16 @@ export default class User implements IUser {
     return ComparePassword(password, this.password);
   }
 
-  update(data: Partial<UserProperties>): void {
+  update(data: Partial<UserProperties>): Partial<UserProperties> {
     this.nickName = data.nickName || this.nickName;
     this.password = data.email || this.password;
     this.phoneNumber = data.phoneNumber || this.phoneNumber;
+
+    return {
+      nickName: this.nickName,
+      password: this.password,
+      phoneNumber: this.phoneNumber
+    };
   }
 
   get(): UserProperties {

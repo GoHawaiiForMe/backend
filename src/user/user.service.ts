@@ -7,10 +7,9 @@ import { JwtService } from '@nestjs/jwt';
 import { DreamerProfile, MakerProfile } from './domain/profile.domain';
 import { FilteredUserProperties, UserProperties } from './type/user.types';
 import { DreamerProfileProperties, MakerProfileProperties } from './type/profile.types';
-import { IUserService } from './interface/user.service.interface';
 
 @Injectable()
-export default class UserService implements IUserService {
+export default class UserService {
   constructor(
     private readonly repository: UserRepository,
     private readonly jwt: JwtService
@@ -71,15 +70,18 @@ export default class UserService implements IUserService {
     if (role === 'DREAMER') {
       const profile = await this.repository.findDreamerProfile(userId);
       return profile.get();
-    } else {
-      const profile = await this.repository.findMakerProfile(userId);
-      return profile.get();
     }
+
+    const profile = await this.repository.findMakerProfile(userId);
+    return profile.get();
   }
 
   createToken(userId: string, type?: string): string {
+    // FIXME: 토큰 생성 부분 수정 예정
     const payload = { userId };
-    const options = { expiresIn: type === 'refresh' ? '1w' : '24h' };
+    const options = {
+      expiresIn: type === process.env.TOKEN_NAME ? process.env.ACCESS_TOKEN_EXPIRY : process.env.REFRESH_TOKEN_EXPIRY
+    };
 
     return this.jwt.sign(payload, options);
   }
@@ -95,9 +97,8 @@ export default class UserService implements IUserService {
       throw new BadRequestError(ErrorMessage.USER_NOT_FOUND);
     }
 
-    user.update(data);
-    await this.repository.update(userId, user);
-    return user.toClient();
+    const newUser = await this.repository.update(userId, user.update(data));
+    return newUser.get();
   }
 
   async updateDreamerProfile(
@@ -109,9 +110,8 @@ export default class UserService implements IUserService {
       throw new BadRequestError(ErrorMessage.USER_NOT_FOUND);
     }
 
-    profile.update(data);
-    await this.repository.updateDreamerProfile(userId, profile.get());
-    return profile.get();
+    const newProfile = await this.repository.updateDreamerProfile(userId, profile.update(data));
+    return newProfile.get();
   }
 
   async updateMakerProfile(userId: string, data: Partial<MakerProfileProperties>): Promise<MakerProfileProperties> {
@@ -120,8 +120,7 @@ export default class UserService implements IUserService {
       throw new BadRequestError(ErrorMessage.USER_NOT_FOUND);
     }
 
-    profile.update(data);
-    await this.repository.updateMakerProfile(userId, profile.get());
-    return profile.get();
+    const newProfile = await this.repository.updateMakerProfile(userId, profile.update(data));
+    return newProfile.get();
   }
 }

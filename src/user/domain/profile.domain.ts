@@ -30,10 +30,16 @@ export class DreamerProfile implements IDreamerProfile {
     });
   }
 
-  update(data: Partial<DreamerProfileProperties>): void {
+  update(data: Partial<DreamerProfileProperties>): DreamerProfileProperties {
     this.image = data.image || this.image;
     this.serviceArea = data.serviceArea || this.serviceArea;
     this.tripTypes = data.tripTypes || this.tripTypes;
+
+    return {
+      image: data.image,
+      serviceArea: data.serviceArea,
+      tripTypes: data.tripTypes
+    };
   }
 
   get() {
@@ -83,13 +89,22 @@ export class MakerProfile implements IMakerProfile {
     });
   }
 
-  update(data: Partial<MakerProfileProperties>): void {
+  update(data: Partial<MakerProfileProperties>): MakerProfileProperties {
     this.image = data.image || this.image;
     this.serviceArea = data.serviceArea || this.serviceArea;
     this.serviceTypes = data.serviceTypes || this.serviceTypes;
     this.gallery = data.gallery || this.gallery;
     this.description = data.description || this.description;
     this.detailDescription = data.detailDescription || this.detailDescription;
+
+    return {
+      image: data.image,
+      serviceArea: data.serviceArea,
+      serviceTypes: data.serviceTypes,
+      gallery: data.gallery,
+      description: data.description,
+      detailDescription: data.detailDescription
+    };
   }
 
   get() {
