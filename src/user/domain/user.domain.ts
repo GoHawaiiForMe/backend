@@ -2,6 +2,8 @@ import { Role } from 'src/common/types/role.type';
 import { FilteredUserProperties, UserProperties } from '../type/user.types';
 import { ComparePassword, HashingPassword } from '../../common/utility/hashingPassword';
 import { IUser } from './user.interface';
+import BadRequestError from 'src/common/errors/badRequestError';
+import ErrorMessage from 'src/common/enums/error.message';
 
 export default class User implements IUser {
   private readonly id?: string;
@@ -10,6 +12,7 @@ export default class User implements IUser {
   private readonly email: string;
   private password: string;
   private phoneNumber: string;
+  private coconut: number;
   private readonly createdAt?: Date;
   private readonly updatedAt?: Date;
 
@@ -20,6 +23,7 @@ export default class User implements IUser {
     this.email = user.email;
     this.password = user.password;
     this.phoneNumber = user.phoneNumber;
+    this.coconut = user.coconut;
     this.createdAt = user?.createdAt;
     this.updatedAt = user?.updatedAt;
   }
@@ -34,14 +38,20 @@ export default class User implements IUser {
   }
 
   update(data: Partial<UserProperties>): Partial<UserProperties> {
+    if (data.coconut < 0) {
+      throw new BadRequestError(ErrorMessage.INVALID_COCONUT);
+    }
+
     this.nickName = data.nickName || this.nickName;
     this.password = data.email || this.password;
     this.phoneNumber = data.phoneNumber || this.phoneNumber;
+    this.coconut = data.coconut || this.coconut;
 
     return {
       nickName: this.nickName,
       password: this.password,
-      phoneNumber: this.phoneNumber
+      phoneNumber: this.phoneNumber,
+      coconut: this.coconut
     };
   }
 
@@ -53,6 +63,7 @@ export default class User implements IUser {
       email: this.email,
       password: this.password,
       phoneNumber: this.phoneNumber,
+      coconut: this.coconut,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
     };
@@ -62,7 +73,8 @@ export default class User implements IUser {
     return {
       id: this.id,
       role: this.role,
-      nickName: this.nickName
+      nickName: this.nickName,
+      coconut: this.coconut
     };
   }
 }

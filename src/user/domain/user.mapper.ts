@@ -12,6 +12,7 @@ export default class UserMapper {
       email: this.user.email,
       password: this.user.password,
       phoneNumber: this.user.phoneNumber,
+      coconut: this.user.coconut,
       createdAt: this.user.createdAt,
       updatedAt: this.user.updatedAt
     });
