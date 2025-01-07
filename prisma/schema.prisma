@@ -23,6 +23,7 @@ model User {
   nickName    String @unique
   phoneNumber String
   password    String
+  coconut     Int    @default(0)
 
   role            Role
   receivedReviews Review[] @relation("owner")

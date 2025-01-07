@@ -7,7 +7,8 @@ export const USERS = [
     nickName: '호랑이',
     phoneNumber: '01012341234',
     password: '12345678',
-    role: Role.DREAMER
+    role: Role.DREAMER,
+    coconut: 1000
   },
   {
     id: 'b2c3d4e5-f678-90ab-cdef-2345678901ab',
@@ -15,7 +16,8 @@ export const USERS = [
     nickName: '고양이',
     phoneNumber: '01012341234',
     password: '12345678',
-    role: Role.DREAMER
+    role: Role.DREAMER,
+    coconut: 1000
   },
   {
     id: 'c3d4e5f6-7890-abcd-ef01-3456789012bc',
@@ -23,7 +25,8 @@ export const USERS = [
     nickName: '하마',
     phoneNumber: '01012341234',
     password: '12345678',
-    role: Role.DREAMER
+    role: Role.DREAMER,
+    coconut: 1000
   },
   {
     id: 'd4e5f678-90ab-cdef-0123-4567890123cd',
@@ -31,7 +34,8 @@ export const USERS = [
     nickName: '돌고래',
     phoneNumber: '01012341234',
     password: '12345678',
-    role: Role.DREAMER
+    role: Role.DREAMER,
+    coconut: 1000
   },
   {
     id: 'e5f67890-abcd-ef01-2345-6789012345de',
@@ -39,7 +43,8 @@ export const USERS = [
     nickName: '미어캣',
     phoneNumber: '01012341234',
     password: '12345678',
-    role: Role.DREAMER
+    role: Role.DREAMER,
+    coconut: 1000
   },
   {
     id: 'f1a2b3c4-d5e6-7890-1234-567890abcdef',
@@ -47,7 +52,8 @@ export const USERS = [
     nickName: '장미',
     phoneNumber: '01012341234',
     password: '12345678',
-    role: Role.MAKER
+    role: Role.MAKER,
+    coconut: 1000
   },
   {
     id: 'a2b3c4d5-e6f7-8901-2345-67890abcdef1',
@@ -55,7 +61,8 @@ export const USERS = [
     nickName: '아카시아',
     phoneNumber: '01012341234',
     password: '12345678',
-    role: Role.MAKER
+    role: Role.MAKER,
+    coconut: 1000
   },
   {
     id: 'b3c4d5e6-f789-0123-4567-890abcdef123',
@@ -63,7 +70,8 @@ export const USERS = [
     nickName: '개나리',
     phoneNumber: '01012341234',
     password: '12345678',
-    role: Role.MAKER
+    role: Role.MAKER,
+    coconut: 1000
   },
   {
     id: 'c4d5e6f7-8901-2345-6789-0abcdef12345',
@@ -71,7 +79,8 @@ export const USERS = [
     nickName: '무궁화',
     phoneNumber: '01012341234',
     password: '12345678',
-    role: Role.MAKER
+    role: Role.MAKER,
+    coconut: 1000
   },
   {
     id: 'd5e6f789-0123-4567-890a-bcdef1234567',
@@ -79,6 +88,7 @@ export const USERS = [
     nickName: '해바라기',
     phoneNumber: '01012341234',
     password: '12345678',
-    role: Role.MAKER
+    role: Role.MAKER,
+    coconut: 1000
   }
 ];

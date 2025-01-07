@@ -10,6 +10,7 @@ export default class User implements IUser {
   private readonly email: string;
   private password: string;
   private phoneNumber: string;
+  private coconut: number;
   private readonly createdAt?: Date;
   private readonly updatedAt?: Date;
 
@@ -20,6 +21,7 @@ export default class User implements IUser {
     this.email = user.email;
     this.password = user.password;
     this.phoneNumber = user.phoneNumber;
+    this.coconut = user.coconut;
     this.createdAt = user?.createdAt;
     this.updatedAt = user?.updatedAt;
   }
@@ -37,11 +39,13 @@ export default class User implements IUser {
     this.nickName = data.nickName || this.nickName;
     this.password = data.email || this.password;
     this.phoneNumber = data.phoneNumber || this.phoneNumber;
+    this.coconut = data.coconut || this.coconut;
 
     return {
       nickName: this.nickName,
       password: this.password,
-      phoneNumber: this.phoneNumber
+      phoneNumber: this.phoneNumber,
+      coconut: this.coconut
     };
   }
 
@@ -53,6 +57,7 @@ export default class User implements IUser {
       email: this.email,
       password: this.password,
       phoneNumber: this.phoneNumber,
+      coconut: this.coconut,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
     };
@@ -62,7 +67,8 @@ export default class User implements IUser {
     return {
       id: this.id,
       role: this.role,
-      nickName: this.nickName
+      nickName: this.nickName,
+      coconut: this.coconut
     };
   }
 }
