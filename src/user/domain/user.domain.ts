@@ -39,7 +39,7 @@ export default class User implements IUser {
 
   update(data: Partial<UserProperties>): Partial<UserProperties> {
     if (data.coconut < 0) {
-      throw new BadRequestError(ErrorMessage.COCONUT_INVALID);
+      throw new BadRequestError(ErrorMessage.USER_COCONUT_INVALID);
     }
 
     this.nickName = data.nickName || this.nickName;

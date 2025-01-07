@@ -10,7 +10,6 @@ import { User } from 'src/decorator/user.decorator';
 export default class PlanController {
   constructor(private readonly planService: PlanService) {}
 
-  //@Public()
   @Get()
   async getPlans(
     @User() dreamerId: string,
@@ -21,10 +20,8 @@ export default class PlanController {
     return { totalCount, list };
   }
 
-  //@Public()
   @Get(':id')
-  async getPlanById(@User() dreamerId: string, @Param('id') id: string): Promise<Plan> {
-    console.log(dreamerId);
+  async getPlanById(@Param('id') id: string): Promise<Plan> {
     const plan = await this.planService.getPlanById(id);
     return plan;
   }
