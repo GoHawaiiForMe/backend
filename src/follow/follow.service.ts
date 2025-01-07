@@ -27,6 +27,6 @@ export default class FollowService {
       throw new BadRequestError(ErrorMessage.FOLLOW_NOT_FOUND);
     }
 
-    return await this.repository.delete(follow[0].get().id);
+    return await this.repository.delete(follow.get().id);
   }
 }

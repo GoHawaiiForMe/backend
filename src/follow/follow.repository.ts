@@ -8,13 +8,13 @@ import IFollow from './domain/follow.interface';
 export default class FollowRepository {
   constructor(private readonly db: DBClient) {}
 
-  async find(dreamerId: string, makerId: string): Promise<IFollow[]> {
-    const data = await this.db.follow.findMany({
+  async find(dreamerId: string, makerId: string): Promise<IFollow> {
+    const data = await this.db.follow.findFirst({
       where: { dreamerId, makerId }
     });
 
-    if (data.length > 0) {
-      return data.map((follow) => new FollowMapper(follow).toDomain());
+    if (data) {
+      return new FollowMapper(data).toDomain();
     }
   }
 
