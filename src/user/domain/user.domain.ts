@@ -4,14 +4,14 @@ import { ComparePassword, HashingPassword } from '../../common/utility/hashingPa
 import { IUser } from './user.interface';
 
 export default class User implements IUser {
-  readonly id?: string;
-  readonly role: Role;
-  nickName: string;
-  readonly email: string;
-  password: string;
-  phoneNumber: string;
-  readonly createdAt?: Date;
-  readonly updatedAt?: Date;
+  private readonly id?: string;
+  private readonly role: Role;
+  private nickName: string;
+  private readonly email: string;
+  private password: string;
+  private phoneNumber: string;
+  private readonly createdAt?: Date;
+  private readonly updatedAt?: Date;
 
   constructor(user: UserProperties) {
     this.id = user?.id;

@@ -55,15 +55,15 @@ export class DreamerProfile implements IDreamerProfile {
 }
 
 export class MakerProfile implements IMakerProfile {
-  userId?: string;
-  image: ProfileImage;
-  serviceArea: ServiceArea[];
-  serviceTypes?: TripType[];
-  gallery?: string;
-  description?: string;
-  detailDescription?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  private userId?: string;
+  private image: ProfileImage;
+  private serviceArea: ServiceArea[];
+  private serviceTypes?: TripType[];
+  private gallery?: string;
+  private description?: string;
+  private detailDescription?: string;
+  private createdAt?: Date;
+  private updatedAt?: Date;
 
   constructor(profile: MakerProfileProperties) {
     this.userId = profile?.userId;

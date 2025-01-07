@@ -32,7 +32,7 @@ export default class UserService {
     }
 
     const userData = await User.create(user);
-    const savedUser = await this.repository.create(userData);
+    const savedUser = await this.repository.create(userData.get());
     const newUser = savedUser.get();
 
     // 역할에 따라 프로필 등록
@@ -41,7 +41,7 @@ export default class UserService {
       await this.repository.createDreamer(profileData);
     } else {
       const profileData = MakerProfile.create({ ...profile, userId: newUser.id });
-      await this.repository.createMaker(profileData);
+      await this.repository.createMaker(profileData.get());
     }
     return;
   }
