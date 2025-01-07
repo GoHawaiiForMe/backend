@@ -1,0 +1,35 @@
+POST http://localhost:3100/user/signup
+Content-Type: application/json
+
+{
+	"user": {
+		"role": "DREAMER",
+	"nickName": "dagdsg",
+	"email": "asdfdfasd@naver.com",
+	"password": "123456789",
+	"phoneNumber": "01012345678"
+	},
+	"profile": {
+		"image": "DEFAULT_1",
+		"tripTypes": ["FOOD_TOUR"],
+		"serviceArea": ["SEOUL", "INCHEON"]
+	}
+}
+
+###
+POST http://localhost:3100/user/login
+Content-Type: application/json
+
+{
+	"email": "bfbda@naver.com",
+	"password": "123456789"
+}
+
+###
+PATCH http://localhost:3100/user/update
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwZWY3MmFjNy1hZmViLTQyNzItYjc2Yi1iNjRkOTNhZTc4NzkiLCJpYXQiOjE3MzYyMjc3NzgsImV4cCI6MTczNjMxNDE3OH0.15V3Va4QzmCeUH2ua3Zt5wM7NVp5v9cfwAlHnTtKpME
+Content-Type: application/json
+
+{
+	"nickName": "닉네임 수정 테스트"
+}
