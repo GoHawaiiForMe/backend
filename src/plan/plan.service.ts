@@ -19,7 +19,6 @@ export default class PlanService {
     const requestUser: IUser = await this.userRepository.findById(options.makerId);
     const requestUserRole = requestUser.get().role;
     if (requestUserRole !== Role.MAKER) {
-      console.log('여기서에러');
       throw new ForbiddenError(ErrorMessage.USER_FORBIDDEN_NOT_MAKER);
     }
     const makerProfile: IMakerProfile = await this.userRepository.findMakerProfile(options.makerId);
