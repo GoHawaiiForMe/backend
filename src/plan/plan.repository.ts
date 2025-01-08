@@ -63,4 +63,12 @@ export default class PlanRepository {
     });
     return plan;
   }
+
+  async delete(id: string): Promise<Plan> {
+    const plan = await this.db.plan.update({
+      where: { id, isDeletedAt: null },
+      data: { isDeletedAt: new Date() }
+    });
+    return plan;
+  }
 }

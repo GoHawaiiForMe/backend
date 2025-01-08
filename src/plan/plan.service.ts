@@ -7,6 +7,7 @@ import { IDreamerProfile, IMakerProfile } from 'src/user/domain/profile.interfac
 import { IUser } from 'src/user/domain/user.interface';
 import ForbiddenError from 'src/common/errors/forbiddenError';
 import ErrorMessage from 'src/common/enums/error.message';
+import NotFoundError from 'src/common/errors/notFoundError';
 
 @Injectable()
 export default class PlanService {
@@ -35,6 +36,21 @@ export default class PlanService {
 
   async getPlanById(id: string): Promise<Plan> {
     const plan = await this.planRepository.findById(id);
+    if (!plan) {
+      throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
+    }
     return plan; //TODO. 단일조회시에도 권한이 필요한지 알아봐야됨
+  }
+
+  async deletePlan(id: string, requestUserId: string): Promise<Plan> {
+    const plan = await this.planRepository.findById(id);
+    if (!plan) {
+      throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
+    }
+    if (plan.dreamerId !== requestUserId) {
+      throw new ForbiddenError(ErrorMessage.USER_FORBIDDEN_NOT_OWNER);
+    }
+    const deletedPlan = this.planRepository.delete(id);
+    return deletedPlan;
   }
 }
