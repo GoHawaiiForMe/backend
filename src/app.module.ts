@@ -6,6 +6,10 @@ import getMongoConfig from '../config/mongo.config';
 import UserModule from './user/user.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtGuard } from './guard/login.guard';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import NotificationModule from './notification/notification.module';
+import ChatSchema from 'mongoose/chat.schema';
+import NotificationSchema, { Notification } from 'mongoose/notification.schema';
 
 @Module({
   imports: [
@@ -14,8 +18,10 @@ import { JwtGuard } from './guard/login.guard';
       useFactory: async () => getMongoConfig(process.env.MONGO_URI),
       connectionName: process.env.CONNECTION_NAME
     }),
+    EventEmitterModule.forRoot(),
     PrismaModule,
-    UserModule
+    UserModule,
+    NotificationModule
   ],
   controllers: [],
   providers: [
