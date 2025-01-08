@@ -1,5 +1,5 @@
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
-import CustomError from '../errors/CustomError';
+import CustomError from '../errors/customError';
 import ErrorMessage from '../enums/error.message';
 
 @Catch()
