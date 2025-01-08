@@ -15,8 +15,7 @@ export default class PlanController {
     @User() makerId: string,
     @Query() options: PlanQueryOptionDTO
   ): Promise<{ totalCount: number; list: Plan[] }> {
-    const serviceOption: PlanQueryOptions = { ...options, makerId };
-    const { totalCount, list } = await this.planService.getPlans(serviceOption);
+    const { totalCount, list } = await this.planService.getPlans(makerId, options);
     return { totalCount, list };
   }
 

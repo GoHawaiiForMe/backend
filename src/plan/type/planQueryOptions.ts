@@ -7,5 +7,4 @@ export default interface PlanQueryOptions {
   serviceArea?: ServiceArea[];
   page: number;
   pageSize: number;
-  makerId: string;
 }

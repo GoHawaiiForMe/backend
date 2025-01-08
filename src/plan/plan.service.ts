@@ -15,13 +15,13 @@ export default class PlanService {
     private readonly userRepository: UserRepository
   ) {}
 
-  async getPlans(options: PlanQueryOptions): Promise<{ list: Plan[]; totalCount: number }> {
-    const requestUser: IUser = await this.userRepository.findById(options.makerId);
+  async getPlans(makerId: string, options: PlanQueryOptions): Promise<{ list: Plan[]; totalCount: number }> {
+    const requestUser: IUser = await this.userRepository.findById(makerId);
     const requestUserRole = requestUser.get().role;
     if (requestUserRole !== Role.MAKER) {
       throw new ForbiddenError(ErrorMessage.USER_FORBIDDEN_NOT_MAKER);
     }
-    const makerProfile: IMakerProfile = await this.userRepository.findMakerProfile(options.makerId);
+    const makerProfile: IMakerProfile = await this.userRepository.findMakerProfile(makerId);
     const serviceArea: ServiceArea[] = makerProfile.get().serviceArea;
     options.serviceArea = serviceArea;
 
