@@ -7,6 +7,8 @@ import PlanOrder from 'src/common/enums/planOrder';
 import SortOrder from 'src/common/enums/sortOrder';
 import PlanWhereConditions from './type/planWhereCondition.interface';
 import CreatePlanData from './type/createPlanData.interface';
+import { connect } from 'http2';
+import UpdatePlanData from './type/updatePlanData.interface';
 
 @Injectable()
 export default class PlanRepository {
@@ -77,6 +79,27 @@ export default class PlanRepository {
         address,
         status: Status.PENDING,
         dreamer: { connect: { id: dreamerId } }
+      },
+      include: {
+        dreamer: { select: { id: true, nickName: true, role: true } },
+        assignees: { select: { id: true, nickName: true, role: true } }
+      }
+    });
+
+    return plan;
+  }
+
+  async update(id: string, data: UpdatePlanData): Promise<Plan> {
+    const { status, assigneeIds } = data;
+    const isAssigneeIds = assigneeIds && assigneeIds.length > 0;
+
+    const plan = await this.db.plan.update({
+      where: { id },
+      data: {
+        ...(status && { status }),
+        assignees: isAssigneeIds
+          ? { connect: assigneeIds.map((assigneeId: string) => ({ id: assigneeId })) }
+          : undefined
       },
       include: {
         dreamer: { select: { id: true, nickName: true, role: true } },

@@ -9,4 +9,5 @@ export default interface CreatePlanData {
   details: string;
   address?: string | null;
   dreamerId?: string | null;
+  assignIds?: string | null;
 }

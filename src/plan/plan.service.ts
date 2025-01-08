@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Plan, Role, ServiceArea } from '@prisma/client';
+import { Plan, Role, ServiceArea, Status } from '@prisma/client';
 import PlanRepository from './plan.repository';
 import PlanQueryOptions from './type/planQueryOptions';
 import UserRepository from 'src/user/user.repository';
@@ -9,6 +9,8 @@ import ForbiddenError from 'src/common/errors/forbiddenError';
 import ErrorMessage from 'src/common/enums/error.message';
 import NotFoundError from 'src/common/errors/notFoundError';
 import CreatePlanData from './type/createPlanData.interface';
+import UpdatePlanData from './type/updatePlanData.interface';
+import BadRequestError from 'src/common/errors/badRequestError';
 
 @Injectable()
 export default class PlanService {
@@ -50,6 +52,25 @@ export default class PlanService {
     }
 
     const plan = await this.planRepository.create(data);
+    return plan;
+  }
+
+  async updatePlan(id: string, requestUserId: string, data: UpdatePlanData): Promise<Plan> {
+    const isPlan = await this.planRepository.findById(id);
+
+    if (!isPlan) {
+      throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
+    }
+
+    if (isPlan.dreamerId !== requestUserId) {
+      throw new ForbiddenError(ErrorMessage.USER_FORBIDDEN_NOT_OWNER);
+    }
+
+    if (data.assigneeIds && isPlan.status !== Status.PENDING) {
+      throw new BadRequestError(ErrorMessage.PLAN_STATUS_INVALID);
+    }
+
+    const plan = await this.planRepository.update(id, data);
     return plan;
   }
 
