@@ -8,6 +8,7 @@ import { IUser } from 'src/user/domain/user.interface';
 import ForbiddenError from 'src/common/errors/forbiddenError';
 import ErrorMessage from 'src/common/enums/error.message';
 import NotFoundError from 'src/common/errors/notFoundError';
+import CreatePlanData from './type/createPlanData.interface';
 
 @Injectable()
 export default class PlanService {
@@ -40,6 +41,16 @@ export default class PlanService {
       throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
     }
     return plan; //TODO. 단일조회시에도 권한이 필요한지 알아봐야됨
+  }
+
+  async postPlan(data: CreatePlanData): Promise<Plan> {
+    const dreamer = await this.userRepository.findById(data.dreamerId);
+    if (dreamer.get().role !== Role.DREAMER) {
+      throw new ForbiddenError(ErrorMessage.USER_FORBIDDEN_NOT_DREAMER);
+    }
+
+    const plan = await this.planRepository.create(data);
+    return plan;
   }
 
   async deletePlan(id: string, requestUserId: string): Promise<Plan> {
