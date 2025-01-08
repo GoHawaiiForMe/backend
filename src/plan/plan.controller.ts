@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Delete, Get, HttpStatus, Param, Query } from '@nestjs/common';
 import { Plan } from '@prisma/client';
 import PlanService from './plan.service';
 import { Public } from 'src/decorator/public.decorator';
@@ -23,5 +23,11 @@ export default class PlanController {
   async getPlanById(@Param('id') id: string): Promise<Plan> {
     const plan = await this.planService.getPlanById(id);
     return plan;
+  }
+
+  @Delete(':id')
+  async deletePlan(@User() requestUserId: string, @Param('id') id: string): Promise<HttpStatus> {
+    const plan = await this.planService.deletePlan(id, requestUserId);
+    return HttpStatus.NO_CONTENT;
   }
 }
