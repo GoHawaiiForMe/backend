@@ -6,6 +6,7 @@ import PlanOrderByField from './type/planOrderByField.type';
 import PlanOrder from 'src/common/enums/planOrder';
 import SortOrder from 'src/common/enums/sortOrder';
 import PlanWhereConditions from './type/planWhereCondition.interface';
+import CreatePlanData from './type/createPlanData.interface';
 
 @Injectable()
 export default class PlanRepository {
@@ -61,6 +62,31 @@ export default class PlanRepository {
         assignees: { select: { id: true, nickName: true, role: true } }
       }
     });
+    return plan;
+  }
+
+  async create(data: CreatePlanData): Promise<Plan> {
+    const { startDate, endDate, tripType, serviceArea, details, address, assigneeIds, dreamerId } = data;
+    const plan = await this.db.plan.create({
+      data: {
+        startDate,
+        endDate,
+        tripType,
+        serviceArea,
+        details,
+        address,
+        status: 'PENDING',
+        assignees: {
+          connect: assigneeIds.map((userId) => ({ id: userId }))
+        },
+        dreamer: { connect: { id: dreamerId } }
+      },
+      include: {
+        dreamer: { select: { id: true, nickName: true, role: true } },
+        assignees: { select: { id: true, nickName: true, role: true } }
+      }
+    });
+
     return plan;
   }
 }

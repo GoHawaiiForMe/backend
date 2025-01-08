@@ -6,3 +6,21 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhMWIyY
 ###
 GET http://localhost:4000/plans
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJmMWEyYjNjNC1kNWU2LTc4OTAtMTIzNC01Njc4OTBhYmNkZWYiLCJpYXQiOjE3MzYyNjg1NjQsImV4cCI6MTczNjg3MzM2NH0.WicixKjBHGDt5cKcACMMSllpRP1pF_zt4bKAky-bS5o
+###
+POST http://localhost:4000/plans
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhMWIyYzNkNC1lNWY2LTc4OTAtYWJjZC0xMjM0NTY3ODkwZWYiLCJpYXQiOjE3MzYyNjUwODgsImV4cCI6MTczNjg2OTg4OH0.8F7RMB-TuYMTIiWc-SXUIGeH060Z0zHAmSSlTammFMA
+Content-Type: application/json
+
+{
+  "startDate": "2025-02-01T10:00:00.000Z",
+  "endDate": "2025-02-10T10:00:00.000Z",
+  "tripType": "FOOD_TOUR",
+  "serviceArea": "SEOUL",
+  "details": "10일간 서울 맛집 탐방.",
+  "address": "경상북도 경주시 불국로 385 (불국동), 38127",
+  "assigneeIds": [
+    "f1a2b3c4-d5e6-7890-1234-567890abcdef",
+    "a2b3c4d5-e6f7-8901-2345-67890abcdef1",
+    "b3c4d5e6-f789-0123-4567-890abcdef123"
+  ]
+}
