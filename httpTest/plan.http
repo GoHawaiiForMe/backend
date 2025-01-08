@@ -17,12 +17,7 @@ Content-Type: application/json
   "tripType": "FOOD_TOUR",
   "serviceArea": "SEOUL",
   "details": "10일간 서울 맛집 탐방.",
-  "address": "경상북도 경주시 불국로 385 (불국동), 38127",
-  "assigneeIds": [
-    "f1a2b3c4-d5e6-7890-1234-567890abcdef",
-    "a2b3c4d5-e6f7-8901-2345-67890abcdef1",
-    "b3c4d5e6-f789-0123-4567-890abcdef123"
-  ]
+  "address": "경상북도 경주시 불국로 385 (불국동), 38127"
 }
 
 ###

@@ -1,4 +1,4 @@
-import { TripType, User } from '@prisma/client';
+import { TripType } from '@prisma/client';
 import { ServiceArea } from 'src/common/types/serviceArea.type';
 
 export default interface CreatePlanData {
@@ -8,6 +8,5 @@ export default interface CreatePlanData {
   serviceArea: ServiceArea;
   details: string;
   address?: string | null;
-  assigneeIds: string[];
   dreamerId?: string | null;
 }

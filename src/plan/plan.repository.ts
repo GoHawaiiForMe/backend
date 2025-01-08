@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Plan } from '@prisma/client';
+import { Plan, Status } from '@prisma/client';
 import DBClient from 'prisma/DB.client';
 import PlanQueryOptions from './type/planQueryOptions';
 import PlanOrderByField from './type/planOrderByField.type';
@@ -66,7 +66,7 @@ export default class PlanRepository {
   }
 
   async create(data: CreatePlanData): Promise<Plan> {
-    const { startDate, endDate, tripType, serviceArea, details, address, assigneeIds, dreamerId } = data;
+    const { startDate, endDate, tripType, serviceArea, details, address, dreamerId } = data;
     const plan = await this.db.plan.create({
       data: {
         startDate,
@@ -75,10 +75,7 @@ export default class PlanRepository {
         serviceArea,
         details,
         address,
-        status: 'PENDING',
-        assignees: {
-          connect: assigneeIds.map((userId) => ({ id: userId }))
-        },
+        status: Status.PENDING,
         dreamer: { connect: { id: dreamerId } }
       },
       include: {

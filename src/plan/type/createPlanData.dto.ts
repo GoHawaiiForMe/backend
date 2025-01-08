@@ -1,6 +1,6 @@
-import { TripType, ServiceArea, User } from '@prisma/client';
-import { IsString, IsOptional, IsArray, IsDate, IsEnum, IsNotEmpty, IsUUID, MaxLength } from 'class-validator';
-import { Transform, Type } from 'class-transformer';
+import { TripType, ServiceArea } from '@prisma/client';
+import { IsString, IsOptional, IsDate, IsEnum, IsNotEmpty } from 'class-validator';
+import { Type } from 'class-transformer';
 export default class CreatePlanDataDTO {
   @Type(() => Date)
   @IsDate()
@@ -23,9 +23,4 @@ export default class CreatePlanDataDTO {
   @IsOptional()
   @IsString()
   address?: string | null;
-
-  @IsArray()
-  @IsString({ each: true })
-  @IsNotEmpty()
-  assigneeIds: string[];
 }
