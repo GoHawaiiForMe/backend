@@ -24,3 +24,8 @@ Content-Type: application/json
     "b3c4d5e6-f789-0123-4567-890abcdef123"
   ]
 }
+
+###
+DELETE http://localhost:4000/plans/b4f4db1e-b32d-44f6-9026-d74c38b8d899
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJkNGU1ZjY3OC05MGFiLWNkZWYtMDEyMy00NTY3ODkwMTIzY2QiLCJpYXQiOjE3MzYyNzIyMjUsImV4cCI6MTczNjg3NzAyNX0.y7CJdvzs6oW93QWLwO-c7f4CoGIzWGTq65rB3Vo1Ne4
+###
