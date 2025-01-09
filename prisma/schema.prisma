@@ -98,6 +98,7 @@ model Plan {
   updatedAt   DateTime  @updatedAt
   isDeletedAt DateTime?
 
+  title       String
   startDate   DateTime
   endDate     DateTime
   tripType    TripType
