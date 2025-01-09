@@ -5,7 +5,7 @@ const enum ErrorMessage {
   USER_UNAUTHORIZED_ID = '존재하지 않는 email 입니다.',
   USER_UNAUTHORIZED_PW = '비밀번호가 일치하지 않습니다.',
   USER_UNAUTHORIZED_TOKEN = '토큰의 유효기간이 만료되었습니다. 로그인이 필요합니다',
-  USER_FORBIDDEN_NOT_OWNER = 'Plan을 등록한 본인만 삭제할 수 있습니다. 권한을 확인해주세요.',
+  USER_FORBIDDEN_NOT_OWNER = 'Plan을 등록한 본인만 수정, 삭제할 수 있습니다. 권한을 확인해주세요.',
   USER_FORBIDDEN_NOT_MAKER = 'Maker 역할을 가진 사용자만 이 리소스에 접근할 수 있습니다. 권한을 확인해 주세요.',
   USER_FORBIDDEN_NOT_DREAMER = 'Dreamer 역할을 가진 사용자만 Plan을 생성할 수 있습니다. 권한을 확인해 주세요.',
   USER_COCONUT_INVALID = '포인트는 0코코넛 이상이어야 합니다.',
@@ -19,7 +19,9 @@ const enum ErrorMessage {
   NOTIFICATION_NOT_FOUND = '해당 알림을 찾을 수 없습니다',
 
   PLAN_NOT_FOUND = '해당 상품을 찾을 수 없습니다.',
-  PLAN_FORBIDDEN = '해당 게시글을 삭제할 권리가 없습니다.',
+  PLAN_DELETE_FORBIDDEN = '해당 게시글을 삭제할 권리가 없습니다.',
+  PLAN_UPDATE_FORBIDDEN = '해당 게시글을 수정할 권리가 없습니다.',
+  PLAN_STATUS_INVALID = '지정견적 요청은 PENDING 상태일 때만 가능합니다.',
 
   INTERNAL_SERVER_ERROR = '내부 서버 오류'
 }
