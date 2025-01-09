@@ -1,0 +1,10 @@
+GET http://localhost:4000/quotes/0b4b3eee-b4c7-485b-9d05-d0b3ba91ed1c
+#Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhMWIyYzNkNC1lNWY2LTc4OTAtYWJjZC0xMjM0NTY3ODkwZWYiLCJpYXQiOjE3MzY0NDc4MzYsImV4cCI6MTczNzA1MjYzNn0.qReKsBi2J6A8BhHj_9j6ue5wEP3alowytBpaPbrqEy8
+#드리머1
+#Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJmMWEyYjNjNC1kNWU2LTc4OTAtMTIzNC01Njc4OTBhYmNkZWYiLCJpYXQiOjE3MzY0NDc4OTIsImV4cCI6MTczNzA1MjY5Mn0.rW-nlExJANOixxjiruIftqHNunl-YqFGkxLEOJ-5ll8
+#메이커1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhMmIzYzRkNS1lNmY3LTg5MDEtMjM0NS02Nzg5MGFiY2RlZjEiLCJpYXQiOjE3MzY0NDc5MzMsImV4cCI6MTczNzA1MjczM30.dU4vEtSdxLr-J-HKbZNPcoUOHtvV7CWuKPbDC9RBCPc
+###
+GET http://localhost:4000/quotes/be7f1e1c-5192-4fa7-9e5e-8e228a8d8038
+#유저가 삭제됐을 때 테스트
+###

@@ -18,10 +18,13 @@ const enum ErrorMessage {
 
   NOTIFICATION_NOT_FOUND = '해당 알림을 찾을 수 없습니다',
 
-  PLAN_NOT_FOUND = '해당 상품을 찾을 수 없습니다.',
-  PLAN_DELETE_FORBIDDEN = '해당 게시글을 삭제할 권리가 없습니다.',
-  PLAN_UPDATE_FORBIDDEN = '해당 게시글을 수정할 권리가 없습니다.',
+  PLAN_NOT_FOUND = '해당 플랜을 찾을 수 없습니다.',
+  PLAN_DELETE_FORBIDDEN = '해당 플랜을 삭제할 권리가 없습니다.',
+  PLAN_UPDATE_FORBIDDEN = '해당 플랜을 수정할 권리가 없습니다.',
   PLAN_STATUS_INVALID = '지정견적 요청은 PENDING 상태일 때만 가능합니다.',
+
+  QUOTE_NOT_FOUND = '해당 견적서를 찾을 수 없습니다.',
+  QUOTE_FORBIDDEN_ID = '해당 견적서의 Maker와 Dreamer만 조회할 수 있습니다.',
 
   INTERNAL_SERVER_ERROR = '내부 서버 오류'
 }

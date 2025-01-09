@@ -8,6 +8,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtGuard } from './guard/login.guard';
 import FollowModule from './follow/follow.module';
 import PlanModule from './plan/plan.module';
+import QuoteModule from './quote/quote.module';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import PlanModule from './plan/plan.module';
     PrismaModule,
     UserModule,
     FollowModule,
-    PlanModule
+    PlanModule,
+    QuoteModule
   ],
   controllers: [],
   providers: [

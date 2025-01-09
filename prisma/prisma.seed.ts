@@ -7,6 +7,7 @@ import { DREAMER_PROFILES } from './mock/dreamerProfile.mock';
 import { MAKER_PROFILES } from './mock/makerProfile.mock';
 import { FOLLOWS } from './mock/follow.mock';
 import { HashingPassword } from 'src/common/utility/hashingPassword';
+import QUOTES from './mock/quote.mock';
 
 async function main(prisma: PrismaDBClient) {
   // 유저 비밀번호 해시 후 데이터베이스 시딩
@@ -18,11 +19,12 @@ async function main(prisma: PrismaDBClient) {
   );
 
   await prisma.$transaction([
-    prisma.user.deleteMany(),
-    prisma.dreamerProfile.deleteMany(),
-    prisma.makerProfile.deleteMany(),
-    prisma.follow.deleteMany(),
+    prisma.quote.deleteMany(),
     prisma.plan.deleteMany(),
+    prisma.follow.deleteMany(),
+    prisma.makerProfile.deleteMany(),
+    prisma.dreamerProfile.deleteMany(),
+    prisma.user.deleteMany(),
 
     prisma.user.createMany({
       data: users,
@@ -42,6 +44,10 @@ async function main(prisma: PrismaDBClient) {
     }),
     prisma.plan.createMany({
       data: PLANS,
+      skipDuplicates: true
+    }),
+    prisma.quote.createMany({
+      data: QUOTES,
       skipDuplicates: true
     })
   ]);
