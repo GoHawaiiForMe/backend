@@ -69,7 +69,6 @@ export default class UserRepository {
       data
     });
 
-    console.log('database:', user);
     return new UserMapper(user).toDomain();
   }
 

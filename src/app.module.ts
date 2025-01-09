@@ -10,6 +10,8 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import NotificationModule from './notification/notification.module';
 import ChatSchema from 'mongoose/chat.schema';
 import NotificationSchema, { Notification } from 'mongoose/notification.schema';
+import FollowModule from './follow/follow.module';
+import PlanModule from './plan/plan.module';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import NotificationSchema, { Notification } from 'mongoose/notification.schema';
     PrismaModule,
     UserModule,
     NotificationModule
+    FollowModule,
+    PlanModule
   ],
   controllers: [],
   providers: [

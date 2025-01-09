@@ -1,1 +1,1 @@
-export type Status = 'PENDING' | 'CONFIRMED' | 'COMPLETED';
+export type Status = 'PENDING' | 'CONFIRMED' | 'COMPLETED' | 'OVERDUE';
