@@ -42,13 +42,13 @@ export default class PlanController {
     @Param('id') id: string,
     @Body() data: UpdateAssignDataDTO
   ): Promise<Plan> {
-    const plan = await this.planService.updatePlan(id, requestUserId, data);
+    const plan = await this.planService.updatePlanAssign(id, requestUserId, data);
     return plan;
   }
 
   @Patch(':id/complete')
   async completePlan(@User() requestUserId: string, @Param('id') id: string): Promise<Plan> {
-    const plan = await this.planService.updatePlan(id, requestUserId, { status: Status.COMPLETED });
+    const plan = await this.planService.updatePlanComplete(id, requestUserId);
     return plan;
   }
 

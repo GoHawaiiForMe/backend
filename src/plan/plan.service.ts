@@ -54,8 +54,7 @@ export default class PlanService {
     const plan = await this.planRepository.create(data);
     return plan;
   }
-
-  async updatePlan(id: string, requestUserId: string, data: UpdatePlanData): Promise<Plan> {
+  async updatePlanAssign(id: string, requestUserId: string, data: Partial<UpdatePlanData>): Promise<Plan> {
     const isPlan = await this.planRepository.findById(id);
 
     if (!isPlan) {
@@ -66,10 +65,24 @@ export default class PlanService {
       throw new ForbiddenError(ErrorMessage.USER_FORBIDDEN_NOT_OWNER);
     }
 
-    if (data.assigneeIds && isPlan.status !== Status.PENDING) {
+    if (isPlan.status !== Status.PENDING) {
       throw new BadRequestError(ErrorMessage.PLAN_STATUS_INVALID);
     }
 
+    const plan = await this.planRepository.update(id, data);
+    return plan;
+  }
+  async updatePlanComplete(id: string, requestUserId: string): Promise<Plan> {
+    const isPlan = await this.planRepository.findById(id);
+
+    if (!isPlan) {
+      throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
+    }
+
+    if (isPlan.dreamerId !== requestUserId) {
+      throw new ForbiddenError(ErrorMessage.USER_FORBIDDEN_NOT_OWNER);
+    }
+    const data = { status: Status.COMPLETED };
     const plan = await this.planRepository.update(id, data);
     return plan;
   }

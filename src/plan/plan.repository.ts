@@ -7,7 +7,6 @@ import PlanOrder from 'src/common/enums/planOrder';
 import SortOrder from 'src/common/enums/sortOrder';
 import PlanWhereConditions from './type/planWhereCondition.interface';
 import CreatePlanData from './type/createPlanData.interface';
-import { connect } from 'http2';
 import UpdatePlanData from './type/updatePlanData.interface';
 
 @Injectable()
