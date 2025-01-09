@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Plan, Status } from '@prisma/client';
+import { Plan, Status, TripType } from '@prisma/client';
 import DBClient from 'prisma/DB.client';
 import PlanQueryOptions from './type/planQueryOptions';
 import PlanOrderByField from './type/planOrderByField.type';
@@ -14,16 +14,10 @@ export default class PlanRepository {
   constructor(private readonly db: DBClient) {}
 
   async findMany(options: PlanQueryOptions): Promise<Plan[]> {
-    const { orderBy, keyword, serviceArea, page, pageSize } = options || {};
+    const { orderBy, keyword, tripType, serviceArea, page, pageSize } = options || {};
     const orderByField: PlanOrderByField =
       orderBy === PlanOrder.RECENT ? { createdAt: SortOrder.DESC } : { startDate: SortOrder.ASC };
-    const whereConditions: PlanWhereConditions = {
-      isDeletedAt: { equals: null },
-      serviceArea: { in: serviceArea }
-    };
-    if (keyword) {
-      whereConditions.OR = [{ details: { contains: keyword, mode: 'insensitive' } }];
-    } //TODO. 검색조건 상의 필요
+    const whereConditions = this.buildWhereConditions(options);
 
     const plans = await this.db.plan.findMany({
       where: whereConditions,
@@ -38,16 +32,7 @@ export default class PlanRepository {
   }
 
   async totalCount(options: PlanQueryOptions): Promise<number> {
-    const { orderBy, keyword, serviceArea, page, pageSize } = options || {};
-
-    const whereConditions: PlanWhereConditions = {
-      isDeletedAt: { equals: null },
-      serviceArea: { in: serviceArea }
-    };
-
-    if (keyword) {
-      whereConditions.OR = [{ details: { contains: keyword, mode: 'insensitive' } }];
-    } //TODO. 검색조건 상의 필요
+    const whereConditions = this.buildWhereConditions(options);
 
     const totalCount = await this.db.plan.count({
       where: whereConditions
@@ -67,9 +52,10 @@ export default class PlanRepository {
   }
 
   async create(data: CreatePlanData): Promise<Plan> {
-    const { startDate, endDate, tripType, serviceArea, details, address, dreamerId } = data;
+    const { title, startDate, endDate, tripType, serviceArea, details, address, dreamerId } = data;
     const plan = await this.db.plan.create({
       data: {
+        title,
         startDate,
         endDate,
         tripType,
@@ -115,5 +101,39 @@ export default class PlanRepository {
       data: { isDeletedAt: new Date() }
     });
     return plan;
+  }
+
+  private buildWhereConditions(options: PlanQueryOptions): PlanWhereConditions {
+    const { keyword, tripType, serviceArea } = options;
+
+    const whereConditions: PlanWhereConditions = {
+      isDeletedAt: { equals: null },
+      serviceArea: { in: serviceArea }
+    };
+
+    if (tripType && tripType.length > 0) {
+      whereConditions.tripType = { in: tripType };
+    }
+
+    if (keyword) {
+      whereConditions.OR = [
+        {
+          dreamer: {
+            nickName: {
+              contains: keyword,
+              mode: 'insensitive'
+            }
+          }
+        },
+        {
+          title: {
+            contains: keyword,
+            mode: 'insensitive'
+          }
+        }
+      ];
+    }
+
+    return whereConditions;
   }
 }
