@@ -52,10 +52,10 @@ export default class PlanRepository {
   }
 
   async create(data: CreatePlanData): Promise<Plan> {
-    const { startDate, endDate, tripType, serviceArea, details, address, dreamerId } = data;
+    const { title, startDate, endDate, tripType, serviceArea, details, address, dreamerId } = data;
     const plan = await this.db.plan.create({
       data: {
-        title: '1111',
+        title,
         startDate,
         endDate,
         tripType,

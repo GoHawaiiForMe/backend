@@ -2,6 +2,7 @@ import { TripType } from '@prisma/client';
 import { ServiceArea } from 'src/common/types/serviceArea.type';
 
 export default interface CreatePlanData {
+  title: string;
   startDate: Date;
   endDate: Date;
   tripType: TripType;
