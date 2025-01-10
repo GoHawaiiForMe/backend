@@ -8,7 +8,7 @@ import NotificationSchema, { Notification } from 'mongoose/notification.schema';
 @Module({
   imports: [MongooseModule.forFeature([{ name: Notification.name, schema: NotificationSchema }])],
   controllers: [NotificationController],
-  providers: [NotificationRepository, NotificationService, Notification],
+  providers: [NotificationRepository, NotificationService],
   exports: []
 })
 export default class NotificationModule {}

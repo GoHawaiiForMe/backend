@@ -8,8 +8,6 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtGuard } from './guard/login.guard';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import NotificationModule from './notification/notification.module';
-import ChatSchema from 'mongoose/chat.schema';
-import NotificationSchema, { Notification } from 'mongoose/notification.schema';
 import FollowModule from './follow/follow.module';
 import PlanModule from './plan/plan.module';
 
@@ -23,7 +21,7 @@ import PlanModule from './plan/plan.module';
     EventEmitterModule.forRoot(),
     PrismaModule,
     UserModule,
-    NotificationModule
+    NotificationModule,
     FollowModule,
     PlanModule
   ],
