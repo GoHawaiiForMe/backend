@@ -6,6 +6,8 @@ import getMongoConfig from '../config/mongo.config';
 import UserModule from './user/user.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtGuard } from './guard/login.guard';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import NotificationModule from './notification/notification.module';
 import FollowModule from './follow/follow.module';
 import PlanModule from './plan/plan.module';
 
@@ -16,8 +18,10 @@ import PlanModule from './plan/plan.module';
       useFactory: async () => getMongoConfig(process.env.MONGO_URI),
       connectionName: process.env.CONNECTION_NAME
     }),
+    EventEmitterModule.forRoot(),
     PrismaModule,
     UserModule,
+    NotificationModule,
     FollowModule,
     PlanModule
   ],
