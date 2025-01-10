@@ -10,6 +10,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import NotificationModule from './notification/notification.module';
 import FollowModule from './follow/follow.module';
 import PlanModule from './plan/plan.module';
+import QuoteModule from './quote/quote.module';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import PlanModule from './plan/plan.module';
     UserModule,
     NotificationModule,
     FollowModule,
-    PlanModule
+    PlanModule,
+    QuoteModule
   ],
   controllers: [],
   providers: [
