@@ -2,10 +2,44 @@ import { Injectable } from '@nestjs/common';
 import DBClient from 'prisma/DB.client';
 import IQuote from './domain/quote.interface';
 import QuoteMapper from './domain/quote.mapper';
+import SortOrder from 'src/common/enums/sortOrder';
+import { QuoteQueryOptions } from './type/quoteQueryOptions.interface';
 
 @Injectable()
 export default class QuoteRepository {
   constructor(private readonly db: DBClient) {}
+
+  async findMany(options: QuoteQueryOptions): Promise<IQuote[]> {
+    const { planId, status, page, pageSize } = options;
+
+    const quotes = await this.db.quote.findMany({
+      where: {
+        planId,
+        isDeletedAt: null,
+        ...(status.length && { plan: { status: { in: status } } })
+      },
+      take: pageSize,
+      skip: (page - 1) * pageSize,
+      orderBy: { createdAt: SortOrder.DESC },
+      include: { maker: true }
+    });
+
+    const domainQuotes = quotes.map((quote) => new QuoteMapper(quote).toDomain());
+    return domainQuotes;
+  }
+
+  async totalCount(options: any): Promise<number> {
+    const { planId, status, page, pageSize } = options;
+    const totalCount = await this.db.quote.count({
+      where: {
+        planId,
+        isDeletedAt: null,
+        ...(status.length && { plan: { status: { in: status } } })
+      }
+    });
+    return totalCount;
+  }
+
   async getQuoteById(id: string): Promise<IQuote> {
     const quote = await this.db.quote.findUnique({
       where: { id, isDeletedAt: null },
@@ -15,7 +49,7 @@ export default class QuoteRepository {
       }
     });
 
-    const domainQuote = new QuoteMapper(quote);
-    return domainQuote.toDomain();
+    const domainQuote = new QuoteMapper(quote).toDomain();
+    return domainQuote;
   }
 }
