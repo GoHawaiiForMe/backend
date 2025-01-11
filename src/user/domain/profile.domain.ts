@@ -109,6 +109,7 @@ export class MakerProfile implements IMakerProfile {
 
   get() {
     return {
+      userId: this.userId,
       image: this.image,
       serviceArea: this.serviceArea,
       serviceTypes: this.serviceTypes,
