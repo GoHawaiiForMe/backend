@@ -3,21 +3,18 @@ import DBClient from 'prisma/DB.client';
 import IQuote from './domain/quote.interface';
 import QuoteMapper from './domain/quote.mapper';
 import SortOrder from 'src/common/enums/sortOrder';
-import { QuoteQueryOptions } from './type/quoteQueryOptions.interface';
+import { QuoteQueryOptions } from './type/quote.type';
+import { StatusEnum } from 'src/common/types/status.type';
 
 @Injectable()
 export default class QuoteRepository {
   constructor(private readonly db: DBClient) {}
 
   async findMany(options: QuoteQueryOptions): Promise<IQuote[]> {
-    const { planId, status, page, pageSize } = options;
+    const { page, pageSize, whereConditions } = options;
 
     const quotes = await this.db.quote.findMany({
-      where: {
-        planId,
-        isDeletedAt: null,
-        ...(status.length && { plan: { status: { in: status } } })
-      },
+      where: whereConditions,
       take: pageSize,
       skip: (page - 1) * pageSize,
       orderBy: { createdAt: SortOrder.DESC },
@@ -28,14 +25,9 @@ export default class QuoteRepository {
     return domainQuotes;
   }
 
-  async totalCount(options: any): Promise<number> {
-    const { planId, status, page, pageSize } = options;
+  async totalCount(whereConditions: any): Promise<number> {
     const totalCount = await this.db.quote.count({
-      where: {
-        planId,
-        isDeletedAt: null,
-        ...(status.length && { plan: { status: { in: status } } })
-      }
+      where: whereConditions
     });
     return totalCount;
   }

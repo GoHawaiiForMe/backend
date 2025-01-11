@@ -1,8 +1,8 @@
 import { Plan } from '@prisma/client';
 import IQuote from './quote.interface';
-import QuoteProperties from '../type/quoteProperties';
+import { QuoteProperties } from '../type/quoteProperties';
 import { IUser } from 'src/user/domain/user.interface';
-import QuoteToClientProperties from '../type/quoteToClientProperties.interface';
+import { QuoteToClientProperties } from '../type/quoteProperties';
 
 export default class Quote implements IQuote {
   private id?: string;

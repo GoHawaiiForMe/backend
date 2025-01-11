@@ -28,6 +28,7 @@ const enum ErrorMessage {
   QUOTE_FORBIDDEN_MAKER = '해당 견적서의 Maker만 조회할 수 있습니다.',
   QUOTE_FORBIDDEN_DREAMER = '해당 견적서의 Dreamer만 조회할 수 있습니다.',
 
+  BOOLEAN_BAD_REQUEST = 'boolean 값인 true와 false만 입력이 가능합니다. 필수 입력사항입니다.',
   INTERNAL_SERVER_ERROR = '내부 서버 오류'
 }
 export default ErrorMessage;
