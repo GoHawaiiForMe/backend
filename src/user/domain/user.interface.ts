@@ -5,4 +5,5 @@ export interface IUser {
   update(data: Partial<UserProperties>): Partial<UserProperties>;
   get(): UserProperties;
   toClient(): FilteredUserProperties;
+  toClientAll(): Omit<UserProperties, 'password'>;
 }

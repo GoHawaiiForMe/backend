@@ -17,7 +17,12 @@ import {
 import LoginDTO from './type/login.dto';
 import { Response } from 'express';
 import SignupDTO from './type/signup.dto';
-import { DreamerProfileResponseDTO, FilteredUserResponseDTO, MakerProfileResponseDTO } from './type/user.response.dto';
+import {
+  DreamerProfileResponseDTO,
+  FilteredUserResponseDTO,
+  MakerProfileResponseDTO,
+  UserResponseDTO
+} from './type/user.response.dto';
 import UpdateProfileDTO from './type/updateProfile.dto';
 import { DreamerProfileProperties, MakerProfileProperties } from './type/profile.types';
 import { FilteredUserProperties, UserProperties } from './type/user.types';
@@ -61,9 +66,9 @@ export default class UserController {
   @Get()
   @ApiBearerAuth('accessToken')
   @ApiOperation({ summary: '유저 정보 조회', description: '로그인한 유저의 기본 정보를 조회합니다' })
-  @ApiOkResponse({ type: FilteredUserResponseDTO })
+  @ApiOkResponse({ type: UserResponseDTO })
   @ApiUnauthorizedResponse({ description: 'Access Token이 없거나 만료되었습니다' })
-  async getUser(@User() userId: string): Promise<FilteredUserProperties> {
+  async getUser(@User() userId: string): Promise<Omit<UserProperties, 'password'>> {
     return await this.service.getUser(userId);
   }
 

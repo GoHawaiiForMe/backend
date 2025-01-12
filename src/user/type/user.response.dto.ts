@@ -8,11 +8,8 @@ export class UserResponseDTO {
   role: RoleEnum;
   nickName: string;
   email: string;
-  password: string;
   phoneNumber: string;
   coconut: number;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 export class FilteredUserResponseDTO {
