@@ -26,6 +26,7 @@ import {
 import UpdateProfileDTO from './type/updateProfile.dto';
 import { DreamerProfileProperties, MakerProfileProperties } from './type/profile.types';
 import { FilteredUserProperties, UserProperties } from './type/user.types';
+import UpdateUserDTO from './type/updateUser.dto';
 
 @Controller('user')
 export default class UserController {
@@ -87,7 +88,7 @@ export default class UserController {
   @Patch('update')
   @ApiBearerAuth('accessToken')
   @ApiOperation({ summary: '유저 정보 수정', description: '로그인한 유저의 기본 정보를 수정합니다' })
-  @ApiBody({ type: LoginDTO })
+  @ApiBody({ type: UpdateUserDTO })
   @ApiOkResponse({ type: FilteredUserResponseDTO })
   @ApiUnauthorizedResponse({ description: 'Access Token이 없거나 만료되었습니다' })
   async updateUser(@Body() data: Partial<UserProperties>, @User() userId: string): Promise<FilteredUserProperties> {
