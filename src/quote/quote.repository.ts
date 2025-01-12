@@ -53,6 +53,7 @@ export default class QuoteRepository {
 
   async create(data: IQuote): Promise<IQuote> {
     const { planId, makerId, isAssigned, price, content } = data.toDB();
+
     const quote = await this.db.quote.create({
       data: {
         plan: { connect: { id: planId } },
@@ -60,8 +61,10 @@ export default class QuoteRepository {
         isAssigned,
         price,
         content
-      }
+      },
+      include: { maker: true }
     });
+
     const domainQuote = new QuoteMapper(quote);
 
     return domainQuote.toDomain();
