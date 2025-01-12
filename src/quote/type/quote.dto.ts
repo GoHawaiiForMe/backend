@@ -18,6 +18,18 @@ export class DreamerQuoteQueryOptionsDTO {
   @IsOptional()
   @Type(() => Number)
   pageSize: number = 2;
+
+  @IsOptional()
+  @Transform(({ value }) => {
+    if (value === 'true') {
+      return true;
+    } else if (value === 'false') {
+      return false;
+    } else {
+      throw new BadRequestError(ErrorMessage.BOOLEAN_BAD_REQUEST_isSent);
+    }
+  })
+  isConfirmed: boolean = false;
 }
 export class MakerQuoteQueryOptions {
   /**
@@ -41,7 +53,6 @@ export class MakerQuoteQueryOptions {
       throw new BadRequestError(ErrorMessage.BOOLEAN_BAD_REQUEST_isSent);
     }
   })
-  @IsDefined()
   isSent: boolean;
 }
 /**

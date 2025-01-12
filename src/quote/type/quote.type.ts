@@ -12,7 +12,7 @@ export interface QuoteQueryOptions {
   page: number;
   pageSize: number;
   planId?: string;
-  // status?: StatusEnum[];
+  isConfirmed?: boolean;
   isSent?: boolean;
   userId?: string;
   whereConditions?: QuoteWhereInput;

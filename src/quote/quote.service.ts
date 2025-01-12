@@ -18,7 +18,7 @@ export default class QuoteService {
     userId: string
   ): Promise<{ totalCount: number; list: QuoteToClientProperties[] }> {
     //TODO. Dreamer 본인인지 권한 체크 필요 -> 데코레이터 예정
-    const { planId, page, pageSize } = options;
+    const { planId, isConfirmed, page, pageSize } = options;
     const whereConditions = this.buildWhereConditions(options);
     options.whereConditions = whereConditions;
 
@@ -58,7 +58,7 @@ export default class QuoteService {
   }
 
   private buildWhereConditions(options: QuoteQueryOptions): QuoteWhereInput {
-    const { planId, isSent, userId } = options || {};
+    const { planId, isConfirmed, isSent, userId } = options || {};
     let whereConditions: QuoteWhereInput = {
       isDeletedAt: null
     };
@@ -69,6 +69,10 @@ export default class QuoteService {
 
     if (planId) {
       whereConditions.planId = planId; // planId 조건 추가
+    }
+
+    if (isConfirmed === true) {
+      whereConditions.isConfirmed = true;
     }
 
     if (isSent === true) {
