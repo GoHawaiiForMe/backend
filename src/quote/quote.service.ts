@@ -9,14 +9,10 @@ import { StatusEnum } from 'src/common/types/status.type';
 import { QuoteWhereInput } from './type/quote.type';
 import QuoteMapper from './domain/quote.mapper';
 import ConflictError from 'src/common/errors/conflictError';
-import PlanRepository from 'src/plan/plan.repository';
 
 @Injectable()
 export default class QuoteService {
-  constructor(
-    private readonly quoteRepository: QuoteRepository,
-    private readonly planRepository: PlanRepository
-  ) {}
+  constructor(private readonly quoteRepository: QuoteRepository) {}
 
   async getQuotesByPlanId(
     options: QuoteQueryOptions,
@@ -65,16 +61,15 @@ export default class QuoteService {
   async createQuote(data: CreateQuoteData, userId: string): Promise<QuoteToClientProperties> {
     const { planId } = data;
     //TODO. 메이커인지 권한체크 필요 -> 데코레이터 예정
-    //TODO. 플랜의 존재 확인 Quote -> 데코레이터 예정
 
     const whereConditions = this.buildWhereConditions({ planId, userId });
-    const isQuote = await this.quoteRepository.isExists(whereConditions);
-    if (!isQuote) {
-      throw new ConflictError(ErrorMessage.QUOTE_CONFLICT);
-    } //NOTE. 해당 플랜에 견적이 있는지 확인
-    //TODO. 해당 견적의 지정견적요청을 확인 후 반영 -> 플랜 도메인 만든 이후 예정
+    const isQuote = await this.quoteRepository.exists(whereConditions);
 
-    const mapperData = { ...data, makerId: userId, isConfirmed: false, isAssigned: false };
+    if (isQuote) {
+      throw new ConflictError(ErrorMessage.QUOTE_CONFLICT);
+    }
+
+    const mapperData = { ...data, makerId: userId, isConfirmed: false };
     const domainData = new QuoteMapper(mapperData).toDomain();
     const quote = await this.quoteRepository.create(domainData);
 

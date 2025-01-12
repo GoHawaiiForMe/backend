@@ -23,10 +23,4 @@ export default class QuoteController {
     const quote = await this.quoteService.getQuoteById(id, userId);
     return quote;
   }
-
-  @Post()
-  async postQuote(@User() userId: string, @Body() data: CreateQuoteDataDTO): Promise<QuoteToClientProperties> {
-    const quote = await this.quoteService.createQuote(data, userId);
-    return quote;
-  }
 }

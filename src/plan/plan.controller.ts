@@ -6,7 +6,7 @@ import { User } from 'src/decorator/user.decorator';
 import CreatePlanDataDTO from './type/createPlanData.dto';
 import CreatePlanData from './type/createPlanData.interface';
 import UpdateAssignDataDTO from './type/updateAssignData.dto';
-import { DreamerQuoteQueryOptionsDTO } from 'src/quote/type/quote.dto';
+import { CreateQuoteDataDTO, DreamerQuoteQueryOptionsDTO } from 'src/quote/type/quote.dto';
 import { QuoteToClientProperties } from 'src/quote/type/quoteProperties';
 
 @Controller('plans')
@@ -44,6 +44,16 @@ export default class PlanController {
     const serviceData: CreatePlanData = { ...data, dreamerId };
     const plan = await this.planService.postPlan(serviceData);
     return plan;
+  }
+
+  @Post(':planId/quotes')
+  async postQuote(
+    @User() userId: string,
+    @Param('planId') planId: string,
+    @Body() data: CreateQuoteDataDTO
+  ): Promise<QuoteToClientProperties> {
+    const quote = await this.planService.postQuote(data, userId, planId);
+    return quote;
   }
 
   @Patch(':id/assign')

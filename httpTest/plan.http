@@ -1,4 +1,4 @@
-GET http://localhost:4000/plans/b4f4db1e-b32d-44f6-9026-d74c38b8d899
+GET http://localhost:4000/plans/8fc40908-9269-4db3-ad7d-fb6e69b0ba0d
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJmMWEyYjNjNC1kNWU2LTc4OTAtMTIzNC01Njc4OTBhYmNkZWYiLCJpYXQiOjE3MzYyNTgxNzksImV4cCI6MTczNjg2Mjk3OX0.8KvG4FE7bGYknYfpgCf6ai_7-2xi7sZ8MiE7KM-FAwA
 ###
 GET http://localhost:4000/plans

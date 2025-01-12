@@ -10,7 +10,6 @@ import { HashingPassword } from 'src/common/utility/hashingPassword';
 import QUOTES from './mock/quote.mock';
 
 async function main(prisma: PrismaDBClient) {
-  // 유저 비밀번호 해시 후 데이터베이스 시딩
   const users = await Promise.all(
     USERS.map(async (user) => ({
       ...user,
@@ -18,39 +17,48 @@ async function main(prisma: PrismaDBClient) {
     }))
   );
 
-  await prisma.$transaction([
-    prisma.quote.deleteMany(),
-    prisma.plan.deleteMany(),
-    prisma.follow.deleteMany(),
-    prisma.makerProfile.deleteMany(),
-    prisma.dreamerProfile.deleteMany(),
-    prisma.user.deleteMany(),
+  await prisma.$transaction(async (tx) => {
+    await tx.quote.deleteMany();
+    await tx.plan.deleteMany();
+    await tx.follow.deleteMany();
+    await tx.makerProfile.deleteMany();
+    await tx.dreamerProfile.deleteMany();
+    await tx.user.deleteMany();
 
-    prisma.user.createMany({
+    await tx.user.createMany({
       data: users,
       skipDuplicates: true
-    }),
-    prisma.dreamerProfile.createMany({
+    });
+    await tx.dreamerProfile.createMany({
       data: DREAMER_PROFILES,
       skipDuplicates: true
-    }),
-    prisma.makerProfile.createMany({
+    });
+    await tx.makerProfile.createMany({
       data: MAKER_PROFILES,
       skipDuplicates: true
-    }),
-    prisma.follow.createMany({
+    });
+    await tx.follow.createMany({
       data: FOLLOWS,
       skipDuplicates: true
-    }),
-    prisma.plan.createMany({
-      data: PLANS,
-      skipDuplicates: true
-    }),
-    prisma.quote.createMany({
+    });
+
+    // Plan 데이터 시딩 (assignees 연결)
+    for (const PLAN of PLANS) {
+      await tx.plan.create({
+        data: {
+          ...PLAN,
+          assignees: {
+            connect: PLAN.assignees?.map((assignee) => ({ id: assignee.id }))
+          }
+        }
+      });
+    }
+
+    await tx.quote.createMany({
       data: QUOTES,
       skipDuplicates: true
-    })
-  ]);
+    });
+  });
   console.log('🌱 Seeding completed!');
 }
 

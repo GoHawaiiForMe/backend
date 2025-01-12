@@ -47,8 +47,4 @@ export class CreateQuoteDataDTO {
   @IsString()
   @IsNotEmpty()
   content: string;
-
-  @IsUUID()
-  @IsNotEmpty()
-  planId: string;
 }

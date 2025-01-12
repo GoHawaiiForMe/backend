@@ -44,7 +44,7 @@ export default class QuoteRepository {
     return domainQuote;
   }
 
-  async isExists(whereConditions: QuoteWhereInput): Promise<Boolean> {
+  async exists(whereConditions: QuoteWhereInput): Promise<Boolean> {
     const quote = await this.db.quote.findFirst({
       where: whereConditions
     });
