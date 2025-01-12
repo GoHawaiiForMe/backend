@@ -9,6 +9,8 @@ import CreatePlanDataDTO from './type/createPlanData.dto';
 import CreatePlanData from './type/createPlanData.interface';
 import UpdatePlanData from './type/updatePlanData.interface';
 import UpdateAssignDataDTO from './type/updateAssignData.dto';
+import { QuoteQueryOptionsByDreamerDTO } from 'src/quote/type/quoteQueryOptions.interface';
+import QuoteToClientProperties from 'src/quote/type/quoteToClientProperties.interface';
 
 @Controller('plans')
 export default class PlanController {
@@ -27,6 +29,17 @@ export default class PlanController {
   async getPlanById(@Param('id') id: string): Promise<Plan> {
     const plan = await this.planService.getPlanById(id);
     return plan;
+  }
+
+  @Get(':planId/quotes')
+  async getQuotesByPlanId(
+    @User() userId: string,
+    @Param('planId') planId: string,
+    @Query() options: QuoteQueryOptionsByDreamerDTO
+  ): Promise<{ totalCount: number; list: QuoteToClientProperties[] }> {
+    const serviceOptions = { ...options, planId };
+    const { totalCount, list } = await this.planService.getQuotesByPlanId(serviceOptions, userId);
+    return { totalCount, list };
   }
 
   @Post()

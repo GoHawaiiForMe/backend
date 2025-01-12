@@ -11,12 +11,16 @@ import NotFoundError from 'src/common/errors/notFoundError';
 import CreatePlanData from './type/createPlanData.interface';
 import UpdatePlanData from './type/updatePlanData.interface';
 import BadRequestError from 'src/common/errors/badRequestError';
+import QuoteService from 'src/quote/quote.service';
+import { QuoteQueryOptions } from 'src/quote/type/quoteQueryOptions.interface';
+import QuoteToClientProperties from 'src/quote/type/quoteToClientProperties.interface';
 
 @Injectable()
 export default class PlanService {
   constructor(
     private readonly planRepository: PlanRepository,
-    private readonly userRepository: UserRepository
+    private readonly userRepository: UserRepository,
+    private readonly quoteService: QuoteService
   ) {}
 
   async getPlans(makerId: string, options: PlanQueryOptions): Promise<{ list: Plan[]; totalCount: number }> {
@@ -45,6 +49,14 @@ export default class PlanService {
     return plan; //TODO. 단일조회시에도 권한이 필요한지 알아봐야됨
   }
 
+  async getQuotesByPlanId(
+    options: QuoteQueryOptions,
+    userId: string
+  ): Promise<{ totalCount: number; list: QuoteToClientProperties[] }> {
+    const { totalCount, list } = await this.quoteService.getQuotesByPlanId(options, userId);
+    return { totalCount, list };
+  }
+
   async postPlan(data: CreatePlanData): Promise<Plan> {
     const dreamer = await this.userRepository.findById(data.dreamerId);
     if (dreamer.get().role !== Role.DREAMER) {
@@ -54,6 +66,7 @@ export default class PlanService {
     const plan = await this.planRepository.create(data);
     return plan;
   }
+
   async updatePlanAssign(id: string, requestUserId: string, data: Partial<UpdatePlanData>): Promise<Plan> {
     const isPlan = await this.planRepository.findById(id);
 

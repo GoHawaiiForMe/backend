@@ -9,7 +9,7 @@ export default interface QuoteMapperProperties {
   isDeletedAt?: Date | null;
   price: number;
   content: string;
-  plan: Plan;
+  plan?: Plan;
   planId: string;
   maker?: UserProperties | null;
   makerId?: string | null;

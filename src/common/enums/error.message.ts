@@ -25,6 +25,8 @@ const enum ErrorMessage {
 
   QUOTE_NOT_FOUND = '해당 견적서를 찾을 수 없습니다.',
   QUOTE_FORBIDDEN_ID = '해당 견적서의 Maker와 Dreamer만 조회할 수 있습니다.',
+  QUOTE_FORBIDDEN_MAKER = '해당 견적서의 Maker만 조회할 수 있습니다.',
+  QUOTE_FORBIDDEN_DREAMER = '해당 견적서의 Dreamer만 조회할 수 있습니다.',
 
   INTERNAL_SERVER_ERROR = '내부 서버 오류'
 }

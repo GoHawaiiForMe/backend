@@ -6,16 +6,15 @@ import UserMapper from 'src/user/domain/user.mapper';
 import ErrorMessage from 'src/common/enums/error.message';
 
 export default class QuoteMapper {
-  constructor(private readonly quote: QuoteMapperProperties) {
-    if (!quote) {
-      throw new NotFoundError(ErrorMessage.QUOTE_NOT_FOUND);
-    }
-  }
+  constructor(private readonly quote: QuoteMapperProperties) {}
 
   toDomain(): Quote {
     let maker: IUser | null = null;
     if (this?.quote?.maker) {
       maker = new UserMapper(this.quote.maker).toDomain();
+    }
+    if (!this.quote) {
+      return null;
     }
 
     return new Quote({
