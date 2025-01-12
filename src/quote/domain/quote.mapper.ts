@@ -1,14 +1,13 @@
-import NotFoundError from 'src/common/errors/notFoundError';
 import Quote from './quote.domain';
 import { QuoteMapperProperties } from '../type/quoteProperties';
 import { IUser } from 'src/user/domain/user.interface';
 import UserMapper from 'src/user/domain/user.mapper';
-import ErrorMessage from 'src/common/enums/error.message';
+import IQuote from './quote.interface';
 
 export default class QuoteMapper {
   constructor(private readonly quote: QuoteMapperProperties) {}
 
-  toDomain(): Quote {
+  toDomain(): IQuote {
     let maker: IUser | null = null;
     if (this?.quote?.maker) {
       maker = new UserMapper(this.quote.maker).toDomain();

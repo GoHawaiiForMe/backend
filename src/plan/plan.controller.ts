@@ -1,15 +1,12 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common';
-import { Plan, Status } from '@prisma/client';
+import { Plan } from '@prisma/client';
 import PlanService from './plan.service';
-import { Public } from 'src/decorator/public.decorator';
-import PlanQueryOptions from './type/planQueryOptions';
 import PlanQueryOptionDTO from './type/planQueryOptions.dto';
 import { User } from 'src/decorator/user.decorator';
 import CreatePlanDataDTO from './type/createPlanData.dto';
 import CreatePlanData from './type/createPlanData.interface';
-import UpdatePlanData from './type/updatePlanData.interface';
 import UpdateAssignDataDTO from './type/updateAssignData.dto';
-import { DreamerQuoteQueryOptionsDTO } from 'src/quote/type/quote.dto';
+import { CreateQuoteDataDTO, DreamerQuoteQueryOptionsDTO } from 'src/quote/type/quote.dto';
 import { QuoteToClientProperties } from 'src/quote/type/quoteProperties';
 
 @Controller('plans')
@@ -49,6 +46,16 @@ export default class PlanController {
     return plan;
   }
 
+  @Post(':planId/quotes')
+  async postQuote(
+    @User() userId: string,
+    @Param('planId') planId: string,
+    @Body() data: CreateQuoteDataDTO
+  ): Promise<QuoteToClientProperties> {
+    const quote = await this.planService.postQuote(data, userId, planId);
+    return quote;
+  }
+
   @Patch(':id/assign')
   async assignPlan(
     @User() requestUserId: string,
@@ -68,6 +75,6 @@ export default class PlanController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async deletePlan(@User() requestUserId: string, @Param('id') id: string): Promise<void> {
-    const plan = await this.planService.deletePlan(id, requestUserId);
+    await this.planService.deletePlan(id, requestUserId);
   }
 }

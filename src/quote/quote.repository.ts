@@ -4,7 +4,6 @@ import IQuote from './domain/quote.interface';
 import QuoteMapper from './domain/quote.mapper';
 import SortOrder from 'src/common/enums/sortOrder';
 import { QuoteQueryOptions, QuoteWhereInput } from './type/quote.type';
-import { StatusEnum } from 'src/common/types/status.type';
 
 @Injectable()
 export default class QuoteRepository {
@@ -43,5 +42,31 @@ export default class QuoteRepository {
 
     const domainQuote = new QuoteMapper(quote).toDomain();
     return domainQuote;
+  }
+
+  async exists(whereConditions: QuoteWhereInput): Promise<Boolean> {
+    const quote = await this.db.quote.findFirst({
+      where: whereConditions
+    });
+    return quote !== null;
+  }
+
+  async create(data: IQuote): Promise<IQuote> {
+    const { planId, makerId, isAssigned, price, content } = data.toDB();
+
+    const quote = await this.db.quote.create({
+      data: {
+        plan: { connect: { id: planId } },
+        maker: { connect: { id: makerId } },
+        isAssigned,
+        price,
+        content
+      },
+      include: { maker: true }
+    });
+
+    const domainQuote = new QuoteMapper(quote);
+
+    return domainQuote.toDomain();
   }
 }

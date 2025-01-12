@@ -8,6 +8,7 @@ import QuoteModule from 'src/quote/quote.module';
 @Module({
   imports: [UserModule, QuoteModule],
   controllers: [PlanController],
-  providers: [PlanRepository, PlanService]
+  providers: [PlanRepository, PlanService],
+  exports: [PlanRepository]
 })
 export default class PlanModule {}
