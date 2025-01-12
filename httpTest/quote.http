@@ -8,7 +8,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhMmIzY
 GET http://localhost:4000/quotes/be7f1e1c-5192-4fa7-9e5e-8e228a8d8038
 #유저가 삭제됐을 때 테스트
 ###
-GET http://localhost:4000/plans/d7a56f8d-94b9-4b9d-8bdf-3b6295a3b3b4/quotes?status=PENDING
+GET http://localhost:4000/plans/4f51184e-72fb-4dd0-acd9-a4dd3ba905/quotes?pageSize=10
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhMWIyYzNkNC1lNWY2LTc4OTAtYWJjZC0xMjM0NTY3ODkwZWYiLCJpYXQiOjE3MzY0ODgwOTgsImV4cCI6MTczNzA5Mjg5OH0.3FF1yKyL9m703ZeWsBtu3HcmmXywsqweOn7WabnS8bY
 #Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMmMzZDRlNS1mNjc4LTkwYWItY2RlZi0yMzQ1Njc4OTAxYWIiLCJpYXQiOjE3MzY0ODgyMDksImV4cCI6MTczNzA5MzAwOX0.wvas5nApZhmBgbW71mh5gOs9RFHvrfEEFuf6cghQXrw
 #GetByDreamer 테스트

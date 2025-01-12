@@ -6,7 +6,6 @@ import { Status, StatusEnum } from 'src/common/types/status.type';
 
 export interface QuoteQueryOptions {
   planId?: string;
-  status: StatusEnum[];
   page: number;
   pageSize: number;
 }
@@ -17,12 +16,6 @@ export interface QuoteQueryOptions {
  */
 
 export class QuoteQueryOptionsByDreamerDTO {
-  @Transform(({ value }) => (Array.isArray(value) ? value : [value]))
-  @IsArray() //NOTE. 피그마의 대기중은 PENDING+CONFIRMED
-  @ArrayNotEmpty()
-  @IsEnum(StatusEnum, { each: true })
-  status: StatusEnum[];
-
   @IsOptional()
   @Type(() => Number)
   page: number = 1;

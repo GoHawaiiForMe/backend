@@ -10,13 +10,12 @@ export default class QuoteRepository {
   constructor(private readonly db: DBClient) {}
 
   async findMany(options: QuoteQueryOptions): Promise<IQuote[]> {
-    const { planId, status, page, pageSize } = options;
+    const { planId, page, pageSize } = options;
 
     const quotes = await this.db.quote.findMany({
       where: {
         planId,
-        isDeletedAt: null,
-        ...(status.length && { plan: { status: { in: status } } })
+        isDeletedAt: null
       },
       take: pageSize,
       skip: (page - 1) * pageSize,
@@ -29,12 +28,11 @@ export default class QuoteRepository {
   }
 
   async totalCount(options: any): Promise<number> {
-    const { planId, status, page, pageSize } = options;
+    const { planId } = options;
     const totalCount = await this.db.quote.count({
       where: {
         planId,
-        isDeletedAt: null,
-        ...(status.length && { plan: { status: { in: status } } })
+        isDeletedAt: null
       }
     });
     return totalCount;
