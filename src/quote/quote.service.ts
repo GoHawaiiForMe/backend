@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import QuoteRepository from './quote.repository';
-import { Quote } from '@prisma/client';
 import { QuoteToClientProperties } from './type/quoteProperties';
 import NotFoundError from 'src/common/errors/notFoundError';
 import ErrorMessage from 'src/common/enums/error.message';
 import ForbiddenError from 'src/common/errors/forbiddenError';
-import { QuoteQueryOptions } from './type/quote.type';
+import { CreateQuoteData, QuoteQueryOptions } from './type/quote.type';
 import { StatusEnum } from 'src/common/types/status.type';
 import { QuoteWhereInput } from './type/quote.type';
+import QuoteMapper from './domain/quote.mapper';
+import ConflictError from 'src/common/errors/conflictError';
 
 @Injectable()
 export default class QuoteService {
@@ -18,7 +19,7 @@ export default class QuoteService {
     userId: string
   ): Promise<{ totalCount: number; list: QuoteToClientProperties[] }> {
     //TODO. Dreamer 본인인지 권한 체크 필요 -> 데코레이터 예정
-    const { planId, isConfirmed, page, pageSize } = options;
+
     const whereConditions = this.buildWhereConditions(options);
     options.whereConditions = whereConditions;
 
@@ -32,7 +33,7 @@ export default class QuoteService {
   }
 
   async getQuotesByMaker(options: QuoteQueryOptions): Promise<{ totalCount: number; list: QuoteToClientProperties[] }> {
-    const { page, pageSize, isSent, userId } = options;
+    const { page, pageSize } = options;
 
     const whereConditions = this.buildWhereConditions(options);
 
@@ -57,7 +58,25 @@ export default class QuoteService {
     return quote.toClient();
   }
 
-  private buildWhereConditions(options: QuoteQueryOptions): QuoteWhereInput {
+  async createQuote(data: CreateQuoteData, userId: string): Promise<QuoteToClientProperties> {
+    const { planId } = data;
+    //TODO. 메이커인지 권한체크 필요 -> 데코레이터 예정
+
+    const whereConditions = this.buildWhereConditions({ planId, userId });
+    const isQuote = await this.quoteRepository.exists(whereConditions);
+
+    if (isQuote) {
+      throw new ConflictError(ErrorMessage.QUOTE_CONFLICT);
+    }
+
+    const mapperData = { ...data, makerId: userId, isConfirmed: false };
+    const domainData = new QuoteMapper(mapperData).toDomain();
+    const quote = await this.quoteRepository.create(domainData);
+
+    return quote.toClient();
+  }
+
+  private buildWhereConditions(options: Partial<QuoteQueryOptions>): QuoteWhereInput {
     const { planId, isConfirmed, isSent, userId } = options || {};
     let whereConditions: QuoteWhereInput = {
       isDeletedAt: null
@@ -68,7 +87,7 @@ export default class QuoteService {
     }
 
     if (planId) {
-      whereConditions.planId = planId; // planId 조건 추가
+      whereConditions.planId = planId;
     }
 
     if (isConfirmed === true) {

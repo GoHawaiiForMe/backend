@@ -3,7 +3,7 @@ import { Plan, Role, ServiceArea, Status } from '@prisma/client';
 import PlanRepository from './plan.repository';
 import PlanQueryOptions from './type/planQueryOptions';
 import UserRepository from 'src/user/user.repository';
-import { IDreamerProfile, IMakerProfile } from 'src/user/domain/profile.interface';
+import { IMakerProfile } from 'src/user/domain/profile.interface';
 import { IUser } from 'src/user/domain/user.interface';
 import ForbiddenError from 'src/common/errors/forbiddenError';
 import ErrorMessage from 'src/common/enums/error.message';
@@ -12,9 +12,10 @@ import CreatePlanData from './type/createPlanData.interface';
 import UpdatePlanData from './type/updatePlanData.interface';
 import BadRequestError from 'src/common/errors/badRequestError';
 import QuoteService from 'src/quote/quote.service';
-import { QuoteQueryOptions } from 'src/quote/type/quote.type';
+import { CreateOptionalQuoteData, CreateQuoteData, QuoteQueryOptions } from 'src/quote/type/quote.type';
 import { QuoteToClientProperties } from 'src/quote/type/quoteProperties';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { FilteredUserProperties } from 'src/user/type/user.types';
 
 @Injectable()
 export default class PlanService {
@@ -48,7 +49,7 @@ export default class PlanService {
     if (!plan) {
       throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
     }
-    return plan; //TODO. 단일조회시에도 권한이 필요한지 알아봐야됨
+    return plan;
   }
 
   async getQuotesByPlanId(
@@ -67,6 +68,24 @@ export default class PlanService {
 
     const plan = await this.planRepository.create(data);
     return plan;
+  }
+
+  async postQuote(data: CreateOptionalQuoteData, userId: string, planId: string): Promise<QuoteToClientProperties> {
+    const plan = await this.planRepository.findById(planId);
+    if (!plan) {
+      throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
+    }
+
+    const planWithAssignees = plan as Plan & { assignees: FilteredUserProperties[] };
+    const assigneeIds = planWithAssignees.assignees.map((user) => user.id);
+    const isAssigned = assigneeIds.includes(userId); //NOTE. 지정견적 요청자인지 확인
+
+    data.isAssigned = isAssigned; //TODO. as는 도메인을 쓰면서 해결할 예정
+    data.planId = planId; //NOTE. quote 서비스에 값을 전달
+    const quoteServiceData = { ...(data as CreateQuoteData), isAssigned };
+
+    const quote = await this.quoteService.createQuote(quoteServiceData, userId);
+    return quote;
   }
 
   async updatePlanAssign(id: string, requestUserId: string, data: Partial<UpdatePlanData>): Promise<Plan> {

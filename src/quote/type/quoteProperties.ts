@@ -1,5 +1,4 @@
 import { Plan } from '@prisma/client';
-import { StatusEnum } from 'src/common/types/status.type';
 import { IUser } from 'src/user/domain/user.interface';
 import { FilteredUserProperties, UserProperties } from 'src/user/type/user.types';
 

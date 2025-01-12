@@ -17,3 +17,17 @@ export interface QuoteQueryOptions {
   userId?: string;
   whereConditions?: QuoteWhereInput;
 }
+
+export interface CreateOptionalQuoteData {
+  price: number;
+  content: string;
+  planId?: string;
+  isAssigned?: boolean;
+}
+
+export interface CreateQuoteData {
+  price: number;
+  content: string;
+  planId: string;
+  isAssigned: boolean;
+}
