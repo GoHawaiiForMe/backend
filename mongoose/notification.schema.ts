@@ -1,13 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
-import { v4 as uuidv4 } from 'uuid';
 
 @Schema({ timestamps: true })
 export class Notification {
   @Prop({ default: null })
   isDeletedAt: Date | null;
 
-  @Prop({ type: String, default: uuidv4 })
+  @Prop({ type: String })
   userId: string | null;
 
   @Prop({ isRequired: true })

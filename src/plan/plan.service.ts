@@ -14,13 +14,15 @@ import BadRequestError from 'src/common/errors/badRequestError';
 import QuoteService from 'src/quote/quote.service';
 import { QuoteQueryOptions } from 'src/quote/type/quote.type';
 import { QuoteToClientProperties } from 'src/quote/type/quoteProperties';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export default class PlanService {
   constructor(
     private readonly planRepository: PlanRepository,
     private readonly userRepository: UserRepository,
-    private readonly quoteService: QuoteService
+    private readonly quoteService: QuoteService,
+    private readonly eventEmitter: EventEmitter2
   ) {}
 
   async getPlans(makerId: string, options: PlanQueryOptions): Promise<{ list: Plan[]; totalCount: number }> {
@@ -83,6 +85,14 @@ export default class PlanService {
     }
 
     const plan = await this.planRepository.update(id, data);
+
+    // 임시 알림 메시지
+    const userId = data.assigneeIds[0]; // 1. assigneeIds -> assigneeId 수정 후 data.assigneeId로 변경
+    // 2. 타입 때문에 dreamer.nickName 데이터를 가져올 수 없음 -> 어디서 수정해야 할지???
+    // const content = `${plan.dreamer.nickName} 드리머가 지정견적을 요청했어요`
+    const content: string = `${plan.dreamerId} 드리머가 지정견적을 요청했어요`;
+    this.eventEmitter.emit('notification', { userId, content });
+
     return plan;
   }
   async updatePlanComplete(id: string, requestUserId: string): Promise<Plan> {
