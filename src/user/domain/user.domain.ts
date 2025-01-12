@@ -69,6 +69,17 @@ export default class User implements IUser {
     };
   }
 
+  toClientAll(): Omit<UserProperties, 'password'> {
+    return {
+      id: this.id,
+      role: this.role,
+      nickName: this.nickName,
+      email: this.email,
+      phoneNumber: this.phoneNumber,
+      coconut: this.coconut
+    };
+  }
+
   toClient(): FilteredUserProperties {
     return {
       id: this.id,
