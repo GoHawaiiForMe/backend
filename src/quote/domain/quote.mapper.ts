@@ -1,6 +1,6 @@
 import NotFoundError from 'src/common/errors/notFoundError';
 import Quote from './quote.domain';
-import QuoteMapperProperties from '../type/quote.mapper.properties.interface';
+import { QuoteMapperProperties } from '../type/quoteProperties';
 import { IUser } from 'src/user/domain/user.interface';
 import UserMapper from 'src/user/domain/user.mapper';
 import ErrorMessage from 'src/common/enums/error.message';

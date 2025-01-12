@@ -90,5 +90,50 @@ export const USERS = [
     password: '12345678',
     role: Role.MAKER,
     coconut: 1000
+  },
+  {
+    id: '2555fe16-1649-48c8-8f3f-971b87dd34a7',
+    email: 'maker6@test.com',
+    nickName: '치와와',
+    phoneNumber: '01012341234',
+    password: '12345678',
+    role: Role.MAKER,
+    coconut: 1000
+  },
+  {
+    id: 'f0f6b3d9-529a-41cc-8ca1-3c29d0a3670a',
+    email: 'maker7@test.com',
+    nickName: '푸들',
+    phoneNumber: '01012341234',
+    password: '12345678',
+    role: Role.MAKER,
+    coconut: 1000
+  },
+  {
+    id: 'eb3d9829-59f7-457f-8f09-beea8ca58dfc',
+    email: 'maker8@test.com',
+    nickName: '닥스훈트',
+    phoneNumber: '01012341234',
+    password: '12345678',
+    role: Role.MAKER,
+    coconut: 1000
+  },
+  {
+    id: '5441d657-f796-427a-b66d-cc5274c60c11',
+    email: 'maker9@test.com',
+    nickName: '시츄',
+    phoneNumber: '01012341234',
+    password: '12345678',
+    role: Role.MAKER,
+    coconut: 1000
+  },
+  {
+    id: '3ee03c9c-9ba5-43eb-a03d-fa7d3e546e41',
+    email: 'maker10@test.com',
+    nickName: '리트리버',
+    phoneNumber: '01012341234',
+    password: '12345678',
+    role: Role.MAKER,
+    coconut: 1000
   }
 ];

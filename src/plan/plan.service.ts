@@ -12,8 +12,8 @@ import CreatePlanData from './type/createPlanData.interface';
 import UpdatePlanData from './type/updatePlanData.interface';
 import BadRequestError from 'src/common/errors/badRequestError';
 import QuoteService from 'src/quote/quote.service';
-import { QuoteQueryOptions } from 'src/quote/type/quoteQueryOptions.interface';
-import QuoteToClientProperties from 'src/quote/type/quoteToClientProperties.interface';
+import { QuoteQueryOptions } from 'src/quote/type/quote.type';
+import { QuoteToClientProperties } from 'src/quote/type/quoteProperties';
 
 @Injectable()
 export default class PlanService {
@@ -108,6 +108,8 @@ export default class PlanService {
     if (plan.dreamerId !== requestUserId) {
       throw new ForbiddenError(ErrorMessage.USER_FORBIDDEN_NOT_OWNER);
     }
+    //TODO. 삭제된 플랜의 견적자들에게 알림 필요
+    //TODO. 플랜이 삭제될 때 해당 플랜의 견적들도 삭제 필요
     const deletedPlan = this.planRepository.delete(id);
     return deletedPlan;
   }

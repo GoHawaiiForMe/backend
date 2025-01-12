@@ -3,20 +3,18 @@ import DBClient from 'prisma/DB.client';
 import IQuote from './domain/quote.interface';
 import QuoteMapper from './domain/quote.mapper';
 import SortOrder from 'src/common/enums/sortOrder';
-import { QuoteQueryOptions } from './type/quoteQueryOptions.interface';
+import { QuoteQueryOptions, QuoteWhereInput } from './type/quote.type';
+import { StatusEnum } from 'src/common/types/status.type';
 
 @Injectable()
 export default class QuoteRepository {
   constructor(private readonly db: DBClient) {}
 
   async findMany(options: QuoteQueryOptions): Promise<IQuote[]> {
-    const { planId, page, pageSize } = options;
+    const { page, pageSize, whereConditions } = options;
 
     const quotes = await this.db.quote.findMany({
-      where: {
-        planId,
-        isDeletedAt: null
-      },
+      where: whereConditions,
       take: pageSize,
       skip: (page - 1) * pageSize,
       orderBy: { createdAt: SortOrder.DESC },
@@ -27,18 +25,14 @@ export default class QuoteRepository {
     return domainQuotes;
   }
 
-  async totalCount(options: any): Promise<number> {
-    const { planId } = options;
+  async totalCount(whereConditions: QuoteWhereInput): Promise<number> {
     const totalCount = await this.db.quote.count({
-      where: {
-        planId,
-        isDeletedAt: null
-      }
+      where: whereConditions
     });
     return totalCount;
   }
 
-  async getQuoteById(id: string): Promise<IQuote> {
+  async findById(id: string): Promise<IQuote> {
     const quote = await this.db.quote.findUnique({
       where: { id, isDeletedAt: null },
       include: {
