@@ -40,7 +40,7 @@ export default class NotificationService {
     return readNotification.get();
   }
 
-  stream(userId: string): Observable<any> {
+  stream(userId: string): Observable<string> {
     return new Observable((subscriber) => {
       const handler = (data: { content: string }) => {
         subscriber.next(data.content);
