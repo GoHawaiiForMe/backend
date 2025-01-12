@@ -11,12 +11,6 @@ import { StatusEnum } from 'src/common/types/status.type';
  */
 
 export class DreamerQuoteQueryOptionsDTO {
-  @Transform(({ value }) => (Array.isArray(value) ? value : [value]))
-  @IsArray() //NOTE. 피그마의 대기중은 PENDING+CONFIRMED
-  @ArrayNotEmpty()
-  @IsEnum(StatusEnum, { each: true })
-  status: StatusEnum[];
-
   @IsOptional()
   @Type(() => Number)
   page: number = 1;
@@ -44,9 +38,10 @@ export class MakerQuoteQueryOptions {
     } else if (value === 'false') {
       return false;
     } else {
-      throw new BadRequestError(ErrorMessage.BOOLEAN_BAD_REQUEST);
+      throw new BadRequestError(ErrorMessage.BOOLEAN_BAD_REQUEST_isSent);
     }
   })
+  @IsDefined()
   isSent: boolean;
 }
 /**

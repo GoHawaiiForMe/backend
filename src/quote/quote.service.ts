@@ -18,7 +18,7 @@ export default class QuoteService {
     userId: string
   ): Promise<{ totalCount: number; list: QuoteToClientProperties[] }> {
     //TODO. Dreamer 본인인지 권한 체크 필요 -> 데코레이터 예정
-    const { planId, status, page, pageSize } = options;
+    const { planId, page, pageSize } = options;
     const whereConditions = this.buildWhereConditions(options);
     options.whereConditions = whereConditions;
 
@@ -47,7 +47,7 @@ export default class QuoteService {
   }
 
   async getQuoteById(id: string, userId: string): Promise<QuoteToClientProperties> {
-    const quote = await this.quoteRepository.getQuoteById(id);
+    const quote = await this.quoteRepository.findById(id);
     if (!quote) {
       throw new NotFoundError(ErrorMessage.QUOTE_NOT_FOUND);
     }
@@ -58,7 +58,7 @@ export default class QuoteService {
   }
 
   private buildWhereConditions(options: QuoteQueryOptions): QuoteWhereInput {
-    const { planId, status, isSent, userId } = options || {};
+    const { planId, isSent, userId } = options || {};
     let whereConditions: QuoteWhereInput = {
       isDeletedAt: null
     };
@@ -71,28 +71,21 @@ export default class QuoteService {
       whereConditions.planId = planId; // planId 조건 추가
     }
 
-    if (status?.length) {
-      whereConditions.plan = { status: { in: status } }; // status 배열이 있으면 추가
-    }
-
-    if (isSent !== undefined) {
-      // isSent가 true이면 내가 보낸 견적에 대한 조건을 추가
-      if (isSent) {
-        whereConditions = {
-          ...whereConditions,
-          OR: [
-            { isConfirmed: true }, // 내가 뽑힌 견적
-            { isConfirmed: false, plan: { status: StatusEnum.PENDING } } // 반려되지 않은 견적 중 plan이 PENDING인 경우
-          ]
-        };
-      } else {
-        // isSent가 false이면 반려된 견적만 가져옴
-        whereConditions = {
-          ...whereConditions,
-          isConfirmed: false, // isConfirmed가 false여야 함
-          plan: { status: { in: [StatusEnum.CONFIRMED, StatusEnum.COMPLETED, StatusEnum.OVERDUE] } } // 반려된 견적의 상태
-        };
-      }
+    if (isSent === true) {
+      whereConditions = {
+        ...whereConditions,
+        OR: [
+          { isConfirmed: true }, // 내가 뽑힌 견적
+          { isConfirmed: false, plan: { status: StatusEnum.PENDING } } // 반려되지 않은 견적 중 plan이 PENDING인 경우
+        ]
+      };
+    } else if (isSent === false) {
+      // isSent가 false이면 반려된 견적만 가져옴
+      whereConditions = {
+        ...whereConditions,
+        isConfirmed: false, // isConfirmed가 false여야 함
+        plan: { status: { in: [StatusEnum.CONFIRMED, StatusEnum.COMPLETED, StatusEnum.OVERDUE] } } // 반려된 견적의 상태
+      };
     }
     return whereConditions;
   }

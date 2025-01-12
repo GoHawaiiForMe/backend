@@ -3,7 +3,7 @@ import DBClient from 'prisma/DB.client';
 import IQuote from './domain/quote.interface';
 import QuoteMapper from './domain/quote.mapper';
 import SortOrder from 'src/common/enums/sortOrder';
-import { QuoteQueryOptions } from './type/quote.type';
+import { QuoteQueryOptions, QuoteWhereInput } from './type/quote.type';
 import { StatusEnum } from 'src/common/types/status.type';
 
 @Injectable()
@@ -25,14 +25,14 @@ export default class QuoteRepository {
     return domainQuotes;
   }
 
-  async totalCount(whereConditions: any): Promise<number> {
+  async totalCount(whereConditions: QuoteWhereInput): Promise<number> {
     const totalCount = await this.db.quote.count({
       where: whereConditions
     });
     return totalCount;
   }
 
-  async getQuoteById(id: string): Promise<IQuote> {
+  async findById(id: string): Promise<IQuote> {
     const quote = await this.db.quote.findUnique({
       where: { id, isDeletedAt: null },
       include: {
