@@ -17,3 +17,9 @@ export interface QuoteQueryOptions {
   userId?: string;
   whereConditions?: QuoteWhereInput;
 }
+
+export interface CreateQuoteData {
+  price: number;
+  content: string;
+  planId: string;
+}

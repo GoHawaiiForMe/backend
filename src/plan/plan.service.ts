@@ -3,7 +3,7 @@ import { Plan, Role, ServiceArea, Status } from '@prisma/client';
 import PlanRepository from './plan.repository';
 import PlanQueryOptions from './type/planQueryOptions';
 import UserRepository from 'src/user/user.repository';
-import { IDreamerProfile, IMakerProfile } from 'src/user/domain/profile.interface';
+import { IMakerProfile } from 'src/user/domain/profile.interface';
 import { IUser } from 'src/user/domain/user.interface';
 import ForbiddenError from 'src/common/errors/forbiddenError';
 import ErrorMessage from 'src/common/enums/error.message';
@@ -46,7 +46,7 @@ export default class PlanService {
     if (!plan) {
       throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
     }
-    return plan; //TODO. 단일조회시에도 권한이 필요한지 알아봐야됨
+    return plan;
   }
 
   async getQuotesByPlanId(

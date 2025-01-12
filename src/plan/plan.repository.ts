@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Plan, Status, TripType } from '@prisma/client';
+import { Plan, Status } from '@prisma/client';
 import DBClient from 'prisma/DB.client';
 import PlanQueryOptions from './type/planQueryOptions';
 import PlanOrderByField from './type/planOrderByField.type';
@@ -14,7 +14,7 @@ export default class PlanRepository {
   constructor(private readonly db: DBClient) {}
 
   async findMany(options: PlanQueryOptions): Promise<Plan[]> {
-    const { orderBy, keyword, tripType, serviceArea, page, pageSize } = options || {};
+    const { orderBy, page, pageSize } = options || {};
     const orderByField: PlanOrderByField =
       orderBy === PlanOrder.RECENT ? { createdAt: SortOrder.DESC } : { startDate: SortOrder.ASC };
     const whereConditions = this.buildWhereConditions(options);

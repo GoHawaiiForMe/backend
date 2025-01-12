@@ -1,11 +1,8 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import QuoteService from './quote.service';
-import QuoteRepository from './quote.repository';
-import { Quote } from '@prisma/client';
-import { Public } from 'src/decorator/public.decorator';
 import { QuoteToClientProperties } from './type/quoteProperties';
 import { User } from 'src/decorator/user.decorator';
-import { MakerQuoteQueryOptions } from './type/quote.dto';
+import { CreateQuoteDataDTO, MakerQuoteQueryOptions } from './type/quote.dto';
 
 @Controller('quotes')
 export default class QuoteController {
@@ -24,6 +21,12 @@ export default class QuoteController {
   @Get(':id')
   async getQuoteById(@User() userId: string, @Param('id') id: string): Promise<QuoteToClientProperties> {
     const quote = await this.quoteService.getQuoteById(id, userId);
+    return quote;
+  }
+
+  @Post()
+  async postQuote(@User() userId: string, @Body() data: CreateQuoteDataDTO): Promise<QuoteToClientProperties> {
+    const quote = await this.quoteService.createQuote(data, userId);
     return quote;
   }
 }
