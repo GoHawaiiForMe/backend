@@ -57,7 +57,15 @@ POST http://localhost:4000/user/login
 Content-Type: application/json
 
 {
-	"email": "maker1@test.com",
+	"email": "maker4@test.com",
+	"password": "12345678"
+}
+###
+POST http://localhost:4000/user/login
+Content-Type: application/json
+
+{
+	"email": "dreamer4@test.com",
 	"password": "12345678"
 }
 ###

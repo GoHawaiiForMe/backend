@@ -3,6 +3,8 @@ import IQuote from './quote.interface';
 import { QuoteProperties } from '../type/quoteProperties';
 import { IUser } from 'src/user/domain/user.interface';
 import { QuoteToClientProperties } from '../type/quoteProperties';
+import ConflictError from 'src/common/errors/conflictError';
+import ErrorMessage from 'src/common/enums/error.message';
 
 export default class Quote implements IQuote {
   private id?: string;
@@ -33,11 +35,18 @@ export default class Quote implements IQuote {
     this.isAssigned = quoteProperties.isAssigned;
   }
 
-  update(data: Partial<QuoteProperties>): Partial<QuoteProperties> {
-    this.isDeletedAt = data.isDeletedAt || this.isDeletedAt;
-    this.isConfirmed = data.isConfirmed || this.isConfirmed;
+  update(data: Partial<QuoteProperties>): IQuote {
+    // isConfirmed 필드의 상태 변경에 대해 예외 처리 (정확한 예외 조건 필요)
+    if (this.isConfirmed === data.isConfirmed) {
+      throw new ConflictError(ErrorMessage.QUOTE_CONFLICT_IS_CONFIRMED);
+    }
+    this.isConfirmed = data.isConfirmed;
+
+    return this;
+  }
+  toDBForUpdate(): Partial<QuoteProperties> {
     return {
-      isDeletedAt: this.isDeletedAt,
+      id: this.id,
       isConfirmed: this.isConfirmed
     };
   }
@@ -45,9 +54,6 @@ export default class Quote implements IQuote {
   toDB(): Partial<QuoteProperties> {
     return {
       id: this.id,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
-      isDeletedAt: this.isDeletedAt,
       price: this.price,
       content: this.content,
       planId: this.planId,
@@ -70,10 +76,13 @@ export default class Quote implements IQuote {
       isAssigned: this.isAssigned
     };
   }
+
   getMakerId(): string {
     return this.makerId;
   }
+
   getDreamerId(): string {
     return this.plan.dreamerId;
   }
 }
+//TODO. 생성 떄는 모든 데이터 반환, 업데이트시에는 업데이트 한 메소드만 반환하게 수정 필요.
