@@ -37,16 +37,18 @@ export default class Quote implements IQuote {
 
   update(data: Partial<QuoteProperties>): IQuote {
     // isConfirmed 필드의 상태 변경에 대해 예외 처리 (정확한 예외 조건 필요)
-    if (data.isConfirmed !== undefined && this.isConfirmed === data.isConfirmed) {
+    if (this.isConfirmed === data.isConfirmed) {
       throw new ConflictError(ErrorMessage.QUOTE_CONFLICT_IS_CONFIRMED);
     }
-
-    this.price = data.price !== undefined ? data.price : this.price;
-    this.content = data.content !== undefined ? data.content : this.content;
-    this.isConfirmed = data.isConfirmed !== undefined ? data.isConfirmed : this.isConfirmed;
-    this.isAssigned = data.isAssigned !== undefined ? data.isAssigned : this.isAssigned;
+    this.isConfirmed = data.isConfirmed;
 
     return this;
+  }
+  toDBForUpdate(): Partial<QuoteProperties> {
+    return {
+      id: this.id,
+      isConfirmed: this.isConfirmed
+    };
   }
 
   toDB(): Partial<QuoteProperties> {

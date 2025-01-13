@@ -70,15 +70,15 @@ export default class QuoteRepository {
   }
 
   async update(data: IQuote): Promise<IQuote> {
-    const { id, price, content, isConfirmed, isAssigned } = data.toDB();
+    const { id, isConfirmed } = data.toDBForUpdate();
 
-    const updateData = { price, content, isConfirmed, isAssigned };
     const quote = await this.db.quote.update({
       where: { id },
-      data: updateData
+      data: { isConfirmed }
     });
 
     const domainQuote = new QuoteMapper(quote).toDomain();
+
     return domainQuote;
   }
 }

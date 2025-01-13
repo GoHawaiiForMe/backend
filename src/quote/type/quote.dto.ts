@@ -51,7 +51,6 @@ export class CreateQuoteDataDTO {
 }
 
 export class UpdateQuoteDataDTO {
-  //@Transform(({ value }) => validateBooleanValue(value, ErrorMessage.QUOTE_BAD_REQUEST_IS_CONFIRMED))
   @Optional()
   @IsBoolean()
   isConfirmed: boolean = true;

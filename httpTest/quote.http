@@ -27,12 +27,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YjRkZ
 Content-Type: application/json
 
 {
-    "price": "200",
+    "price": 200,
     "content": "제가 제일 잘해요"
 }
 #GetByDreamer 테스트
 ###
-PATCH http://localhost:4000/quotes/f0068b3c-8f6c-4ad1-8fbc-37fb4492a023
+PATCH http://localhost:4000/quotes/dacafeb2-e19a-4449-a3ad-0bb2b9d8ba23
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1NTVkNDYzZS0zN2I2LTQxMGItOTA2MS0xMWE5ZDY4MjJiZGQiLCJpYXQiOjE3MzY3NTM3NzgsImV4cCI6MTczNzM1ODU3OH0.us-Jbn1-Rb6Eiq0UCdLGSsGuZqy5dJL6Dix5xFdRoPA
 Content-Type: application/json
 
