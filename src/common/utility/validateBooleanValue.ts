@@ -1,10 +1,7 @@
 import ErrorMessage from '../enums/error.message';
 import BadRequestError from '../errors/badRequestError';
 
-export default function validateBooleanValue(value: string | boolean, message: Partial<ErrorMessage>): Boolean {
-  if (typeof value === 'boolean') {
-    return value;
-  }
+export default function validateBooleanValue(value: string, message: Partial<ErrorMessage>): Boolean {
   if (value === 'true') {
     return true; //내가 보낸 견적 중 뽑혔거나 대기중인 견적
   } else if (value === 'false') {

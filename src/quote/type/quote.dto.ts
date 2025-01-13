@@ -1,5 +1,6 @@
+import { Optional } from '@nestjs/common';
 import { Transform, Type } from 'class-transformer';
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import ErrorMessage from 'src/common/enums/error.message';
 import validateBooleanValue from 'src/common/utility/validateBooleanValue';
 
@@ -50,6 +51,8 @@ export class CreateQuoteDataDTO {
 }
 
 export class UpdateQuoteDataDTO {
-  @Transform(({ value }) => validateBooleanValue(value, ErrorMessage.QUOTE_BAD_REQUEST_IS_CONFIRMED))
+  //@Transform(({ value }) => validateBooleanValue(value, ErrorMessage.QUOTE_BAD_REQUEST_IS_CONFIRMED))
+  @Optional()
+  @IsBoolean()
   isConfirmed: boolean = true;
 }

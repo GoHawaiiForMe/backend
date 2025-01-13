@@ -36,9 +36,9 @@ PATCH http://localhost:4000/quotes/f0068b3c-8f6c-4ad1-8fbc-37fb4492a023
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1NTVkNDYzZS0zN2I2LTQxMGItOTA2MS0xMWE5ZDY4MjJiZGQiLCJpYXQiOjE3MzY3NTM3NzgsImV4cCI6MTczNzM1ODU3OH0.us-Jbn1-Rb6Eiq0UCdLGSsGuZqy5dJL6Dix5xFdRoPA
 Content-Type: application/json
 
-# {
-#     "isConfirmed": "false"
-# }
+{
+    "isConfirmed": true
+}
 ###
 GET http://localhost:4000/quotes/df36dc9c-288a-4db6-9ccf-7c80b1dbef9e
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0Y2I1ZTUxYi0wNzJlLTRjYTItYTRhZS1iZjQzMmVhOGVmNzYiLCJpYXQiOjE3MzY3NTMyMzUsImV4cCI6MTczNzM1ODAzNX0.ocKhhduYJTg6PumZyQbIcykuO5i6SyUG2zPtHH68KpU
