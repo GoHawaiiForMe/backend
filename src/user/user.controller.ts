@@ -91,7 +91,7 @@ export default class UserController {
   @ApiBody({ type: UpdateUserDTO })
   @ApiOkResponse({ type: FilteredUserResponseDTO })
   @ApiUnauthorizedResponse({ description: 'Access Token이 없거나 만료되었습니다' })
-  async updateUser(@Body() data: Partial<UserProperties>, @User() userId: string): Promise<FilteredUserProperties> {
+  async updateUser(@Body() data: UpdateUserDTO, @User() userId: string): Promise<FilteredUserProperties> {
     return await this.service.updateUser(userId, data);
   }
 

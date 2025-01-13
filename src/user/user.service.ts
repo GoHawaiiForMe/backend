@@ -5,7 +5,7 @@ import ErrorMessage from 'src/common/enums/error.message';
 import User from './domain/user.domain';
 import { JwtService } from '@nestjs/jwt';
 import { DreamerProfile, MakerProfile } from './domain/profile.domain';
-import { FilteredUserProperties, UserProperties } from './type/user.types';
+import { FilteredUserProperties, UpdatePasswordProperties, UserProperties } from './type/user.types';
 import { DreamerProfileProperties, MakerProfileProperties } from './type/profile.types';
 
 @Injectable()
@@ -91,14 +91,18 @@ export default class UserService {
     return userId;
   }
 
-  async updateUser(userId: string, data: Partial<UserProperties>): Promise<FilteredUserProperties> {
+  async updateUser(
+    userId: string,
+    data: Partial<UserProperties> & UpdatePasswordProperties
+  ): Promise<FilteredUserProperties> {
     const user = await this.repository.findById(userId);
     if (!user) {
       throw new BadRequestError(ErrorMessage.USER_NOT_FOUND);
     }
 
-    const newUser = await this.repository.update(userId, user.update(data));
-    return newUser.get();
+    await user.update(data);
+    const newUser = await this.repository.update(userId, user.get());
+    return newUser.toClient();
   }
 
   async updateDreamerProfile(

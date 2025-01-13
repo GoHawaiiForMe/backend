@@ -18,3 +18,9 @@ export interface FilteredUserProperties {
   nickName: string;
   coconut: number;
 }
+
+export interface UpdatePasswordProperties {
+  password: string;
+  newPassword: string;
+  confirmNewPassword: string;
+}
