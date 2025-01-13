@@ -26,7 +26,7 @@ const enum ErrorMessage {
 
   QUOTE_NOT_FOUND = '해당 견적서를 찾을 수 없습니다.',
   QUOTE_FORBIDDEN_ID = '해당 견적서의 Maker와 Dreamer만 조회할 수 있습니다.',
-  QUOTE_FORBIDDEN_MAKER = '해당 견적서의 Maker만 조회할 수 있습니다.',
+  QUOTE_FORBIDDEN_MAKER = '해당 견적서의 Maker만 조회, 삭제할 수 있습니다.',
   QUOTE_FORBIDDEN_DREAMER = '해당 견적서의 Dreamer만 조회, 확정 할 수 있습니다.',
   QUOTE_CONFLICT_IS_CONFIRMED = '해당 견적서는 이미 요청 상태입니다.',
   QUOTE_BAD_REQUEST_IS_SENT = 'isSent는 boolean 값인 true와 false만 입력이 가능합니다. 필수 입력사항입니다.',

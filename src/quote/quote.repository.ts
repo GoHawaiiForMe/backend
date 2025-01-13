@@ -81,4 +81,15 @@ export default class QuoteRepository {
 
     return domainQuote;
   }
+
+  async delete(id: string): Promise<IQuote> {
+    const quote = await this.db.quote.update({
+      where: { id },
+      data: { isDeletedAt: new Date() }
+    });
+
+    const domainQuote = new QuoteMapper(quote);
+
+    return domainQuote.toDomain();
+  }
 }

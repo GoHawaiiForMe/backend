@@ -9,6 +9,7 @@ import { StatusEnum } from 'src/common/types/status.type';
 import { QuoteWhereInput } from './type/quote.type';
 import QuoteMapper from './domain/quote.mapper';
 import ConflictError from 'src/common/errors/conflictError';
+import IQuote from './domain/quote.interface';
 
 @Injectable()
 export default class QuoteService {
@@ -88,6 +89,20 @@ export default class QuoteService {
 
     const returnQuote = await this.quoteRepository.update(quote.update(data));
     return returnQuote.toClient();
+  }
+
+  async deleteQuote(id: string, userId: string): Promise<IQuote> {
+    const quote = await this.quoteRepository.findById(id);
+
+    if (!quote) {
+      throw new NotFoundError(ErrorMessage.QUOTE_NOT_FOUND);
+    }
+    if (userId !== quote.getMakerId()) {
+      throw new ForbiddenError(ErrorMessage.QUOTE_FORBIDDEN_MAKER);
+    }
+
+    const deletedQuote = await this.quoteRepository.delete(id);
+    return deletedQuote;
   }
 
   private buildWhereConditions(options: Partial<QuoteQueryOptions>): QuoteWhereInput {

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Patch, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Patch, Query } from '@nestjs/common';
 import QuoteService from './quote.service';
 import { QuoteToClientProperties } from './type/quoteProperties';
 import { User } from 'src/decorator/user.decorator';
@@ -32,5 +32,11 @@ export default class QuoteController {
   ): Promise<QuoteToClientProperties> {
     const quote = await this.quoteService.update(id, userId, data);
     return quote;
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteQuoteById(@User() userId: string, @Param('id') id: string): Promise<void> {
+    await this.quoteService.deleteQuote(id, userId);
   }
 }
