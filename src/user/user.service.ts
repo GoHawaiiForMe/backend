@@ -76,19 +76,16 @@ export default class UserService {
     return profile.get();
   }
 
-  createToken(userId: string, type?: string): string {
-    // FIXME: 토큰 생성 부분 수정 예정
-    const payload = { userId };
-    const options = {
-      expiresIn: type === process.env.TOKEN_NAME ? process.env.ACCESS_TOKEN_EXPIRY : process.env.REFRESH_TOKEN_EXPIRY
-    };
+  createTokens(payload: { userId: string; role: string }) {
+    const accessToken = this.jwt.sign(payload, { expiresIn: process.env.ACCESS_TOKEN_EXPIRY });
+    const refreshToken = this.jwt.sign(payload, { expiresIn: process.env.REFRESH_TOKEN_EXPIRY });
 
-    return this.jwt.sign(payload, options);
+    return { accessToken, refreshToken };
   }
 
-  getPayload(refreshToken: string): string {
-    const { userId } = this.jwt.verify(refreshToken);
-    return userId;
+  createNewToken(oldToken: string) {
+    const { payload } = this.jwt.verify(oldToken);
+    return this.createTokens(payload);
   }
 
   async updateUser(

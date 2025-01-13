@@ -21,13 +21,13 @@ POST http://localhost:3100/user/login
 Content-Type: application/json
 
 {
-	"email": "bfbda@naver.com",
-	"password": "123456789"
+	"email": "asdfdfasd@naver.com",
+	"password": "12345678"
 }
 
 ###
 PATCH http://localhost:3100/user/update
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwZWY3MmFjNy1hZmViLTQyNzItYjc2Yi1iNjRkOTNhZTc4NzkiLCJpYXQiOjE3MzYyMjc3NzgsImV4cCI6MTczNjMxNDE3OH0.15V3Va4QzmCeUH2ua3Zt5wM7NVp5v9cfwAlHnTtKpME
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3ZDI5ZWRmNi1iMWQxLTQxNWEtOWI3OS1jNWU2NGRmY2E3YmEiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNjc1NzM2NCwiZXhwIjoxNzM2ODQzNzY0fQ.gkcFRuf3Il8_fvyJTHJYbdo1jwB4IoeANWWalIO6Jnk
 Content-Type: application/json
 
 {
