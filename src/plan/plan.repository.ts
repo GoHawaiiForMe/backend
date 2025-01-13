@@ -8,6 +8,7 @@ import SortOrder from 'src/common/enums/sortOrder';
 import PlanWhereConditions from './type/planWhereCondition.interface';
 import CreatePlanData from './type/createPlanData.interface';
 import UpdatePlanData from './type/updatePlanData.interface';
+import { QuoteProperties } from 'src/quote/type/quoteProperties';
 
 @Injectable()
 export default class PlanRepository {
@@ -45,7 +46,8 @@ export default class PlanRepository {
       where: { id, isDeletedAt: null },
       include: {
         dreamer: { select: { id: true, nickName: true, role: true } },
-        assignees: { select: { id: true, nickName: true, role: true } }
+        assignees: { select: { id: true, nickName: true, role: true } },
+        quotes: { select: { id: true } }
       }
     });
     return plan;
