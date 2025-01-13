@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Patch, Post, Sse } from '@nestjs/common';
+import { Controller, Get, Param, Patch, Sse } from '@nestjs/common';
 import NotificationService from './notification.service';
 import { User } from 'src/decorator/user.decorator';
 import { map, Observable } from 'rxjs';
@@ -21,8 +21,8 @@ export default class NotificationController {
 
   // 로그인 시 알림 SSE stream 연결 요청
   @Public()
-  @Sse('stream/:userId')
-  stream(@Param('userId') userId: string): Observable<any> {
+  @Sse('stream')
+  stream(@User() userId: string): Observable<{ data: string }> {
     console.log(`SSE connection for userId: ${userId}`);
     return this.service.stream(userId).pipe(
       map((content: string) => {
