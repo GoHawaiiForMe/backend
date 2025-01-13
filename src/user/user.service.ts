@@ -84,8 +84,8 @@ export default class UserService {
   }
 
   createNewToken(oldToken: string) {
-    const { payload } = this.jwt.verify(oldToken);
-    return this.createTokens(payload);
+    const { userId, role } = this.jwt.verify(oldToken);
+    return this.createTokens({ userId, role });
   }
 
   async updateUser(
