@@ -18,3 +18,8 @@ export interface FilteredUserProperties {
   nickName: string;
   coconut: number;
 }
+
+export interface PasswordProperties {
+  password: string;
+  newPassword: string;
+}

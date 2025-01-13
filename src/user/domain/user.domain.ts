@@ -1,9 +1,10 @@
 import { Role } from 'src/common/types/role.type';
-import { FilteredUserProperties, UserProperties } from '../type/user.types';
+import { FilteredUserProperties, PasswordProperties, UserProperties } from '../type/user.types';
 import { ComparePassword, HashingPassword } from '../../common/utility/hashingPassword';
 import { IUser } from './user.interface';
 import BadRequestError from 'src/common/errors/badRequestError';
 import ErrorMessage from 'src/common/enums/error.message';
+import UnauthorizedError from 'src/common/errors/unauthorizedError';
 
 export default class User implements IUser {
   private readonly id?: string;
@@ -37,22 +38,32 @@ export default class User implements IUser {
     return ComparePassword(password, this.password);
   }
 
-  update(data: Partial<UserProperties>): Partial<UserProperties> {
+  async update(data: Partial<UserProperties> & PasswordProperties): Promise<FilteredUserProperties> {
+    if (data.password) {
+      await this.updatePassword({
+        password: data.password,
+        newPassword: data.newPassword
+      });
+    }
+
     if (data.coconut < 0) {
       throw new BadRequestError(ErrorMessage.USER_COCONUT_INVALID);
     }
 
     this.nickName = data.nickName || this.nickName;
-    this.password = data.email || this.password;
     this.phoneNumber = data.phoneNumber || this.phoneNumber;
     this.coconut = data.coconut || this.coconut;
 
-    return {
-      nickName: this.nickName,
-      password: this.password,
-      phoneNumber: this.phoneNumber,
-      coconut: this.coconut
-    };
+    return this.toClient();
+  }
+
+  async updatePassword(data: PasswordProperties): Promise<void> {
+    const isCorrectPassword = await this.validatePassword(data.password);
+    if (!isCorrectPassword) {
+      throw new UnauthorizedError(ErrorMessage.USER_UNAUTHORIZED_PW);
+    }
+
+    this.password = await HashingPassword(data.newPassword);
   }
 
   get(): UserProperties {

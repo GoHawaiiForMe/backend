@@ -1,5 +1,6 @@
+import { Optional } from '@nestjs/common';
 import { Transform, Type } from 'class-transformer';
-import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import ErrorMessage from 'src/common/enums/error.message';
 import validateBooleanValue from 'src/common/utility/validateBooleanValue';
 
@@ -22,7 +23,7 @@ export class DreamerQuoteQueryOptionsDTO {
   @Transform(({ value }) => validateBooleanValue(value, ErrorMessage.QUOTE_BAD_REQUEST_IS_SENT))
   isConfirmed: boolean = false;
 }
-export class MakerQuoteQueryOptions {
+export class MakerQuoteQueryOptionsDTO {
   /**
    * NOTE. 보낸견적 조회, 취소된 플랜
    */
@@ -47,4 +48,10 @@ export class CreateQuoteDataDTO {
   @IsString()
   @IsNotEmpty()
   content: string;
+}
+
+export class UpdateQuoteDataDTO {
+  @Optional()
+  @IsBoolean()
+  isConfirmed: boolean = true;
 }

@@ -74,10 +74,10 @@ export default class PlanService {
 
   async postQuote(data: CreateOptionalQuoteData, userId: string, planId: string): Promise<QuoteToClientProperties> {
     const plan = await this.planRepository.findById(planId);
+
     if (!plan) {
       throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
     }
-
     const planWithAssignees = plan as Plan & { assignees: FilteredUserProperties[] };
     const assigneeIds = planWithAssignees.assignees.map((user) => user.id);
     const isAssigned = assigneeIds.includes(userId); //NOTE. 지정견적 요청자인지 확인
@@ -87,6 +87,7 @@ export default class PlanService {
     const quoteServiceData = { ...(data as CreateQuoteData), isAssigned };
 
     const quote = await this.quoteService.createQuote(quoteServiceData, userId);
+
     return quote;
   }
 

@@ -27,6 +27,8 @@ import UpdateProfileDTO from './type/updateProfile.dto';
 import { DreamerProfileProperties, MakerProfileProperties } from './type/profile.types';
 import { FilteredUserProperties, UserProperties } from './type/user.types';
 import UpdateUserDTO from './type/updateUser.dto';
+import UnauthorizedError from 'src/common/errors/unauthorizedError';
+import ErrorMessage from 'src/common/enums/error.message';
 
 @Controller('user')
 export default class UserController {
@@ -50,8 +52,8 @@ export default class UserController {
   @ApiBadRequestResponse({ description: '이메일 또는 비밀번호가 유저 정보와 일치하지 않습니다' })
   async login(@Body() data: LoginDTO, @Res() res: Response): Promise<void> {
     const user = await this.service.login(data.email, data.password);
-    const accessToken = this.service.createToken(user.id);
-    const refreshToken = this.service.createToken(user.id, 'refresh');
+    const tokenPayload = { userId: user.id, role: user.role };
+    const { accessToken, refreshToken } = this.service.createTokens(tokenPayload);
 
     res.cookie('refreshToken', refreshToken, {
       path: '/user/token/refresh',
@@ -91,7 +93,7 @@ export default class UserController {
   @ApiBody({ type: UpdateUserDTO })
   @ApiOkResponse({ type: FilteredUserResponseDTO })
   @ApiUnauthorizedResponse({ description: 'Access Token이 없거나 만료되었습니다' })
-  async updateUser(@Body() data: Partial<UserProperties>, @User() userId: string): Promise<FilteredUserProperties> {
+  async updateUser(@Body() data: UpdateUserDTO, @User() userId: string): Promise<FilteredUserProperties> {
     return await this.service.updateUser(userId, data);
   }
 
@@ -120,9 +122,11 @@ export default class UserController {
   @ApiCreatedResponse({ description: '{ accessToken }' })
   @ApiUnauthorizedResponse({ description: 'Refresh Token이 없거나 만료되었습니다' })
   async getNewToken(@Cookies('refreshToken') refreshToken: string, @Res() res: Response): Promise<void> {
-    const userId = this.service.getPayload(refreshToken);
-    const accessToken = this.service.createToken(userId);
-    const newRefreshToken = this.service.createToken(userId, 'refresh');
+    if (!refreshToken) {
+      throw new UnauthorizedError(ErrorMessage.REFRESH_TOKEN_NOT_FOUND);
+    }
+
+    const { accessToken, refreshToken: newRefreshToken } = this.service.createNewToken(refreshToken);
 
     res.cookie('refreshToken', newRefreshToken, {
       path: '/user/token/refresh',
