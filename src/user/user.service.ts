@@ -5,7 +5,7 @@ import ErrorMessage from 'src/common/enums/error.message';
 import User from './domain/user.domain';
 import { JwtService } from '@nestjs/jwt';
 import { DreamerProfile, MakerProfile } from './domain/profile.domain';
-import { FilteredUserProperties, UserProperties } from './type/user.types';
+import { FilteredUserProperties, PasswordProperties, UserProperties } from './type/user.types';
 import { DreamerProfileProperties, MakerProfileProperties } from './type/profile.types';
 
 @Injectable()
@@ -76,29 +76,30 @@ export default class UserService {
     return profile.get();
   }
 
-  createToken(userId: string, type?: string): string {
-    // FIXME: 토큰 생성 부분 수정 예정
-    const payload = { userId };
-    const options = {
-      expiresIn: type === process.env.TOKEN_NAME ? process.env.ACCESS_TOKEN_EXPIRY : process.env.REFRESH_TOKEN_EXPIRY
-    };
+  createTokens(payload: { userId: string; role: string }) {
+    const accessToken = this.jwt.sign(payload, { expiresIn: process.env.ACCESS_TOKEN_EXPIRY });
+    const refreshToken = this.jwt.sign(payload, { expiresIn: process.env.REFRESH_TOKEN_EXPIRY });
 
-    return this.jwt.sign(payload, options);
+    return { accessToken, refreshToken };
   }
 
-  getPayload(refreshToken: string): string {
-    const { userId } = this.jwt.verify(refreshToken);
-    return userId;
+  createNewToken(oldToken: string) {
+    const { userId, role } = this.jwt.verify(oldToken);
+    return this.createTokens({ userId, role });
   }
 
-  async updateUser(userId: string, data: Partial<UserProperties>): Promise<FilteredUserProperties> {
+  async updateUser(
+    userId: string,
+    data: Partial<UserProperties> & PasswordProperties
+  ): Promise<FilteredUserProperties> {
     const user = await this.repository.findById(userId);
     if (!user) {
       throw new BadRequestError(ErrorMessage.USER_NOT_FOUND);
     }
 
-    const newUser = await this.repository.update(userId, user.update(data));
-    return newUser.get();
+    await user.update(data);
+    const newUser = await this.repository.update(userId, user.get());
+    return newUser.toClient();
   }
 
   async updateDreamerProfile(
