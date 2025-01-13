@@ -20,6 +20,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMzJkN
     "price": "200",
     "content": "제가 제일 잘해요"
 }
+
+{
+    "price": "200",
+    "content": "제가 제일 잘해요"
+}
 ###
 POST http://localhost:4000/plans/8fc40908-9269-4db3-ad7d-fb6e69b0ba0d/quotes
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YjRkZWQ4Mi1lNjgwLTQxMGQtYjg2ZC1jZTY5NzRlNTNmMzciLCJpYXQiOjE3MzY3NTI5MTksImV4cCI6MTczNzM1NzcxOX0.P1jnV5MKrUzrNtRORJGGvpPp_IqhIBDCBazVGLan2YA
@@ -32,7 +37,7 @@ Content-Type: application/json
 }
 #GetByDreamer 테스트
 ###
-PATCH http://localhost:4000/quotes/dacafeb2-e19a-4449-a3ad-0bb2b9d8ba23
+PATCH http://localhost:4000/quotes/ee7464c1-cb21-409b-b689-216e26dd8e6a
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1NTVkNDYzZS0zN2I2LTQxMGItOTA2MS0xMWE5ZDY4MjJiZGQiLCJpYXQiOjE3MzY3NTM3NzgsImV4cCI6MTczNzM1ODU3OH0.us-Jbn1-Rb6Eiq0UCdLGSsGuZqy5dJL6Dix5xFdRoPA
 Content-Type: application/json
 
@@ -42,3 +47,6 @@ Content-Type: application/json
 ###
 GET http://localhost:4000/quotes/df36dc9c-288a-4db6-9ccf-7c80b1dbef9e
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0Y2I1ZTUxYi0wNzJlLTRjYTItYTRhZS1iZjQzMmVhOGVmNzYiLCJpYXQiOjE3MzY3NTMyMzUsImV4cCI6MTczNzM1ODAzNX0.ocKhhduYJTg6PumZyQbIcykuO5i6SyUG2zPtHH68KpU
+###
+DELETE http://localhost:4000/quotes/ee7464c1-cb21-409b-b689-216e26dd8e6a
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YjRkZWQ4Mi1lNjgwLTQxMGQtYjg2ZC1jZTY5NzRlNTNmMzciLCJpYXQiOjE3MzY3NTI5MTksImV4cCI6MTczNzM1NzcxOX0.P1jnV5MKrUzrNtRORJGGvpPp_IqhIBDCBazVGLan2YA
