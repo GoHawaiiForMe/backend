@@ -19,8 +19,7 @@ export interface FilteredUserProperties {
   coconut: number;
 }
 
-export interface UpdatePasswordProperties {
+export interface PasswordProperties {
   password: string;
   newPassword: string;
-  confirmNewPassword: string;
 }

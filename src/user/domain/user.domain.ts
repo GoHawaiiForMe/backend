@@ -1,5 +1,5 @@
 import { Role } from 'src/common/types/role.type';
-import { FilteredUserProperties, UpdatePasswordProperties, UserProperties } from '../type/user.types';
+import { FilteredUserProperties, PasswordProperties, UserProperties } from '../type/user.types';
 import { ComparePassword, HashingPassword } from '../../common/utility/hashingPassword';
 import { IUser } from './user.interface';
 import BadRequestError from 'src/common/errors/badRequestError';
@@ -38,12 +38,11 @@ export default class User implements IUser {
     return ComparePassword(password, this.password);
   }
 
-  async update(data: Partial<UserProperties> & UpdatePasswordProperties): Promise<FilteredUserProperties> {
+  async update(data: Partial<UserProperties> & PasswordProperties): Promise<FilteredUserProperties> {
     if (data.password) {
       await this.updatePassword({
         password: data.password,
-        newPassword: data.newPassword,
-        confirmNewPassword: data.confirmNewPassword
+        newPassword: data.newPassword
       });
     }
 
@@ -58,14 +57,10 @@ export default class User implements IUser {
     return this.toClient();
   }
 
-  async updatePassword(data: UpdatePasswordProperties): Promise<void> {
+  async updatePassword(data: PasswordProperties): Promise<void> {
     const isCorrectPassword = await this.validatePassword(data.password);
     if (!isCorrectPassword) {
       throw new UnauthorizedError(ErrorMessage.USER_UNAUTHORIZED_PW);
-    }
-
-    if (data.newPassword !== data.confirmNewPassword) {
-      throw new BadRequestError(ErrorMessage.USER_BAD_REQUEST_PW);
     }
 
     this.password = await HashingPassword(data.newPassword);
