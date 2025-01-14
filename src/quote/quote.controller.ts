@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Patch, Query } from '@nestjs/common';
 import QuoteService from './quote.service';
 import { QuoteToClientProperties } from './type/quoteProperties';
-import { User } from 'src/decorator/user.decorator';
+import { UserId } from 'src/decorator/user.decorator';
 import { MakerQuoteQueryOptionsDTO, UpdateQuoteDataDTO } from './type/quote.dto';
 
 @Controller('quotes')
@@ -10,7 +10,7 @@ export default class QuoteController {
 
   @Get()
   async getQuotesByMaker(
-    @User() userId: string,
+    @UserId() userId: string,
     @Query() options: MakerQuoteQueryOptionsDTO
   ): Promise<{ totalCount: number; list: QuoteToClientProperties[] }> {
     const serviceOptions = { ...options, userId };
@@ -19,14 +19,14 @@ export default class QuoteController {
   }
 
   @Get(':id')
-  async getQuoteById(@User() userId: string, @Param('id') id: string): Promise<QuoteToClientProperties> {
+  async getQuoteById(@UserId() userId: string, @Param('id') id: string): Promise<QuoteToClientProperties> {
     const quote = await this.quoteService.getQuoteById(id, userId);
     return quote;
   }
 
   @Patch(':id')
   async patchQuote(
-    @User() userId: string,
+    @UserId() userId: string,
     @Param('id') id: string,
     @Body() data: UpdateQuoteDataDTO
   ): Promise<QuoteToClientProperties> {
@@ -36,7 +36,7 @@ export default class QuoteController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async deleteQuoteById(@User() userId: string, @Param('id') id: string): Promise<void> {
+  async deleteQuoteById(@UserId() userId: string, @Param('id') id: string): Promise<void> {
     await this.quoteService.deleteQuote(id, userId);
   }
 }

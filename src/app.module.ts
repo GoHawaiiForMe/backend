@@ -5,7 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import getMongoConfig from '../config/mongo.config';
 import UserModule from './user/user.module';
 import { APP_GUARD } from '@nestjs/core';
-import { JwtGuard } from './guard/login.guard';
+import { UserGuard } from './guard/user.guard';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import NotificationModule from './notification/notification.module';
 import FollowModule from './follow/follow.module';
@@ -31,7 +31,7 @@ import QuoteModule from './quote/quote.module';
   providers: [
     {
       provide: APP_GUARD,
-      useClass: JwtGuard
+      useClass: UserGuard
     }
   ]
 })

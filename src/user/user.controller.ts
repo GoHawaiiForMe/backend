@@ -1,8 +1,8 @@
-import { Body, Controller, Get, Param, Patch, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, Res } from '@nestjs/common';
 import UserService from './user.service';
 import { Cookies } from 'src/decorator/cookie.decorator';
 import { Public } from 'src/decorator/public.decorator';
-import { User } from 'src/decorator/user.decorator';
+import { UserId } from 'src/decorator/user.decorator';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -29,6 +29,7 @@ import { FilteredUserProperties, UserProperties } from './type/user.types';
 import UpdateUserDTO from './type/updateUser.dto';
 import UnauthorizedError from 'src/common/errors/unauthorizedError';
 import ErrorMessage from 'src/common/enums/error.message';
+import { UserRole } from 'src/decorator/role.decorator';
 
 @Controller('user')
 export default class UserController {
@@ -71,18 +72,18 @@ export default class UserController {
   @ApiOperation({ summary: '유저 정보 조회', description: '로그인한 유저의 기본 정보를 조회합니다' })
   @ApiOkResponse({ type: UserResponseDTO })
   @ApiUnauthorizedResponse({ description: 'Access Token이 없거나 만료되었습니다' })
-  async getUser(@User() userId: string): Promise<Omit<UserProperties, 'password'>> {
+  async getUser(@UserId() userId: string): Promise<Omit<UserProperties, 'password'>> {
     return await this.service.getUser(userId);
   }
 
-  @Get('profile/:role')
+  @Get('profile')
   @ApiBearerAuth('accessToken')
   @ApiOperation({ summary: '프로필 정보 조회', description: '로그인한 유저의 프로필을 조회합니다' })
   @ApiOkResponse({ type: MakerProfileResponseDTO || DreamerProfileResponseDTO })
   @ApiUnauthorizedResponse({ description: 'Access Token이 없거나 만료되었습니다' })
   async getProfile(
-    @Param('role') role: string,
-    @User() userId: string
+    @UserRole() role: string,
+    @UserId() userId: string
   ): Promise<MakerProfileProperties | DreamerProfileProperties> {
     return await this.service.getProfile(role, userId);
   }
@@ -93,20 +94,20 @@ export default class UserController {
   @ApiBody({ type: UpdateUserDTO })
   @ApiOkResponse({ type: FilteredUserResponseDTO })
   @ApiUnauthorizedResponse({ description: 'Access Token이 없거나 만료되었습니다' })
-  async updateUser(@Body() data: UpdateUserDTO, @User() userId: string): Promise<FilteredUserProperties> {
+  async updateUser(@Body() data: UpdateUserDTO, @UserId() userId: string): Promise<FilteredUserProperties> {
     return await this.service.updateUser(userId, data);
   }
 
-  @Patch('update/profile/:role')
+  @Patch('update/profile')
   @ApiBearerAuth('accessToken')
   @ApiOperation({ summary: '프로필 수정', description: '로그인한 유저의 프로필을 수정합니다' })
   @ApiBody({ type: UpdateProfileDTO })
   @ApiResponse({ type: MakerProfileResponseDTO || DreamerProfileResponseDTO })
   @ApiUnauthorizedResponse({ description: 'Access Token이 없거나 만료되었습니다' })
   async updateProfile(
-    @Param('role') role: string,
+    @UserRole() role: string,
     @Body() data: Partial<MakerProfileProperties | DreamerProfileProperties>,
-    @User() userId: string
+    @UserId() userId: string
   ) {
     if (role === 'DREAMER') {
       return await this.service.updateDreamerProfile(userId, data);
