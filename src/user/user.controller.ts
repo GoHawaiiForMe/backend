@@ -2,7 +2,7 @@ import { Body, Controller, Get, Patch, Post, Res } from '@nestjs/common';
 import UserService from './user.service';
 import { Cookies } from 'src/decorator/cookie.decorator';
 import { Public } from 'src/decorator/public.decorator';
-import { User } from 'src/decorator/user.decorator';
+import { UserId } from 'src/decorator/user.decorator';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -72,7 +72,7 @@ export default class UserController {
   @ApiOperation({ summary: '유저 정보 조회', description: '로그인한 유저의 기본 정보를 조회합니다' })
   @ApiOkResponse({ type: UserResponseDTO })
   @ApiUnauthorizedResponse({ description: 'Access Token이 없거나 만료되었습니다' })
-  async getUser(@User() userId: string): Promise<Omit<UserProperties, 'password'>> {
+  async getUser(@UserId() userId: string): Promise<Omit<UserProperties, 'password'>> {
     return await this.service.getUser(userId);
   }
 
@@ -83,7 +83,7 @@ export default class UserController {
   @ApiUnauthorizedResponse({ description: 'Access Token이 없거나 만료되었습니다' })
   async getProfile(
     @UserRole() role: string,
-    @User() userId: string
+    @UserId() userId: string
   ): Promise<MakerProfileProperties | DreamerProfileProperties> {
     return await this.service.getProfile(role, userId);
   }
@@ -94,7 +94,7 @@ export default class UserController {
   @ApiBody({ type: UpdateUserDTO })
   @ApiOkResponse({ type: FilteredUserResponseDTO })
   @ApiUnauthorizedResponse({ description: 'Access Token이 없거나 만료되었습니다' })
-  async updateUser(@Body() data: UpdateUserDTO, @User() userId: string): Promise<FilteredUserProperties> {
+  async updateUser(@Body() data: UpdateUserDTO, @UserId() userId: string): Promise<FilteredUserProperties> {
     return await this.service.updateUser(userId, data);
   }
 
@@ -107,7 +107,7 @@ export default class UserController {
   async updateProfile(
     @UserRole() role: string,
     @Body() data: Partial<MakerProfileProperties | DreamerProfileProperties>,
-    @User() userId: string
+    @UserId() userId: string
   ) {
     if (role === 'DREAMER') {
       return await this.service.updateDreamerProfile(userId, data);

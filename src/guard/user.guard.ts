@@ -37,7 +37,7 @@ export class UserGuard extends AuthGuard('jwt') {
     return true;
   }
 
-  handleRequest<TUser = any>(err: any, user: any): TUser {
+  handleRequest<TUser = { userId: string; role: string }>(err: Error, user: TUser): TUser {
     if (err || !user) {
       throw err || new UnauthorizedError(ErrorMessage.TOKEN_UNAUTHORIZED_NOTFOUND);
     }

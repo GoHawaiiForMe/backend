@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import QuoteService from './quote.service';
 import { QuoteToClientProperties } from './type/quoteProperties';
-import { User } from 'src/decorator/user.decorator';
+import { UserId } from 'src/decorator/user.decorator';
 import { CreateQuoteDataDTO, MakerQuoteQueryOptions } from './type/quote.dto';
 
 @Controller('quotes')
@@ -10,7 +10,7 @@ export default class QuoteController {
 
   @Get()
   async getQuotesByMaker(
-    @User() userId: string,
+    @UserId() userId: string,
     @Query() options: MakerQuoteQueryOptions
   ): Promise<{ totalCount: number; list: QuoteToClientProperties[] }> {
     const serviceOptions = { ...options, userId };
@@ -19,7 +19,7 @@ export default class QuoteController {
   }
 
   @Get(':id')
-  async getQuoteById(@User() userId: string, @Param('id') id: string): Promise<QuoteToClientProperties> {
+  async getQuoteById(@UserId() userId: string, @Param('id') id: string): Promise<QuoteToClientProperties> {
     const quote = await this.quoteService.getQuoteById(id, userId);
     return quote;
   }

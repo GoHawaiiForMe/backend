@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Patch, Sse } from '@nestjs/common';
 import NotificationService from './notification.service';
-import { User } from 'src/decorator/user.decorator';
+import { UserId } from 'src/decorator/user.decorator';
 import { map, Observable } from 'rxjs';
 import { Public } from 'src/decorator/public.decorator';
 import { NotificationProperties } from './type/notification.types';
@@ -10,7 +10,7 @@ export default class NotificationController {
   constructor(private readonly service: NotificationService) {}
 
   @Get()
-  async getNotifications(@User() userId: string): Promise<NotificationProperties[]> {
+  async getNotifications(@UserId() userId: string): Promise<NotificationProperties[]> {
     return await this.service.get(userId);
   }
 
@@ -22,7 +22,7 @@ export default class NotificationController {
   // 로그인 시 알림 SSE stream 연결 요청
   @Public()
   @Sse('stream')
-  stream(@User() userId: string): Observable<{ data: string }> {
+  stream(@UserId() userId: string): Observable<{ data: string }> {
     console.log(`SSE connection for userId: ${userId}`);
     return this.service.stream(userId).pipe(
       map((content: string) => {

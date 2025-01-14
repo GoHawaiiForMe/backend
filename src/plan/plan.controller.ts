@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post
 import { Plan } from '@prisma/client';
 import PlanService from './plan.service';
 import PlanQueryOptionDTO from './type/planQueryOptions.dto';
-import { User } from 'src/decorator/user.decorator';
+import { UserId } from 'src/decorator/user.decorator';
 import CreatePlanDataDTO from './type/createPlanData.dto';
 import CreatePlanData from './type/createPlanData.interface';
 import UpdateAssignDataDTO from './type/updateAssignData.dto';
@@ -15,7 +15,7 @@ export default class PlanController {
 
   @Get()
   async getPlans(
-    @User() makerId: string,
+    @UserId() makerId: string,
     @Query() options: PlanQueryOptionDTO
   ): Promise<{ totalCount: number; list: Plan[] }> {
     const { totalCount, list } = await this.planService.getPlans(makerId, options);
@@ -30,7 +30,7 @@ export default class PlanController {
 
   @Get(':planId/quotes')
   async getQuotesByPlanId(
-    @User() userId: string,
+    @UserId() userId: string,
     @Param('planId') planId: string,
     @Query() options: DreamerQuoteQueryOptionsDTO
   ): Promise<{ totalCount: number; list: QuoteToClientProperties[] }> {
@@ -40,7 +40,7 @@ export default class PlanController {
   }
 
   @Post()
-  async postPlan(@User() dreamerId: string, @Body() data: CreatePlanDataDTO): Promise<Plan> {
+  async postPlan(@UserId() dreamerId: string, @Body() data: CreatePlanDataDTO): Promise<Plan> {
     const serviceData: CreatePlanData = { ...data, dreamerId };
     const plan = await this.planService.postPlan(serviceData);
     return plan;
@@ -48,7 +48,7 @@ export default class PlanController {
 
   @Post(':planId/quotes')
   async postQuote(
-    @User() userId: string,
+    @UserId() userId: string,
     @Param('planId') planId: string,
     @Body() data: CreateQuoteDataDTO
   ): Promise<QuoteToClientProperties> {
@@ -58,7 +58,7 @@ export default class PlanController {
 
   @Patch(':id/assign')
   async assignPlan(
-    @User() requestUserId: string,
+    @UserId() requestUserId: string,
     @Param('id') id: string,
     @Body() data: UpdateAssignDataDTO
   ): Promise<Plan> {
@@ -67,14 +67,14 @@ export default class PlanController {
   }
 
   @Patch(':id/complete')
-  async completePlan(@User() requestUserId: string, @Param('id') id: string): Promise<Plan> {
+  async completePlan(@UserId() requestUserId: string, @Param('id') id: string): Promise<Plan> {
     const plan = await this.planService.updatePlanComplete(id, requestUserId);
     return plan;
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async deletePlan(@User() requestUserId: string, @Param('id') id: string): Promise<void> {
+  async deletePlan(@UserId() requestUserId: string, @Param('id') id: string): Promise<void> {
     await this.planService.deletePlan(id, requestUserId);
   }
 }
