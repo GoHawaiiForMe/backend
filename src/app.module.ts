@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import PrismaModule from 'prisma/prisma.module';
+import PrismaModule from './providers/database/prisma/prisma.module';
 import { MongooseModule } from '@nestjs/mongoose';
-import getMongoConfig from '../config/mongo.config';
-import UserModule from './core/user/user.module';
+import getMongoConfig from './providers/database/mongoose/config/mongo.config';
+import UserModule from './modules/user/user.module';
 import { APP_GUARD } from '@nestjs/core';
-import { UserGuard } from './shared/guard/user.guard';
+import { UserGuard } from './common/guards/user.guard';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import NotificationModule from './core/notification/notification.module';
-import FollowModule from './core/follow/follow.module';
-import PlanModule from './core/plan/plan.module';
-import QuoteModule from './core/quote/quote.module';
+import NotificationModule from './modules/notification/notification.module';
+import FollowModule from './modules/follow/follow.module';
+import PlanModule from './modules/plan/plan.module';
+import QuoteModule from './modules/quote/quote.module';
 
 @Module({
   imports: [
