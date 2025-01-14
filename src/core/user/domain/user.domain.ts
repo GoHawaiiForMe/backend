@@ -1,6 +1,6 @@
 import { Role } from 'src/common/types/role.type';
 import { FilteredUserProperties, PasswordProperties, UserProperties } from '../type/user.types';
-import { ComparePassword, HashingPassword } from '../../common/utility/hashingPassword';
+import { ComparePassword, HashingPassword } from '../../../common/utility/hashingPassword';
 import { IUser } from './user.interface';
 import BadRequestError from 'src/common/errors/badRequestError';
 import ErrorMessage from 'src/common/enums/error.message';

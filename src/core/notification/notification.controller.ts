@@ -1,8 +1,8 @@
 import { Controller, Get, Param, Patch, Sse } from '@nestjs/common';
 import NotificationService from './notification.service';
-import { UserId } from 'src/decorator/user.decorator';
+import { UserId } from 'src/shared/decorator/user.decorator';
 import { map, Observable } from 'rxjs';
-import { Public } from 'src/decorator/public.decorator';
+import { Public } from 'src/shared/decorator/public.decorator';
 import { NotificationProperties } from './type/notification.types';
 
 @Controller('notifications')

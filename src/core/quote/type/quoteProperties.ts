@@ -1,6 +1,6 @@
 import { Plan } from '@prisma/client';
-import { IUser } from 'src/user/domain/user.interface';
-import { FilteredUserProperties, UserProperties } from 'src/user/type/user.types';
+import { IUser } from 'src/core/user/domain/user.interface';
+import { FilteredUserProperties, UserProperties } from 'src/core/user/type/user.types';
 
 export interface QuoteProperties {
   id?: string;

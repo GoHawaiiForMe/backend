@@ -8,7 +8,7 @@ import SortOrder from 'src/common/enums/sortOrder';
 import PlanWhereConditions from './type/planWhereCondition.interface';
 import CreatePlanData from './type/createPlanData.interface';
 import UpdatePlanData from './type/updatePlanData.interface';
-import { QuoteProperties } from 'src/quote/type/quoteProperties';
+import { QuoteProperties } from 'src/core/quote/type/quoteProperties';
 
 @Injectable()
 export default class PlanRepository {

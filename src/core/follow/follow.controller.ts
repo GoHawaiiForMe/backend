@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, HttpCode, HttpStatus, Post, Res } from '@nestjs/common';
 import FollowService from './follow.service';
-import { UserId } from 'src/decorator/user.decorator';
+import { UserId } from 'src/shared/decorator/user.decorator';
 
 @Controller('follow')
 export default class FollowController {

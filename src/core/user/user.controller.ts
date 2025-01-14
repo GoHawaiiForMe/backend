@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Patch, Post, Res } from '@nestjs/common';
 import UserService from './user.service';
-import { Cookies } from 'src/decorator/cookie.decorator';
-import { Public } from 'src/decorator/public.decorator';
-import { UserId } from 'src/decorator/user.decorator';
+import { Cookies } from 'src/shared/decorator/cookie.decorator';
+import { Public } from 'src/shared/decorator/public.decorator';
+import { UserId } from 'src/shared/decorator/user.decorator';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -29,7 +29,7 @@ import { FilteredUserProperties, UserProperties } from './type/user.types';
 import UpdateUserDTO from './type/updateUser.dto';
 import UnauthorizedError from 'src/common/errors/unauthorizedError';
 import ErrorMessage from 'src/common/enums/error.message';
-import { UserRole } from 'src/decorator/role.decorator';
+import { UserRole } from 'src/shared/decorator/role.decorator';
 
 @Controller('user')
 export default class UserController {

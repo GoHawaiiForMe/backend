@@ -1,7 +1,7 @@
 import { Plan } from '@prisma/client';
 import IQuote from './quote.interface';
 import { QuoteProperties } from '../type/quoteProperties';
-import { IUser } from 'src/user/domain/user.interface';
+import { IUser } from 'src/core/user/domain/user.interface';
 import { QuoteToClientProperties } from '../type/quoteProperties';
 import ConflictError from 'src/common/errors/conflictError';
 import ErrorMessage from 'src/common/enums/error.message';

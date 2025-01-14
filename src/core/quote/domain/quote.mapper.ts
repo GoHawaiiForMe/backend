@@ -1,7 +1,7 @@
 import Quote from './quote.domain';
 import { QuoteMapperProperties } from '../type/quoteProperties';
-import { IUser } from 'src/user/domain/user.interface';
-import UserMapper from 'src/user/domain/user.mapper';
+import { IUser } from 'src/core/user/domain/user.interface';
+import UserMapper from 'src/core/user/domain/user.mapper';
 import IQuote from './quote.interface';
 
 export default class QuoteMapper {

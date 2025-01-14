@@ -2,21 +2,21 @@ import { Injectable } from '@nestjs/common';
 import { Plan, Role, ServiceArea, Status } from '@prisma/client';
 import PlanRepository from './plan.repository';
 import PlanQueryOptions from './type/planQueryOptions';
-import UserRepository from 'src/user/user.repository';
-import { IMakerProfile } from 'src/user/domain/profile.interface';
-import { IUser } from 'src/user/domain/user.interface';
+import UserRepository from 'src/core/user/user.repository';
+import { IMakerProfile } from 'src/core/user/domain/profile.interface';
+import { IUser } from 'src/core/user/domain/user.interface';
 import ForbiddenError from 'src/common/errors/forbiddenError';
 import ErrorMessage from 'src/common/enums/error.message';
 import NotFoundError from 'src/common/errors/notFoundError';
 import CreatePlanData from './type/createPlanData.interface';
 import UpdatePlanData from './type/updatePlanData.interface';
 import BadRequestError from 'src/common/errors/badRequestError';
-import QuoteService from 'src/quote/quote.service';
-import { CreateOptionalQuoteData, CreateQuoteData, QuoteQueryOptions } from 'src/quote/type/quote.type';
-import { QuoteProperties, QuoteToClientProperties } from 'src/quote/type/quoteProperties';
+import QuoteService from 'src/core/quote/quote.service';
+import { CreateOptionalQuoteData, CreateQuoteData, QuoteQueryOptions } from 'src/core/quote/type/quote.type';
+import { QuoteProperties, QuoteToClientProperties } from 'src/core/quote/type/quoteProperties';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { FilteredUserProperties } from 'src/user/type/user.types';
-import QuoteRepository from 'src/quote/quote.repository';
+import { FilteredUserProperties } from 'src/core/user/type/user.types';
+import QuoteRepository from 'src/core/quote/quote.repository';
 
 @Injectable()
 export default class PlanService {

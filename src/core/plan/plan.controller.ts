@@ -2,12 +2,12 @@ import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post
 import { Plan } from '@prisma/client';
 import PlanService from './plan.service';
 import PlanQueryOptionDTO from './type/planQueryOptions.dto';
-import { UserId } from 'src/decorator/user.decorator';
+import { UserId } from 'src/shared/decorator/user.decorator';
 import CreatePlanDataDTO from './type/createPlanData.dto';
 import CreatePlanData from './type/createPlanData.interface';
 import UpdateAssignDataDTO from './type/updateAssignData.dto';
-import { CreateQuoteDataDTO, DreamerQuoteQueryOptionsDTO } from 'src/quote/type/quote.dto';
-import { QuoteToClientProperties } from 'src/quote/type/quoteProperties';
+import { CreateQuoteDataDTO, DreamerQuoteQueryOptionsDTO } from 'src/core/quote/type/quote.dto';
+import { QuoteToClientProperties } from 'src/core/quote/type/quoteProperties';
 
 @Controller('plans')
 export default class PlanController {

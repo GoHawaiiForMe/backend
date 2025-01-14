@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Patch, Query } from '@nestjs/common';
 import QuoteService from './quote.service';
 import { QuoteToClientProperties } from './type/quoteProperties';
-import { UserId } from 'src/decorator/user.decorator';
+import { UserId } from 'src/shared/decorator/user.decorator';
 import { MakerQuoteQueryOptionsDTO, UpdateQuoteDataDTO } from './type/quote.dto';
 
 @Controller('quotes')
