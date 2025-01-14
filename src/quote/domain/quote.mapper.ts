@@ -9,11 +9,13 @@ export default class QuoteMapper {
 
   toDomain(): IQuote {
     let maker: IUser | null = null;
-    if (this?.quote?.maker) {
-      maker = new UserMapper(this.quote.maker).toDomain();
-    }
+
     if (!this.quote) {
       return null;
+    }
+
+    if (this?.quote?.maker) {
+      maker = new UserMapper(this.quote.maker).toDomain();
     }
 
     return new Quote({

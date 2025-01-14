@@ -13,15 +13,17 @@ import UpdatePlanData from './type/updatePlanData.interface';
 import BadRequestError from 'src/common/errors/badRequestError';
 import QuoteService from 'src/quote/quote.service';
 import { CreateOptionalQuoteData, CreateQuoteData, QuoteQueryOptions } from 'src/quote/type/quote.type';
-import { QuoteToClientProperties } from 'src/quote/type/quoteProperties';
+import { QuoteProperties, QuoteToClientProperties } from 'src/quote/type/quoteProperties';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { FilteredUserProperties } from 'src/user/type/user.types';
+import QuoteRepository from 'src/quote/quote.repository';
 
 @Injectable()
 export default class PlanService {
   constructor(
     private readonly planRepository: PlanRepository,
     private readonly userRepository: UserRepository,
+    private readonly quoteRepository: QuoteRepository,
     private readonly quoteService: QuoteService,
     private readonly eventEmitter: EventEmitter2
   ) {}
@@ -72,10 +74,10 @@ export default class PlanService {
 
   async postQuote(data: CreateOptionalQuoteData, userId: string, planId: string): Promise<QuoteToClientProperties> {
     const plan = await this.planRepository.findById(planId);
+
     if (!plan) {
       throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
     }
-
     const planWithAssignees = plan as Plan & { assignees: FilteredUserProperties[] };
     const assigneeIds = planWithAssignees.assignees.map((user) => user.id);
     const isAssigned = assigneeIds.includes(userId); //NOTE. 지정견적 요청자인지 확인
@@ -85,6 +87,7 @@ export default class PlanService {
     const quoteServiceData = { ...(data as CreateQuoteData), isAssigned };
 
     const quote = await this.quoteService.createQuote(quoteServiceData, userId);
+
     return quote;
   }
 
@@ -139,7 +142,15 @@ export default class PlanService {
     }
     //TODO. 삭제된 플랜의 견적자들에게 알림 필요
     //TODO. 플랜이 삭제될 때 해당 플랜의 견적들도 삭제 필요
+
+    const plan2 = plan as any;
+    const quotes = plan2.quotes; //TODO. Plan 도메인 모델 구현 후 수정
+
+    const deletedQuotes = quotes.map((quote) => this.quoteRepository.delete(quote.id));
     const deletedPlan = this.planRepository.delete(id);
+
+    await Promise.all([...deletedQuotes, deletedPlan]);
+
     return deletedPlan;
   }
 }
