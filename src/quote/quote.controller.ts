@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Patch
 import QuoteService from './quote.service';
 import { QuoteToClientProperties } from './type/quoteProperties';
 import { UserId } from 'src/decorator/user.decorator';
-import { CreateQuoteDataDTO, MakerQuoteQueryOptionsDTO, UpdateQuoteDataDTO } from './type/quote.dto';
+import { MakerQuoteQueryOptionsDTO, UpdateQuoteDataDTO } from './type/quote.dto';
 
 @Controller('quotes')
 export default class QuoteController {
@@ -26,7 +26,7 @@ export default class QuoteController {
 
   @Patch(':id')
   async patchQuote(
-    @User() userId: string,
+    @UserId() userId: string,
     @Param('id') id: string,
     @Body() data: UpdateQuoteDataDTO
   ): Promise<QuoteToClientProperties> {
@@ -36,7 +36,7 @@ export default class QuoteController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async deleteQuoteById(@User() userId: string, @Param('id') id: string): Promise<void> {
+  async deleteQuoteById(@UserId() userId: string, @Param('id') id: string): Promise<void> {
     await this.quoteService.deleteQuote(id, userId);
   }
 }
