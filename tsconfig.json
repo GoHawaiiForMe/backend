@@ -21,10 +21,10 @@
   },
   "include": [
     "src/**/*", // src 폴더의 모든 파일 포함
-    "prisma/**/*",
+    "src/prisma/**/*",
     "test/**/*",
-    "config",
-    "mongoose/**/*"
+    "src/providers/database/mongoose/config",
+    "src/providers/database/mongoose/**/*"
   ],
   "exclude": [
     "dist/**/*" // dist 폴더의 모든 파일 제외
