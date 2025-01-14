@@ -68,7 +68,6 @@ export default class UserController {
   }
 
   @Get()
-  @Role('MAKER')
   @ApiBearerAuth('accessToken')
   @ApiOperation({ summary: '유저 정보 조회', description: '로그인한 유저의 기본 정보를 조회합니다' })
   @ApiOkResponse({ type: UserResponseDTO })

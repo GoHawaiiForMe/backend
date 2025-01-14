@@ -5,13 +5,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 import getMongoConfig from '../config/mongo.config';
 import UserModule from './user/user.module';
 import { APP_GUARD } from '@nestjs/core';
-import { JwtGuard } from './guard/login.guard';
+import { UserGuard } from './guard/user.guard';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import NotificationModule from './notification/notification.module';
 import FollowModule from './follow/follow.module';
 import PlanModule from './plan/plan.module';
 import QuoteModule from './quote/quote.module';
-import { RoleGuard } from './guard/role.guard';
 
 @Module({
   imports: [
@@ -32,11 +31,7 @@ import { RoleGuard } from './guard/role.guard';
   providers: [
     {
       provide: APP_GUARD,
-      useClass: JwtGuard
-    },
-    {
-      provide: APP_GUARD,
-      useClass: RoleGuard
+      useClass: UserGuard
     }
   ]
 })
