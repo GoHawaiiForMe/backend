@@ -29,6 +29,7 @@ import { FilteredUserProperties, UserProperties } from './type/user.types';
 import UpdateUserDTO from './type/updateUser.dto';
 import UnauthorizedError from 'src/common/errors/unauthorizedError';
 import ErrorMessage from 'src/common/enums/error.message';
+import { Role } from 'src/decorator/role.decorator';
 
 @Controller('user')
 export default class UserController {
@@ -67,6 +68,7 @@ export default class UserController {
   }
 
   @Get()
+  @Role('MAKER')
   @ApiBearerAuth('accessToken')
   @ApiOperation({ summary: '유저 정보 조회', description: '로그인한 유저의 기본 정보를 조회합니다' })
   @ApiOkResponse({ type: UserResponseDTO })

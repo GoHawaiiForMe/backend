@@ -11,6 +11,7 @@ import NotificationModule from './notification/notification.module';
 import FollowModule from './follow/follow.module';
 import PlanModule from './plan/plan.module';
 import QuoteModule from './quote/quote.module';
+import { RoleGuard } from './guard/role.guard';
 
 @Module({
   imports: [
@@ -32,6 +33,10 @@ import QuoteModule from './quote/quote.module';
     {
       provide: APP_GUARD,
       useClass: JwtGuard
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RoleGuard
     }
   ]
 })
