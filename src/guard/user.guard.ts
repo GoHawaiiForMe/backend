@@ -5,7 +5,7 @@ import ErrorMessage from 'src/common/enums/error.message';
 import ForbiddenError from 'src/common/errors/forbiddenError';
 import UnauthorizedError from 'src/common/errors/unauthorizedError';
 import { IS_PUBLIC_KEY } from 'src/decorator/public.decorator';
-import { Role } from 'src/decorator/role.decorator';
+import { Role } from 'src/decorator/roleGuard.decorator';
 
 @Injectable()
 export class UserGuard extends AuthGuard('jwt') {

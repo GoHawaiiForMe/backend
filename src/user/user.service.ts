@@ -16,7 +16,6 @@ export default class UserService {
   ) {}
 
   async createUser(data): Promise<null> {
-    // 데이터 받는 형식을 프론트엔드와 다시 한 번 상의 필요
     const { user, profile } = data;
 
     // FIXME: transaction utility 만들어서 적용하자
