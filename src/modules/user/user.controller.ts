@@ -151,6 +151,6 @@ export default class UserController {
   @HttpCode(HttpStatus.OK)
   @Post('check/nickname')
   async checkNickName(@Body() body: { nickName: string }): Promise<boolean> {
-    return await this.service.checkEmail(body.nickName);
+    return await this.service.checkNickName(body.nickName);
   }
 }
