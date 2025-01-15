@@ -73,8 +73,8 @@ export default class PlanService {
       throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
     }
 
-    const makerId = plan.getDreamerId();
-    if (makerId !== userId) {
+    const dreamerId = plan.getDreamerId();
+    if (dreamerId !== userId) {
       throw new ForbiddenError(ErrorMessage.QUOTE_FORBIDDEN_DREAMER);
     }
 
