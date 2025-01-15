@@ -63,9 +63,9 @@ export default class Plan implements IPlan {
       details: this.details,
       //address: this.address,
       status: this.status,
-      quotes: this.quotes.map((quote) => quote?.toClient()),
-      assignees: this.assignees.map((assignee) => assignee.toClient()),
-      dreamer: this.dreamer.toClient(),
+      quotes: this.quotes?.map((quote) => quote?.toClient()),
+      assignees: this.assignees?.map((assignee) => assignee?.toClient()),
+      dreamer: this.dreamer?.toClient(),
       review: this.review
     };
   }

@@ -20,6 +20,7 @@ import { ServiceArea } from 'src/common/constants/serviceArea.type';
 import { RoleEnum } from 'src/common/constants/role.type';
 import PlanMapper from 'src/common/domains/plan/plan.mapper';
 import BadRequestError from 'src/common/errors/badRequestError';
+import { StatusEnum } from 'src/common/constants/status.type';
 
 @Injectable()
 export default class PlanService {
@@ -43,11 +44,9 @@ export default class PlanService {
     const serviceArea: ServiceArea[] = makerProfile.get().serviceArea;
     options.serviceArea = serviceArea; //NOTE. 메이커의 서비스지역 필터링
 
-    const whereConditions = this.buildWhereConditions({ keyword, tripType, serviceArea });
-
     const [totalCount, list] = await Promise.all([
-      this.planRepository.totalCount(whereConditions),
-      this.planRepository.findMany({ ...options, whereConditions })
+      this.planRepository.totalCount(options),
+      this.planRepository.findMany(options)
     ]);
 
     const toClientList = list.map((plan) => plan.toClient());
@@ -92,61 +91,48 @@ export default class PlanService {
   async postQuote(data: CreateOptionalQuoteData, userId: string, planId: string): Promise<QuoteToClientProperties> {
     const plan = await this.planRepository.findById(planId);
 
-    if (!plan) {
-      throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
-    }
+    if (!plan) throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
 
     const assigneeIds = plan.getAssigneeIds();
-    const domainQuote = new QuoteMapper({ ...data, planId, assigneeIds, makerId: userId }).toDomain();
+    const isAssigned = assigneeIds.includes(userId);
+    const domainQuote = new QuoteMapper({ ...data, planId, isAssigned, makerId: userId }).toDomain();
     const quote = await this.quoteService.createQuote(domainQuote);
 
     return quote;
   }
 
-  async updatePlanAssign(
-    id: string,
-    requestUserId: string,
-    data: { assigneeId: string }
-  ): Promise<PlanToClientProperties> {
-    const assigneeUser = await this.userRepository.findById(data.assigneeId);
+  async updatePlanAssign(id: string, userId: string, data: { assigneeId: string }): Promise<PlanToClientProperties> {
+    const assignee = await this.userRepository.findById(data.assigneeId);
     const plan = await this.planRepository.findById(id);
 
-    if (!assigneeUser) {
-      throw new NotFoundError(ErrorMessage.USER_NOT_FOUND);
-    }
+    if (!assignee) throw new NotFoundError(ErrorMessage.USER_NOT_FOUND);
 
-    if (assigneeUser.getRole() !== RoleEnum.MAKER) {
+    if (assignee.getRole() !== RoleEnum.MAKER) {
       throw new BadRequestError(ErrorMessage.PLAN_ASSIGN_NOT_MAKER);
     }
 
-    if (!plan) {
-      throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
-    }
+    if (!plan) throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
 
-    if (plan.getDreamerId() !== requestUserId) {
+    if (plan.getDreamerId() !== userId) {
       throw new ForbiddenError(ErrorMessage.USER_FORBIDDEN_NOT_OWNER);
     }
 
     plan.updateAssign(data);
     const updatedPlan = await this.planRepository.update(plan);
 
-    const userId = data.assigneeId; //NOTE. 알림
+    const assigneeId = data.assigneeId; //NOTE. 알림
     const content: string = `${plan.getDreamerNickName()} 드리머가 지정견적을 요청했어요`;
-    this.eventEmitter.emit('notification', { userId, content });
+    this.eventEmitter.emit('notification', { assigneeId, content });
 
     return updatedPlan.toClient();
   }
 
-  async updatePlanComplete(id: string, requestUserId: string): Promise<PlanToClientProperties> {
+  async updatePlanComplete(id: string, userId: string): Promise<PlanToClientProperties> {
     const plan = await this.planRepository.findById(id);
 
-    if (!plan) {
-      throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
-    }
+    if (!plan) throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
 
-    if (plan.getDreamerId() !== requestUserId) {
-      throw new ForbiddenError(ErrorMessage.USER_FORBIDDEN_NOT_OWNER);
-    }
+    if (plan.getDreamerId() !== userId) throw new ForbiddenError(ErrorMessage.USER_FORBIDDEN_NOT_OWNER);
 
     plan.updateComplete();
     const updatedPlan = await this.planRepository.update(plan);
@@ -154,13 +140,17 @@ export default class PlanService {
     return updatedPlan.toClient();
   }
 
-  async deletePlan(id: string, requestUserId: string): Promise<PlanToClientProperties> {
+  async deletePlan(id: string, userId: string): Promise<PlanToClientProperties> {
     const plan = await this.planRepository.findById(id);
-    if (!plan) {
-      throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
-    }
-    if (plan.getDreamerId() !== requestUserId) {
+
+    if (!plan) throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
+
+    if (plan.getDreamerId() !== userId) {
       throw new ForbiddenError(ErrorMessage.USER_FORBIDDEN_NOT_OWNER);
+    }
+
+    if (plan.getStatus() === StatusEnum.CONFIRMED) {
+      throw new BadRequestError(ErrorMessage.PLAN_DELETE_BAD_REQUEST);
     }
     //TODO. 삭제된 플랜의 견적자들에게 알림 필요
 
@@ -173,36 +163,5 @@ export default class PlanService {
     await Promise.all([...deletedQuotes, deletedPlan]);
 
     return deletedPlan.toClient();
-  }
-
-  private buildWhereConditions(whereOptions: PlanQueryOptions): PlanWhereConditions {
-    const { keyword, tripType, serviceArea } = whereOptions;
-    const whereConditions: any = {
-      isDeletedAt: null,
-      serviceArea: { in: serviceArea }
-    };
-    if (tripType) {
-      whereConditions.tripType = { in: tripType };
-    }
-    if (keyword) {
-      whereConditions.OR = [
-        {
-          title: {
-            contains: keyword,
-            mode: 'insensitive' // 대소문자 구분 없이 검색
-          }
-        },
-        {
-          dreamer: {
-            nickName: {
-              contains: keyword,
-              mode: 'insensitive' // 대소문자 구분 없이 검색
-            }
-          }
-        }
-      ];
-    }
-
-    return whereConditions;
   }
 }

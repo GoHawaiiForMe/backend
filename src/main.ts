@@ -11,8 +11,7 @@ async function bootstrap() {
   app.enableCors();
   app.use(cookieParser());
 
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
-  //.useGlobalFilters(new GlobalExceptionFilter());
+  app.useGlobalPipes(new ValidationPipe({ transform: true })).useGlobalFilters(new GlobalExceptionFilter());
 
   // swagger 세부 세팅 참고 : https://docs.nestjs.com/openapi/introduction
   const config = new DocumentBuilder()

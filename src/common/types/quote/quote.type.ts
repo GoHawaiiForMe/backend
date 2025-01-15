@@ -16,7 +16,6 @@ export interface QuoteQueryOptions {
   isConfirmed?: boolean;
   isSent?: boolean;
   userId?: string;
-  whereConditions?: QuoteWhereConditions;
 }
 
 export interface CreateOptionalQuoteData {

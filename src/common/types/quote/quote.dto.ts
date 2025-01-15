@@ -37,6 +37,7 @@ export class MakerQuoteQueryOptionsDTO {
 
   //NOTE. NestJS에서는 DTO에서 boolean값으로 변환이 이상함
   @Transform(({ value }) => validateBooleanValue(value, ErrorMessage.QUOTE_BAD_REQUEST_IS_SENT))
+  @IsNotEmpty()
   isSent: boolean;
 }
 

@@ -63,11 +63,11 @@ export default class PlanController {
 
   @Patch(':id/assign')
   async assignPlan(
-    @UserId() requestUserId: string,
+    @UserId() userId: string,
     @Param('id') id: string,
     @Body() data: UpdateAssignDataDTO
   ): Promise<PlanToClientProperties> {
-    const plan = await this.planService.updatePlanAssign(id, requestUserId, data);
+    const plan = await this.planService.updatePlanAssign(id, userId, data);
     return plan;
   }
 

@@ -10,6 +10,7 @@ import { QuoteWhereConditions } from '../../common/types/quote/quote.type';
 import QuoteMapper from '../../common/domains/quote/quote.mapper';
 import ConflictError from 'src/common/errors/conflictError';
 import IQuote from '../../common/domains/quote/quote.interface';
+import BadRequestError from 'src/common/errors/badRequestError';
 
 @Injectable()
 export default class QuoteService {
@@ -19,11 +20,8 @@ export default class QuoteService {
     options: QuoteQueryOptions,
     userId: string
   ): Promise<{ totalCount: number; list: QuoteToClientProperties[] }> {
-    const whereConditions = this.buildWhereConditions(options);
-    options.whereConditions = whereConditions;
-
     const [totalCount, list] = await Promise.all([
-      this.quoteRepository.totalCount(whereConditions),
+      this.quoteRepository.totalCount(options),
       this.quoteRepository.findMany(options)
     ]);
     const toClientList = list.map((quote) => quote.toClient());
@@ -34,11 +32,9 @@ export default class QuoteService {
   async getQuotesByMaker(options: QuoteQueryOptions): Promise<{ totalCount: number; list: QuoteToClientProperties[] }> {
     const { page, pageSize } = options;
 
-    const whereConditions = this.buildWhereConditions(options);
-
     const [list, totalCount] = await Promise.all([
-      this.quoteRepository.findMany({ page, pageSize, whereConditions }),
-      this.quoteRepository.totalCount(whereConditions)
+      this.quoteRepository.findMany(options),
+      this.quoteRepository.totalCount(options)
     ]);
 
     const toClientList = list.map((quote) => quote.toClient());
@@ -48,24 +44,22 @@ export default class QuoteService {
 
   async getQuoteById(id: string, userId: string): Promise<QuoteToClientProperties> {
     const quote = await this.quoteRepository.findById(id);
-    if (!quote) {
-      throw new NotFoundError(ErrorMessage.QUOTE_NOT_FOUND);
-    }
+
+    if (!quote) throw new NotFoundError(ErrorMessage.QUOTE_NOT_FOUND);
+
     if (userId !== quote.getDreamerId() && userId !== quote.getMakerId()) {
       throw new ForbiddenError(ErrorMessage.QUOTE_FORBIDDEN_ID);
     }
+
     return quote.toClient();
   }
 
   async createQuote(data: IQuote): Promise<QuoteToClientProperties> {
     const planId = data.getPlanId();
     const makerId = data.getMakerId();
-    const whereConditions = this.buildWhereConditions({ planId, userId: makerId });
-    const isQuote = await this.quoteRepository.exists(whereConditions);
+    const isQuote = await this.quoteRepository.exists({ planId, userId: makerId });
 
-    if (isQuote) {
-      throw new ConflictError(ErrorMessage.QUOTE_CONFLICT);
-    }
+    if (isQuote) throw new ConflictError(ErrorMessage.QUOTE_CONFLICT);
 
     const quote = await this.quoteRepository.create(data);
     return quote.toClient();
@@ -74,9 +68,7 @@ export default class QuoteService {
   async update(id: string, userId: string, data: { isConfirmed: boolean }): Promise<QuoteToClientProperties> {
     const quote = await this.quoteRepository.findById(id);
 
-    if (!quote) {
-      throw new NotFoundError(ErrorMessage.QUOTE_NOT_FOUND);
-    }
+    if (!quote) throw new NotFoundError(ErrorMessage.QUOTE_NOT_FOUND);
     if (userId !== quote.getDreamerId()) {
       throw new ForbiddenError(ErrorMessage.QUOTE_FORBIDDEN_DREAMER);
     }
@@ -88,51 +80,14 @@ export default class QuoteService {
   async deleteQuote(id: string, userId: string): Promise<IQuote> {
     const quote = await this.quoteRepository.findById(id);
 
-    if (!quote) {
-      throw new NotFoundError(ErrorMessage.QUOTE_NOT_FOUND);
-    }
-    if (userId !== quote.getMakerId()) {
-      throw new ForbiddenError(ErrorMessage.QUOTE_FORBIDDEN_MAKER);
+    if (!quote) throw new NotFoundError(ErrorMessage.QUOTE_NOT_FOUND);
+    if (userId !== quote.getMakerId()) throw new ForbiddenError(ErrorMessage.QUOTE_FORBIDDEN_MAKER);
+
+    if (quote.getPlanStatus() !== StatusEnum.PENDING) {
+      throw new BadRequestError(ErrorMessage.QUOTE_DELETE_BAD_REQUEST_STATUS);
     }
 
     const deletedQuote = await this.quoteRepository.delete(id);
     return deletedQuote;
-  }
-
-  private buildWhereConditions(options: Partial<QuoteQueryOptions>): QuoteWhereConditions {
-    const { planId, isConfirmed, isSent, userId } = options || {};
-    let whereConditions: QuoteWhereConditions = {
-      isDeletedAt: null
-    };
-
-    if (userId) {
-      whereConditions.makerId = userId;
-    }
-
-    if (planId) {
-      whereConditions.planId = planId;
-    }
-
-    if (isConfirmed === true) {
-      whereConditions.isConfirmed = true;
-    }
-
-    if (isSent === true) {
-      whereConditions = {
-        ...whereConditions,
-        OR: [
-          { isConfirmed: true }, // 내가 뽑힌 견적
-          { isConfirmed: false, plan: { status: StatusEnum.PENDING } } // 반려되지 않은 견적 중 plan이 PENDING인 경우
-        ]
-      };
-    } else if (isSent === false) {
-      // isSent가 false이면 반려된 견적만 가져옴
-      whereConditions = {
-        ...whereConditions,
-        isConfirmed: false, // isConfirmed가 false여야 함
-        plan: { status: { in: [StatusEnum.CONFIRMED, StatusEnum.COMPLETED, StatusEnum.OVERDUE] } } // 반려된 견적의 상태
-      };
-    }
-    return whereConditions;
   }
 }

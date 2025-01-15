@@ -15,7 +15,7 @@ export interface QuoteProperties {
   planId: string;
   maker?: IUser;
   makerId?: string;
-  isConfirmed: boolean;
+  isConfirmed?: boolean;
   isAssigned: boolean;
 }
 
@@ -44,5 +44,4 @@ export interface QuoteMapperProperties {
   makerId?: string | null;
   isConfirmed?: boolean;
   isAssigned?: boolean;
-  assigneeIds?: string[];
 }

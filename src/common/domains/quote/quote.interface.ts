@@ -1,3 +1,4 @@
+import { Status } from 'src/common/constants/status.type';
 import { QuoteProperties, QuoteToClientProperties } from 'src/common/types/quote/quoteProperties';
 
 export default interface IQuote {
@@ -9,4 +10,5 @@ export default interface IQuote {
   getMakerId(): string;
   getDreamerId(): string;
   getPlanId(): string;
+  getPlanStatus(): Status;
 }

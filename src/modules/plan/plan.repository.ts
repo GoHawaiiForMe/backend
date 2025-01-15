@@ -14,7 +14,9 @@ export default class PlanRepository {
   constructor(private readonly db: DBClient) {}
 
   async findMany(options: PlanQueryOptions): Promise<IPlan[]> {
-    const { orderBy, page, pageSize, whereConditions } = options || {};
+    const { orderBy, page, pageSize } = options || {};
+
+    const whereConditions = this.buildWhereConditions(options);
     const orderByField: PlanOrderByField =
       orderBy === PlanOrder.RECENT ? { createdAt: SortOrder.DESC } : { startDate: SortOrder.ASC };
 
@@ -33,10 +35,13 @@ export default class PlanRepository {
     return domainPlans;
   }
 
-  async totalCount(whereConditions: PlanWhereConditions): Promise<number> {
+  async totalCount(options: PlanQueryOptions): Promise<number> {
+    const whereConditions = this.buildWhereConditions(options);
+
     const totalCount = await this.db.plan.count({
       where: whereConditions
     });
+
     return totalCount;
   }
 
@@ -109,5 +114,35 @@ export default class PlanRepository {
     });
     const domainPlan = new PlanMapper(plan).toDomain();
     return domainPlan;
+  }
+
+  private buildWhereConditions(whereOptions: PlanQueryOptions): PlanWhereConditions {
+    const { keyword, tripType, serviceArea } = whereOptions;
+    const whereConditions: any = {
+      isDeletedAt: null,
+      serviceArea: { in: serviceArea }
+    };
+    if (tripType) whereConditions.tripType = { in: tripType };
+
+    if (keyword) {
+      whereConditions.OR = [
+        {
+          title: {
+            contains: keyword,
+            mode: 'insensitive' // 대소문자 구분 없이 검색
+          }
+        },
+        {
+          dreamer: {
+            nickName: {
+              contains: keyword,
+              mode: 'insensitive' // 대소문자 구분 없이 검색
+            }
+          }
+        }
+      ];
+    }
+
+    return whereConditions;
   }
 }

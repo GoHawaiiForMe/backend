@@ -10,22 +10,11 @@ import { StatusEnum } from 'src/common/constants/status.type';
 export default class PlanMapper {
   constructor(private readonly plan: PlanMapperProperties) {}
   toDomain(): IPlan {
-    let dreamer: IUser | null = null;
-    let assignees: IUser[] = [];
-    let quotes: IQuote[] = [];
+    // let dreamer: IUser | null = null;
+    // let assignees: IUser[] = [];
+    // let quotes: IQuote[] = [];
 
     if (!this.plan) return null;
-    if (this?.plan?.dreamer) {
-      dreamer = new UserMapper(this.plan.dreamer).toDomain();
-    }
-
-    if (this.plan.assignees && this.plan.assignees.length > 0) {
-      assignees = this.plan.assignees.map((assignee) => new UserMapper(assignee).toDomain());
-    }
-
-    if (this.plan.quotes && this.plan.quotes.length > 0) {
-      quotes = this.plan.quotes.map((quote) => new QuoteMapper(quote).toDomain());
-    }
 
     return new Plan({
       id: this.plan.id,
@@ -40,9 +29,9 @@ export default class PlanMapper {
       details: this.plan.details,
       address: this.plan.address,
       status: this.plan.status ?? StatusEnum.PENDING,
-      quotes,
-      assignees,
-      dreamer,
+      quotes: this.plan.quotes?.map((quote) => new QuoteMapper(quote)?.toDomain()),
+      assignees: this.plan.assignees?.map((assignee) => new UserMapper(assignee)?.toDomain()),
+      dreamer: new UserMapper(this.plan.dreamer)?.toDomain(),
       dreamerId: this.plan.dreamerId,
       review: this.plan.review
     });

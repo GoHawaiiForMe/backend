@@ -4,6 +4,7 @@ import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import { IUser } from '../user/user.interface';
 import { QuoteProperties, QuoteToClientProperties } from 'src/common/types/quote/quoteProperties';
 import IPlan from '../plan/plan.interface';
+import { Status } from 'src/common/constants/status.type';
 
 export default class Quote implements IQuote {
   private id?: string;
@@ -39,7 +40,6 @@ export default class Quote implements IQuote {
       throw new ConflictError(ErrorMessage.QUOTE_CONFLICT_IS_CONFIRMED);
     }
     this.isConfirmed = data.isConfirmed;
-
     return this;
   }
   toDBForUpdate(): Partial<QuoteProperties> {
@@ -69,7 +69,7 @@ export default class Quote implements IQuote {
       price: this.price,
       content: this.content,
       plan: this.plan?.toClient(),
-      maker: this.maker?.toClient() ?? null,
+      maker: this.maker?.toClient(),
       isConfirmed: this.isConfirmed,
       isAssigned: this.isAssigned
     };
@@ -85,7 +85,11 @@ export default class Quote implements IQuote {
   getDreamerId(): string {
     return this.plan.getDreamerId();
   }
+
   getPlanId(): string {
     return this.planId;
+  }
+  getPlanStatus(): Status {
+    return this.plan.getStatus();
   }
 }

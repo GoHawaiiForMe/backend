@@ -25,9 +25,10 @@ const enum ErrorMessage {
   PLAN_UPDATE_FORBIDDEN = '해당 플랜을 수정할 권리가 없습니다.',
   PLAN_STATUS_INVALID = '지정견적 요청은 PENDING 상태일 때만 가능합니다.',
   PLAN_COMPLETED_BAD_REQUEST = '플랜 완료 요청은 CONFIRMED 상태일 떄만 가능합니다.',
-  PLAN_ASSIGN_CONFLICT = '이미 지정견척을 요청한 사람입니다.',
+  PLAN_ASSIGN_CONFLICT = '이미 지정견적을 요청한 사람입니다.',
   PLAN_ASSIGN_NOT_MAKER = 'Maker에게만 지정견적 요청을 할 수 있습니다.',
   PLAN_ASSIGN_NOT_PENDING = 'PENDING 상태일 때만 지정견적 요청을 할 수 있습니다.',
+  PLAN_DELETE_BAD_REQUEST = 'CONFIRMED 상태의 진행중인 플랜은 삭제할 수 없습니다.',
 
   QUOTE_NOT_FOUND = '해당 견적서를 찾을 수 없습니다.',
   QUOTE_FORBIDDEN_ID = '해당 견적서의 Maker와 Dreamer만 조회할 수 있습니다.',
@@ -38,6 +39,7 @@ const enum ErrorMessage {
   QUOTE_BAD_REQUEST_IS_ASSIGNED = 'isAssigned는 boolean 값인 true와 false만 입력이 가능합니다. 필수 입력사항입니다.',
   QUOTE_BAD_REQUEST_IS_CONFIRMED = 'isConfirmed는 boolean 값인 true와 false만 입력이 가능합니다.',
   QUOTE_CONFLICT = '해당 플랜에 이미 견적서를 작성하셨습니다. 하나의 플랜에는 하나의 견적서만 쓸 수 있습니다.',
+  QUOTE_DELETE_BAD_REQUEST_STATUS = '견적의 플랜이 PENDING 상태 일 때만 삭제할 수 있습니다.',
 
   INTERNAL_SERVER_ERROR = '내부 서버 오류'
 }
