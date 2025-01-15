@@ -125,14 +125,14 @@ export default class UserService {
   }
 
   async checkEmail(email: string) {
-    const findByEmail = await this.repository.findByEmail(email);
+    const user = await this.repository.findByEmail(email);
 
-    return !findByEmail;
+    return !user;
   }
 
   async checkNickName(nickName: string) {
-    const findByNickName = await this.repository.findByNickName(nickName);
+    const user = await this.repository.findByNickName(nickName);
 
-    return !findByNickName;
+    return !user;
   }
 }
