@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Patch, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Patch, Post, Res } from '@nestjs/common';
 import UserService from './user.service';
 import { Cookies } from 'src/common/decorators/cookie.decorator';
 import { Public } from 'src/common/decorators/public.decorator';
@@ -138,5 +138,19 @@ export default class UserController {
     });
 
     res.json({ accessToken });
+  }
+
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Post('check/email')
+  async checkEmail(@Body() body: { email: string }): Promise<boolean> {
+    return await this.service.checkEmail(body.email);
+  }
+
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Post('check/nickname')
+  async checkNickName(@Body() body: { nickName: string }): Promise<boolean> {
+    return await this.service.checkNickName(body.nickName);
   }
 }
