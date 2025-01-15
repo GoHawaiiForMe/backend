@@ -123,4 +123,16 @@ export default class UserService {
     const newProfile = await this.repository.updateMakerProfile(userId, profile.update(data));
     return newProfile.get();
   }
+
+  async checkEmail(email: string) {
+    const findByEmail = await this.repository.findByEmail(email);
+
+    return !findByEmail;
+  }
+
+  async checkNickName(nickName: string) {
+    const findByNickName = await this.repository.findByNickName(nickName);
+
+    return !findByNickName;
+  }
 }
