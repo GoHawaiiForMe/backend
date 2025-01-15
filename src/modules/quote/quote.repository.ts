@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import DBClient from 'src/providers/database/prisma/DB.client';
 import SortOrder from 'src/common/constants/sortOrder.enum';
-import { QuoteQueryOptions, QuoteWhereInput } from '../../common/types/quote/quote.type';
+import { QuoteQueryOptions, QuoteWhereConditions } from '../../common/types/quote/quote.type';
 import IQuote from 'src/common/domains/quote/quote.interface';
 import QuoteMapper from 'src/common/domains/quote/quote.mapper';
 
@@ -24,7 +24,7 @@ export default class QuoteRepository {
     return domainQuotes;
   }
 
-  async totalCount(whereConditions: QuoteWhereInput): Promise<number> {
+  async totalCount(whereConditions: QuoteWhereConditions): Promise<number> {
     const totalCount = await this.db.quote.count({
       where: whereConditions
     });
@@ -44,7 +44,7 @@ export default class QuoteRepository {
     return domainQuote;
   }
 
-  async exists(whereConditions: QuoteWhereInput): Promise<Boolean> {
+  async exists(whereConditions: QuoteWhereConditions): Promise<Boolean> {
     const quote = await this.db.quote.findFirst({
       where: whereConditions
     });

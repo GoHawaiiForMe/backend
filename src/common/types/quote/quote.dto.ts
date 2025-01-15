@@ -1,6 +1,6 @@
 import { Optional } from '@nestjs/common';
 import { Transform, Type } from 'class-transformer';
-import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import validateBooleanValue from 'src/common/utilities/validateBooleanValue';
 
@@ -41,7 +41,7 @@ export class MakerQuoteQueryOptionsDTO {
 }
 
 export class CreateQuoteDataDTO {
-  @Type(() => Number)
+  @IsNumber()
   @IsNotEmpty()
   price: number;
 

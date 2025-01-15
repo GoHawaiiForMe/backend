@@ -8,10 +8,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhMmIzY
 GET http://localhost:4000/quotes/be7f1e1c-5192-4fa7-9e5e-8e228a8d8038
 #유저가 삭제됐을 때 테스트
 ###
-GET http://localhost:4000/plans/8fc40908-9269-4db3-ad7d-fb6e69b0ba0d/quotes?isConfirmed=true
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhMWIyYzNkNC1lNWY2LTc4OTAtYWJjZC0xMjM0NTY3ODkwZWYiLCJpYXQiOjE3MzY0ODgwOTgsImV4cCI6MTczNzA5Mjg5OH0.3FF1yKyL9m703ZeWsBtu3HcmmXywsqweOn7WabnS8bY
-#Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMmMzZDRlNS1mNjc4LTkwYWItY2RlZi0yMzQ1Njc4OTAxYWIiLCJpYXQiOjE3MzY0ODgyMDksImV4cCI6MTczNzA5MzAwOX0.wvas5nApZhmBgbW71mh5gOs9RFHvrfEEFuf6cghQXrw
+GET http://localhost:4000/plans/8fc40908-9269-4db3-ad7d-fb6e69b0ba0d/quotes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1NTVkNDYzZS0zN2I2LTQxMGItOTA2MS0xMWE5ZDY4MjJiZGQiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNjg4NDEwOSwiZXhwIjoxNzM2OTcwNTA5fQ.rqxDDA33-JctQQ1K_uAHu7gJw2IgpzPSqP7nOCfiQUs
 #GetByDreamer 테스트
+## 드리머 2번의 플랜 토큰은
 ###
 POST http://localhost:4000/quotes?isSent=true
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMzJkN2JkNC0xMTZjLTQ2N2ItOTM1Mi1hMTRiMGQ0OTRlZjkiLCJpYXQiOjE3MzY2MDQ0MTEsImV4cCI6MTczNzIwOTIxMX0.-eqbbKywgkiLltw8lF7NOFxytanxIQTtRHQ8OEYkE3M
@@ -20,15 +20,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMzJkN
     "price": "200",
     "content": "제가 제일 잘해요"
 }
-
-{
-    "price": "200",
-    "content": "제가 제일 잘해요"
-}
 ###
 POST http://localhost:4000/plans/8fc40908-9269-4db3-ad7d-fb6e69b0ba0d/quotes
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YjRkZWQ4Mi1lNjgwLTQxMGQtYjg2ZC1jZTY5NzRlNTNmMzciLCJpYXQiOjE3MzY3NTI5MTksImV4cCI6MTczNzM1NzcxOX0.P1jnV5MKrUzrNtRORJGGvpPp_IqhIBDCBazVGLan2YA
-#Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMmMzZDRlNS1mNjc4LTkwYWItY2RlZi0yMzQ1Njc4OTAxYWIiLCJpYXQiOjE3MzY0ODgyMDksImV4cCI6MTczNzA5MzAwOX0.wvas5nApZhmBgbW71mh5gOs9RFHvrfEEFuf6cghQXrw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YjRkZWQ4Mi1lNjgwLTQxMGQtYjg2ZC1jZTY5NzRlNTNmMzciLCJyb2xlIjoiTUFLRVIiLCJpYXQiOjE3MzY4ODMyODAsImV4cCI6MTczNjk2OTY4MH0.J5OAcjDZqhxSdb-7CECpHoqxLnybp-QSKQpFbiNALiM
 Content-Type: application/json
 
 {

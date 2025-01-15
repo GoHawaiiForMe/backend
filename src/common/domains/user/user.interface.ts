@@ -1,3 +1,4 @@
+import { Role } from 'src/common/constants/role.type';
 import { FilteredUserProperties, PasswordProperties, UserProperties } from 'src/common/types/user/user.types';
 
 export interface IUser {
@@ -7,4 +8,6 @@ export interface IUser {
   get(): UserProperties;
   toClient(): FilteredUserProperties;
   toClientAll(): Omit<UserProperties, 'password'>;
+  getId(): string;
+  getRole(): Role;
 }

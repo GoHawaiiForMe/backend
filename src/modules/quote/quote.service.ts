@@ -6,7 +6,7 @@ import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import ForbiddenError from 'src/common/errors/forbiddenError';
 import { CreateQuoteData, QuoteQueryOptions } from '../../common/types/quote/quote.type';
 import { StatusEnum } from 'src/common/constants/status.type';
-import { QuoteWhereInput } from '../../common/types/quote/quote.type';
+import { QuoteWhereConditions } from '../../common/types/quote/quote.type';
 import QuoteMapper from '../../common/domains/quote/quote.mapper';
 import ConflictError from 'src/common/errors/conflictError';
 import IQuote from '../../common/domains/quote/quote.interface';
@@ -19,8 +19,6 @@ export default class QuoteService {
     options: QuoteQueryOptions,
     userId: string
   ): Promise<{ totalCount: number; list: QuoteToClientProperties[] }> {
-    //TODO. Dreamer 본인인지 권한 체크 필요 -> 데코레이터 예정
-
     const whereConditions = this.buildWhereConditions(options);
     options.whereConditions = whereConditions;
 
@@ -59,21 +57,17 @@ export default class QuoteService {
     return quote.toClient();
   }
 
-  async createQuote(data: CreateQuoteData, userId: string): Promise<QuoteToClientProperties> {
-    const { planId } = data;
-    //TODO. 메이커인지 권한체크 필요 -> 데코레이터 예정
-    const whereConditions = this.buildWhereConditions({ planId, userId });
+  async createQuote(data: IQuote): Promise<QuoteToClientProperties> {
+    const planId = data.getPlanId();
+    const makerId = data.getMakerId();
+    const whereConditions = this.buildWhereConditions({ planId, userId: makerId });
     const isQuote = await this.quoteRepository.exists(whereConditions);
 
     if (isQuote) {
       throw new ConflictError(ErrorMessage.QUOTE_CONFLICT);
     }
 
-    const mapperData = { ...data, makerId: userId, isConfirmed: false };
-    const domainData = new QuoteMapper(mapperData).toDomain();
-
-    const quote = await this.quoteRepository.create(domainData);
-
+    const quote = await this.quoteRepository.create(data);
     return quote.toClient();
   }
 
@@ -105,9 +99,9 @@ export default class QuoteService {
     return deletedQuote;
   }
 
-  private buildWhereConditions(options: Partial<QuoteQueryOptions>): QuoteWhereInput {
+  private buildWhereConditions(options: Partial<QuoteQueryOptions>): QuoteWhereConditions {
     const { planId, isConfirmed, isSent, userId } = options || {};
-    let whereConditions: QuoteWhereInput = {
+    let whereConditions: QuoteWhereConditions = {
       isDeletedAt: null
     };
 
