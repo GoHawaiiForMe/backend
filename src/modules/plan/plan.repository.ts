@@ -117,12 +117,14 @@ export default class PlanRepository {
   }
 
   private buildWhereConditions(whereOptions: PlanQueryOptions): PlanWhereConditions {
-    const { keyword, tripType, serviceArea } = whereOptions;
+    const { keyword, tripType, serviceArea, isAssigned, userId } = whereOptions;
     const whereConditions: any = {
       isDeletedAt: null,
       serviceArea: { in: serviceArea }
     };
     if (tripType) whereConditions.tripType = { in: tripType };
+
+    if (isAssigned === true) whereConditions.assignees = { some: { id: userId } };
 
     if (keyword) {
       whereConditions.OR = [

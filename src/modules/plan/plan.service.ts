@@ -4,7 +4,7 @@ import QuoteRepository from 'src/modules/quote/quote.repository';
 import QuoteService from 'src/modules/quote/quote.service';
 import UserRepository from 'src/modules/user/user.repository';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { PlanQueryOptions, PlanWhereConditions } from 'src/common/types/plan/plan.type';
+import { PlanQueryOptions } from 'src/common/types/plan/plan.type';
 import IPlan from 'src/common/domains/plan/plan.interface';
 import { PlanToClientProperties } from 'src/common/types/plan/plan.properties';
 import NotFoundError from 'src/common/errors/notFoundError';
@@ -33,16 +33,17 @@ export default class PlanService {
   ) {}
 
   async getPlans(
-    makerId: string,
+    userId: string,
     options: PlanQueryOptions
   ): Promise<{ list: PlanToClientProperties[]; totalCount: number }> {
     const { keyword, tripType } = options;
-    const requestUser: IUser = await this.userRepository.findById(makerId);
+    const requestUser: IUser = await this.userRepository.findById(userId);
     const requestUserRole = requestUser.get().role;
 
-    const makerProfile: IMakerProfile = await this.userRepository.findMakerProfile(makerId);
+    const makerProfile: IMakerProfile = await this.userRepository.findMakerProfile(userId);
     const serviceArea: ServiceArea[] = makerProfile.get().serviceArea;
     options.serviceArea = serviceArea; //NOTE. 메이커의 서비스지역 필터링
+    options.userId = userId;
 
     const [totalCount, list] = await Promise.all([
       this.planRepository.totalCount(options),
