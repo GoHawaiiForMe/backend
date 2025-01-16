@@ -100,7 +100,6 @@ model Plan {
 
   title       String
   startDate   DateTime
-  endDate     DateTime
   tripType    TripType
   serviceArea ServiceArea
   details     String

@@ -13,11 +13,6 @@ export class CreatePlanDataDTO {
   @IsNotEmpty()
   startDate: Date;
 
-  @Type(() => Date)
-  @IsDate()
-  @IsNotEmpty()
-  endDate: Date;
-
   @IsEnum(TripType)
   @IsNotEmpty()
   tripType: TripType;

@@ -10,10 +10,6 @@ import { StatusEnum } from 'src/common/constants/status.type';
 export default class PlanMapper {
   constructor(private readonly plan: PlanMapperProperties) {}
   toDomain(): IPlan {
-    // let dreamer: IUser | null = null;
-    // let assignees: IUser[] = [];
-    // let quotes: IQuote[] = [];
-
     if (!this.plan) return null;
 
     return new Plan({
@@ -23,7 +19,6 @@ export default class PlanMapper {
       isDeletedAt: this.plan.isDeletedAt,
       title: this.plan.title,
       startDate: this.plan.startDate,
-      endDate: this.plan.endDate,
       tripType: this.plan.tripType,
       serviceArea: this.plan.serviceArea,
       details: this.plan.details,

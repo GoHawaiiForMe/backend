@@ -26,7 +26,6 @@ export interface PlanQueryOptions {
 export interface CreatePlanData {
   title: string;
   startDate: Date;
-  endDate: Date;
   tripType: TripType;
   serviceArea: ServiceArea;
   details: string;

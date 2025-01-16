@@ -14,7 +14,6 @@ export interface PlanProperties {
   isDeletedAt?: Date | null;
   title: string;
   startDate: Date;
-  endDate: Date;
   tripType: TripType;
   serviceArea: ServiceArea;
   details: string;
@@ -34,7 +33,6 @@ export interface PlanToClientProperties {
   updatedAt?: Date;
   title: string;
   startDate: Date;
-  endDate: Date;
   tripType: TripType;
   serviceArea: ServiceArea;
   details: string;
@@ -52,7 +50,6 @@ export interface PlanMapperProperties {
   isDeletedAt?: Date | null;
   title: string;
   startDate: Date;
-  endDate: Date;
   tripType: TripType;
   serviceArea: ServiceArea;
   details: string;

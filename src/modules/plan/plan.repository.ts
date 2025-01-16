@@ -59,12 +59,11 @@ export default class PlanRepository {
   }
 
   async create(data: IPlan): Promise<IPlan> {
-    const { title, startDate, endDate, tripType, serviceArea, details, address, status, dreamerId } = data.toDB();
+    const { title, startDate, tripType, serviceArea, details, address, status, dreamerId } = data.toDB();
     const plan = await this.db.plan.create({
       data: {
         title,
         startDate,
-        endDate,
         tripType,
         serviceArea,
         details,
@@ -112,6 +111,7 @@ export default class PlanRepository {
         quotes: true
       }
     });
+
     const domainPlan = new PlanMapper(plan).toDomain();
     return domainPlan;
   }
