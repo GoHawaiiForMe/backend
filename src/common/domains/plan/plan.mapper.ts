@@ -18,7 +18,7 @@ export default class PlanMapper {
       updatedAt: this.plan.updatedAt,
       isDeletedAt: this.plan.isDeletedAt,
       title: this.plan.title,
-      startDate: this.plan.startDate,
+      tripDate: this.plan.tripDate,
       tripType: this.plan.tripType,
       serviceArea: this.plan.serviceArea,
       details: this.plan.details,

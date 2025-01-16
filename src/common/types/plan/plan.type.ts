@@ -5,7 +5,7 @@ import SortOrder from 'src/common/constants/sortOrder.enum';
 import { Status } from 'src/common/constants/status.type';
 import { TripType } from 'src/common/constants/tripType.type';
 
-export type PlanOrderByField = { createdAt: SortOrder.DESC } | { startDate: SortOrder.ASC };
+export type PlanOrderByField = { createdAt: SortOrder.DESC } | { tripDate: SortOrder.ASC };
 
 export interface PlanWhereConditions {
   isDeletedAt: Date | null;
@@ -25,7 +25,7 @@ export interface PlanQueryOptions {
 
 export interface CreatePlanData {
   title: string;
-  startDate: Date;
+  tripDate: Date;
   tripType: TripType;
   serviceArea: ServiceArea;
   details: string;
