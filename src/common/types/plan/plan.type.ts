@@ -11,6 +11,7 @@ export interface PlanWhereConditions {
   isDeletedAt: Date | null;
   serviceArea?: { in: ServiceArea[] };
   tripType?: { in: TripType[] };
+  assignees?: { some: { id: string } };
   OR?: PlanWhereConditions[]; // OR 조건을 배열로 추가
 }
 export interface PlanQueryOptions {
@@ -20,7 +21,8 @@ export interface PlanQueryOptions {
   serviceArea?: ServiceArea[];
   page?: number;
   pageSize?: number;
-  whereConditions?: PlanWhereConditions;
+  isAssigned?: boolean;
+  userId?: string;
 }
 
 export interface CreatePlanData {

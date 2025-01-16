@@ -68,8 +68,7 @@ export const PLANS = [
     serviceArea: ServiceArea.JEONNAM,
     details: '평화로운 전남 해남 땅끝마을 풍경 찍어와주실 분 구해요.',
     status: Status.OVERDUE,
-    dreamerId: '555d463e-37b6-410b-9061-11a9d6822bdd',
-    assignees: [{ id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }]
+    dreamerId: '555d463e-37b6-410b-9061-11a9d6822bdd'
   },
   {
     id: '991f3cbd-c9a6-4429-bb34-221327df7cc8',
@@ -105,7 +104,8 @@ export const PLANS = [
     details: '대구 동성로에서 쇼핑할 분 구합니다.',
     address: '미쿡 하와이 CU사거리 4번지',
     status: Status.OVERDUE,
-    dreamerId: '30106a60-200d-467c-8b0d-5817ee604904'
+    dreamerId: '30106a60-200d-467c-8b0d-5817ee604904',
+    assignees: [{ id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }]
   },
   {
     id: '0373ced8-c000-4020-9ecc-66e9b908e174',

@@ -1,8 +1,8 @@
 GET http://localhost:4000/plans/8fc40908-9269-4db3-ad7d-fb6e69b0ba0d
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJmMWEyYjNjNC1kNWU2LTc4OTAtMTIzNC01Njc4OTBhYmNkZWYiLCJpYXQiOjE3MzYyNTgxNzksImV4cCI6MTczNjg2Mjk3OX0.8KvG4FE7bGYknYfpgCf6ai_7-2xi7sZ8MiE7KM-FAwA
 ###
-GET http://localhost:4000/plans
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1NTVkNDYzZS0zN2I2LTQxMGItOTA2MS0xMWE5ZDY4MjJiZGQiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNjg4NDEwOSwiZXhwIjoxNzM2OTcwNTA5fQ.rqxDDA33-JctQQ1K_uAHu7gJw2IgpzPSqP7nOCfiQUs
+GET http://localhost:4000/plans?isAssigned=true
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMzJkN2JkNC0xMTZjLTQ2N2ItOTM1Mi1hMTRiMGQ0OTRlZjkiLCJyb2xlIjoiTUFLRVIiLCJpYXQiOjE3MzY5OTA2ODgsImV4cCI6MTczNzA3NzA4OH0.IIFIWPNRPOwj-rhyxkzXYVVSnlTVo-ZBUYYyJcbdgeg
 ###
 GET http://localhost:4000/plans?tripType=RELAXATION&tripType=FOOD_TOUR
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJmMWEyYjNjNC1kNWU2LTc4OTAtMTIzNC01Njc4OTBhYmNkZWYiLCJpYXQiOjE3MzYyNjg1NjQsImV4cCI6MTczNjg3MzM2NH0.WicixKjBHGDt5cKcACMMSllpRP1pF_zt4bKAky-bS5o
@@ -82,7 +82,7 @@ Content-Type: application/json
   "address": "경상북도 경주시 불국로 385 (불국동), 38127"
 }
 ###
-PATCH http://localhost:4000/plans/44f0f56b-fa4a-49bd-9941-48fbb940f180/assign
+PATCH http://localhost:4000/plans/21fb7521-fdef-4930-a621-3734b646b9f6/assign
 #드리머
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Njg4NWEzYy01MGY0LTQyN2ItOGE5Mi0zNzAyYzY5NzZmYjAiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNjg5OTgwMCwiZXhwIjoxNzM2OTg2MjAwfQ.QiGmulTsGAoshlCA42svDnp4Ce_iS8iCKqND27cYpmk
 #메이커

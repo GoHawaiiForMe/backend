@@ -29,6 +29,7 @@ const enum ErrorMessage {
   PLAN_ASSIGN_NOT_MAKER = 'Maker에게만 지정견적 요청을 할 수 있습니다.',
   PLAN_ASSIGN_NOT_PENDING = 'PENDING 상태일 때만 지정견적 요청을 할 수 있습니다.',
   PLAN_DELETE_BAD_REQUEST = 'CONFIRMED 상태의 진행중인 플랜은 삭제할 수 없습니다.',
+  PLAN_IS_ASSIGNED_BAD_REQUEST = 'IS_ASSIGNED 값은 true와 false 혹은 입력하지 않아야 합니다.',
 
   QUOTE_NOT_FOUND = '해당 견적서를 찾을 수 없습니다.',
   QUOTE_FORBIDDEN_ID = '해당 견적서의 Maker와 Dreamer만 조회할 수 있습니다.',

@@ -1,7 +1,9 @@
 import { TripType, ServiceArea } from '@prisma/client';
-import { IsString, IsOptional, IsDate, IsEnum, IsNotEmpty, IsInt } from 'class-validator';
+import { IsString, IsOptional, IsDate, IsEnum, IsNotEmpty, IsInt, IsBoolean } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import PlanOrder from 'src/common/constants/planOrder.enum';
+import validateBooleanValue from 'src/common/utilities/validateBooleanValue';
+import ErrorMessage from 'src/common/constants/errorMessage.enum';
 
 export class CreatePlanDataDTO {
   @IsString()
@@ -46,6 +48,10 @@ export class PlanQueryOptionDTO {
     return Array.isArray(value) ? value : value ? [value] : [];
   })
   tripType: TripType[];
+
+  @IsOptional()
+  @Transform(({ value }) => validateBooleanValue(value, ErrorMessage.PLAN_IS_ASSIGNED_BAD_REQUEST))
+  isAssigned: boolean;
 
   @IsOptional()
   @IsString()
