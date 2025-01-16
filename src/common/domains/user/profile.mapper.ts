@@ -5,6 +5,7 @@ export class DreamerProfileMapper {
   constructor(private readonly dreamer: DreamerProfileProperties) {}
 
   toDomain() {
+    if (!this.dreamer) return null;
     return new DreamerProfile({
       userId: this.dreamer.userId,
       image: this.dreamer.image,

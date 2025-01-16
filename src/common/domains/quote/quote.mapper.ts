@@ -3,20 +3,14 @@ import Quote from './quote.domain';
 import IQuote from './quote.interface';
 import { IUser } from '../user/user.interface';
 import UserMapper from '../user/user.mapper';
+import IPlan from '../plan/plan.interface';
+import PlanMapper from '../plan/plan.mapper';
 
 export default class QuoteMapper {
   constructor(private readonly quote: QuoteMapperProperties) {}
 
   toDomain(): IQuote {
-    let maker: IUser | null = null;
-
-    if (!this.quote) {
-      return null;
-    }
-
-    if (this?.quote?.maker) {
-      maker = new UserMapper(this.quote.maker).toDomain();
-    }
+    if (!this.quote) return null;
 
     return new Quote({
       id: this.quote.id,
@@ -25,12 +19,12 @@ export default class QuoteMapper {
       isDeletedAt: this.quote.isDeletedAt,
       price: this.quote.price,
       content: this.quote.content,
-      plan: this.quote.plan,
+      plan: new PlanMapper(this.quote.plan)?.toDomain(),
       planId: this.quote.planId,
-      maker,
+      maker: new UserMapper(this.quote.maker)?.toDomain(),
       makerId: this.quote.makerId,
-      isConfirmed: this.quote.isConfirmed,
-      isAssigned: this.quote.isAssigned
+      isAssigned: this.quote.isAssigned,
+      isConfirmed: this.quote.isConfirmed
     });
   }
 }

@@ -6,3 +6,10 @@ export enum StatusEnum {
   COMPLETED = 'COMPLETED',
   OVERDUE = 'OVERDUE'
 }
+
+// export const Status = {
+//   PENDING: 'PENDING',
+//   CONFIRMED: 'CONFIRMED',
+//   COMPLETED: 'COMPLETED',
+//   OVERDUE: 'OVERDUE'
+// } as const;

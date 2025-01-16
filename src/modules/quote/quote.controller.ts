@@ -3,12 +3,14 @@ import QuoteService from './quote.service';
 import { QuoteToClientProperties } from '../../common/types/quote/quoteProperties';
 import { UserId } from 'src/common/decorators/user.decorator';
 import { MakerQuoteQueryOptionsDTO, UpdateQuoteDataDTO } from '../../common/types/quote/quote.dto';
+import { Role } from 'src/common/decorators/roleGuard.decorator';
 
 @Controller('quotes')
 export default class QuoteController {
   constructor(private readonly quoteService: QuoteService) {}
 
   @Get()
+  @Role('MAKER')
   async getQuotesByMaker(
     @UserId() userId: string,
     @Query() options: MakerQuoteQueryOptionsDTO

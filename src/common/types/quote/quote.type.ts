@@ -1,5 +1,6 @@
 import { StatusEnum } from 'src/common/constants/status.type';
-export type QuoteWhereInput = {
+
+export type QuoteWhereConditions = {
   isDeletedAt: Date | null;
   isConfirmed?: boolean;
   makerId?: string;
@@ -15,7 +16,6 @@ export interface QuoteQueryOptions {
   isConfirmed?: boolean;
   isSent?: boolean;
   userId?: string;
-  whereConditions?: QuoteWhereInput;
 }
 
 export interface CreateOptionalQuoteData {

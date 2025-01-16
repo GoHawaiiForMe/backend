@@ -5,6 +5,8 @@ export default class UserMapper {
   constructor(private readonly user: UserProperties) {}
 
   toDomain() {
+    if (!this.user) return null;
+
     return new User({
       id: this.user.id,
       role: this.user.role,
@@ -16,5 +18,5 @@ export default class UserMapper {
       createdAt: this.user.createdAt,
       updatedAt: this.user.updatedAt
     });
-  }
+  } // 빈값의 객체가 나옴
 }

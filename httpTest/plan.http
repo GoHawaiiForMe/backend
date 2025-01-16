@@ -2,13 +2,13 @@ GET http://localhost:4000/plans/8fc40908-9269-4db3-ad7d-fb6e69b0ba0d
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJmMWEyYjNjNC1kNWU2LTc4OTAtMTIzNC01Njc4OTBhYmNkZWYiLCJpYXQiOjE3MzYyNTgxNzksImV4cCI6MTczNjg2Mjk3OX0.8KvG4FE7bGYknYfpgCf6ai_7-2xi7sZ8MiE7KM-FAwA
 ###
 GET http://localhost:4000/plans
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhMWIyYzNkNC1lNWY2LTc4OTAtYWJjZC0xMjM0NTY3ODkwZWYiLCJpYXQiOjE3MzYyNjUwODgsImV4cCI6MTczNjg2OTg4OH0.8F7RMB-TuYMTIiWc-SXUIGeH060Z0zHAmSSlTammFMA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1NTVkNDYzZS0zN2I2LTQxMGItOTA2MS0xMWE5ZDY4MjJiZGQiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNjg4NDEwOSwiZXhwIjoxNzM2OTcwNTA5fQ.rqxDDA33-JctQQ1K_uAHu7gJw2IgpzPSqP7nOCfiQUs
 ###
 GET http://localhost:4000/plans?tripType=RELAXATION&tripType=FOOD_TOUR
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJmMWEyYjNjNC1kNWU2LTc4OTAtMTIzNC01Njc4OTBhYmNkZWYiLCJpYXQiOjE3MzYyNjg1NjQsImV4cCI6MTczNjg3MzM2NH0.WicixKjBHGDt5cKcACMMSllpRP1pF_zt4bKAky-bS5o
 ###
 POST http://localhost:4000/plans
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhMWIyYzNkNC1lNWY2LTc4OTAtYWJjZC0xMjM0NTY3ODkwZWYiLCJpYXQiOjE3MzYyNjUwODgsImV4cCI6MTczNjg2OTg4OH0.8F7RMB-TuYMTIiWc-SXUIGeH060Z0zHAmSSlTammFMA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1NTVkNDYzZS0zN2I2LTQxMGItOTA2MS0xMWE5ZDY4MjJiZGQiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNjg4MzAyNywiZXhwIjoxNzM2OTY5NDI3fQ.frKxMUBndRFcaImyqQ1NwQgYeUv39xUBiwLEHca9u8U
 Content-Type: application/json
 
 {
@@ -51,3 +51,50 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1NTVkN
 DELETE http://localhost:4000/plans/7f1d4fd9-9364-4daa-8f00-5e368e91f9ff
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1NTVkNDYzZS0zN2I2LTQxMGItOTA2MS0xMWE5ZDY4MjJiZGQiLCJpYXQiOjE3MzY3NjEzMTYsImV4cCI6MTczNzM2NjExNn0.ZThshnko4UiQi6uWKn8awYFhaUoY6smXlfMf-QWeGR0
 ###
+
+
+
+
+
+
+
+
+GET http://localhost:4000/plans?orderBy=SCHEDULE_FIRST&tripType=SHOPPING
+#드리머
+#Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Njg4NWEzYy01MGY0LTQyN2ItOGE5Mi0zNzAyYzY5NzZmYjAiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNjg5OTgwMCwiZXhwIjoxNzM2OTg2MjAwfQ.QiGmulTsGAoshlCA42svDnp4Ce_iS8iCKqND27cYpmk
+#메이커
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMzJkN2JkNC0xMTZjLTQ2N2ItOTM1Mi1hMTRiMGQ0OTRlZjkiLCJyb2xlIjoiTUFLRVIiLCJpYXQiOjE3MzY4OTk4NDgsImV4cCI6MTczNjk4NjI0OH0.cnv6k5TdsIT3pNPB0KtPiioCqWGrJKltloe8Ry1gGkM
+###
+POST http://localhost:4000/plans
+#드리머
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Njg4NWEzYy01MGY0LTQyN2ItOGE5Mi0zNzAyYzY5NzZmYjAiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNjg5OTgwMCwiZXhwIjoxNzM2OTg2MjAwfQ.QiGmulTsGAoshlCA42svDnp4Ce_iS8iCKqND27cYpmk
+#메이커
+#Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMzJkN2JkNC0xMTZjLTQ2N2ItOTM1Mi1hMTRiMGQ0OTRlZjkiLCJyb2xlIjoiTUFLRVIiLCJpYXQiOjE3MzY4OTk4NDgsImV4cCI6MTczNjk4NjI0OH0.cnv6k5TdsIT3pNPB0KtPiioCqWGrJKltloe8Ry1gGkM
+Content-Type: application/json
+
+{
+  "title": "제목",
+  "startDate": "2025-02-01T10:00:00.000Z",
+  "endDate": "2025-02-10T10:00:00.000Z",
+  "tripType": "FOOD_TOUR",
+  "serviceArea": "SEOUL",
+  "details": "10일간 서울 맛집 탐방.",
+  "address": "경상북도 경주시 불국로 385 (불국동), 38127"
+}
+###
+PATCH http://localhost:4000/plans/44f0f56b-fa4a-49bd-9941-48fbb940f180/assign
+#드리머
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Njg4NWEzYy01MGY0LTQyN2ItOGE5Mi0zNzAyYzY5NzZmYjAiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNjg5OTgwMCwiZXhwIjoxNzM2OTg2MjAwfQ.QiGmulTsGAoshlCA42svDnp4Ce_iS8iCKqND27cYpmk
+#메이커
+#Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMzJkN2JkNC0xMTZjLTQ2N2ItOTM1Mi1hMTRiMGQ0OTRlZjkiLCJyb2xlIjoiTUFLRVIiLCJpYXQiOjE3MzY4OTk4NDgsImV4cCI6MTczNjk4NjI0OH0.cnv6k5TdsIT3pNPB0KtPiioCqWGrJKltloe8Ry1gGkM
+Content-Type: application/json
+
+{
+ "assigneeId": "ef846519-2b73-4be4-807e-f6ef1c07eb60"
+}
+###
+PATCH http://localhost:4000/plans/b4f4db1e-b32d-44f6-9026-d74c38b8d899/complete
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1NTVkNDYzZS0zN2I2LTQxMGItOTA2MS0xMWE5ZDY4MjJiZGQiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNjkxNTEyNSwiZXhwIjoxNzM3MDAxNTI1fQ.VhGugs4Mj9xGrKfsExqcmrYP1WZfNA4cmV2VgFFxGY0
+###
+DELETE http://localhost:4000/plans/b4f4db1e-b32d-44f6-9026-d74c38b8d899
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1NTVkNDYzZS0zN2I2LTQxMGItOTA2MS0xMWE5ZDY4MjJiZGQiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNjkxNTEyNSwiZXhwIjoxNzM3MDAxNTI1fQ.VhGugs4Mj9xGrKfsExqcmrYP1WZfNA4cmV2VgFFxGY0

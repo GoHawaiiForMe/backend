@@ -1,17 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import DBClient from 'src/providers/database/prisma/DB.client';
 import SortOrder from 'src/common/constants/sortOrder.enum';
-import { QuoteQueryOptions, QuoteWhereInput } from '../../common/types/quote/quote.type';
+import { QuoteQueryOptions, QuoteWhereConditions } from '../../common/types/quote/quote.type';
 import IQuote from 'src/common/domains/quote/quote.interface';
 import QuoteMapper from 'src/common/domains/quote/quote.mapper';
+import { StatusEnum } from 'src/common/constants/status.type';
 
 @Injectable()
 export default class QuoteRepository {
   constructor(private readonly db: DBClient) {}
 
   async findMany(options: QuoteQueryOptions): Promise<IQuote[]> {
-    const { page, pageSize, whereConditions } = options;
-
+    const { page, pageSize } = options;
+    const whereConditions = this.buildWhereConditions(options);
     const quotes = await this.db.quote.findMany({
       where: whereConditions,
       take: pageSize,
@@ -24,7 +25,8 @@ export default class QuoteRepository {
     return domainQuotes;
   }
 
-  async totalCount(whereConditions: QuoteWhereInput): Promise<number> {
+  async totalCount(options: QuoteQueryOptions): Promise<number> {
+    const whereConditions = this.buildWhereConditions(options);
     const totalCount = await this.db.quote.count({
       where: whereConditions
     });
@@ -44,7 +46,8 @@ export default class QuoteRepository {
     return domainQuote;
   }
 
-  async exists(whereConditions: QuoteWhereInput): Promise<Boolean> {
+  async exists(options: { planId: string; userId: string }): Promise<Boolean> {
+    const whereConditions = this.buildWhereConditions(options);
     const quote = await this.db.quote.findFirst({
       where: whereConditions
     });
@@ -91,5 +94,34 @@ export default class QuoteRepository {
     const domainQuote = new QuoteMapper(quote);
 
     return domainQuote.toDomain();
+  }
+
+  private buildWhereConditions(options: Partial<QuoteQueryOptions>): QuoteWhereConditions {
+    const { planId, isConfirmed, isSent, userId } = options || {};
+    let whereConditions: QuoteWhereConditions = {
+      isDeletedAt: null
+    };
+
+    if (userId) whereConditions.makerId = userId;
+    if (planId) whereConditions.planId = planId;
+    if (isConfirmed === true) whereConditions.isConfirmed = true;
+
+    if (isSent === true) {
+      whereConditions = {
+        ...whereConditions,
+        OR: [
+          { isConfirmed: true }, // 내가 뽑힌 견적
+          { isConfirmed: false, plan: { status: StatusEnum.PENDING } } // 반려되지 않은 견적 중 plan이 PENDING인 경우
+        ]
+      };
+    } else if (isSent === false) {
+      // isSent가 false이면 반려된 견적만 가져옴
+      whereConditions = {
+        ...whereConditions,
+        isConfirmed: false, // isConfirmed가 false여야 함
+        plan: { status: { in: [StatusEnum.CONFIRMED, StatusEnum.COMPLETED, StatusEnum.OVERDUE] } } // 반려된 견적의 상태
+      };
+    }
+    return whereConditions;
   }
 }

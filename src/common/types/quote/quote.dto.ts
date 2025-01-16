@@ -1,6 +1,6 @@
 import { Optional } from '@nestjs/common';
 import { Transform, Type } from 'class-transformer';
-import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import validateBooleanValue from 'src/common/utilities/validateBooleanValue';
 
@@ -37,11 +37,12 @@ export class MakerQuoteQueryOptionsDTO {
 
   //NOTE. NestJS에서는 DTO에서 boolean값으로 변환이 이상함
   @Transform(({ value }) => validateBooleanValue(value, ErrorMessage.QUOTE_BAD_REQUEST_IS_SENT))
+  @IsNotEmpty()
   isSent: boolean;
 }
 
 export class CreateQuoteDataDTO {
-  @Type(() => Number)
+  @IsNumber()
   @IsNotEmpty()
   price: number;
 

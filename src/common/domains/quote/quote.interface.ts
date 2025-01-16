@@ -1,3 +1,4 @@
+import { Status } from 'src/common/constants/status.type';
 import { QuoteProperties, QuoteToClientProperties } from 'src/common/types/quote/quoteProperties';
 
 export default interface IQuote {
@@ -5,6 +6,9 @@ export default interface IQuote {
   toDBForUpdate(): Partial<QuoteProperties>;
   toDB(): Partial<QuoteProperties>;
   toClient(): QuoteToClientProperties;
+  getId(): string;
   getMakerId(): string;
   getDreamerId(): string;
+  getPlanId(): string;
+  getPlanStatus(): Status;
 }

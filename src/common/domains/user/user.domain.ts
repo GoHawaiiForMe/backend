@@ -99,4 +99,12 @@ export default class User implements IUser {
       coconut: this.coconut
     };
   }
+
+  getId(): string {
+    return this.id;
+  }
+
+  getRole(): Role {
+    return this.role;
+  }
 }

@@ -1,23 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import { Plan, Status } from '@prisma/client';
-import DBClient from 'src/providers/database/prisma/DB.client';
-import PlanQueryOptions from '../../common/types/plan/planQueryOptions';
-import PlanOrderByField from '../../common/types/plan/planOrderByField.type';
 import PlanOrder from 'src/common/constants/planOrder.enum';
 import SortOrder from 'src/common/constants/sortOrder.enum';
-import PlanWhereConditions from '../../common/types/plan/planWhereCondition.interface';
-import CreatePlanData from '../../common/types/plan/createPlanData.interface';
-import UpdatePlanData from '../../common/types/plan/updatePlanData.interface';
+import { StatusEnum } from 'src/common/constants/status.type';
+import IPlan from 'src/common/domains/plan/plan.interface';
+import PlanMapper from 'src/common/domains/plan/plan.mapper';
+import { CreatePlanData, PlanWhereConditions, UpdatePlanData } from 'src/common/types/plan/plan.type';
+import { PlanOrderByField } from 'src/common/types/plan/plan.type';
+import { PlanQueryOptions } from 'src/common/types/plan/plan.type';
+import DBClient from 'src/providers/database/prisma/DB.client';
 
 @Injectable()
 export default class PlanRepository {
   constructor(private readonly db: DBClient) {}
 
-  async findMany(options: PlanQueryOptions): Promise<Plan[]> {
+  async findMany(options: PlanQueryOptions): Promise<IPlan[]> {
     const { orderBy, page, pageSize } = options || {};
+
+    const whereConditions = this.buildWhereConditions(options);
     const orderByField: PlanOrderByField =
       orderBy === PlanOrder.RECENT ? { createdAt: SortOrder.DESC } : { startDate: SortOrder.ASC };
-    const whereConditions = this.buildWhereConditions(options);
 
     const plans = await this.db.plan.findMany({
       where: whereConditions,
@@ -25,10 +26,13 @@ export default class PlanRepository {
       take: pageSize,
       skip: pageSize * (page - 1),
       include: {
-        dreamer: { select: { id: true, nickName: true, role: true } }
+        dreamer: true,
+        assignees: true,
+        quotes: true
       }
     });
-    return plans;
+    const domainPlans = plans.map((plan) => new PlanMapper(plan).toDomain());
+    return domainPlans;
   }
 
   async totalCount(options: PlanQueryOptions): Promise<number> {
@@ -37,23 +41,25 @@ export default class PlanRepository {
     const totalCount = await this.db.plan.count({
       where: whereConditions
     });
+
     return totalCount;
   }
 
-  async findById(id: string): Promise<Plan> {
+  async findById(id: string): Promise<IPlan> {
     const plan = await this.db.plan.findUnique({
       where: { id, isDeletedAt: null },
       include: {
-        dreamer: { select: { id: true, nickName: true, role: true } },
-        assignees: { select: { id: true, nickName: true, role: true } },
-        quotes: { select: { id: true } }
+        dreamer: true,
+        assignees: true,
+        quotes: true
       }
     });
-    return plan;
+    const domainPlan = new PlanMapper(plan).toDomain();
+    return domainPlan;
   }
 
-  async create(data: CreatePlanData): Promise<Plan> {
-    const { title, startDate, endDate, tripType, serviceArea, details, address, dreamerId } = data;
+  async create(data: IPlan): Promise<IPlan> {
+    const { title, startDate, endDate, tripType, serviceArea, details, address, status, dreamerId } = data.toDB();
     const plan = await this.db.plan.create({
       data: {
         title,
@@ -63,73 +69,75 @@ export default class PlanRepository {
         serviceArea,
         details,
         address,
-        status: Status.PENDING,
+        status,
         dreamer: { connect: { id: dreamerId } }
       },
       include: {
-        dreamer: { select: { id: true, nickName: true, role: true } },
-        assignees: { select: { id: true, nickName: true, role: true } }
+        dreamer: true,
+        assignees: true,
+        quotes: true
       }
     });
 
-    return plan;
+    const domainPlan = new PlanMapper(plan).toDomain();
+    return domainPlan;
   }
 
-  async update(id: string, data: UpdatePlanData): Promise<Plan> {
-    const { status, assigneeIds } = data;
-    const isAssigneeIds = assigneeIds && assigneeIds.length > 0;
-
+  async update(data: IPlan): Promise<IPlan> {
+    const { id, status, assigneeId } = data.toDB();
     const plan = await this.db.plan.update({
       where: { id },
       data: {
         ...(status && { status }),
-        assignees: isAssigneeIds
-          ? { connect: assigneeIds.map((assigneeId: string) => ({ id: assigneeId })) }
-          : undefined
+        assignees: assigneeId ? { connect: { id: assigneeId } } : undefined
       },
       include: {
-        dreamer: { select: { id: true, nickName: true, role: true } },
-        assignees: { select: { id: true, nickName: true, role: true } }
+        dreamer: true,
+        assignees: true,
+        quotes: true
       }
     });
 
-    return plan;
+    const domainPlan = new PlanMapper(plan).toDomain();
+    return domainPlan;
   }
 
-  async delete(id: string): Promise<Plan> {
+  async delete(id: string): Promise<IPlan> {
     const plan = await this.db.plan.update({
       where: { id, isDeletedAt: null },
-      data: { isDeletedAt: new Date() }
+      data: { isDeletedAt: new Date() },
+      include: {
+        dreamer: true,
+        assignees: true,
+        quotes: true
+      }
     });
-    return plan;
+    const domainPlan = new PlanMapper(plan).toDomain();
+    return domainPlan;
   }
 
-  private buildWhereConditions(options: PlanQueryOptions): PlanWhereConditions {
-    const { keyword, tripType, serviceArea } = options;
-
-    const whereConditions: PlanWhereConditions = {
-      isDeletedAt: { equals: null },
+  private buildWhereConditions(whereOptions: PlanQueryOptions): PlanWhereConditions {
+    const { keyword, tripType, serviceArea } = whereOptions;
+    const whereConditions: any = {
+      isDeletedAt: null,
       serviceArea: { in: serviceArea }
     };
-
-    if (tripType && tripType.length > 0) {
-      whereConditions.tripType = { in: tripType };
-    }
+    if (tripType) whereConditions.tripType = { in: tripType };
 
     if (keyword) {
       whereConditions.OR = [
         {
-          dreamer: {
-            nickName: {
-              contains: keyword,
-              mode: 'insensitive'
-            }
+          title: {
+            contains: keyword,
+            mode: 'insensitive' // 대소문자 구분 없이 검색
           }
         },
         {
-          title: {
-            contains: keyword,
-            mode: 'insensitive'
+          dreamer: {
+            nickName: {
+              contains: keyword,
+              mode: 'insensitive' // 대소문자 구분 없이 검색
+            }
           }
         }
       ];

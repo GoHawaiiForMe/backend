@@ -1,34 +1,36 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common';
-import { Plan } from '@prisma/client';
-import PlanService from './plan.service';
-import PlanQueryOptionDTO from '../../common/types/plan/planQueryOptions.dto';
 import { UserId } from 'src/common/decorators/user.decorator';
-import CreatePlanDataDTO from '../../common/types/plan/createPlanData.dto';
-import CreatePlanData from '../../common/types/plan/createPlanData.interface';
-import UpdateAssignDataDTO from '../../common/types/plan/updateAssignData.dto';
-import { CreateQuoteDataDTO, DreamerQuoteQueryOptionsDTO } from '../../common/types/quote/quote.dto';
-import { QuoteToClientProperties } from '../../common/types/quote/quoteProperties';
+import { CreatePlanDataDTO, PlanQueryOptionDTO } from 'src/common/types/plan/plan.dto';
+import { PlanToClientProperties } from 'src/common/types/plan/plan.properties';
+import PlanService from './plan.service';
+import { CreatePlanData } from 'src/common/types/plan/plan.type';
+import { CreateQuoteDataDTO, DreamerQuoteQueryOptionsDTO } from 'src/common/types/quote/quote.dto';
+import { QuoteToClientProperties } from 'src/common/types/quote/quoteProperties';
+import { UpdateAssignDataDTO } from 'src/common/types/plan/plan.dto';
+import { Role } from 'src/common/decorators/roleGuard.decorator';
 
 @Controller('plans')
 export default class PlanController {
   constructor(private readonly planService: PlanService) {}
 
   @Get()
+  @Role('MAKER')
   async getPlans(
     @UserId() makerId: string,
     @Query() options: PlanQueryOptionDTO
-  ): Promise<{ totalCount: number; list: Plan[] }> {
+  ): Promise<{ totalCount: number; list: PlanToClientProperties[] }> {
     const { totalCount, list } = await this.planService.getPlans(makerId, options);
     return { totalCount, list };
   }
 
   @Get(':id')
-  async getPlanById(@Param('id') id: string): Promise<Plan> {
+  async getPlanById(@Param('id') id: string): Promise<PlanToClientProperties> {
     const plan = await this.planService.getPlanById(id);
     return plan;
   }
 
   @Get(':planId/quotes')
+  @Role('DREAMER')
   async getQuotesByPlanId(
     @UserId() userId: string,
     @Param('planId') planId: string,
@@ -40,13 +42,16 @@ export default class PlanController {
   }
 
   @Post()
-  async postPlan(@UserId() dreamerId: string, @Body() data: CreatePlanDataDTO): Promise<Plan> {
+  @Role('DREAMER')
+  async postPlan(@UserId() dreamerId: string, @Body() data: CreatePlanDataDTO): Promise<PlanToClientProperties> {
     const serviceData: CreatePlanData = { ...data, dreamerId };
+
     const plan = await this.planService.postPlan(serviceData);
     return plan;
   }
 
   @Post(':planId/quotes')
+  @Role('MAKER')
   async postQuote(
     @UserId() userId: string,
     @Param('planId') planId: string,
@@ -58,23 +63,23 @@ export default class PlanController {
 
   @Patch(':id/assign')
   async assignPlan(
-    @UserId() requestUserId: string,
+    @UserId() userId: string,
     @Param('id') id: string,
     @Body() data: UpdateAssignDataDTO
-  ): Promise<Plan> {
-    const plan = await this.planService.updatePlanAssign(id, requestUserId, data);
+  ): Promise<PlanToClientProperties> {
+    const plan = await this.planService.updatePlanAssign(id, userId, data);
     return plan;
   }
 
   @Patch(':id/complete')
-  async completePlan(@UserId() requestUserId: string, @Param('id') id: string): Promise<Plan> {
-    const plan = await this.planService.updatePlanComplete(id, requestUserId);
+  async completePlan(@UserId() userId: string, @Param('id') id: string): Promise<PlanToClientProperties> {
+    const plan = await this.planService.updatePlanComplete(id, userId);
     return plan;
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async deletePlan(@UserId() requestUserId: string, @Param('id') id: string): Promise<void> {
-    await this.planService.deletePlan(id, requestUserId);
+  async deletePlan(@UserId() userId: string, @Param('id') id: string): Promise<void> {
+    await this.planService.deletePlan(id, userId);
   }
 }
