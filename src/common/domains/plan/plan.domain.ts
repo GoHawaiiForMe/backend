@@ -16,8 +16,7 @@ export default class Plan implements IPlan {
   private updatedAt?: Date;
   private isDeletedAt?: Date | null;
   private title: string;
-  private startDate: Date;
-  private endDate: Date;
+  private tripDate: Date;
   private tripType: TripType;
   private serviceArea: ServiceArea;
   private details: string;
@@ -36,8 +35,7 @@ export default class Plan implements IPlan {
     this.updatedAt = planProperties.updatedAt;
     this.isDeletedAt = planProperties.isDeletedAt;
     this.title = planProperties.title;
-    this.startDate = planProperties.startDate;
-    this.endDate = planProperties.endDate;
+    this.tripDate = planProperties.tripDate;
     this.tripType = planProperties.tripType;
     this.serviceArea = planProperties.serviceArea;
     this.details = planProperties.details;
@@ -56,8 +54,7 @@ export default class Plan implements IPlan {
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       title: this.title,
-      startDate: this.startDate,
-      endDate: this.endDate,
+      tripDate: this.tripDate,
       tripType: this.tripType,
       serviceArea: this.serviceArea,
       details: this.details,
@@ -73,8 +70,7 @@ export default class Plan implements IPlan {
     return {
       id: this.id,
       title: this.title,
-      startDate: this.startDate,
-      endDate: this.endDate,
+      tripDate: this.tripDate,
       tripType: this.tripType,
       serviceArea: this.serviceArea,
       details: this.details,

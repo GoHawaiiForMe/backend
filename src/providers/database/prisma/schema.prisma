@@ -99,8 +99,7 @@ model Plan {
   isDeletedAt DateTime?
 
   title       String
-  startDate   DateTime
-  endDate     DateTime
+  tripDate    DateTime
   tripType    TripType
   serviceArea ServiceArea
   details     String

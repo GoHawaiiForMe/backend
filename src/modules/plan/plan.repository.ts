@@ -18,7 +18,7 @@ export default class PlanRepository {
 
     const whereConditions = this.buildWhereConditions(options);
     const orderByField: PlanOrderByField =
-      orderBy === PlanOrder.RECENT ? { createdAt: SortOrder.DESC } : { startDate: SortOrder.ASC };
+      orderBy === PlanOrder.RECENT ? { createdAt: SortOrder.DESC } : { tripDate: SortOrder.ASC };
 
     const plans = await this.db.plan.findMany({
       where: whereConditions,
@@ -59,12 +59,11 @@ export default class PlanRepository {
   }
 
   async create(data: IPlan): Promise<IPlan> {
-    const { title, startDate, endDate, tripType, serviceArea, details, address, status, dreamerId } = data.toDB();
+    const { title, tripDate, tripType, serviceArea, details, address, status, dreamerId } = data.toDB();
     const plan = await this.db.plan.create({
       data: {
         title,
-        startDate,
-        endDate,
+        tripDate,
         tripType,
         serviceArea,
         details,
@@ -112,6 +111,7 @@ export default class PlanRepository {
         quotes: true
       }
     });
+
     const domainPlan = new PlanMapper(plan).toDomain();
     return domainPlan;
   }
