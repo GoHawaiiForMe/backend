@@ -1,4 +1,5 @@
 const enum ErrorMessage {
+  USER_UNAUTHORIZED = '접근 권한이 없습니다.',
   USER_NOT_FOUND = '해당 유저를 찾을 수 없습니다.',
   USER_EXIST = '이미 존재하는 이메일입니다.',
   USER_NICKNAME_EXIST = '이미 존재하는 닉네임입니다.',
@@ -41,6 +42,8 @@ const enum ErrorMessage {
   QUOTE_BAD_REQUEST_IS_CONFIRMED = 'isConfirmed는 boolean 값인 true와 false만 입력이 가능합니다.',
   QUOTE_CONFLICT = '해당 플랜에 이미 견적서를 작성하셨습니다. 하나의 플랜에는 하나의 견적서만 쓸 수 있습니다.',
   QUOTE_DELETE_BAD_REQUEST_STATUS = '견적의 플랜이 PENDING 상태 일 때만 삭제할 수 있습니다.',
+
+  PAYMENT_BAD_REQUEST = '결제 정보가 잘못되어 결제를 완료할 수 없습니다.',
 
   INTERNAL_SERVER_ERROR = '내부 서버 오류'
 }
