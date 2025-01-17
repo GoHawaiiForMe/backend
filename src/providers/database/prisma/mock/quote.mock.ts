@@ -256,7 +256,7 @@ export const QUOTES = [
     content: '서울 플랜13 견적',
     planId: '6d201a98-1d06-4497-806a-fa123599019a',
     makerId: 'ef846519-2b73-4be4-807e-f6ef1c07eb60',
-    isConfirmed: true,
+    isConfirmed: false,
     isAssigned: false
   },
   {
@@ -276,7 +276,7 @@ export const QUOTES = [
     content: '서울 플랜14 견적',
     planId: '9004bc52-a8b0-4587-af53-59914168582f',
     makerId: 'ef846519-2b73-4be4-807e-f6ef1c07eb60',
-    isConfirmed: true,
+    isConfirmed: false,
     isAssigned: false
   },
   {
@@ -296,7 +296,7 @@ export const QUOTES = [
     content: '경기 플랜15 견적',
     planId: '068eb509-ab56-4a95-b750-09be1e8db28e',
     makerId: '6b4ded82-e680-410d-b86d-ce6974e53f37',
-    isConfirmed: true,
+    isConfirmed: false,
     isAssigned: false
   },
   {
@@ -316,7 +316,7 @@ export const QUOTES = [
     content: '경기 플랜16 견적',
     planId: '07cb9492-2685-4890-806c-c0e502b9853e',
     makerId: '6b4ded82-e680-410d-b86d-ce6974e53f37',
-    isConfirmed: true,
+    isConfirmed: false,
     isAssigned: false
   },
   {
@@ -336,7 +336,7 @@ export const QUOTES = [
     content: '경기 플랜17 견적',
     planId: '156961b9-8bf1-48b0-81a2-f42ee99ea4df',
     makerId: '6b4ded82-e680-410d-b86d-ce6974e53f37',
-    isConfirmed: true,
+    isConfirmed: false,
     isAssigned: false
   },
   {
@@ -356,7 +356,7 @@ export const QUOTES = [
     content: '경기 플랜18 견적',
     planId: '1b3920d2-5489-400a-8488-207f242b8960',
     makerId: '6b4ded82-e680-410d-b86d-ce6974e53f37',
-    isConfirmed: true,
+    isConfirmed: false,
     isAssigned: false
   },
   {
@@ -376,7 +376,7 @@ export const QUOTES = [
     content: '경기 플랜19 견적',
     planId: '3acd4926-382a-48f2-b44c-c4055e30d07a',
     makerId: '6b4ded82-e680-410d-b86d-ce6974e53f37',
-    isConfirmed: true,
+    isConfirmed: false,
     isAssigned: false
   },
   {
@@ -396,7 +396,7 @@ export const QUOTES = [
     content: '경기 플랜20 견적',
     planId: '3cb4fe49-de44-43cc-b8b7-a52c6cc1c7a3',
     makerId: '6b4ded82-e680-410d-b86d-ce6974e53f37',
-    isConfirmed: true,
+    isConfirmed: false,
     isAssigned: false
   },
   {
@@ -406,7 +406,7 @@ export const QUOTES = [
     content: '경기 플랜21 견적',
     planId: 'c1d848c2-2ee2-49c6-aad7-ed6933497d42',
     makerId: 'a08d9856-adfa-4f83-9e9a-48401f3d0ef3',
-    isConfirmed: true,
+    isConfirmed: false,
     isAssigned: true
   },
   {
@@ -426,7 +426,7 @@ export const QUOTES = [
     content: '경기 플랜22 견적',
     planId: '5744034e-7c08-4a63-8cf5-e90579adcadf',
     makerId: 'a08d9856-adfa-4f83-9e9a-48401f3d0ef3',
-    isConfirmed: true,
+    isConfirmed: false,
     isAssigned: false
   },
   {
@@ -446,7 +446,7 @@ export const QUOTES = [
     content: '경기 플랜23 견적',
     planId: '307449fd-b592-463e-80a4-862520b938e3',
     makerId: 'a08d9856-adfa-4f83-9e9a-48401f3d0ef3',
-    isConfirmed: true,
+    isConfirmed: false,
     isAssigned: false
   },
   {
@@ -466,7 +466,7 @@ export const QUOTES = [
     content: '경기 플랜24 견적',
     planId: 'b4faa9ff-a867-481f-9fb4-a6e595c4efe0',
     makerId: 'a08d9856-adfa-4f83-9e9a-48401f3d0ef3',
-    isConfirmed: true,
+    isConfirmed: false,
     isAssigned: true
   },
   {
@@ -486,7 +486,7 @@ export const QUOTES = [
     content: '경기 플랜25 견적',
     planId: '6b314ec7-aeb4-4227-a332-ef72c16394eb',
     makerId: 'a08d9856-adfa-4f83-9e9a-48401f3d0ef3',
-    isConfirmed: true,
+    isConfirmed: false,
     isAssigned: false
   },
   {
@@ -506,7 +506,7 @@ export const QUOTES = [
     content: '경기 플랜26 견적',
     planId: 'de56436d-2662-4d43-9a8f-830f736f1dbf',
     makerId: 'a08d9856-adfa-4f83-9e9a-48401f3d0ef3',
-    isConfirmed: true,
+    isConfirmed: false,
     isAssigned: true
   },
   {
@@ -526,7 +526,7 @@ export const QUOTES = [
     content: '경기 플랜27 견적',
     planId: '2d09f3d4-39d1-423b-8806-23fdd2bac6e1',
     makerId: 'a08d9856-adfa-4f83-9e9a-48401f3d0ef3',
-    isConfirmed: true,
+    isConfirmed: false,
     isAssigned: true
   },
   {
@@ -546,7 +546,7 @@ export const QUOTES = [
     content: '경기 플랜28 견적',
     planId: '5fea4a39-5853-40c2-802a-41960bdc4fcb',
     makerId: 'a08d9856-adfa-4f83-9e9a-48401f3d0ef3',
-    isConfirmed: true,
+    isConfirmed: false,
     isAssigned: false
   },
   {
