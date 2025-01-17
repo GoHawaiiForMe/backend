@@ -1,25 +1,27 @@
 import { QuoteMapperProperties } from 'src/common/types/quote/quoteProperties';
 import Quote from './quote.domain';
 import IQuote from './quote.interface';
-import { IUser } from '../user/user.interface';
 import UserMapper from '../user/user.mapper';
-import IPlan from '../plan/plan.interface';
-import PlanMapper from '../plan/plan.mapper';
+import { PlanReference } from 'src/common/types/plan/plan.type';
 
 export default class QuoteMapper {
   constructor(private readonly quote: QuoteMapperProperties) {}
 
   toDomain(): IQuote {
+    let plan: PlanReference;
     if (!this.quote) return null;
+    if (!this.quote.plan) plan = null;
+    else {
+      plan = this.quote.plan;
+    }
 
     return new Quote({
       id: this.quote.id,
       createdAt: this.quote.createdAt,
       updatedAt: this.quote.updatedAt,
-      isDeletedAt: this.quote.isDeletedAt,
       price: this.quote.price,
       content: this.quote.content,
-      plan: new PlanMapper(this.quote.plan)?.toDomain(),
+      plan,
       planId: this.quote.planId,
       maker: new UserMapper(this.quote.maker)?.toDomain(),
       makerId: this.quote.makerId,

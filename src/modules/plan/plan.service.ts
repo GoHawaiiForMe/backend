@@ -94,7 +94,7 @@ export default class PlanService {
       throw new ForbiddenError(ErrorMessage.QUOTE_FORBIDDEN_DREAMER);
     }
 
-    const { totalCount, list } = await this.quoteService.getQuotesByPlanId(options, userId);
+    const { totalCount, list } = await this.quoteService.getQuotesByPlanId(options);
     return { totalCount, list };
   }
 

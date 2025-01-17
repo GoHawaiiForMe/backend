@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import DBClient from 'src/providers/database/prisma/DB.client';
 import SortOrder from 'src/common/constants/sortOrder.enum';
-import { QuoteQueryOptions, QuoteWhereConditions } from '../../common/types/quote/quote.type';
+import { QuoteIncludeConditions, QuoteQueryOptions, QuoteWhereConditions } from '../../common/types/quote/quote.type';
 import IQuote from 'src/common/domains/quote/quote.interface';
 import QuoteMapper from 'src/common/domains/quote/quote.mapper';
 import { StatusEnum } from 'src/common/constants/status.type';
@@ -13,12 +13,13 @@ export default class QuoteRepository {
   async findMany(options: QuoteQueryOptions): Promise<IQuote[]> {
     const { page, pageSize } = options;
     const whereConditions = this.buildWhereConditions(options);
+    const includeConditions = this.buildIncludeConditions(options);
     const quotes = await this.db.quote.findMany({
       where: whereConditions,
       take: pageSize,
       skip: (page - 1) * pageSize,
       orderBy: { createdAt: SortOrder.DESC },
-      include: { maker: true }
+      include: includeConditions
     });
 
     const domainQuotes = quotes.map((quote) => new QuoteMapper(quote).toDomain());
@@ -123,5 +124,16 @@ export default class QuoteRepository {
       };
     }
     return whereConditions;
+  }
+
+  private buildIncludeConditions(options: Partial<QuoteQueryOptions>): QuoteIncludeConditions {
+    const { planId } = options;
+    const includeConditions: QuoteIncludeConditions = { maker: true };
+
+    if (!planId) {
+      includeConditions.plan = true;
+    }
+
+    return includeConditions;
   }
 }

@@ -9,6 +9,11 @@ export type QuoteWhereConditions = {
   planId?: string;
 };
 
+export type QuoteIncludeConditions = {
+  maker: boolean;
+  plan?: boolean;
+};
+
 export interface QuoteQueryOptions {
   page: number;
   pageSize: number;

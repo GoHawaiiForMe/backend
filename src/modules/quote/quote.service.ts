@@ -4,10 +4,8 @@ import { QuoteToClientProperties } from '../../common/types/quote/quotePropertie
 import NotFoundError from 'src/common/errors/notFoundError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import ForbiddenError from 'src/common/errors/forbiddenError';
-import { CreateQuoteData, QuoteQueryOptions } from '../../common/types/quote/quote.type';
+import { QuoteQueryOptions } from '../../common/types/quote/quote.type';
 import { StatusEnum } from 'src/common/constants/status.type';
-import { QuoteWhereConditions } from '../../common/types/quote/quote.type';
-import QuoteMapper from '../../common/domains/quote/quote.mapper';
 import ConflictError from 'src/common/errors/conflictError';
 import IQuote from '../../common/domains/quote/quote.interface';
 import BadRequestError from 'src/common/errors/badRequestError';
@@ -17,21 +15,18 @@ export default class QuoteService {
   constructor(private readonly quoteRepository: QuoteRepository) {}
 
   async getQuotesByPlanId(
-    options: QuoteQueryOptions,
-    userId: string
+    options: QuoteQueryOptions
   ): Promise<{ totalCount: number; list: QuoteToClientProperties[] }> {
     const [totalCount, list] = await Promise.all([
       this.quoteRepository.totalCount(options),
       this.quoteRepository.findMany(options)
     ]);
-    const toClientList = list.map((quote) => quote.toClient());
+    const toClientList = list.map((quote) => quote.toClientWithoutPlan());
 
     return { totalCount, list: toClientList };
   }
 
   async getQuotesByMaker(options: QuoteQueryOptions): Promise<{ totalCount: number; list: QuoteToClientProperties[] }> {
-    const { page, pageSize } = options;
-
     const [list, totalCount] = await Promise.all([
       this.quoteRepository.findMany(options),
       this.quoteRepository.totalCount(options)

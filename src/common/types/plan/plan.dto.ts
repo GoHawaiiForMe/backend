@@ -39,7 +39,6 @@ export class MyPlanQueryDTO {
   @Transform(({ value }) => PlanOrder[value])
   orderBy: PlanOrder = PlanOrder.RECENT;
 
-  @IsOptional()
   @Transform(({ value }) => {
     return Array.isArray(value) ? value : value ? [value] : [];
   })
