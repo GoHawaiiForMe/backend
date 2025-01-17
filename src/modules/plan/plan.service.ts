@@ -32,13 +32,12 @@ export default class PlanService {
     private readonly eventEmitter: EventEmitter2
   ) {}
 
-  async getPlans(
+  async getPlansByMaker(
     userId: string,
     options: PlanQueryOptions
   ): Promise<{ totalCount: number; list: PlanToClientProperties[] }> {
     const { keyword, tripType } = options;
     const requestUser: IUser = await this.userRepository.findById(userId);
-    const requestUserRole = requestUser.get().role;
 
     const makerProfile: IMakerProfile = await this.userRepository.findMakerProfile(userId);
     const serviceArea: ServiceArea[] = makerProfile.get().serviceArea;
@@ -54,7 +53,7 @@ export default class PlanService {
     return { totalCount, list: toClientList };
   }
 
-  async getMyPlans(
+  async getPlansByDreamer(
     userId: string,
     options: PlanQueryOptions
   ): Promise<{ totalCount: number; list: PlanToClientProperties[] }> {

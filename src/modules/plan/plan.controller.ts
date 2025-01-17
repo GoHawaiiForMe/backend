@@ -21,7 +21,7 @@ export default class PlanController {
     @UserId() userId: string,
     @Query() options: PlanQueryOptionDTO
   ): Promise<{ totalCount: number; list: PlanToClientProperties[] }> {
-    const { totalCount, list } = await this.planService.getPlans(userId, options);
+    const { totalCount, list } = await this.planService.getPlansByMaker(userId, options);
     return { totalCount, list };
   }
 
@@ -31,7 +31,7 @@ export default class PlanController {
     @UserId() userId: string,
     @Query() options: MyPlanQueryDTO
   ): Promise<{ totalCount: number; list: PlanToClientProperties[] }> {
-    const { totalCount, list } = await this.planService.getMyPlans(userId, options);
+    const { totalCount, list } = await this.planService.getPlansByDreamer(userId, options);
     return { totalCount, list };
   }
 
