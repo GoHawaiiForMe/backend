@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import DBClient from 'src/providers/database/prisma/DB.client';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { UserStats } from 'src/providers/database/mongoose/userStats.schema';
 
 @Injectable()
 export default class UserStatsRepository {
-  constructor(private readonly db: DBClient) {}
+  constructor(@InjectModel(UserStats.name) private db: Model<UserStats>) {}
 }
