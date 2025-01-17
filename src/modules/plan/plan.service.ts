@@ -35,7 +35,7 @@ export default class PlanService {
   async getPlans(
     userId: string,
     options: PlanQueryOptions
-  ): Promise<{ list: PlanToClientProperties[]; totalCount: number }> {
+  ): Promise<{ totalCount: number; list: PlanToClientProperties[] }> {
     const { keyword, tripType } = options;
     const requestUser: IUser = await this.userRepository.findById(userId);
     const requestUserRole = requestUser.get().role;
@@ -51,7 +51,21 @@ export default class PlanService {
     ]);
 
     const toClientList = list.map((plan) => plan.toClient());
-    return { list: toClientList, totalCount };
+    return { totalCount, list: toClientList };
+  }
+
+  async getMyPlans(
+    userId: string,
+    options: PlanQueryOptions
+  ): Promise<{ totalCount: number; list: PlanToClientProperties[] }> {
+    options.userId = userId;
+    const [totalCount, list] = await Promise.all([
+      this.planRepository.totalCount(options),
+      this.planRepository.findMany(options)
+    ]);
+
+    const toClientList = list.map((plan) => plan.toClient());
+    return { totalCount, list: toClientList };
   }
 
   async getPlanById(id: string): Promise<PlanToClientProperties> {
