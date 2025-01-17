@@ -32,13 +32,12 @@ export default class PlanService {
     private readonly eventEmitter: EventEmitter2
   ) {}
 
-  async getPlans(
+  async getPlansByMaker(
     userId: string,
     options: PlanQueryOptions
-  ): Promise<{ list: PlanToClientProperties[]; totalCount: number }> {
+  ): Promise<{ totalCount: number; list: PlanToClientProperties[] }> {
     const { keyword, tripType } = options;
     const requestUser: IUser = await this.userRepository.findById(userId);
-    const requestUserRole = requestUser.get().role;
 
     const makerProfile: IMakerProfile = await this.userRepository.findMakerProfile(userId);
     const serviceArea: ServiceArea[] = makerProfile.get().serviceArea;
@@ -51,7 +50,21 @@ export default class PlanService {
     ]);
 
     const toClientList = list.map((plan) => plan.toClient());
-    return { list: toClientList, totalCount };
+    return { totalCount, list: toClientList };
+  }
+
+  async getPlansByDreamer(
+    userId: string,
+    options: PlanQueryOptions
+  ): Promise<{ totalCount: number; list: PlanToClientProperties[] }> {
+    options.userId = userId;
+    const [totalCount, list] = await Promise.all([
+      this.planRepository.totalCount(options),
+      this.planRepository.findMany(options)
+    ]);
+
+    const toClientList = list.map((plan) => plan.toClient());
+    return { totalCount, list: toClientList };
   }
 
   async getPlanById(id: string): Promise<PlanToClientProperties> {
