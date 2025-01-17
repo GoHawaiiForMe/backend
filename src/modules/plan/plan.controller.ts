@@ -10,6 +10,7 @@ import { UpdateAssignDataDTO } from 'src/common/types/plan/plan.dto';
 import { Role } from 'src/common/decorators/roleGuard.decorator';
 import { UserRole } from 'src/common/decorators/role.decorator';
 import { RoleEnum } from 'src/common/constants/role.type';
+import { GroupByCount } from 'src/common/constants/tripType.type';
 
 @Controller('plans')
 export default class PlanController {
@@ -20,9 +21,9 @@ export default class PlanController {
   async getPlanByMaker(
     @UserId() userId: string,
     @Query() options: PlanQueryOptionDTO
-  ): Promise<{ totalCount: number; list: PlanToClientProperties[] }> {
-    const { totalCount, list } = await this.planService.getPlansByMaker(userId, options);
-    return { totalCount, list };
+  ): Promise<{ totalCount: number; groupByCount: GroupByCount; list: PlanToClientProperties[] }> {
+    const { totalCount, groupByCount, list } = await this.planService.getPlansByMaker(userId, options);
+    return { totalCount, groupByCount, list };
   }
 
   @Get('dreamer')
