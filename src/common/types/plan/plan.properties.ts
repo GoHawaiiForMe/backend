@@ -43,6 +43,7 @@ export interface PlanToClientProperties {
   dreamer?: FilteredUserProperties | null;
   review?: Review;
 }
+
 export interface PlanMapperProperties {
   id?: string;
   createdAt?: Date;

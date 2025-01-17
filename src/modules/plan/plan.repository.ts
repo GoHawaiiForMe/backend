@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import PlanOrder from 'src/common/constants/planOrder.enum';
 import SortOrder from 'src/common/constants/sortOrder.enum';
-import { StatusEnum } from 'src/common/constants/status.type';
+import { TRIP_TYPE } from 'src/common/constants/tripType.type';
 import IPlan from 'src/common/domains/plan/plan.interface';
 import PlanMapper from 'src/common/domains/plan/plan.mapper';
-import { CreatePlanData, PlanWhereConditions, UpdatePlanData } from 'src/common/types/plan/plan.type';
+import { GroupByCount } from 'src/common/types/plan/plan.dto';
+import { PlanWhereConditions } from 'src/common/types/plan/plan.type';
 import { PlanOrderByField } from 'src/common/types/plan/plan.type';
 import { PlanQueryOptions } from 'src/common/types/plan/plan.type';
 import DBClient from 'src/providers/database/prisma/DB.client';
@@ -27,8 +28,7 @@ export default class PlanRepository {
       skip: pageSize * (page - 1),
       include: {
         dreamer: true,
-        assignees: true,
-        quotes: true
+        assignees: true
       }
     });
     const domainPlans = plans.map((plan) => new PlanMapper(plan).toDomain());
@@ -43,6 +43,24 @@ export default class PlanRepository {
     });
 
     return totalCount;
+  }
+
+  async groupByCount(options: PlanQueryOptions): Promise<GroupByCount> {
+    const groupByField = TRIP_TYPE;
+    const whereConditions = this.buildWhereConditions(options);
+
+    const groupByCount = await this.db.plan.groupBy({
+      by: [groupByField],
+      where: whereConditions,
+      _count: { id: true }
+    });
+
+    const formattedGroupByCount = groupByCount.map((group) => ({
+      tripType: group.tripType,
+      count: group._count.id
+    }));
+
+    return formattedGroupByCount;
   }
 
   async findById(id: string): Promise<IPlan> {

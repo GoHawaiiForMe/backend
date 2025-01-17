@@ -8,3 +8,5 @@ export enum TripTypeEnum {
   ACTIVITY = 'ACTIVITY',
   FESTIVAL = 'FESTIVAL'
 }
+
+export const TRIP_TYPE = 'tripType';

@@ -1,7 +1,6 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common';
 import { UserId } from 'src/common/decorators/user.decorator';
-import { CreatePlanDataDTO, MyPlanQueryDTO, PlanQueryOptionDTO } from 'src/common/types/plan/plan.dto';
-import { PlanToClientProperties } from 'src/common/types/plan/plan.properties';
+import { CreatePlanDataDTO, GroupByCount, MyPlanQueryDTO, PlanQueryOptionDTO } from 'src/common/types/plan/plan.dto';
 import PlanService from './plan.service';
 import { CreatePlanData } from 'src/common/types/plan/plan.type';
 import { CreateQuoteDataDTO, DreamerQuoteQueryOptionsDTO } from 'src/common/types/quote/quote.dto';
@@ -10,6 +9,7 @@ import { UpdateAssignDataDTO } from 'src/common/types/plan/plan.dto';
 import { Role } from 'src/common/decorators/roleGuard.decorator';
 import { UserRole } from 'src/common/decorators/role.decorator';
 import { RoleEnum } from 'src/common/constants/role.type';
+import { PlanToClientProperties } from 'src/common/types/plan/plan.properties';
 
 @Controller('plans')
 export default class PlanController {
@@ -20,9 +20,9 @@ export default class PlanController {
   async getPlanByMaker(
     @UserId() userId: string,
     @Query() options: PlanQueryOptionDTO
-  ): Promise<{ totalCount: number; list: PlanToClientProperties[] }> {
-    const { totalCount, list } = await this.planService.getPlansByMaker(userId, options);
-    return { totalCount, list };
+  ): Promise<{ totalCount: number; groupByCount: GroupByCount; list: PlanToClientProperties[] }> {
+    const { totalCount, groupByCount, list } = await this.planService.getPlansByMaker(userId, options);
+    return { totalCount, groupByCount, list };
   }
 
   @Get('dreamer')

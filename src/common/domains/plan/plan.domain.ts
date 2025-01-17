@@ -58,7 +58,7 @@ export default class Plan implements IPlan {
       tripType: this.tripType,
       serviceArea: this.serviceArea,
       details: this.details,
-      //address: this.address,
+      //address: this.address, //TODO. 컨펌이 되면 리스폰스로 돌려줘야함 상의필요.
       status: this.status,
       quotes: this.quotes?.map((quote) => quote?.toClient()),
       assignees: this.assignees?.map((assignee) => assignee?.toClient()),

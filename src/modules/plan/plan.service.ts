@@ -21,6 +21,7 @@ import { RoleEnum } from 'src/common/constants/role.type';
 import PlanMapper from 'src/common/domains/plan/plan.mapper';
 import BadRequestError from 'src/common/errors/badRequestError';
 import { StatusEnum } from 'src/common/constants/status.type';
+import { GroupByCount } from 'src/common/types/plan/plan.dto';
 
 @Injectable()
 export default class PlanService {
@@ -35,7 +36,7 @@ export default class PlanService {
   async getPlansByMaker(
     userId: string,
     options: PlanQueryOptions
-  ): Promise<{ totalCount: number; list: PlanToClientProperties[] }> {
+  ): Promise<{ totalCount: number; groupByCount: GroupByCount; list: PlanToClientProperties[] }> {
     const { keyword, tripType } = options;
     const requestUser: IUser = await this.userRepository.findById(userId);
 
@@ -43,14 +44,15 @@ export default class PlanService {
     const serviceArea: ServiceArea[] = makerProfile.get().serviceArea;
     options.serviceArea = serviceArea; //NOTE. 메이커의 서비스지역 필터링
     options.userId = userId;
-
-    const [totalCount, list] = await Promise.all([
+    const groupOptions = { ...options, tripType: undefined };
+    const [totalCount, groupByCount, list] = await Promise.all([
       this.planRepository.totalCount(options),
+      this.planRepository.groupByCount(groupOptions),
       this.planRepository.findMany(options)
     ]);
 
     const toClientList = list.map((plan) => plan.toClient());
-    return { totalCount, list: toClientList };
+    return { totalCount, groupByCount, list: toClientList };
   }
 
   async getPlansByDreamer(
