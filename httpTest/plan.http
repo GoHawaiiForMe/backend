@@ -59,7 +59,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1NTVkN
 
 
 
-GET http://localhost:4000/plans/maker?orderBy=SCHEDULE_FIRST&tripType=SHOPPING
+GET http://localhost:4000/plans/maker?keyword=호랑이
 #드리머
 #Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Njg4NWEzYy01MGY0LTQyN2ItOGE5Mi0zNzAyYzY5NzZmYjAiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNjg5OTgwMCwiZXhwIjoxNzM2OTg2MjAwfQ.QiGmulTsGAoshlCA42svDnp4Ce_iS8iCKqND27cYpmk
 #메이커
@@ -100,5 +100,5 @@ DELETE http://localhost:4000/plans/b4f4db1e-b32d-44f6-9026-d74c38b8d899
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1NTVkNDYzZS0zN2I2LTQxMGItOTA2MS0xMWE5ZDY4MjJiZGQiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNjkxNTEyNSwiZXhwIjoxNzM3MDAxNTI1fQ.VhGugs4Mj9xGrKfsExqcmrYP1WZfNA4cmV2VgFFxGY0
 ###
 #드리머의 본인의 플랜목록 조회
-GET http://localhost:4000/plans/Dreamer?status=OVERDUE
+GET http://localhost:4000/plans/dreamer?status=OVERDUE
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1NTVkNDYzZS0zN2I2LTQxMGItOTA2MS0xMWE5ZDY4MjJiZGQiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNzA5NDA3MSwiZXhwIjoxNzM3MTgwNDcxfQ.JKM0QTwyYC16yui7yOfSTM4Ek39eM7VZed9n4r0gLF0

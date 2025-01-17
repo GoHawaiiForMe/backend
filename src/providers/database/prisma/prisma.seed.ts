@@ -7,7 +7,7 @@ import { DREAMER_PROFILES } from './mock/dreamerProfile.mock';
 import { MAKER_PROFILES } from './mock/makerProfile.mock';
 import { FOLLOWS } from './mock/follow.mock';
 import { HashingPassword } from 'src/common/utilities/hashingPassword';
-import QUOTES from './mock/quote.mock';
+import { QUOTES } from './mock/quote.mock';
 
 async function main(prisma: PrismaDBClient) {
   const users = await Promise.all(
