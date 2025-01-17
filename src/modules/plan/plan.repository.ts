@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import PlanOrder from 'src/common/constants/planOrder.enum';
 import SortOrder from 'src/common/constants/sortOrder.enum';
-import { GroupByCount, TRIP_TYPE } from 'src/common/constants/tripType.type';
+import { TRIP_TYPE } from 'src/common/constants/tripType.type';
 import IPlan from 'src/common/domains/plan/plan.interface';
 import PlanMapper from 'src/common/domains/plan/plan.mapper';
+import { GroupByCount } from 'src/common/types/plan/plan.dto';
 import { PlanWhereConditions } from 'src/common/types/plan/plan.type';
 import { PlanOrderByField } from 'src/common/types/plan/plan.type';
 import { PlanQueryOptions } from 'src/common/types/plan/plan.type';

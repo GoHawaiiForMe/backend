@@ -1,10 +1,11 @@
-import { TripType, ServiceArea } from '@prisma/client';
 import { IsString, IsOptional, IsDate, IsEnum, IsNotEmpty, IsInt, IsBoolean, IsArray } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import PlanOrder from 'src/common/constants/planOrder.enum';
 import validateBooleanValue from 'src/common/utilities/validateBooleanValue';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import { Status, StatusEnum } from 'src/common/constants/status.type';
+import { TripType, TripTypeEnum } from 'src/common/constants/tripType.type';
+import { ServiceAreaEnum } from 'src/common/constants/serviceArea.type';
 
 export class CreatePlanDataDTO {
   @IsString()
@@ -16,13 +17,13 @@ export class CreatePlanDataDTO {
   @IsNotEmpty()
   tripDate: Date;
 
-  @IsEnum(TripType)
+  @IsEnum(TripTypeEnum)
   @IsNotEmpty()
-  tripType: TripType;
+  tripType: TripTypeEnum;
 
-  @IsEnum(ServiceArea)
+  @IsEnum(ServiceAreaEnum)
   @IsNotEmpty()
-  serviceArea: ServiceArea;
+  serviceArea: ServiceAreaEnum;
 
   @IsString()
   @IsNotEmpty()
@@ -60,11 +61,11 @@ export class PlanQueryOptionDTO {
   orderBy: PlanOrder = PlanOrder.RECENT;
 
   @IsOptional()
-  @IsEnum(TripType, { each: true })
+  @IsEnum(TripTypeEnum, { each: true })
   @Transform(({ value }) => {
     return Array.isArray(value) ? value : value ? [value] : [];
   })
-  tripType: TripType[];
+  tripType: TripTypeEnum[];
 
   @IsOptional()
   @Transform(({ value }) => validateBooleanValue(value, ErrorMessage.PLAN_IS_ASSIGNED_BAD_REQUEST))
@@ -88,3 +89,8 @@ export class UpdateAssignDataDTO {
   @IsNotEmpty()
   assigneeId: string;
 }
+
+export type GroupByCount = {
+  tripType: TripType;
+  count: number;
+}[];

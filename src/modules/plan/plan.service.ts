@@ -21,7 +21,7 @@ import { RoleEnum } from 'src/common/constants/role.type';
 import PlanMapper from 'src/common/domains/plan/plan.mapper';
 import BadRequestError from 'src/common/errors/badRequestError';
 import { StatusEnum } from 'src/common/constants/status.type';
-import { GroupByCount } from 'src/common/constants/tripType.type';
+import { GroupByCount } from 'src/common/types/plan/plan.dto';
 
 @Injectable()
 export default class PlanService {

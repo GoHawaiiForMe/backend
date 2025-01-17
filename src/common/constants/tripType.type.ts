@@ -10,8 +10,3 @@ export enum TripTypeEnum {
 }
 
 export const TRIP_TYPE = 'tripType';
-
-export type GroupByCount = {
-  tripType: TripType;
-  count: number;
-}[];
