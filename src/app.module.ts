@@ -12,6 +12,8 @@ import FollowModule from './modules/follow/follow.module';
 import PlanModule from './modules/plan/plan.module';
 import QuoteModule from './modules/quote/quote.module';
 import PaymentModule from './modules/payment/payment.module';
+import { BullModule } from '@nestjs/bullmq';
+import { BullmqModule } from './providers/cache/bullmq.module';
 
 @Module({
   imports: [
@@ -21,6 +23,10 @@ import PaymentModule from './modules/payment/payment.module';
       connectionName: process.env.CONNECTION_NAME
     }),
     EventEmitterModule.forRoot(),
+    BullModule.registerQueue({
+      name: 'calculation'
+    }),
+    BullmqModule,
     PrismaModule,
     UserModule,
     NotificationModule,
