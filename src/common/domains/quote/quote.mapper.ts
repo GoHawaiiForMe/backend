@@ -8,12 +8,7 @@ export default class QuoteMapper {
   constructor(private readonly quote: QuoteMapperProperties) {}
 
   toDomain(): IQuote {
-    let plan: PlanReference;
     if (!this.quote) return null;
-    if (!this.quote.plan) plan = null;
-    else {
-      plan = this.quote.plan;
-    }
 
     return new Quote({
       id: this.quote.id,
@@ -21,7 +16,7 @@ export default class QuoteMapper {
       updatedAt: this.quote.updatedAt,
       price: this.quote.price,
       content: this.quote.content,
-      plan,
+      plan: this.quote.plan || null,
       planId: this.quote.planId,
       maker: new UserMapper(this.quote.maker)?.toDomain(),
       makerId: this.quote.makerId,
