@@ -5,8 +5,12 @@ import { Module } from '@nestjs/common';
   imports: [
     BullModule.forRoot({
       connection: {
-        url: process.env.REDIS_URL
+        host: process.env.REDIS_HOST,
+        port: Number(process.env.REDIS_PORT)
       }
+    }),
+    BullModule.registerQueue({
+      name: 'calculation'
     })
   ]
 })
