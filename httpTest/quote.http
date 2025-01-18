@@ -24,3 +24,10 @@ Content-Type: application/json
 {
     "isConfirmed": true
 }
+###
+GET http://localhost:4000/plans/415037fb-b4da-43dc-a9e0-a68399fd5667/quotes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Njg4NWEzYy01MGY0LTQyN2ItOGE5Mi0zNzAyYzY5NzZmYjAiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNzEyNTY1NCwiZXhwIjoxNzM3MjEyMDU0fQ.i_oXVFqPvXGLR0Jxz0C-KxrOZxvE0rXArb2VMMVyOTk
+###
+
+GET http://localhost:4000/quotes?isSent=false
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YjRkZWQ4Mi1lNjgwLTQxMGQtYjg2ZC1jZTY5NzRlNTNmMzciLCJyb2xlIjoiTUFLRVIiLCJpYXQiOjE3MzcxODg0ODgsImV4cCI6MTczNzI3NDg4OH0.a5MQpfsQD8ZkZemy1ZghAvmOVNIDzxPdjKMSV24cH80

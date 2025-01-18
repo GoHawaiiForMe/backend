@@ -44,7 +44,7 @@ export default class PlanController {
   @Get(':planId/quotes')
   @Role('DREAMER')
   async getQuotesByPlanId(
-    @UserId() userId: string,
+    @UserId() userId: string, //NOTE. Dreamer의 나의 플랜에 해당하는 견적 목록 조회
     @Param('planId') planId: string,
     @Query() options: DreamerQuoteQueryOptionsDTO
   ): Promise<{ totalCount: number; list: QuoteToClientProperties[] }> {

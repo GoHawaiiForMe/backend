@@ -1,17 +1,17 @@
-import { Plan } from '@prisma/client';
 import { IUser } from 'src/common/domains/user/user.interface';
 import { FilteredUserProperties, UserProperties } from '../user/user.types';
-import IPlan from 'src/common/domains/plan/plan.interface';
-import { PlanToClientProperties } from '../plan/plan.properties';
+import { TripType } from 'src/common/constants/tripType.type';
+import { ServiceArea } from 'src/common/constants/serviceArea.type';
+import { Status } from 'src/common/constants/status.type';
+import { PlanReference } from '../plan/plan.type';
 
 export interface QuoteProperties {
   id?: string;
   createdAt?: Date;
   updatedAt?: Date;
-  isDeletedAt?: Date | null;
   price: number;
   content: string;
-  plan: IPlan;
+  plan: PlanReference;
   planId: string;
   maker?: IUser;
   makerId?: string;
@@ -25,7 +25,7 @@ export interface QuoteToClientProperties {
   updatedAt?: Date;
   price: number;
   content: string;
-  plan: PlanToClientProperties;
+  plan?: PlanReference;
   maker?: FilteredUserProperties | null;
   isConfirmed: boolean;
   isAssigned: boolean;
@@ -35,10 +35,9 @@ export interface QuoteMapperProperties {
   id?: string;
   createdAt?: Date;
   updatedAt?: Date;
-  isDeletedAt?: Date | null;
   price: number;
   content: string;
-  plan?: Plan;
+  plan?: PlanReference;
   planId: string;
   maker?: UserProperties | null;
   makerId?: string | null;

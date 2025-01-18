@@ -46,3 +46,14 @@ export interface UpdatePlanData {
   status?: Status;
   assigneeId?: string;
 }
+
+export interface PlanReference {
+  id?: string;
+  createdAt?: Date;
+  tripType?: TripType;
+  tripDate?: Date;
+  serviceArea?: ServiceArea;
+  details?: string;
+  status?: Status;
+  dreamer?: any; //NOTE. 임시로 any 사용
+}
