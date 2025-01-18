@@ -104,6 +104,12 @@ export default class Plan implements IPlan {
     return this;
   }
 
+  updateByScheduler(): IPlan {
+    if (this.status === StatusEnum.PENDING) this.status = StatusEnum.OVERDUE;
+    else if (this.status === StatusEnum.CONFIRMED) this.status = StatusEnum.COMPLETED;
+    return this;
+  }
+
   getQuotes(): IQuote[] {
     return this.quotes;
   }

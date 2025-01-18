@@ -135,21 +135,27 @@ export default class PlanRepository {
   }
 
   private buildWhereConditions(whereOptions: PlanQueryOptions): PlanWhereConditions {
-    const { keyword, tripType, serviceArea, isAssigned, userId, status } = whereOptions;
+    const { keyword, tripDate, tripType, serviceArea, isAssigned, userId, status } = whereOptions;
+
     const whereConditions: PlanWhereConditions = {
       isDeletedAt: null
     };
+
+    if (tripDate) {
+      whereConditions.tripDate = { lte: tripDate };
+      whereConditions.status = { in: status };
+    } //NOTE.스케줄러 조건
 
     if (serviceArea) whereConditions.serviceArea = { in: serviceArea };
 
     if (tripType) whereConditions.tripType = { in: tripType };
 
-    if (status) {
+    if (status && userId) {
       whereConditions.status = { in: status };
-      whereConditions.dreamerId = userId;
+      whereConditions.dreamerId = userId; //NOTE. Dreamer 전용 api 조건
     }
 
-    if (isAssigned === true) whereConditions.assignees = { some: { id: userId } };
+    if (isAssigned === true) whereConditions.assignees = { some: { id: userId } }; //NOTE. 지정견적 조회 API
 
     if (keyword) {
       whereConditions.OR = [

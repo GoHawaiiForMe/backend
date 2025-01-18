@@ -156,6 +156,41 @@ export default class PlanService {
     return updatedPlan.toClient();
   }
 
+  async updateAutoStatus(status: StatusEnum.PENDING | StatusEnum.CONFIRMED): Promise<void> {
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+    today.setDate(today.getDate() + 1);
+
+    const bufferDate = new Date(today);
+    bufferDate.setDate(today.getDate() - 7);
+
+    const tripDate = status === StatusEnum.PENDING ? today : bufferDate;
+    const options = {
+      status: [status],
+      tripDate,
+      page: 1,
+      pageSize: 100
+    };
+
+    let hasMoreData = true;
+    while (hasMoreData) {
+      const plans = await this.planRepository.findMany(options);
+
+      if (plans.length === 0) {
+        hasMoreData = false;
+        break;
+      }
+
+      const update = plans.map(async (plan) => {
+        plan.updateByScheduler();
+        await this.planRepository.update(plan);
+      });
+
+      await Promise.allSettled(update);
+      options.page++;
+    }
+  }
+
   async deletePlan(id: string, userId: string): Promise<PlanToClientProperties> {
     const plan = await this.planRepository.findById(id);
 
@@ -171,7 +206,6 @@ export default class PlanService {
     //TODO. 삭제된 플랜의 견적자들에게 알림 필요
 
     const quotes = plan.getQuotes();
-    const quoteIds = quotes.map((quote) => quote.getId());
 
     const deletedQuotes = quotes.map(async (quote) => this.quoteRepository.delete(quote.getId()));
     const deletedPlan = await this.planRepository.delete(id);

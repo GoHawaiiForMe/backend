@@ -14,6 +14,7 @@ import QuoteModule from './modules/quote/quote.module';
 import PaymentModule from './modules/payment/payment.module';
 import { BullModule } from '@nestjs/bullmq';
 import { BullmqModule } from './providers/cache/bullmq.module';
+import TaskModule from './modules/task/task.module';
 
 @Module({
   imports: [
@@ -33,7 +34,8 @@ import { BullmqModule } from './providers/cache/bullmq.module';
     FollowModule,
     PlanModule,
     QuoteModule,
-    PaymentModule
+    PaymentModule,
+    TaskModule
   ],
   controllers: [],
   providers: [
