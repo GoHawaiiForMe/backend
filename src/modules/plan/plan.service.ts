@@ -156,7 +156,7 @@ export default class PlanService {
     return updatedPlan.toClient();
   }
 
-  async updateAutoStatus(status: StatusEnum.PENDING | StatusEnum.CONFIRMED): Promise<void> {
+  async autoUpdateStatus(status: StatusEnum.PENDING | StatusEnum.CONFIRMED): Promise<void> {
     const today = new Date();
     today.setUTCHours(0, 0, 0, 0);
     today.setDate(today.getDate() + 1);
@@ -187,7 +187,6 @@ export default class PlanService {
       });
 
       await Promise.allSettled(update);
-      options.page++;
     }
   }
 

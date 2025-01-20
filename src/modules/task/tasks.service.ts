@@ -9,7 +9,7 @@ export class TasksService {
 
   @Cron('0 0 0 * * *', { timeZone: 'Asia/Seoul' })
   async updatePlanStatus() {
-    await this.planService.updateAutoStatus(StatusEnum.PENDING);
-    await this.planService.updateAutoStatus(StatusEnum.CONFIRMED);
+    await this.planService.autoUpdateStatus(StatusEnum.PENDING);
+    await this.planService.autoUpdateStatus(StatusEnum.CONFIRMED);
   } //TODO. 로그
 }
