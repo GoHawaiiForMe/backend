@@ -3,3 +3,21 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0OWJlN
 ###
 GET http://localhost:4000/plans/dreamer?status=PENDING
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Njg4NWEzYy01MGY0LTQyN2ItOGE5Mi0zNzAyYzY5NzZmYjAiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNzEyOTk2MCwiZXhwIjoxNzM3MjE2MzYwfQ.2o7m9QnpwhHU4otm8L-MapayoJWBsz1CTYnKQ2fQRTM
+###
+POST http://localhost:4000/plans
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Njg4NWEzYy01MGY0LTQyN2ItOGE5Mi0zNzAyYzY5NzZmYjAiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNzE5NDY4MCwiZXhwIjoxNzM3MjgxMDgwfQ.NESpqyBh_8SHKaY1PvEXpqrAQrJ0Kx0fHEnt5iAWTq4
+Content-Type: application/json
+
+{
+    "title": "제목",
+    "tripDate": "2025-01-19T00:00:00.000Z",
+    "tripType": "FOOD_TOUR",
+    "serviceArea": "SEOUL",
+    "details": "상세내용"
+}
+###
+
+
+GET http://localhost:4000/plans/dreamer?status=OVERDUE?keyword=제목
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Njg4NWEzYy01MGY0LTQyN2ItOGE5Mi0zNzAyYzY5NzZmYjAiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNzIxMjc2OSwiZXhwIjoxNzM3Mjk5MTY5fQ.SrI-qFEw1ngiNEanTNWry9V9kpg0xqlbI0zVWUqjsEY
+###
