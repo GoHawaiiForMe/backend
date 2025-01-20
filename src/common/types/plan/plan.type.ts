@@ -12,6 +12,7 @@ export interface PlanWhereConditions {
   isDeletedAt: Date | null;
   serviceArea?: { in: ServiceArea[] };
   tripType?: { in: TripType[] };
+  tripDate?: Date | string | { gte?: Date; lte?: Date };
   assignees?: { some: { id: string } };
   status?: { in: StatusEnum[] };
   dreamerId?: string;
@@ -24,6 +25,7 @@ export interface PlanQueryOptions {
   orderBy?: PlanOrder;
   keyword?: string;
   tripType?: TripType[];
+  tripDate?: Date; //NOTE. 스케줄러를 위한 필드
   serviceArea?: ServiceArea[];
   page?: number;
   pageSize?: number;

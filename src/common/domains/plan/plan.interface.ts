@@ -7,6 +7,7 @@ export default interface IPlan {
   toDB(): Partial<PlanProperties>;
   updateAssign(data: { assigneeId: string }): IPlan;
   updateComplete(): IPlan;
+  updateByScheduler(): IPlan;
   getQuotes(): IQuote[];
   getAssigneeIds(): string[];
   getDreamerId(): string;
