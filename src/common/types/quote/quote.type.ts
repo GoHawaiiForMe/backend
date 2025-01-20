@@ -1,11 +1,11 @@
-import { StatusEnum } from 'src/common/constants/status.type';
+import { Status } from 'src/common/constants/status.type';
 
 export type QuoteWhereConditions = {
   isDeletedAt: Date | null;
   isConfirmed?: boolean;
   makerId?: string;
-  OR?: [{ isConfirmed: boolean }, { isConfirmed: boolean; plan: { status: StatusEnum } }];
-  plan?: { status: { in: StatusEnum[] } };
+  OR?: [{ isConfirmed: boolean }, { isConfirmed: boolean; plan: { status: Status } }];
+  plan?: { status: { in: Status[] } };
   planId?: string;
 };
 

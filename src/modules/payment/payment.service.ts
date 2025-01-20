@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import PaymentRepository from './payment.repository';
-import { PaymentStatusEnum } from 'src/common/constants/paymentStatus.type';
+import { PaymentStatus } from 'src/common/constants/paymentStatus.type';
 import { PaymentToClientProperties } from 'src/common/types/payment/payment.type';
 import Payment from 'src/common/domains/payment/payment.domain';
 import UnauthorizedError from 'src/common/errors/unauthorizedError';
@@ -20,7 +20,7 @@ export default class PaymentService {
   }
 
   async create(userId: string, data: { amount: number }): Promise<PaymentToClientProperties> {
-    const payment = new Payment({ userId, amount: data.amount, status: PaymentStatusEnum.PENDING });
+    const payment = new Payment({ userId, amount: data.amount, status: PaymentStatus.PENDING });
     const savedPayment = await this.repository.create(payment.get());
 
     return savedPayment.toClient();

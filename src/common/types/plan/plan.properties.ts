@@ -5,7 +5,7 @@ import { TripType } from 'src/common/constants/tripType.type';
 import IQuote from 'src/common/domains/quote/quote.interface';
 import { IUser } from 'src/common/domains/user/user.interface';
 import { QuoteMapperProperties, QuoteToClientProperties } from 'src/common/types/quote/quoteProperties';
-import { FilteredUserProperties, UserProperties } from 'src/common/types/user/user.types';
+import { FilteredUserProperties, UserMapperProperties, UserProperties } from 'src/common/types/user/user.types';
 
 export interface PlanProperties {
   id?: string;
@@ -51,14 +51,14 @@ export interface PlanMapperProperties {
   isDeletedAt?: Date | null;
   title: string;
   tripDate: Date;
-  tripType: TripType;
-  serviceArea: ServiceArea;
+  tripType: string;
+  serviceArea: string;
   details: string;
   address?: string;
-  status?: Status;
+  status?: string;
   quotes?: QuoteMapperProperties[];
-  assignees?: UserProperties[];
-  dreamer?: UserProperties | null;
+  assignees?: UserMapperProperties[];
+  dreamer?: UserMapperProperties | null;
   dreamerId?: string | null;
   review?: Review;
 }

@@ -1,10 +1,10 @@
-import { PaymentStatusEnum } from 'src/common/constants/paymentStatus.type';
+import { PaymentStatus } from 'src/common/constants/paymentStatus.type';
 
 export interface PaymentProperties {
   id?: string;
   userId: string;
   amount: number;
-  status: PaymentStatusEnum;
+  status: PaymentStatus;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -12,5 +12,5 @@ export interface PaymentProperties {
 export interface PaymentToClientProperties {
   id: string;
   amount: number;
-  status: PaymentStatusEnum;
+  status: PaymentStatus;
 }

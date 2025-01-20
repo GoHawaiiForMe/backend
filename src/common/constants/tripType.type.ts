@@ -1,6 +1,4 @@
-export type TripType = 'FOOD_TOUR' | 'SHOPPING' | 'RELAXATION' | 'CULTURE' | 'ACTIVITY' | 'FESTIVAL';
-
-export enum TripTypeEnum {
+export enum TripType {
   FOOD_TOUR = 'FOOD_TOUR',
   SHOPPING = 'SHOPPING',
   RELAXATION = 'RELAXATION',
@@ -9,4 +7,3 @@ export enum TripTypeEnum {
   FESTIVAL = 'FESTIVAL'
 }
 
-export const TRIP_TYPE = 'tripType';

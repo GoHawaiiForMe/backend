@@ -17,10 +17,10 @@ import ForbiddenError from 'src/common/errors/forbiddenError';
 import { IUser } from 'src/common/domains/user/user.interface';
 import { IMakerProfile } from 'src/common/domains/user/profile.interface';
 import { ServiceArea } from 'src/common/constants/serviceArea.type';
-import { RoleEnum } from 'src/common/constants/role.type';
+import { Role } from 'src/common/constants/role.type';
 import PlanMapper from 'src/common/domains/plan/plan.mapper';
 import BadRequestError from 'src/common/errors/badRequestError';
-import { StatusEnum } from 'src/common/constants/status.type';
+import { Status } from 'src/common/constants/status.type';
 import { GroupByCount } from 'src/common/types/plan/plan.dto';
 
 @Injectable()
@@ -123,7 +123,7 @@ export default class PlanService {
 
     if (!assignee) throw new NotFoundError(ErrorMessage.USER_NOT_FOUND);
 
-    if (assignee.getRole() !== RoleEnum.MAKER) {
+    if (assignee.getRole() !== Role.MAKER) {
       throw new BadRequestError(ErrorMessage.PLAN_ASSIGN_NOT_MAKER);
     }
 
@@ -165,7 +165,7 @@ export default class PlanService {
       throw new ForbiddenError(ErrorMessage.USER_FORBIDDEN_NOT_OWNER);
     }
 
-    if (plan.getStatus() === StatusEnum.CONFIRMED) {
+    if (plan.getStatus() === Status.CONFIRMED) {
       throw new BadRequestError(ErrorMessage.PLAN_DELETE_BAD_REQUEST);
     }
     //TODO. 삭제된 플랜의 견적자들에게 알림 필요

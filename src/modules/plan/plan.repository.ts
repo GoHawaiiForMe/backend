@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import PlanOrder from 'src/common/constants/planOrder.enum';
 import SortOrder from 'src/common/constants/sortOrder.enum';
-import { TRIP_TYPE } from 'src/common/constants/tripType.type';
 import IPlan from 'src/common/domains/plan/plan.interface';
 import PlanMapper from 'src/common/domains/plan/plan.mapper';
 import { GroupByCount } from 'src/common/types/plan/plan.dto';
 import { PlanWhereConditions } from 'src/common/types/plan/plan.type';
 import { PlanOrderByField } from 'src/common/types/plan/plan.type';
 import { PlanQueryOptions } from 'src/common/types/plan/plan.type';
+import { mapToTripType } from 'src/common/utilities/mapToEnum';
 import DBClient from 'src/providers/database/prisma/DB.client';
 
 @Injectable()
@@ -46,7 +46,7 @@ export default class PlanRepository {
   }
 
   async groupByCount(options: PlanQueryOptions): Promise<GroupByCount> {
-    const groupByField = TRIP_TYPE;
+    const groupByField = 'tripType';
     const whereConditions = this.buildWhereConditions(options);
 
     const groupByCount = await this.db.plan.groupBy({
@@ -56,7 +56,7 @@ export default class PlanRepository {
     });
 
     const formattedGroupByCount = groupByCount.map((group) => ({
-      tripType: group.tripType,
+      tripType: mapToTripType(group.tripType),
       count: group._count.id
     }));
 

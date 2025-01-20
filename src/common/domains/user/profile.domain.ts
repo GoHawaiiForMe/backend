@@ -1,7 +1,7 @@
+import { ServiceArea } from 'src/common/constants/serviceArea.type';
 import { DreamerProfileProperties, MakerProfileProperties } from '../../types/user/profile.types';
 import { IDreamerProfile, IMakerProfile } from './profile.interface';
 import { ProfileImage } from 'src/common/constants/image.type';
-import { ServiceArea } from 'src/common/constants/serviceArea.type';
 import { TripType } from 'src/common/constants/tripType.type';
 
 export class DreamerProfile implements IDreamerProfile {

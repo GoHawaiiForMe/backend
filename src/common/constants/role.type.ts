@@ -1,6 +1,4 @@
-export type Role = 'DREAMER' | 'MAKER';
-
-export enum RoleEnum {
+export enum Role {
   DREAMER = 'DREAMER',
   MAKER = 'MAKER'
 }

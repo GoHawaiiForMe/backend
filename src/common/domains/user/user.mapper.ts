@@ -1,15 +1,16 @@
-import { UserProperties } from '../../types/user/user.types';
+import { mapToRole } from 'src/common/utilities/mapToEnum';
+import { UserMapperProperties, UserProperties } from '../../types/user/user.types';
 import User from './user.domain';
 
 export default class UserMapper {
-  constructor(private readonly user: UserProperties) {}
+  constructor(private readonly user: UserMapperProperties) {}
 
   toDomain() {
     if (!this.user) return null;
 
     return new User({
       id: this.user.id,
-      role: this.user.role,
+      role: mapToRole(this.user.role),
       nickName: this.user.nickName,
       email: this.user.email,
       password: this.user.password,

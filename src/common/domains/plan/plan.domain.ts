@@ -1,7 +1,7 @@
 import { TripType } from 'src/common/constants/tripType.type';
 import IPlan from './plan.interface';
 import { ServiceArea } from 'src/common/constants/serviceArea.type';
-import { Status, StatusEnum } from 'src/common/constants/status.type';
+import { Status } from 'src/common/constants/status.type';
 import IQuote from '../quote/quote.interface';
 import { IUser } from '../user/user.interface';
 import { Review } from '@prisma/client';
@@ -87,7 +87,7 @@ export default class Plan implements IPlan {
       throw new ConflictError(ErrorMessage.PLAN_ASSIGN_CONFLICT);
     } //NOTE. 지정경적 요청을 한 사람이 중복인지 체크
 
-    if (this.getStatus() !== StatusEnum.PENDING) {
+    if (this.getStatus() !== Status.PENDING) {
       throw new BadRequestError(ErrorMessage.PLAN_ASSIGN_NOT_PENDING);
     } //NOTE. PENDING 상태인지 체크
 
@@ -96,11 +96,11 @@ export default class Plan implements IPlan {
   }
 
   updateComplete(): IPlan {
-    if (this.status !== StatusEnum.CONFIRMED) {
+    if (this.status !== Status.CONFIRMED) {
       throw new BadRequestError(ErrorMessage.PLAN_COMPLETED_BAD_REQUEST);
     }
 
-    this.status = StatusEnum.COMPLETED;
+    this.status = Status.COMPLETED;
     return this;
   }
 

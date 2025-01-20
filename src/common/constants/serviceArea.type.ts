@@ -1,23 +1,4 @@
-export type ServiceArea =
-  | 'SEOUL'
-  | 'BUSAN'
-  | 'INCHEON'
-  | 'DAEGU'
-  | 'DAEJEON'
-  | 'GWANGJU'
-  | 'ULSAN'
-  | 'SEJONG'
-  | 'GYEONGGI'
-  | 'GANGWON'
-  | 'CHUNGBUK'
-  | 'CHUNGNAM'
-  | 'JEONBUK'
-  | 'JEONNAM'
-  | 'GYEONGBUK'
-  | 'GYEONGNAM'
-  | 'JEJU';
-
-export enum ServiceAreaEnum {
+export enum ServiceArea{
   SEOUL = 'SEOUL',
   BUSAN = 'BUSAN',
   INCHEON = 'INCHEON',

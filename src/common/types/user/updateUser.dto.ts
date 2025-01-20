@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
-import { RoleEnum } from 'src/common/constants/role.type';
+import { Role } from 'src/common/constants/role.type';
 
 export default class UpdateUserDTO {
-  @ApiProperty({ example: 'DEFAULT_1', enum: RoleEnum })
-  @IsEnum(RoleEnum)
+  @ApiProperty({ example: 'DEFAULT_1', enum: Role })
+  @IsEnum(Role)
   @IsOptional()
-  role: RoleEnum;
+  role: Role;
 
   @IsString()
   @IsOptional()

@@ -1,11 +1,10 @@
 import { PlanMapperProperties } from 'src/common/types/plan/plan.properties';
 import IPlan from './plan.interface';
-import { IUser } from '../user/user.interface';
-import IQuote from '../quote/quote.interface';
 import UserMapper from '../user/user.mapper';
 import QuoteMapper from '../quote/quote.mapper';
 import Plan from './plan.domain';
-import { StatusEnum } from 'src/common/constants/status.type';
+import { Status } from 'src/common/constants/status.type';
+import { mapToServiceArea, mapToStatus, mapToTripType } from 'src/common/utilities/mapToEnum';
 
 export default class PlanMapper {
   constructor(private readonly plan: PlanMapperProperties) {}
@@ -19,11 +18,11 @@ export default class PlanMapper {
       isDeletedAt: this.plan.isDeletedAt,
       title: this.plan.title,
       tripDate: this.plan.tripDate,
-      tripType: this.plan.tripType,
-      serviceArea: this.plan.serviceArea,
+      tripType: mapToTripType(this.plan.tripType),
+      serviceArea: mapToServiceArea(this.plan.serviceArea),
       details: this.plan.details,
       address: this.plan.address,
-      status: this.plan.status ?? StatusEnum.PENDING,
+      status: mapToStatus(this.plan.status) ?? Status.PENDING,
       quotes: this.plan.quotes?.map((quote) => new QuoteMapper(quote)?.toDomain()),
       assignees: this.plan.assignees?.map((assignee) => new UserMapper(assignee)?.toDomain()),
       dreamer: new UserMapper(this.plan.dreamer)?.toDomain(),

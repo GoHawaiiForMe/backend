@@ -1,7 +1,7 @@
 import { DreamerProfileProperties, MakerProfileProperties } from 'src/common/types/user/profile.types';
 
 export interface IDreamerProfile {
-  update(data: Partial<DreamerProfileProperties>): DreamerProfileProperties;
+        update(data: Partial<DreamerProfileProperties>): DreamerProfileProperties;
   get(): DreamerProfileProperties;
 }
 

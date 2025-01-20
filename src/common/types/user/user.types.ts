@@ -1,4 +1,15 @@
 import { Role } from 'src/common/constants/role.type';
+export interface UserMapperProperties{
+  id?: string;
+  role: string;
+  nickName: string;
+  email: string;
+  password: string;
+  phoneNumber: string;
+  coconut: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
 
 export interface UserProperties {
   id?: string;

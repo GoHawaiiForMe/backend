@@ -1,6 +1,6 @@
 import { Plan } from '@prisma/client';
 import { IUser } from 'src/common/domains/user/user.interface';
-import { FilteredUserProperties, UserProperties } from '../user/user.types';
+import { FilteredUserProperties, UserMapperProperties, UserProperties } from '../user/user.types';
 import IPlan from 'src/common/domains/plan/plan.interface';
 import { PlanToClientProperties } from '../plan/plan.properties';
 
@@ -40,7 +40,7 @@ export interface QuoteMapperProperties {
   content: string;
   plan?: Plan;
   planId: string;
-  maker?: UserProperties | null;
+  maker?: UserMapperProperties | null;
   makerId?: string | null;
   isConfirmed?: boolean;
   isAssigned?: boolean;

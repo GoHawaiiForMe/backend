@@ -1,4 +1,4 @@
-import { PaymentStatusEnum } from 'src/common/constants/paymentStatus.type';
+import { PaymentStatus } from 'src/common/constants/paymentStatus.type';
 import { PaymentProperties, PaymentToClientProperties } from 'src/common/types/payment/payment.type';
 import { IPayment } from './payment.interface';
 
@@ -6,7 +6,7 @@ export default class Payment implements IPayment {
   private readonly id?: string;
   private readonly userId: string;
   private readonly amount: number;
-  private status: PaymentStatusEnum;
+  private status: PaymentStatus;
 
   constructor(payment: PaymentProperties) {
     this.id = payment?.id;
@@ -19,7 +19,7 @@ export default class Payment implements IPayment {
     return new Payment(data);
   }
 
-  update(status: PaymentStatusEnum): void {
+  update(status: PaymentStatus): void {
     this.status = status;
   }
 

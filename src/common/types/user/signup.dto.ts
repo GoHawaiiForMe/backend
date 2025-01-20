@@ -1,13 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ArrayNotEmpty, IsEmail, IsEnum, IsNotEmpty, IsString } from 'class-validator';
-import { ProfileImage, ProfileImageEnum } from 'src/common/constants/image.type';
-import { Role, RoleEnum } from 'src/common/constants/role.type';
-import { ServiceArea, ServiceAreaEnum } from 'src/common/constants/serviceArea.type';
-import { TripType, TripTypeEnum } from 'src/common/constants/tripType.type';
+import { ProfileImage } from 'src/common/constants/image.type';
+import { Role  } from 'src/common/constants/role.type';
+import { ServiceArea } from 'src/common/constants/serviceArea.type';
+import { TripType  } from 'src/common/constants/tripType.type';
 
 export class SignupUserDTO {
-  @ApiProperty({ example: 'DEFAULT_1', enum: RoleEnum })
-  @IsEnum(RoleEnum)
+  @ApiProperty({ example: 'DEFAULT_1', enum: Role })
+  @IsEnum(Role)
   @IsNotEmpty()
   role: Role;
 
@@ -28,18 +28,18 @@ export class SignupUserDTO {
 }
 
 export class SignupProfileDTO {
-  @ApiProperty({ example: 'DEFAULT_1', enum: ProfileImageEnum })
-  @IsEnum(ProfileImageEnum)
+  @ApiProperty({ example: 'DEFAULT_1', enum: ProfileImage })
+  @IsEnum(ProfileImage)
   @IsNotEmpty()
   image: ProfileImage;
 
-  @ApiProperty({ example: ['FOOD_TOUR'], enum: TripTypeEnum })
-  @IsEnum(TripTypeEnum, { each: true })
+  @ApiProperty({ example: ['FOOD_TOUR'], enum: TripType })
+  @IsEnum(TripType, { each: true })
   @ArrayNotEmpty()
   tripTypes: TripType[];
 
-  @ApiProperty({ example: ['SEOUL', 'INCHEON'], enum: ServiceAreaEnum })
-  @IsEnum(ServiceAreaEnum, { each: true })
+  @ApiProperty({ example: ['SEOUL', 'INCHEON'], enum: ServiceArea})
+  @IsEnum(ServiceArea, { each: true })
   @ArrayNotEmpty()
   serviceArea: ServiceArea[];
 }

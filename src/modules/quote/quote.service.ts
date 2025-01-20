@@ -5,7 +5,7 @@ import NotFoundError from 'src/common/errors/notFoundError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import ForbiddenError from 'src/common/errors/forbiddenError';
 import { CreateQuoteData, QuoteQueryOptions } from '../../common/types/quote/quote.type';
-import { StatusEnum } from 'src/common/constants/status.type';
+import { Status } from 'src/common/constants/status.type';
 import { QuoteWhereConditions } from '../../common/types/quote/quote.type';
 import QuoteMapper from '../../common/domains/quote/quote.mapper';
 import ConflictError from 'src/common/errors/conflictError';
@@ -83,7 +83,7 @@ export default class QuoteService {
     if (!quote) throw new NotFoundError(ErrorMessage.QUOTE_NOT_FOUND);
     if (userId !== quote.getMakerId()) throw new ForbiddenError(ErrorMessage.QUOTE_FORBIDDEN_MAKER);
 
-    if (quote.getPlanStatus() !== StatusEnum.PENDING) {
+    if (quote.getPlanStatus() !== Status.PENDING) {
       throw new BadRequestError(ErrorMessage.QUOTE_DELETE_BAD_REQUEST_STATUS);
     }
 
