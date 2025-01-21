@@ -13,6 +13,7 @@ import PlanModule from './modules/plan/plan.module';
 import QuoteModule from './modules/quote/quote.module';
 import PaymentModule from './modules/payment/payment.module';
 import { BullmqModule } from './providers/cache/bullmq.module';
+import ChatModule from './modules/chat/chat.module';
 import UserStatsModule from './modules/userStats/userStats.module';
 import TaskModule from './modules/task/task.module';
 
@@ -33,7 +34,8 @@ import TaskModule from './modules/task/task.module';
     QuoteModule,
     PaymentModule,
     UserStatsModule,
-    TaskModule
+    TaskModule,
+    ChatModule
   ],
   controllers: [],
   providers: [
