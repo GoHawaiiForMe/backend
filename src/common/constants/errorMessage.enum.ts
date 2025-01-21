@@ -44,6 +44,7 @@ const enum ErrorMessage {
   QUOTE_DELETE_BAD_REQUEST_STATUS = '견적의 플랜이 PENDING 상태 일 때만 삭제할 수 있습니다.',
 
   PAYMENT_BAD_REQUEST = '결제 정보가 잘못되어 결제를 완료할 수 없습니다.',
+  EVENT_NOT_FOUND = '큐에 설정되지 않은 이벤트는 추가할 수 없습니다',
 
   INTERNAL_SERVER_ERROR = '내부 서버 오류'
 }

@@ -15,6 +15,7 @@ import PaymentModule from './modules/payment/payment.module';
 import { BullmqModule } from './providers/cache/bullmq.module';
 import UserStatsModule from './modules/userStats/userStats.module';
 import TaskModule from './modules/task/task.module';
+import { RedisModule } from './providers/cache/redis.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import TaskModule from './modules/task/task.module';
     }),
     EventEmitterModule.forRoot(),
     BullmqModule,
+    RedisModule,
     PrismaModule,
     UserModule,
     NotificationModule,
