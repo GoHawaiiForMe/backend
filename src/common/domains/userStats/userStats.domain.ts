@@ -22,21 +22,32 @@ export default class UserStats implements IUserStats {
     this.updatedAt = user?.updatedAt;
   }
 
-  static create({
-    userId,
-    averageRating = 0,
-    totalReviews = 0,
-    totalFollows = 0,
-    totalConfirms = 0
-  }: Partial<UserStatsProperties>) {
-    return new UserStats({ userId, averageRating, totalReviews, totalFollows, totalConfirms });
+  static create({ userId, averageRating, totalReviews, totalFollows, totalConfirms }: Partial<UserStatsProperties>) {
+    return new UserStats({
+      userId,
+      averageRating: averageRating ?? 0,
+      totalReviews: totalReviews ?? 0,
+      totalFollows: totalFollows ?? 0,
+      totalConfirms: totalConfirms ?? 0
+    });
   }
 
-  update(data: Partial<UserStatsProperties>) {
-    this.averageRating = data.averageRating || this.averageRating;
-    this.totalReviews = data.totalReviews || this.totalReviews;
-    this.totalFollows = data.totalFollows || this.totalFollows;
-    this.totalConfirms = data.totalConfirms || this.totalConfirms;
+  updateReviewData(rating: number, isAdd: boolean) {
+    if (isAdd === true) {
+      this.averageRating = (this.averageRating * this.totalReviews + rating) / (this.totalReviews + 1);
+      this.totalReviews += 1;
+    } else {
+      this.averageRating = (this.averageRating * this.totalReviews - rating) / (this.totalReviews - 1);
+      this.totalReviews -= 1;
+    }
+  }
+
+  updateTotalFollows(isAdd: boolean) {
+    isAdd ? (this.totalFollows += 1) : (this.totalFollows -= 1);
+  }
+
+  updateTotalConfirms(isAdd: boolean) {
+    isAdd ? (this.totalConfirms += 1) : (this.totalConfirms -= 1);
   }
 
   get() {
@@ -51,7 +62,19 @@ export default class UserStats implements IUserStats {
     };
   }
 
-  toClient(): UserStatsToClientProperties {
+  getTotalReviews() {
+    return { averageRating: this.averageRating, totalReviews: this.totalReviews };
+  }
+
+  getTotalFollows() {
+    return { totalFollows: this.totalFollows };
+  }
+
+  getTotalConfirms() {
+    return { totalConfirms: this.totalConfirms };
+  }
+
+  toObject(): UserStatsToClientProperties {
     return {
       averageRating: this.averageRating,
       totalReviews: this.totalReviews,
