@@ -14,7 +14,7 @@ export default class UserStatsController {
 
   @Patch('review')
   async updateReview(@UserId() userId: string) {
-    return await this.service.updateReviewData(userId, 4, true);
+    return await this.service.updateReviewData(userId, 1, true);
   }
 
   @Patch('follow')

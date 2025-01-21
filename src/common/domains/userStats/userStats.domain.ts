@@ -53,7 +53,7 @@ export default class UserStats implements IUserStats {
   get() {
     return {
       userId: this.userId,
-      averageRating: this.averageRating,
+      averageRating: Math.round(this.averageRating),
       totalReviews: this.totalReviews,
       totalFollows: this.totalFollows,
       totalConfirms: this.totalConfirms,
@@ -76,7 +76,7 @@ export default class UserStats implements IUserStats {
 
   toObject(): UserStatsToClientProperties {
     return {
-      averageRating: this.averageRating,
+      averageRating: Math.round(this.averageRating),
       totalReviews: this.totalReviews,
       totalFollows: this.totalFollows,
       totalConfirms: this.totalConfirms
