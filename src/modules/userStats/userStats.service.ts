@@ -13,42 +13,16 @@ export default class UserStatsService {
     return user?.toObject();
   }
 
-  async updateReviewData(userId: string, rating: number, isAdd?: boolean): Promise<UserStatsToClientProperties> {
+  async update(userId: string, data: Partial<UserStatsProperties>): Promise<UserStatsToClientProperties> {
     const user = await this.repository.getByUserId(userId);
 
     if (user !== null) {
-      user.updateReviewData(rating, isAdd);
-      const updatedUser = await this.repository.update(userId, user.getTotalReviews());
+      user.update(data);
+      const updatedUser = await this.repository.update(userId, data);
 
       return updatedUser.toObject();
     } else {
-      return await this.create(userId, { totalReviews: 1, averageRating: rating });
-    }
-  }
-
-  async updateTotalFollows(userId: string, isAdd?: boolean): Promise<UserStatsToClientProperties> {
-    const user = await this.repository.getByUserId(userId);
-
-    if (user !== null) {
-      user.updateTotalFollows(isAdd);
-      const updatedUser = await this.repository.update(userId, user.getTotalFollows());
-
-      return updatedUser.toObject();
-    } else {
-      return await this.create(userId, { totalFollows: 1 });
-    }
-  }
-
-  async updateTotalConfirms(userId: string, isAdd?: boolean): Promise<UserStatsToClientProperties> {
-    const user = await this.repository.getByUserId(userId);
-
-    if (user !== null) {
-      user.updateTotalConfirms(isAdd);
-      const updatedUser = await this.repository.update(userId, user.getTotalConfirms());
-
-      return updatedUser.toObject();
-    } else {
-      return await this.create(userId, { totalConfirms: 1 });
+      return await this.create(userId, data);
     }
   }
 
