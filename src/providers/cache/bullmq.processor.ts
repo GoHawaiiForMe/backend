@@ -1,10 +1,11 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import RedisService from './redis.service';
-import BadRequestError from 'src/common/errors/badRequestError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import { Job } from 'bullmq';
 import UserStatsService from 'src/modules/userStats/userStats.service';
 import { UserStatsProperties } from 'src/common/types/userStats/userStats.types';
+import CustomError from 'src/common/errors/customError';
+import { HttpStatus } from '@nestjs/common';
 
 @Processor('stats')
 export class UserStatsProcessor extends WorkerHost {
@@ -43,7 +44,7 @@ export class UserStatsProcessor extends WorkerHost {
         isAdd ? (stats.totalConfirms += 1) : (stats.totalConfirms -= 1);
         break;
       default:
-        throw new BadRequestError(ErrorMessage.EVENT_NOT_FOUND);
+        throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR, ErrorMessage.EVENT_NOT_FOUND);
     }
 
     // 3. 데이터 업데이트
