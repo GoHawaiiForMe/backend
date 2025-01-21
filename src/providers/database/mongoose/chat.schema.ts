@@ -3,21 +3,20 @@ import { HydratedDocument, Types } from 'mongoose';
 
 @Schema({ timestamps: true })
 class Chat {
-  @Prop({ required: true })
-  name: string;
-
   @Prop({ default: null })
   isDeletedAt: Date | null;
 
-  @Prop({ type: [String] })
-  userIds: string[];
+  @Prop()
+  senderId: string | null;
 
   @Prop({
-    type: [Types.ObjectId],
     required: true,
-    ref: 'Message'
+    ref: 'ChatRoom'
   })
-  messageIds: Types.ObjectId[];
+  chatRoomId: Types.ObjectId;
+
+  @Prop({ required: true })
+  content: string;
 }
 
 export type ChatDocument = HydratedDocument<Chat>;
