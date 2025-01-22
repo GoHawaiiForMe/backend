@@ -7,6 +7,6 @@ import UserStatsRepository from './userStats.repository';
 @Module({
   imports: [MongooseModule.forFeature([{ name: UserStats.name, schema: UserStatsSchema }])],
   providers: [UserStatsRepository, UserStatsService],
-  exports: [UserStatsService]
+  exports: [UserStatsService, UserStatsRepository]
 })
 export default class UserStatsModule {}

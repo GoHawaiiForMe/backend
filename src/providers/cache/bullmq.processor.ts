@@ -26,7 +26,7 @@ export class UserStatsProcessor extends WorkerHost {
       if (!stats) {
         stats = { totalReviews: 0, averageRating: 0, totalFollows: 0, totalConfirms: 0 };
       }
-      const x = await this.redis.cacheStats(userId, stats);
+      await this.redis.cacheStats(userId, stats);
     }
 
     // 2. 데이터 계산
