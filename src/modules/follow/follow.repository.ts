@@ -8,6 +8,30 @@ import IFollow from '../../common/domains/follow/follow.interface';
 export default class FollowRepository {
   constructor(private readonly db: DBClient) {}
 
+  async get(dreamerId: string) {
+    const data = await this.db.follow.findMany({
+      where: { dreamerId },
+      select: {
+        id: true,
+        makerId: true,
+        dreamerId: true,
+        maker: {
+          select: {
+            nickName: true,
+            makerProfile: { select: { image: true } },
+            followers: {
+              where: { dreamerId },
+              select: { id: true }
+            }
+          }
+        }
+      }
+    });
+    console.log(JSON.stringify(data, null, 2));
+
+    return data.map((follow) => new FollowMapper(follow).toDomain());
+  }
+
   async find(dreamerId: string, makerId: string): Promise<IFollow> {
     const data = await this.db.follow.findFirst({
       where: { dreamerId, makerId }
@@ -20,6 +44,7 @@ export default class FollowRepository {
 
   async create(data: Partial<FollowProperties>): Promise<null> {
     await this.db.follow.create({ data });
+    console.log('db created');
     return;
   }
 
