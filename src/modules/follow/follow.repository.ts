@@ -27,8 +27,6 @@ export default class FollowRepository {
         }
       }
     });
-    console.log(JSON.stringify(data, null, 2));
-
     return data.map((follow) => new FollowMapper(follow).toDomain());
   }
 
@@ -44,7 +42,6 @@ export default class FollowRepository {
 
   async create(data: Partial<FollowProperties>): Promise<null> {
     await this.db.follow.create({ data });
-    console.log('db created');
     return;
   }
 
