@@ -5,6 +5,7 @@ import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import Follow from '../../common/domains/follow/follow.domain';
 import RedisService from 'src/providers/cache/redis.service';
 import UserStatsService from '../userStats/userStats.service';
+import { GetFollowQueryDTO } from 'src/common/types/follow/follow.dto';
 
 @Injectable()
 export default class FollowService {
@@ -14,8 +15,8 @@ export default class FollowService {
     private readonly userStats: UserStatsService
   ) {}
 
-  async get(userId: string) {
-    const follows = await this.repository.get(userId);
+  async get(userId: string, options: GetFollowQueryDTO) {
+    const follows = await this.repository.get(userId, options);
 
     const followList = await Promise.all(
       follows.map(async (follow) => {
