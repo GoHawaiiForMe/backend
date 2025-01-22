@@ -1,0 +1,32 @@
+{
+  "apps": [
+    {
+      "name": "hawaii",
+      "script": "./dist/main.js",
+      "autorestart": true,
+      "watch": false,
+      "env": {
+        "NODE_ENV": "production",
+
+        "PORT": "4000",
+        "DATABASE_URL": "postgresql://goforme_postgresql_db_user:sxEQsJuv9O3WYhfpCU1ZAFz0SjXkpBjq@dpg-ctus5rl2ng1s73e78h20-a.singapore-postgres.render.com/goforme_postgresql_db",
+
+        "MONGO_DB_NAME": "GoHawaiiForMe",
+        "MONGO_USER": "maybeiley",
+        "MONGO_PASS": "S4YdOTTL4gMFNBiO",
+        "MONGO_AUTH_SOURCE": "admin",
+        "MONGO_URI": "mongodb+srv://maybeiley:S4YdOTTL4gMFNBiO@gohawaiiforme.tlrbf.mongodb.net/?retryWrites=true&w=majority&appName=GoHawaiiForMe",
+
+        "JWT_SECRET": "62b55e76f55da8f8554f494bd59b71db16cff882e8be1ed6c3ade558ed25174e",
+        "ACCESS_TOKEN_EXPIRY": "24h",
+        "REFRESH_TOKEN_EXPIRY": "1w",
+
+        "REDIS_HOST": "127.0.0.1",
+        "REDIS_PORT": "6379",
+        "USER_STATS_KEY_PREFIX": "stats",
+
+        "V2_API_SECRET": "zdrtutRYISnUxl97xpNnDjTlUQvIt4SnlvwMgPBdxmajlGmlfrCpMt10xuDBlqqFefA2KGWiNgm7PnCe"
+      }
+    }
+  ]
+}
