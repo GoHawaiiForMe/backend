@@ -17,6 +17,7 @@ import ChatModule from './modules/chat/chat.module';
 import UserStatsModule from './modules/userStats/userStats.module';
 import TaskModule from './modules/task/task.module';
 import { RedisModule } from './providers/cache/redis.module';
+import ReviewModule from './modules/review/review.module';
 
 @Module({
   imports: [
@@ -37,7 +38,8 @@ import { RedisModule } from './providers/cache/redis.module';
     PaymentModule,
     UserStatsModule,
     TaskModule,
-    ChatModule
+    ChatModule,
+    ReviewModule
   ],
   controllers: [],
   providers: [

@@ -46,6 +46,8 @@ const enum ErrorMessage {
   PAYMENT_BAD_REQUEST = '결제 정보가 잘못되어 결제를 완료할 수 없습니다.',
   EVENT_NOT_FOUND = '큐에 설정되지 않은 이벤트는 추가할 수 없습니다',
 
+  REVIEW_BAD_REQUEST = '플랜 상태가 완료 처리된 후에 리뷰를 작성할 수 있습니다',
+
   INTERNAL_SERVER_ERROR = '내부 서버 오류'
 }
 export default ErrorMessage;
