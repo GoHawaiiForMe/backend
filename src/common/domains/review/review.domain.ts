@@ -29,16 +29,20 @@ export default class Review {
     this.updatedAt = review?.updatedAt;
   }
 
-  get() {
+  static create(data: ReviewProperties) {
+    return new Review(data);
+  }
+
+  toDB() {
     return {
-      id: this?.id,
+      id: this.id,
       writerId: this.writerId,
       ownerId: this.ownerId,
       rating: this.rating,
       content: this.content,
       planId: this.planId,
-      createdAt: this?.createdAt,
-      updatedAt: this?.updatedAt
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt
     };
   }
 }

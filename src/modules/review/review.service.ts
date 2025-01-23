@@ -23,7 +23,7 @@ export default class ReviewService {
       throw new BadRequestError(ErrorMessage.REVIEW_BAD_REQUEST);
     }
 
-    const review = new Review({
+    const review = Review.create({
       writerId,
       ownerId: data.makerId,
       rating: data.rating,
