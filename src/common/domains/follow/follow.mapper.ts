@@ -13,7 +13,8 @@ export default class FollowMapper {
       maker: {
         nickName: this.follow?.maker?.nickName,
         image: this.follow?.maker?.makerProfile.image,
-        gallery: this.follow?.maker?.makerProfile.gallery
+        gallery: this.follow?.maker?.makerProfile.gallery,
+        serviceTypes: this.follow?.maker?.makerProfile.serviceTypes
       },
       isFollowed,
       dreamerId: this.follow.dreamerId,
