@@ -20,14 +20,7 @@ export class UserStatsProcessor extends WorkerHost {
     const { userId, event, rating, isAdd } = job.data;
 
     // 1. 데이터 조회
-    let stats = await this.redis.getStats(userId);
-    if (!stats) {
-      stats = await this.StatsService.get(userId);
-      if (!stats) {
-        stats = { totalReviews: 0, averageRating: 0, totalFollows: 0, totalConfirms: 0 };
-      }
-      await this.redis.cacheStats(userId, stats);
-    }
+    const stats = await this.StatsService.get(userId);
 
     // 2. 데이터 계산
     switch (event) {

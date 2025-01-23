@@ -3,7 +3,6 @@ import FollowRepository from './follow.repository';
 import BadRequestError from 'src/common/errors/badRequestError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import Follow from '../../common/domains/follow/follow.domain';
-import RedisService from 'src/providers/cache/redis.service';
 import UserStatsService from '../userStats/userStats.service';
 import { GetFollowQueryDTO } from 'src/common/types/follow/follow.dto';
 
@@ -11,7 +10,6 @@ import { GetFollowQueryDTO } from 'src/common/types/follow/follow.dto';
 export default class FollowService {
   constructor(
     private readonly repository: FollowRepository,
-    private readonly redis: RedisService,
     private readonly userStats: UserStatsService
   ) {}
 
@@ -20,14 +18,7 @@ export default class FollowService {
 
     const followList = await Promise.all(
       follows.map(async (follow) => {
-        let makerStats = await this.redis.getStats(follow.getMakerId());
-        if (!makerStats) {
-          makerStats = await this.userStats.get(follow.getMakerId());
-          if (!makerStats) {
-            makerStats = { totalReviews: 0, averageRating: 0, totalFollows: 0, totalConfirms: 0 };
-          }
-          await this.redis.cacheStats(userId, makerStats);
-        }
+        const makerStats = await this.userStats.get(follow.getMakerId());
         const followData = follow.toClient();
 
         return { ...followData, makerStats };
