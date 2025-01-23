@@ -21,7 +21,7 @@ export default class FollowService {
         const makerStats = await this.userStats.get(follow.getMakerId());
         const followData = follow.toClient();
 
-        return { ...followData, makerStats };
+        return { ...followData, maker: { ...followData.maker, ...makerStats } };
       })
     );
 

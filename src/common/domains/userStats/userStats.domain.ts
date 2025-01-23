@@ -59,4 +59,13 @@ export default class UserStats implements IUserStats {
       totalConfirms: this.totalConfirms
     };
   }
+
+  isValidStats(): boolean {
+    return (
+      this.averageRating !== undefined &&
+      this.totalReviews !== undefined &&
+      this.totalFollows !== undefined &&
+      this.totalConfirms !== undefined
+    );
+  }
 }

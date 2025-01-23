@@ -16,10 +16,11 @@ export default class UserStatsService {
   async get(userId: string): Promise<UserStatsToClientProperties> {
     const stats = await this.redis.getStats(userId);
     let user: IUserStats = new UserStatsMapper({ ...stats, userId }).toDomain();
-    if (!user) {
+
+    if (!user.isValidStats()) {
       user = await this.repository.getByUserId(userId);
       if (!user) {
-        user = UserStats.create({ userId, totalReviews: 0, averageRating: 0, totalFollows: 0, totalConfirms: 0 });
+        user = UserStats.create({ userId });
       }
       await this.redis.cacheStats(userId, user.toObject());
     }
