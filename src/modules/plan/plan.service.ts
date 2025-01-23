@@ -22,6 +22,7 @@ import PlanMapper from 'src/common/domains/plan/plan.mapper';
 import BadRequestError from 'src/common/errors/badRequestError';
 import { StatusEnum } from 'src/common/constants/status.type';
 import { GroupByCount } from 'src/common/types/plan/plan.dto';
+import { NotificationEventName } from 'src/common/types/notification/notification.types';
 
 @Injectable()
 export default class PlanService {
@@ -136,9 +137,14 @@ export default class PlanService {
     plan.updateAssign(data);
     const updatedPlan = await this.planRepository.update(plan);
 
-    const assigneeId = data.assigneeId; //NOTE. 알림
-    const content: string = `${plan.getDreamerNickName()} 드리머가 지정견적을 요청했어요`;
-    this.eventEmitter.emit('notification', { assigneeId, content });
+    const assigneeId = data.assigneeId;
+    const nickName = updatedPlan.getDreamerNickName();
+    const tripType = updatedPlan.toClient().tripType;
+    this.eventEmitter.emit('notification', {
+      userId: assigneeId,
+      event: NotificationEventName.ARRIVE_REQUEST,
+      payload: { nickName, tripType }
+    });
 
     return updatedPlan.toClient();
   }
