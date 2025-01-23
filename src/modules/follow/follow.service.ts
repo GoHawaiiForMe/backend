@@ -5,6 +5,7 @@ import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import Follow from '../../common/domains/follow/follow.domain';
 import UserStatsService from '../userStats/userStats.service';
 import { GetFollowQueryDTO } from 'src/common/types/follow/follow.dto';
+import { FollowProperties } from 'src/common/types/follow/follow.types';
 
 @Injectable()
 export default class FollowService {
@@ -13,10 +14,10 @@ export default class FollowService {
     private readonly userStats: UserStatsService
   ) {}
 
-  async get(userId: string, options: GetFollowQueryDTO) {
+  async get(userId: string, options: GetFollowQueryDTO): Promise<{ totalCount: number; list: FollowProperties[] }> {
     const follows = await this.repository.get(userId, options);
 
-    const followList = await Promise.all(
+    const list = await Promise.all(
       follows.map(async (follow) => {
         const makerStats = await this.userStats.get(follow.getMakerId());
         const followData = follow.toClient();
@@ -25,7 +26,9 @@ export default class FollowService {
       })
     );
 
-    return followList;
+    const totalCount = await this.repository.count(userId);
+
+    return { totalCount, list };
   }
 
   // 찜 기능: Dreamer -> Maker

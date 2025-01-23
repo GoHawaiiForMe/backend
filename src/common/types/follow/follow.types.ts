@@ -11,7 +11,7 @@ export interface FollowProperties {
 export interface FollowPropertiesWithMaker {
   id?: string;
   makerId: string;
-  maker?: { nickName: string; image: ProfileImage };
+  maker?: { nickName: string; image: ProfileImage; gallery: string };
   dreamerId: string;
   isFollowed?: boolean;
   createdAt?: Date;
@@ -23,7 +23,7 @@ export interface FollowPropertiesFromDB {
   makerId: string;
   maker?: {
     nickName: string;
-    makerProfile: { image: ProfileImage };
+    makerProfile: { image: ProfileImage; gallery: string };
     followers: { id: string }[];
   };
   dreamerId: string;

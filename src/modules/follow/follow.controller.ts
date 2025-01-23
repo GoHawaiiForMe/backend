@@ -3,6 +3,7 @@ import FollowService from './follow.service';
 import { UserId } from 'src/common/decorators/user.decorator';
 import { Role } from 'src/common/decorators/roleGuard.decorator';
 import { GetFollowQueryDTO } from 'src/common/types/follow/follow.dto';
+import { FollowProperties } from 'src/common/types/follow/follow.types';
 
 @Controller('follow')
 @Role('DREAMER')
@@ -10,7 +11,10 @@ export default class FollowController {
   constructor(private readonly service: FollowService) {}
 
   @Get()
-  async getFollowList(@UserId() userId: string, @Query() options: GetFollowQueryDTO) {
+  async getFollowList(
+    @UserId() userId: string,
+    @Query() options: GetFollowQueryDTO
+  ): Promise<{ totalCount: number; list: FollowProperties[] }> {
     return await this.service.get(userId, options);
   }
 

@@ -23,7 +23,7 @@ export default class FollowRepository {
         maker: {
           select: {
             nickName: true,
-            makerProfile: { select: { image: true } },
+            makerProfile: { select: { image: true, gallery: true } },
             followers: {
               where: { dreamerId },
               select: { id: true }

@@ -28,4 +28,5 @@ export interface PasswordProperties {
 export interface UserReference {
   nickName: string;
   image: ProfileImage;
+  gallery: string;
 }
