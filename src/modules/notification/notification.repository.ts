@@ -23,11 +23,8 @@ export default class NotificationRepository {
     return new NotificationMapper(data).toDomain();
   }
 
-  async create(userId: string, content: string): Promise<INotification> {
-    const notification = await this.notification.create({
-      userId,
-      content
-    });
+  async create(data: NotificationProperties): Promise<INotification> {
+    const notification = await this.notification.create(data);
 
     return new NotificationMapper(notification).toDomain();
   }

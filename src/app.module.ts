@@ -16,6 +16,8 @@ import { BullmqModule } from './providers/cache/bullmq.module';
 import ChatModule from './modules/chat/chat.module';
 import UserStatsModule from './modules/userStats/userStats.module';
 import TaskModule from './modules/task/task.module';
+import { RedisModule } from './providers/cache/redis.module';
+import ReviewModule from './modules/review/review.module';
 import ChatRoomModule from './modules/chatRoom/chatRoom.module';
 
 @Module({
@@ -27,6 +29,7 @@ import ChatRoomModule from './modules/chatRoom/chatRoom.module';
     }),
     EventEmitterModule.forRoot(),
     BullmqModule,
+    RedisModule,
     PrismaModule,
     UserModule,
     NotificationModule,
@@ -37,9 +40,9 @@ import ChatRoomModule from './modules/chatRoom/chatRoom.module';
     UserStatsModule,
     TaskModule,
     ChatRoomModule,
-    ChatModule
+    ChatModule,
+    ReviewModule
   ],
-  controllers: [],
   providers: [
     {
       provide: APP_GUARD,

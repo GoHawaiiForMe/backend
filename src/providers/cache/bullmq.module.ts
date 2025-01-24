@@ -1,5 +1,8 @@
 import { BullModule } from '@nestjs/bullmq';
 import { Module } from '@nestjs/common';
+import UserStatsModule from 'src/modules/userStats/userStats.module';
+import { UserStatsProcessor } from './bullmq.processor';
+import RedisService from './redis.service';
 
 @Module({
   imports: [
@@ -9,9 +12,8 @@ import { Module } from '@nestjs/common';
         port: Number(process.env.REDIS_PORT)
       }
     }),
-    BullModule.registerQueue({
-      name: 'calculation'
-    })
-  ]
+    UserStatsModule
+  ],
+  providers: [UserStatsProcessor, RedisService]
 })
 export class BullmqModule {}

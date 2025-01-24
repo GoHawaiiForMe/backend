@@ -45,6 +45,9 @@ const enum ErrorMessage {
   QUOTE_DELETE_BAD_REQUEST_STATUS = '견적의 플랜이 PENDING 상태 일 때만 삭제할 수 있습니다.',
 
   PAYMENT_BAD_REQUEST = '결제 정보가 잘못되어 결제를 완료할 수 없습니다.',
+  EVENT_NOT_FOUND = '큐에 설정되지 않은 이벤트는 추가할 수 없습니다',
+
+  REVIEW_BAD_REQUEST = '플랜 상태가 완료 처리된 후에 리뷰를 작성할 수 있습니다',
 
   CHAT_ROOM_FORBIDDEN_ID = '해당 플랜의 채팅방에 대한 권한이 없습니다.',
   CHAT_ROOM_NOTFOUND = '해당 채팅방을 찾을 수 없습니다.',

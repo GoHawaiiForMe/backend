@@ -7,7 +7,7 @@ export class NotificationListener {
   constructor(private readonly notification: NotificationService) {}
 
   @OnEvent('notification')
-  async handleNotificationEvent(event: { userId: string; content: string }): Promise<void> {
-    await this.notification.create(event.userId, event.content);
+  async handleNotificationEvent({ userId, event, payload }): Promise<void> {
+    await this.notification.create({ userId, event, payload });
   }
 }
