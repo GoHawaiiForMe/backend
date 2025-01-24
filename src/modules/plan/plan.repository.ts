@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import PlanOrder from 'src/common/constants/planOrder.enum';
+import { RoleEnum } from 'src/common/constants/role.type';
 import SortOrder from 'src/common/constants/sortOrder.enum';
 import { TRIP_TYPE } from 'src/common/constants/tripType.type';
 import IPlan from 'src/common/domains/plan/plan.interface';
@@ -135,7 +136,7 @@ export default class PlanRepository {
   }
 
   private buildWhereConditions(whereOptions: PlanQueryOptions): PlanWhereConditions {
-    const { keyword, tripDate, tripType, serviceArea, isAssigned, userId, status } = whereOptions;
+    const { keyword, tripDate, tripType, serviceArea, isAssigned, userId, status, role } = whereOptions;
 
     const whereConditions: PlanWhereConditions = {
       isDeletedAt: null
@@ -150,7 +151,9 @@ export default class PlanRepository {
 
     if (tripType) whereConditions.tripType = { in: tripType };
 
-    if (status && userId) {
+    if (role === RoleEnum.MAKER) {
+      whereConditions.status = { in: status }; //NOTE. Maker 전용 api 조건
+    } else if (status && userId) {
       whereConditions.status = { in: status };
       whereConditions.dreamerId = userId; //NOTE. Dreamer 전용 api 조건
     }

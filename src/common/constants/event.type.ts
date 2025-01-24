@@ -1,4 +1,4 @@
-const enum EventType {
+export enum EventType {
   REVIEW = 'review',
   FOLLOW = 'follow',
   CONFIRM = 'confirm'
