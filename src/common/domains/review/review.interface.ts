@@ -3,5 +3,6 @@ import { ReviewAllProperties, ReviewProperties } from 'src/common/types/review/r
 export default interface IReview {
   toDB(): ReviewProperties;
   toClient(): ReviewProperties;
-  toMakerProfile(): ReviewAllProperties;
+  toMaker(): ReviewAllProperties;
+  toDreamer(): ReviewAllProperties;
 }

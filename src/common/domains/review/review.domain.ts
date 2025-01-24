@@ -57,10 +57,20 @@ export default class Review {
     };
   }
 
-  toMakerProfile() {
+  toMaker() {
     return {
       id: this?.id,
       writer: this.writer,
+      rating: this.rating,
+      content: this.content,
+      createdAt: this.createdAt
+    };
+  }
+  toDreamer() {
+    return {
+      id: this?.id,
+      owner: this.owner,
+      plan: this.plan,
       rating: this.rating,
       content: this.content,
       createdAt: this.createdAt

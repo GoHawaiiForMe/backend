@@ -9,14 +9,16 @@ export default class ReviewMapper {
 
     return new Review({
       id: this.review.id,
-      writerId: this.review?.writerId,
-      writer: this.review?.writer,
-      ownerId: this.review?.ownerId,
+      writerId: this.review.writerId,
+      writer: this.review.writer,
+      ownerId: this.review.ownerId,
+      owner: this.review.owner,
       rating: this.review.rating,
       content: this.review.content,
-      planId: this.review?.planId,
+      planId: this.review.planId,
+      plan: this.review.plan,
       createdAt: this.review.createdAt,
-      updatedAt: this.review?.updatedAt
+      updatedAt: this.review.updatedAt
     });
   }
 }

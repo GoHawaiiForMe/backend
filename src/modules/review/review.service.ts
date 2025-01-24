@@ -4,7 +4,7 @@ import PlanService from '../plan/plan.service';
 import { StatusEnum } from 'src/common/constants/status.type';
 import BadRequestError from 'src/common/errors/badRequestError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
-import { CreateReviewDTO, GetReviewsQueryDTO } from 'src/common/types/review/review.dto';
+import { CreateReviewDTO, GetReviewsQueryDTO, GetReviewsResponseDTO } from 'src/common/types/review/review.dto';
 import Review from 'src/common/domains/review/review.domain';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
@@ -18,17 +18,24 @@ export default class ReviewService {
     private readonly plan: PlanService
   ) {}
 
-  async getByUser(
-    userId: string,
-    options: GetReviewsQueryDTO
-  ): Promise<{ totalCount: number; groupByCount: { rating: number; count: number }[]; list: ReviewAllProperties[] }> {
+  async getByDreamer(userId: string, options: GetReviewsQueryDTO): Promise<GetReviewsResponseDTO> {
+    const [reviews, totalCount] = await Promise.all([
+      this.repository.getByUser(userId, options, true),
+      this.repository.count(userId, true)
+    ]);
+
+    const reviewsToClient = reviews.map((review) => review.toDreamer());
+    return { totalCount, list: reviewsToClient };
+  }
+
+  async getByMaker(userId: string, options: GetReviewsQueryDTO): Promise<GetReviewsResponseDTO> {
     const [reviews, totalCount, groupByCount] = await Promise.all([
-      this.repository.getByUser(userId, options),
+      this.repository.getByUser(userId, options, false),
       this.repository.count(userId, false),
       this.repository.countByRating(userId)
     ]);
 
-    const reviewsToClient = reviews.map((review) => review.toMakerProfile());
+    const reviewsToClient = reviews.map((review) => review.toMaker());
     return { totalCount, groupByCount, list: reviewsToClient };
   }
 
