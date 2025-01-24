@@ -1,4 +1,5 @@
 import { ProfileImage } from 'src/common/constants/image.type';
+import { UserReference } from '../user/user.types';
 
 export interface FollowProperties {
   id?: string;
@@ -11,7 +12,7 @@ export interface FollowProperties {
 export interface FollowPropertiesWithMaker {
   id?: string;
   makerId: string;
-  maker?: { nickName: string; image: ProfileImage; gallery: string };
+  maker?: UserReference;
   dreamerId: string;
   isFollowed?: boolean;
   createdAt?: Date;

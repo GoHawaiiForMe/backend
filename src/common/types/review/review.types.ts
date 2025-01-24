@@ -14,13 +14,13 @@ export interface ReviewProperties {
 
 export interface ReviewAllProperties {
   id?: string;
-  writerId: string;
+  writerId?: string;
   writer?: UserReference;
-  ownerId: string;
+  ownerId?: string;
   owner?: UserReference;
   rating: number;
   content: string;
-  planId: string;
+  planId?: string;
   plan?: PlanReference;
   createdAt?: Date;
   updatedAt?: Date;

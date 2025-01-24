@@ -4,10 +4,11 @@ import PlanService from '../plan/plan.service';
 import { StatusEnum } from 'src/common/constants/status.type';
 import BadRequestError from 'src/common/errors/badRequestError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
-import { CreateReviewDTO } from 'src/common/types/review/review.dto';
+import { CreateReviewDTO, GetReviewsQueryDTO } from 'src/common/types/review/review.dto';
 import Review from 'src/common/domains/review/review.domain';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
+import { ReviewAllProperties } from 'src/common/types/review/review.types';
 
 @Injectable()
 export default class ReviewService {
@@ -16,6 +17,20 @@ export default class ReviewService {
     private readonly repository: ReviewRepository,
     private readonly plan: PlanService
   ) {}
+
+  async getByUser(
+    userId: string,
+    options: GetReviewsQueryDTO
+  ): Promise<{ totalCount: number; groupByCount: { rating: number; count: number }[]; list: ReviewAllProperties[] }> {
+    const [reviews, totalCount, groupByCount] = await Promise.all([
+      this.repository.getByUser(userId, options),
+      this.repository.count(userId, false),
+      this.repository.countByRating(userId)
+    ]);
+
+    const reviewsToClient = reviews.map((review) => review.toMakerProfile());
+    return { totalCount, groupByCount, list: reviewsToClient };
+  }
 
   async create(writerId: string, data: CreateReviewDTO) {
     const plan = await this.plan.getPlanById(data.planId);
@@ -30,7 +45,7 @@ export default class ReviewService {
       content: data.content,
       planId: data.planId
     });
-    await this.repository.create(review);
+    const newReview = await this.repository.create(review);
 
     // 메이커의 UserStats(리뷰 수, 평점) 업데이트 작업을 큐에 추가
     await this.queue.add('stats', {
@@ -40,6 +55,6 @@ export default class ReviewService {
       rating: data.rating
     });
 
-    return;
+    return newReview.toClient();
   }
 }
