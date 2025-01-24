@@ -1,6 +1,6 @@
-import { ChatObjectProperties, ChatProperties } from './chat.properties';
+import { ChatProperties } from './chat.properties';
 
 export default interface IChat {
-  toDB(): ChatObjectProperties;
+  toDB(): ChatProperties;
   toClient(): ChatProperties;
 }

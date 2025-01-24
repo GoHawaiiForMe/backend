@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import IChat from 'src/common/domains/chat/chat.interface';
 import ChatMapper from 'src/common/domains/chat/chat.mapper';
+import InternalServerError from 'src/common/errors/internalServerError';
 import { Chat } from 'src/providers/database/mongoose/chat.schema';
 import { ChatRoom } from 'src/providers/database/mongoose/chatRoom.schema';
 
@@ -34,8 +36,8 @@ export default class ChatRepository {
       { $push: { chatIds: chat._id } } // chatIds 배열에 채팅 ID 추가
     );
     if (chatRoom.modifiedCount === 0) {
-      throw Error('채팅방 업데이트에 실패했습니다.');
-    } //NOTE. 로그남기기용 에러, 클라이언트에는 500이 가도록 유도
+      throw new InternalServerError(ErrorMessage.INTERNAL_SERVER_ERROR_CHAT_ROOM_UPDATE);
+    }
 
     const domainChat = new ChatMapper(chat).toDomain();
 

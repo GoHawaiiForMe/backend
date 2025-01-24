@@ -19,14 +19,10 @@ export class Chat {
   content: string;
 }
 
-export type ChatDocument = HydratedDocument<Chat>;
-export interface IChatDocument {
-  _id?: Types.ObjectId;
+export type ChatDocument = HydratedDocument<Chat> & {
   createdAt?: Date;
   updatedAt?: Date;
-  senderId?: string;
-  chatRoomId: Types.ObjectId;
-  content: string;
-}
+};
+
 const ChatSchema = SchemaFactory.createForClass(Chat);
 export default ChatSchema;

@@ -1,15 +1,15 @@
 GET http://localhost:4000/chatRooms
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Njg4NWEzYy01MGY0LTQyN2ItOGE5Mi0zNzAyYzY5NzZmYjAiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNzY4NDg3NywiZXhwIjoxNzM3NzcxMjc3fQ.1AyCEKJtWKw31vYEg0z25Rm5Q4SYCE5IFPA-aHYAmcg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMzJkN2JkNC0xMTZjLTQ2N2ItOTM1Mi1hMTRiMGQ0OTRlZjkiLCJyb2xlIjoiTUFLRVIiLCJpYXQiOjE3Mzc3MjU0NzUsImV4cCI6MTczNzgxMTg3NX0.Q6afR4kJ1KtTbabL9dqtHEtT9cYSoF698ngtulSy0yY
 ###
 GET http://localhost:4000/chatRooms/67933592d9d1b4a0ed4dccc9
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Njg4NWEzYy01MGY0LTQyN2ItOGE5Mi0zNzAyYzY5NzZmYjAiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNzY4NDg3NywiZXhwIjoxNzM3NzcxMjc3fQ.1AyCEKJtWKw31vYEg0z25Rm5Q4SYCE5IFPA-aHYAmcg
 ###
 POST http://localhost:4000/chatRooms
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Njg4NWEzYy01MGY0LTQyN2ItOGE5Mi0zNzAyYzY5NzZmYjAiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNzYxNjU1MiwiZXhwIjoxNzM3NzAyOTUyfQ.dfd0q-wtLLhwT7zgCJsqH6ULk_bo1TzU29OFCjOMoII
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMzJkN2JkNC0xMTZjLTQ2N2ItOTM1Mi1hMTRiMGQ0OTRlZjkiLCJyb2xlIjoiTUFLRVIiLCJpYXQiOjE3Mzc3MjU0NzUsImV4cCI6MTczNzgxMTg3NX0.Q6afR4kJ1KtTbabL9dqtHEtT9cYSoF698ngtulSy0yY
 Content-Type: application/json
 
 {
-    "planId": "9004bc52-a8b0-4587-af53-59914168582f"
+    "otherUserId": "a08d9856-adfa-4f83-9e9a-48401f3d0ef3"
 }
 ###
 POST http://localhost:4000/chatRooms/67933592d9d1b4a0ed4dccc9/chats
@@ -17,7 +17,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMzJkN
 Content-Type: application/json
 
 {
-    "content": "채팅12312sdsadasd3!!!"
+    "content": "마지막채팅123123213"
 }
 ###
 GET http://localhost:4000/chats/6792f34d2f7696df3e742d33

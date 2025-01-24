@@ -1,6 +1,5 @@
-import { Types } from 'mongoose';
 import IChatRoom from './chatRoom.interface';
-import { ChatRoomObjectProperties, ChatRoomProperties } from './chatRoom.properties';
+import { ChatRoomProperties } from './chatRoom.properties';
 
 export default class ChatRoom implements IChatRoom {
   private id?: string;
@@ -26,11 +25,10 @@ export default class ChatRoom implements IChatRoom {
     return new ChatRoom(data);
   }
 
-  toDB(): ChatRoomObjectProperties {
+  toDB(): ChatRoomProperties {
     return {
-      id: new Types.ObjectId(this.id),
+      id: this.id,
       userIds: this.userIds,
-      chatIds: this.chatIds?.map((chatId) => new Types.ObjectId(chatId)),
       planId: this.planId
     };
   }
@@ -43,16 +41,6 @@ export default class ChatRoom implements IChatRoom {
       userIds: this.userIds,
       planId: this.planId,
       lastChat: this.lastChat,
-      isActive: this.isActive
-    };
-  }
-  toClientSingle(): ChatRoomProperties {
-    return {
-      id: this.id,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
-      userIds: this.userIds,
-      planId: this.planId,
       isActive: this.isActive
     };
   }

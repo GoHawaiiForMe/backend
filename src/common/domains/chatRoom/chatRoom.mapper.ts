@@ -1,9 +1,9 @@
+import { ChatRoomDocument } from 'src/providers/database/mongoose/chatRoom.schema';
 import ChatRoom from './chatRoom.domain';
 import IChatRoom from './chatRoom.interface';
-import { IChatRoomDocument } from './chatRoom.properties';
 
 export default class ChatRoomMapper {
-  constructor(private readonly chatRoom: IChatRoomDocument) {}
+  constructor(private readonly chatRoom: ChatRoomDocument) {}
 
   toDomain(): IChatRoom {
     if (!this.chatRoom) return null;

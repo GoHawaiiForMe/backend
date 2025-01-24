@@ -56,6 +56,7 @@ const enum ErrorMessage {
 
   CHAT_POST_BAD_ID = '채팅방의 id가 잘못된 형식입니다.',
 
-  INTERNAL_SERVER_ERROR = '내부 서버 오류'
+  INTERNAL_SERVER_ERROR = '내부 서버 오류',
+  INTERNAL_SERVER_ERROR_CHAT_ROOM_UPDATE = '채팅방 업데이트 실패'
 }
 export default ErrorMessage;

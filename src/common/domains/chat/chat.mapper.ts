@@ -1,9 +1,9 @@
-import { ChatDocument, IChatDocument } from 'src/providers/database/mongoose/chat.schema';
+import { ChatDocument } from 'src/providers/database/mongoose/chat.schema';
 import IChat from './chat.interface';
 import Chat from './chat.domain';
 
 export default class ChatMapper {
-  constructor(private readonly chat: IChatDocument) {}
+  constructor(private readonly chat: ChatDocument) {}
 
   toDomain(): IChat {
     if (!this.chat) return null;

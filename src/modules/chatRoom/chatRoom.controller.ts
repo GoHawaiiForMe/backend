@@ -30,8 +30,9 @@ export default class ChatRoomController {
   }
 
   @Post() //TO_DELETE. 테스트용
-  async postChatRoom(@UserId() userId: string, @Body() data: { planId: string }): Promise<ChatRoomProperties> {
-    const chatRoom = await this.chatRoomService.postChatRoom(userId, data.planId);
+  async postChatRoom(@UserId() userId: string, @Body() data: { otherUserId: string }): Promise<ChatRoomProperties> {
+    const userIds = [userId, data.otherUserId];
+    const chatRoom = await this.chatRoomService.postChatRoom(userIds);
     return chatRoom;
   }
 

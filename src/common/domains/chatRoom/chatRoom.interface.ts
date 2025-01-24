@@ -1,9 +1,8 @@
-import { ChatRoomObjectProperties, ChatRoomProperties } from './chatRoom.properties';
+import { ChatRoomProperties } from './chatRoom.properties';
 
 export default interface IChatRoom {
-  toDB(): ChatRoomObjectProperties;
+  toDB(): ChatRoomProperties;
   toClient(): ChatRoomProperties;
-  toClientSingle(): ChatRoomProperties;
   getUserIds(): string[];
   getIsActive(): boolean;
 }

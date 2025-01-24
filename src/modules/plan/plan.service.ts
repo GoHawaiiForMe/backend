@@ -81,21 +81,6 @@ export default class PlanService {
     return plan.toClient();
   }
 
-  async checkPlanAndGetChatParticipants(id: string): Promise<string[]> {
-    const plan = await this.planRepository.findById(id); //TO_DO. 플랜의 상세정보를 주게 변경예정
-
-    if (!plan) {
-      throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
-    }
-
-    if (plan.getStatus() !== StatusEnum.CONFIRMED) {
-      throw new BadRequestError(ErrorMessage.PLAN_CANNOT_CREATE_CHATROOM_BAD_REQUEST);
-    }
-
-    const userIds = [plan.getDreamerId(), plan.getConfirmedMakerId()];
-    return userIds;
-  }
-
   async getQuotesByPlanId(
     options: QuoteQueryOptions,
     userId: string

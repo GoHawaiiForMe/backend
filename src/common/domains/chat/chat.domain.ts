@@ -1,6 +1,5 @@
-import { Types } from 'mongoose';
 import IChat from './chat.interface';
-import { ChatObjectProperties, ChatProperties } from './chat.properties';
+import { ChatProperties } from './chat.properties';
 
 export default class Chat implements IChat {
   private id?: string;
@@ -23,11 +22,11 @@ export default class Chat implements IChat {
     return new Chat(data);
   }
 
-  toDB(): ChatObjectProperties {
+  toDB(): ChatProperties {
     return {
-      id: new Types.ObjectId(this.id),
+      id: this.id,
       senderId: this.senderId,
-      chatRoomId: new Types.ObjectId(this.chatRoomId),
+      chatRoomId: this.chatRoomId,
       content: this.content
     };
   }

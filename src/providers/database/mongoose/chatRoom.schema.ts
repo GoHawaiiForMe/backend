@@ -28,6 +28,8 @@ export class ChatRoom {
 }
 
 export type ChatRoomDocument = HydratedDocument<ChatRoom> & {
+  createdAt?: Date;
+  updatedAt?: Date;
   chatIds: PopulatedDoc<ChatDocument>[];
 };
 

@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UnauthorizedException } from '@nestjs/common';
 import { Socket } from 'socket.io';
+import UnauthorizedError from '../errors/unauthorizedError';
+import ErrorMessage from '../constants/errorMessage.enum';
 
 @Injectable()
 export default class WebSocketJwtGuard {
@@ -11,14 +13,14 @@ export default class WebSocketJwtGuard {
   async handleConnection(client: Socket): Promise<void> {
     const token = client.handshake.headers['authorization']?.split(' ')[1]; // Authorization 헤더에서 Bearer 토큰 추출
     if (!token) {
-      throw new UnauthorizedException('No token provided');
+      throw new UnauthorizedError(ErrorMessage.TOKEN_UNAUTHORIZED_NOTFOUND);
     }
 
     try {
       const decoded = this.jwtService.verify(token); // JWT 검증
       client.data.user = decoded; // 인증된 사용자 정보 클라이언트 객체에 저장
     } catch (error) {
-      throw new UnauthorizedException('Invalid token');
+      throw new UnauthorizedError(ErrorMessage.TOKEN_UNAUTHORIZED_VALIDATION);
     }
   }
 
