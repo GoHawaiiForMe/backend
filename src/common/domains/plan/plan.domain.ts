@@ -119,6 +119,14 @@ export default class Plan implements IPlan {
   getDreamerId(): string {
     return this.dreamerId;
   }
+
+  getConfirmedMakerId(): string {
+    const confirmedQuote = this.quotes.find((quote) => quote.getIsConfirmed() === true);
+    const makerId = confirmedQuote.getMakerId();
+
+    return makerId;
+  }
+
   getDreamerNickName(): string {
     return this.dreamer.toClient().nickName;
   }

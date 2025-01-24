@@ -16,6 +16,7 @@ import { BullmqModule } from './providers/cache/bullmq.module';
 import ChatModule from './modules/chat/chat.module';
 import UserStatsModule from './modules/userStats/userStats.module';
 import TaskModule from './modules/task/task.module';
+import ChatRoomModule from './modules/chatRoom/chatRoom.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import TaskModule from './modules/task/task.module';
     PaymentModule,
     UserStatsModule,
     TaskModule,
+    ChatRoomModule,
     ChatModule
   ],
   controllers: [],

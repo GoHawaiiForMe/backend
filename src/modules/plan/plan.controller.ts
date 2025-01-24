@@ -7,8 +7,6 @@ import { CreateQuoteDataDTO, DreamerQuoteQueryOptionsDTO } from 'src/common/type
 import { QuoteToClientProperties } from 'src/common/types/quote/quoteProperties';
 import { UpdateAssignDataDTO } from 'src/common/types/plan/plan.dto';
 import { Role } from 'src/common/decorators/roleGuard.decorator';
-import { UserRole } from 'src/common/decorators/role.decorator';
-import { RoleEnum } from 'src/common/constants/role.type';
 import { PlanToClientProperties } from 'src/common/types/plan/plan.properties';
 
 @Controller('plans')
