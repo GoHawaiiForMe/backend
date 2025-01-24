@@ -1,4 +1,5 @@
 import { ProfileImage } from 'src/common/constants/image.type';
+import { TripType } from 'src/common/constants/tripType.type';
 import { UserReference } from '../user/user.types';
 
 export interface FollowProperties {
@@ -24,7 +25,7 @@ export interface FollowPropertiesFromDB {
   makerId: string;
   maker?: {
     nickName: string;
-    makerProfile: { image: ProfileImage; gallery: string };
+    makerProfile: { image: ProfileImage; gallery: string; serviceTypes: TripType[] };
     followers: { id: string }[];
   };
   dreamerId: string;
