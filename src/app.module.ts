@@ -18,6 +18,7 @@ import UserStatsModule from './modules/userStats/userStats.module';
 import TaskModule from './modules/task/task.module';
 import { RedisModule } from './providers/cache/redis.module';
 import ReviewModule from './modules/review/review.module';
+import ChatRoomModule from './modules/chatRoom/chatRoom.module';
 
 @Module({
   imports: [
@@ -38,10 +39,10 @@ import ReviewModule from './modules/review/review.module';
     PaymentModule,
     UserStatsModule,
     TaskModule,
+    ChatRoomModule,
     ChatModule,
     ReviewModule
   ],
-  controllers: [],
   providers: [
     {
       provide: APP_GUARD,

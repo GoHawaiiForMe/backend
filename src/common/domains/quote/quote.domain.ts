@@ -100,7 +100,12 @@ export default class Quote implements IQuote {
   getPlanId(): string {
     return this.planId;
   }
+
   getPlanStatus(): Status {
     return this.plan.status;
+  }
+
+  getIsConfirmed(): boolean {
+    return this.isConfirmed;
   }
 }

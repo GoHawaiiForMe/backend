@@ -46,6 +46,7 @@ export default class PlanService {
     options.role = RoleEnum.MAKER;
 
     const groupOptions = { ...options, tripType: undefined };
+
     const [totalCount, groupByCount, list] = await Promise.all([
       this.planRepository.totalCount(options),
       this.planRepository.groupByCount(groupOptions),

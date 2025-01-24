@@ -12,4 +12,5 @@ export default interface IQuote {
   getDreamerId(): string;
   getPlanId(): string;
   getPlanStatus(): Status;
+  getIsConfirmed(): boolean;
 }
