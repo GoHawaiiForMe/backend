@@ -35,7 +35,18 @@ export default class Review {
 
   toDB() {
     return {
-      id: this.id,
+      id: this?.id,
+      writerId: this.writerId,
+      ownerId: this.ownerId,
+      rating: this.rating,
+      content: this.content,
+      planId: this.planId
+    };
+  }
+
+  toClient() {
+    return {
+      id: this?.id,
       writerId: this.writerId,
       ownerId: this.ownerId,
       rating: this.rating,
@@ -43,6 +54,16 @@ export default class Review {
       planId: this.planId,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
+    };
+  }
+
+  toMakerProfile() {
+    return {
+      id: this?.id,
+      writer: this.writer,
+      rating: this.rating,
+      content: this.content,
+      createdAt: this.createdAt
     };
   }
 }

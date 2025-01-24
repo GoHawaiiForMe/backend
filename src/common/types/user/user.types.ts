@@ -28,7 +28,7 @@ export interface PasswordProperties {
 
 export interface UserReference {
   nickName: string;
-  image: ProfileImage;
+  image?: ProfileImage;
   gallery?: string;
   serviceTypes?: TripType[];
 }
