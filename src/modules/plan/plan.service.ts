@@ -37,14 +37,14 @@ export default class PlanService {
     userId: string,
     options: PlanQueryOptions
   ): Promise<{ totalCount: number; groupByCount: GroupByCount; list: PlanToClientProperties[] }> {
-    const { keyword, tripType } = options;
-    const requestUser: IUser = await this.userRepository.findById(userId);
-
     const makerProfile: IMakerProfile = await this.userRepository.findMakerProfile(userId);
     const serviceArea: ServiceArea[] = makerProfile.get().serviceArea;
 
     options.serviceArea = serviceArea; //NOTE. 메이커의 서비스지역 필터링
     options.userId = userId;
+    options.status = [StatusEnum.PENDING];
+    options.role = RoleEnum.MAKER;
+
     const groupOptions = { ...options, tripType: undefined };
 
     const [totalCount, groupByCount, list] = await Promise.all([

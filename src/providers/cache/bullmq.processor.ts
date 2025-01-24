@@ -6,6 +6,7 @@ import UserStatsService from 'src/modules/userStats/userStats.service';
 import { UserStatsProperties } from 'src/common/types/userStats/userStats.types';
 import CustomError from 'src/common/errors/customError';
 import { HttpStatus } from '@nestjs/common';
+import { EventType } from 'src/common/constants/event.type';
 
 @Processor('stats')
 export class UserStatsProcessor extends WorkerHost {
