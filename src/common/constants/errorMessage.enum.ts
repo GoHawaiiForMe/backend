@@ -1,4 +1,4 @@
-const enum ErrorMessage {
+export enum ErrorMessage {
   USER_UNAUTHORIZED = '접근 권한이 없습니다.',
   USER_NOT_FOUND = '해당 유저를 찾을 수 없습니다.',
   USER_EXIST = '이미 존재하는 이메일입니다.',

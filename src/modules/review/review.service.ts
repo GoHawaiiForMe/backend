@@ -8,7 +8,7 @@ import { CreateReviewDTO, GetReviewsQueryDTO, GetReviewsResponseDTO } from 'src/
 import Review from 'src/common/domains/review/review.domain';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
-import { ReviewAllProperties } from 'src/common/types/review/review.types';
+import { EventType } from 'src/common/constants/event.type';
 
 @Injectable()
 export default class ReviewService {

@@ -6,7 +6,7 @@ export const PLANS = [
     id: 'b198135d-9865-445b-a04b-742ca9939ee1',
     createdAt: '2024-07-25T00:00:00.000Z', // 5개월 전
     title: '플랜1타이틀',
-    tripDate: '2024-12-25T00:00:00.000Z',
+    tripDate: '2025-04-05T00:00:00.000Z',
     tripType: TripType.ACTIVITY,
     serviceArea: ServiceArea.SEOUL,
     details: '플랜1디테일',
@@ -173,7 +173,7 @@ export const PLANS = [
     title: '플랜15타이틀',
     tripDate: '2025-03-11T00:00:00.000Z',
     tripType: TripType.SHOPPING,
-    serviceArea: ServiceArea.SEOUL,
+    serviceArea: ServiceArea.GYEONGGI,
     details: '플랜15디테일',
     status: Status.CONFIRMED,
     dreamerId: '555d463e-37b6-410b-9061-11a9d6822bdd',
@@ -329,5 +329,126 @@ export const PLANS = [
     details: '플랜28디테일',
     status: Status.COMPLETED,
     dreamerId: '4cb5e51b-072e-4ca2-a4ae-bf432ea8ef76'
+  },
+  /********************************************************************** */
+  {
+    id: '64a5676a-0dee-4d14-ad5f-8dd0cdb0fa21',
+    createdAt: '2025-01-05T00:00:00.000Z', // 5개월 전
+    title: '플랜29타이틀',
+    tripDate: '2025-04-05T00:00:00.000Z',
+    tripType: TripType.ACTIVITY,
+    serviceArea: ServiceArea.SEOUL,
+    details: '플랜1디테일',
+    status: Status.PENDING,
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0',
+    assignees: [{ id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }]
+  },
+  {
+    id: '9f619a84-5a27-4ae2-94dc-fbd4a5bdba28',
+    createdAt: '2025-01-06T00:00:00.000Z', // 5개월 전
+    title: '플랜30타이틀',
+    tripDate: '2025-04-06T00:00:00.000Z',
+    tripType: TripType.CULTURE,
+    serviceArea: ServiceArea.SEOUL,
+    details: '플랜1디테일',
+    status: Status.PENDING,
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0',
+    assignees: [{ id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }]
+  },
+  {
+    id: '6e624f6f-bf11-4c84-b53a-8635a2f79f92',
+    createdAt: '2025-01-07T00:00:00.000Z', // 5개월 전
+    title: '플랜31타이틀',
+    tripDate: '2025-04-07T00:00:00.000Z',
+    tripType: TripType.FESTIVAL,
+    serviceArea: ServiceArea.SEOUL,
+    details: '플랜1디테일',
+    status: Status.PENDING,
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0',
+    assignees: [{ id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }]
+  },
+  {
+    id: '6d3557a3-f6ad-4413-97f0-923fadec4a3f',
+    createdAt: '2025-01-08T00:00:00.000Z', // 5개월 전
+    title: '플랜32타이틀',
+    tripDate: '2025-04-08T00:00:00.000Z',
+    tripType: TripType.FOOD_TOUR,
+    serviceArea: ServiceArea.SEOUL,
+    details: '플랜1디테일',
+    status: Status.PENDING,
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0',
+    assignees: [{ id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }]
+  },
+  {
+    id: '4d9fdaa5-daf0-4c74-a14b-c20f5d769a6f',
+    createdAt: '2025-01-09T00:00:00.000Z', // 5개월 전
+    title: '플랜33타이틀',
+    tripDate: '2025-04-09T00:00:00.000Z',
+    tripType: TripType.RELAXATION,
+    serviceArea: ServiceArea.SEOUL,
+    details: '플랜1디테일',
+    status: Status.PENDING,
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0',
+    assignees: [{ id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }]
+  },
+  {
+    id: '1fae7b51-a14e-450d-8c71-777bfa429185',
+    createdAt: '2025-01-10T00:00:00.000Z', // 5개월 전
+    title: '플랜34타이틀',
+    tripDate: '2025-04-10T00:00:00.000Z',
+    tripType: TripType.SHOPPING,
+    serviceArea: ServiceArea.SEOUL,
+    details: '플랜1디테일',
+    status: Status.PENDING,
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0',
+    assignees: [{ id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }]
+  },
+  {
+    id: '34a5c86e-f587-4bf0-b671-8a177fa2331f',
+    createdAt: '2025-01-11T00:00:00.000Z', // 5개월 전
+    title: '플랜35타이틀',
+    tripDate: '2025-04-11T00:00:00.000Z',
+    tripType: TripType.ACTIVITY,
+    serviceArea: ServiceArea.SEOUL,
+    details: '플랜1디테일',
+    status: Status.PENDING,
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0',
+    assignees: [{ id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }]
+  },
+  {
+    id: 'caa9876f-b3a8-4f7d-b137-316ddba3ac78',
+    createdAt: '2025-01-12T00:00:00.000Z', // 5개월 전
+    title: '플랜36타이틀',
+    tripDate: '2025-04-12T00:00:00.000Z',
+    tripType: TripType.CULTURE,
+    serviceArea: ServiceArea.SEOUL,
+    details: '플랜1디테일',
+    status: Status.PENDING,
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0',
+    assignees: [{ id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }]
+  },
+  {
+    id: '953b4831-2db5-4eb5-b8bf-56624e227a92',
+    createdAt: '2025-01-13T00:00:00.000Z', // 5개월 전
+    title: '플랜37타이틀',
+    tripDate: '2025-04-13T00:00:00.000Z',
+    tripType: TripType.FESTIVAL,
+    serviceArea: ServiceArea.SEOUL,
+    details: '플랜1디테일',
+    status: Status.PENDING,
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0',
+    assignees: [{ id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }]
+  },
+  {
+    id: '10ceb118-9682-4c9e-9841-bca818022369',
+    createdAt: '2025-01-14T00:00:00.000Z', // 5개월 전
+    title: '플랜38타이틀',
+    tripDate: '2025-04-14T00:00:00.000Z',
+    tripType: TripType.FOOD_TOUR,
+    serviceArea: ServiceArea.SEOUL,
+    details: '플랜1디테일',
+    status: Status.PENDING,
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0',
+    assignees: [{ id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }]
   }
 ];

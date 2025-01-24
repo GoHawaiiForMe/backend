@@ -5,7 +5,6 @@ import QuoteService from 'src/modules/quote/quote.service';
 import UserRepository from 'src/modules/user/user.repository';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { PlanQueryOptions } from 'src/common/types/plan/plan.type';
-import IPlan from 'src/common/domains/plan/plan.interface';
 import { PlanToClientProperties } from 'src/common/types/plan/plan.properties';
 import NotFoundError from 'src/common/errors/notFoundError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
@@ -38,13 +37,14 @@ export default class PlanService {
     userId: string,
     options: PlanQueryOptions
   ): Promise<{ totalCount: number; groupByCount: GroupByCount; list: PlanToClientProperties[] }> {
-    const { keyword, tripType } = options;
-    const requestUser: IUser = await this.userRepository.findById(userId);
-
     const makerProfile: IMakerProfile = await this.userRepository.findMakerProfile(userId);
     const serviceArea: ServiceArea[] = makerProfile.get().serviceArea;
+
     options.serviceArea = serviceArea; //NOTE. 메이커의 서비스지역 필터링
     options.userId = userId;
+    options.status = [StatusEnum.PENDING];
+    options.role = RoleEnum.MAKER;
+
     const groupOptions = { ...options, tripType: undefined };
     const [totalCount, groupByCount, list] = await Promise.all([
       this.planRepository.totalCount(options),

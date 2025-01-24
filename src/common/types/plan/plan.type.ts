@@ -32,6 +32,7 @@ export interface PlanQueryOptions {
   isAssigned?: boolean;
   status?: StatusEnum[];
   userId?: string;
+  role?: Role;
 }
 
 export interface CreatePlanData {
