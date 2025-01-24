@@ -25,3 +25,40 @@ export interface ReviewAllProperties {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface ReviewSelect {
+  id: boolean;
+  createdAt: boolean;
+  rating: boolean;
+  content: boolean;
+  plan?: {
+    select: {
+      tripType: boolean;
+      tripDate: boolean;
+      quotes: {
+        select: {
+          price: boolean;
+          isAssigned: boolean;
+        };
+        where: {
+          isConfirmed: boolean;
+        };
+      };
+    };
+  };
+  owner?: {
+    select: {
+      nickName: boolean;
+      makerProfile: {
+        select: {
+          image: boolean;
+        };
+      };
+    };
+  };
+  writer?: {
+    select: {
+      nickName: boolean;
+    };
+  };
+}

@@ -1,5 +1,6 @@
 import { IsInt, IsNotEmpty, IsPositive, IsString, IsUUID } from 'class-validator';
 import { Type } from 'class-transformer';
+import { ReviewAllProperties } from './review.types';
 
 export class CreateReviewDTO {
   @IsUUID()
@@ -28,4 +29,10 @@ export class GetReviewsQueryDTO {
   @Type(() => Number)
   @IsInt()
   pageSize: number = 5;
+}
+
+export class GetReviewsResponseDTO {
+  totalCount: number;
+  groupByCount?: { rating: number; count: number }[];
+  list: ReviewAllProperties[];
 }
