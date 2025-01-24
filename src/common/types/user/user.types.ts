@@ -1,5 +1,6 @@
 import { ProfileImage } from 'src/common/constants/image.type';
 import { Role } from 'src/common/constants/role.type';
+import { TripType } from 'src/common/constants/tripType.type';
 
 export interface UserProperties {
   id?: string;
@@ -28,5 +29,6 @@ export interface PasswordProperties {
 export interface UserReference {
   nickName: string;
   image: ProfileImage;
-  gallery: string;
+  gallery?: string;
+  serviceTypes?: TripType[];
 }
