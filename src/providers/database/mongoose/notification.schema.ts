@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
+import { NotificationEvent } from 'src/common/types/notification/notification.types';
 
 @Schema({ timestamps: true })
 export class Notification {
@@ -9,8 +10,11 @@ export class Notification {
   @Prop({ type: String })
   userId: string | null;
 
-  @Prop({ isRequired: true })
-  content: string;
+  @Prop({ isRequired: true, type: String })
+  event: keyof NotificationEvent;
+
+  @Prop({ isRequired: true, type: Object })
+  payload: NotificationEvent[keyof NotificationEvent];
 
   @Prop({ default: false })
   isRead: boolean;

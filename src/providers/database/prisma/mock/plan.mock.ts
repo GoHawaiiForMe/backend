@@ -23,7 +23,8 @@ export const PLANS = [
     serviceArea: ServiceArea.SEOUL,
     details: '플랜2디테일',
     status: Status.OVERDUE,
-    dreamerId: '555d463e-37b6-410b-9061-11a9d6822bdd'
+    dreamerId: '555d463e-37b6-410b-9061-11a9d6822bdd',
+    assignees: [{ id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }]
   },
   {
     id: 'b32d8b23-76cc-45b9-b086-985c965829fb',
@@ -35,7 +36,7 @@ export const PLANS = [
     details: '플랜3디테일',
     status: Status.OVERDUE,
     dreamerId: '30106a60-200d-467c-8b0d-5817ee604904',
-    assignees: [{ id: 'ef846519-2b73-4be4-807e-f6ef1c07eb60' }]
+    assignees: [{ id: 'ef846519-2b73-4be4-807e-f6ef1c07eb60' }, { id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }]
   },
   {
     id: 'febaa030-b1ee-4bc5-9e99-1c554831ac83',
@@ -72,7 +73,8 @@ export const PLANS = [
     serviceArea: ServiceArea.SEOUL,
     details: '플랜6디테일',
     status: Status.PENDING,
-    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0'
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0',
+    assignees: [{ id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }]
   },
   {
     id: '072bb272-bf10-4e9b-9334-41c4dc2504b8',
@@ -95,7 +97,8 @@ export const PLANS = [
     serviceArea: ServiceArea.SEOUL,
     details: '플랜8디테일',
     status: Status.PENDING,
-    dreamerId: '555d463e-37b6-410b-9061-11a9d6822bdd'
+    dreamerId: '555d463e-37b6-410b-9061-11a9d6822bdd',
+    assignees: [{ id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }]
   },
   {
     id: '437bf5e9-f755-4764-bb4c-9c716632e8aa',
@@ -106,7 +109,8 @@ export const PLANS = [
     serviceArea: ServiceArea.SEOUL,
     details: '플랜9디테일',
     status: Status.PENDING,
-    dreamerId: '30106a60-200d-467c-8b0d-5817ee604904'
+    dreamerId: '30106a60-200d-467c-8b0d-5817ee604904',
+    assignees: [{ id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }]
   },
   {
     id: '7be7551a-44ae-41db-a344-c05b9a76ef5c',
@@ -117,7 +121,8 @@ export const PLANS = [
     serviceArea: ServiceArea.GYEONGGI,
     details: '플랜10디테일',
     status: Status.PENDING,
-    dreamerId: '30106a60-200d-467c-8b0d-5817ee604904'
+    dreamerId: '30106a60-200d-467c-8b0d-5817ee604904',
+    assignees: [{ id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }]
   },
   {
     id: '76db280a-af2b-4f0b-b7f6-a98a7456fa42',
@@ -128,7 +133,8 @@ export const PLANS = [
     serviceArea: ServiceArea.GYEONGGI,
     details: '플랜11디테일',
     status: Status.PENDING,
-    dreamerId: '4cb5e51b-072e-4ca2-a4ae-bf432ea8ef76'
+    dreamerId: '4cb5e51b-072e-4ca2-a4ae-bf432ea8ef76',
+    assignees: [{ id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }]
   },
   {
     id: '62d8e271-03e2-4080-8428-44180813cde6',
@@ -153,7 +159,8 @@ export const PLANS = [
     serviceArea: ServiceArea.SEOUL,
     details: '플랜13디테일',
     status: Status.CONFIRMED,
-    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0'
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0',
+    assignees: [{ id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }]
   },
   {
     id: '9004bc52-a8b0-4587-af53-59914168582f',

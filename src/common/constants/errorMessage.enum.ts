@@ -25,12 +25,13 @@ const enum ErrorMessage {
   PLAN_DELETE_FORBIDDEN = '해당 플랜을 삭제할 권리가 없습니다.',
   PLAN_UPDATE_FORBIDDEN = '해당 플랜을 수정할 권리가 없습니다.',
   PLAN_STATUS_INVALID = '지정견적 요청은 PENDING 상태일 때만 가능합니다.',
-  PLAN_COMPLETED_BAD_REQUEST = '플랜 완료 요청은 CONFIRMED 상태일 떄만 가능합니다.',
+  PLAN_COMPLETED_BAD_REQUEST = '플랜 완료 요청은 CONFIRMED 상태일 때만 가능합니다.',
   PLAN_ASSIGN_CONFLICT = '이미 지정견적을 요청한 사람입니다.',
   PLAN_ASSIGN_NOT_MAKER = 'Maker에게만 지정견적 요청을 할 수 있습니다.',
   PLAN_ASSIGN_NOT_PENDING = 'PENDING 상태일 때만 지정견적 요청을 할 수 있습니다.',
   PLAN_DELETE_BAD_REQUEST = 'CONFIRMED 상태의 진행중인 플랜은 삭제할 수 없습니다.',
   PLAN_IS_ASSIGNED_BAD_REQUEST = 'IS_ASSIGNED 값은 true와 false 혹은 입력하지 않아야 합니다.',
+  PLAN_CANNOT_CREATE_CHATROOM_BAD_REQUEST = '해당 플랜은 채팅방을 만들 수 없습니다. CONFIRMED상태의 플랜만 가능합니다.',
 
   QUOTE_NOT_FOUND = '해당 견적서를 찾을 수 없습니다.',
   QUOTE_FORBIDDEN_ID = '해당 견적서의 Maker와 Dreamer만 조회할 수 있습니다.',
@@ -44,6 +45,16 @@ const enum ErrorMessage {
   QUOTE_DELETE_BAD_REQUEST_STATUS = '견적의 플랜이 PENDING 상태 일 때만 삭제할 수 있습니다.',
 
   PAYMENT_BAD_REQUEST = '결제 정보가 잘못되어 결제를 완료할 수 없습니다.',
+  EVENT_NOT_FOUND = '큐에 설정되지 않은 이벤트는 추가할 수 없습니다',
+
+  REVIEW_BAD_REQUEST = '플랜 상태가 완료 처리된 후에 리뷰를 작성할 수 있습니다',
+
+  CHAT_ROOM_FORBIDDEN_ID = '해당 플랜의 채팅방에 대한 권한이 없습니다.',
+  CHAT_ROOM_NOTFOUND = '해당 채팅방을 찾을 수 없습니다.',
+  CHAT_ROOM_POST_CONFLICT = '해당 플랜의 채팅방은 이미 생성하셨습니다. 하나의 플랜에는 하나의 채팅방만 만들 수 있습니다.',
+  CHAT_ROOM_NOT_IS_ACTIVE = '해당 채팅방은 사용할 수 있는 기간이 지나 사용할 수 없습니다.',
+
+  CHAT_POST_BAD_ID = '채팅방의 id가 잘못된 형식입니다.',
 
   INTERNAL_SERVER_ERROR = '내부 서버 오류'
 }

@@ -1,18 +1,20 @@
-import { NotificationProperties } from '../../types/notification/notification.types';
+import { NotificationEvent, NotificationProperties } from '../../types/notification/notification.types';
 import INotification from './notification.interface';
 
 export default class Notification implements INotification {
-  readonly id?: string;
-  readonly userId: string;
-  content: string;
-  isRead: boolean;
-  readonly createdAt?: Date;
-  readonly updatedAt?: Date;
+  private readonly id?: string;
+  private readonly userId: string;
+  private event: keyof NotificationEvent;
+  private payload: NotificationEvent[keyof NotificationEvent];
+  private isRead: boolean;
+  private readonly createdAt?: Date;
+  private readonly updatedAt?: Date;
 
   constructor(notification: NotificationProperties) {
     this.id = notification?.id;
     this.userId = notification.userId;
-    this.content = notification.content;
+    this.event = notification.event;
+    this.payload = notification.payload;
     this.isRead = notification.isRead;
     this.createdAt = notification?.createdAt;
     this.updatedAt = notification?.updatedAt;
@@ -30,7 +32,8 @@ export default class Notification implements INotification {
     return {
       id: this.id,
       userId: this.userId,
-      content: this.content,
+      event: this.event,
+      payload: this.payload,
       isRead: this.isRead,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt

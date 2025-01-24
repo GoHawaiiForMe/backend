@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 
 @Schema({ timestamps: true })
-class Chat {
+export class Chat {
   @Prop({ default: null })
   isDeletedAt: Date | null;
 
@@ -20,6 +20,13 @@ class Chat {
 }
 
 export type ChatDocument = HydratedDocument<Chat>;
-
+export interface IChatDocument {
+  _id?: Types.ObjectId;
+  createdAt?: Date;
+  updatedAt?: Date;
+  senderId?: string;
+  chatRoomId: Types.ObjectId;
+  content: string;
+}
 const ChatSchema = SchemaFactory.createForClass(Chat);
 export default ChatSchema;

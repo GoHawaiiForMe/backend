@@ -5,7 +5,6 @@ import QuoteService from 'src/modules/quote/quote.service';
 import UserRepository from 'src/modules/user/user.repository';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { PlanQueryOptions } from 'src/common/types/plan/plan.type';
-import IPlan from 'src/common/domains/plan/plan.interface';
 import { PlanToClientProperties } from 'src/common/types/plan/plan.properties';
 import NotFoundError from 'src/common/errors/notFoundError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
@@ -22,6 +21,7 @@ import PlanMapper from 'src/common/domains/plan/plan.mapper';
 import BadRequestError from 'src/common/errors/badRequestError';
 import { StatusEnum } from 'src/common/constants/status.type';
 import { GroupByCount } from 'src/common/types/plan/plan.dto';
+import { NotificationEventName } from 'src/common/types/notification/notification.types';
 
 @Injectable()
 export default class PlanService {
@@ -42,9 +42,11 @@ export default class PlanService {
 
     const makerProfile: IMakerProfile = await this.userRepository.findMakerProfile(userId);
     const serviceArea: ServiceArea[] = makerProfile.get().serviceArea;
+
     options.serviceArea = serviceArea; //NOTE. 메이커의 서비스지역 필터링
     options.userId = userId;
     const groupOptions = { ...options, tripType: undefined };
+
     const [totalCount, groupByCount, list] = await Promise.all([
       this.planRepository.totalCount(options),
       this.planRepository.groupByCount(groupOptions),
@@ -77,6 +79,21 @@ export default class PlanService {
     }
 
     return plan.toClient();
+  }
+
+  async checkPlanAndGetChatParticipants(id: string): Promise<string[]> {
+    const plan = await this.planRepository.findById(id); //TO_DO. 플랜의 상세정보를 주게 변경예정
+
+    if (!plan) {
+      throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
+    }
+
+    if (plan.getStatus() !== StatusEnum.CONFIRMED) {
+      throw new BadRequestError(ErrorMessage.PLAN_CANNOT_CREATE_CHATROOM_BAD_REQUEST);
+    }
+
+    const userIds = [plan.getDreamerId(), plan.getConfirmedMakerId()];
+    return userIds;
   }
 
   async getQuotesByPlanId(
@@ -136,9 +153,14 @@ export default class PlanService {
     plan.updateAssign(data);
     const updatedPlan = await this.planRepository.update(plan);
 
-    const assigneeId = data.assigneeId; //NOTE. 알림
-    const content: string = `${plan.getDreamerNickName()} 드리머가 지정견적을 요청했어요`;
-    this.eventEmitter.emit('notification', { assigneeId, content });
+    const assigneeId = data.assigneeId;
+    const nickName = updatedPlan.getDreamerNickName();
+    const tripType = updatedPlan.toClient().tripType;
+    this.eventEmitter.emit('notification', {
+      userId: assigneeId,
+      event: NotificationEventName.ARRIVE_REQUEST,
+      payload: { nickName, tripType }
+    });
 
     return updatedPlan.toClient();
   }

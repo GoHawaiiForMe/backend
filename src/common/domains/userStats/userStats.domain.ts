@@ -32,22 +32,11 @@ export default class UserStats implements IUserStats {
     });
   }
 
-  updateReviewData(rating: number, isAdd: boolean) {
-    if (isAdd === true) {
-      this.averageRating = (this.averageRating * this.totalReviews + rating) / (this.totalReviews + 1);
-      this.totalReviews += 1;
-    } else {
-      this.averageRating = (this.averageRating * this.totalReviews - rating) / (this.totalReviews - 1);
-      this.totalReviews -= 1;
-    }
-  }
-
-  updateTotalFollows(isAdd: boolean) {
-    isAdd ? (this.totalFollows += 1) : (this.totalFollows -= 1);
-  }
-
-  updateTotalConfirms(isAdd: boolean) {
-    isAdd ? (this.totalConfirms += 1) : (this.totalConfirms -= 1);
+  update(data: Partial<UserStatsProperties>): void {
+    this.averageRating = data.averageRating;
+    this.totalReviews = data.totalReviews;
+    this.totalFollows = data.totalFollows;
+    this.totalConfirms = data.totalConfirms;
   }
 
   get() {
@@ -62,18 +51,6 @@ export default class UserStats implements IUserStats {
     };
   }
 
-  getTotalReviews() {
-    return { averageRating: this.averageRating, totalReviews: this.totalReviews };
-  }
-
-  getTotalFollows() {
-    return { totalFollows: this.totalFollows };
-  }
-
-  getTotalConfirms() {
-    return { totalConfirms: this.totalConfirms };
-  }
-
   toObject(): UserStatsToClientProperties {
     return {
       averageRating: Math.round(this.averageRating),
@@ -81,5 +58,14 @@ export default class UserStats implements IUserStats {
       totalFollows: this.totalFollows,
       totalConfirms: this.totalConfirms
     };
+  }
+
+  isValidStats(): boolean {
+    return (
+      this.averageRating !== undefined &&
+      this.totalReviews !== undefined &&
+      this.totalFollows !== undefined &&
+      this.totalConfirms !== undefined
+    );
   }
 }

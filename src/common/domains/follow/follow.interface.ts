@@ -1,5 +1,9 @@
-import { FollowProperties } from '../../types/follow/follow.types';
+import { UserReference } from 'src/common/types/user/user.types';
+import { FollowProperties, FollowPropertiesWithMaker } from '../../types/follow/follow.types';
 
 export default interface IFollow {
-  get(): FollowProperties;
+  getMakerId(): string;
+  getMaker(): UserReference;
+  toDB(): FollowProperties;
+  toClient(): FollowPropertiesWithMaker;
 }

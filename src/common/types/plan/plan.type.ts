@@ -52,6 +52,7 @@ export interface UpdatePlanData {
 export interface PlanReference {
   id?: string;
   createdAt?: Date;
+  title?: string;
   tripType?: TripType;
   tripDate?: Date;
   serviceArea?: ServiceArea;

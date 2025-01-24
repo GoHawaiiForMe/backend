@@ -27,7 +27,7 @@ export const QUOTES = [
     planId: '10502cab-f60f-4ba5-8031-abf89e367b01',
     makerId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
     isConfirmed: false,
-    isAssigned: false
+    isAssigned: true //변경된부분
   },
   {
     id: 'e14c6ba3-7249-4fbf-bc4b-12d2e353dc85',
@@ -47,7 +47,7 @@ export const QUOTES = [
     planId: 'b32d8b23-76cc-45b9-b086-985c965829fb',
     makerId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
     isConfirmed: false,
-    isAssigned: false
+    isAssigned: true //변경된부분
   },
   {
     id: 'b2b1ffc0-7987-43d8-b223-d93f4b6acdc1',
@@ -107,7 +107,7 @@ export const QUOTES = [
     planId: '415037fb-b4da-43dc-a9e0-a68399fd5667',
     makerId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
     isConfirmed: false,
-    isAssigned: false
+    isAssigned: true //변경된부분
   },
   {
     id: '1ab21339-2832-4d22-b891-453b3efc5d89',
@@ -147,7 +147,7 @@ export const QUOTES = [
     planId: 'e329c3de-3f36-46e2-8f01-baafcecbd8e4',
     makerId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
     isConfirmed: false,
-    isAssigned: false
+    isAssigned: true //변경된부분
   },
   {
     id: '56dcfa3b-70ee-457b-aa29-c8b1690c697d',
@@ -167,7 +167,7 @@ export const QUOTES = [
     planId: '437bf5e9-f755-4764-bb4c-9c716632e8aa',
     makerId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
     isConfirmed: false,
-    isAssigned: false
+    isAssigned: true //변경된부분
   },
   {
     id: '85909c17-7f1d-41b5-982e-992ff3da90ba',
@@ -187,7 +187,7 @@ export const QUOTES = [
     planId: '7be7551a-44ae-41db-a344-c05b9a76ef5c',
     makerId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
     isConfirmed: false,
-    isAssigned: false
+    isAssigned: true //변경된부분
   },
   {
     id: '3324a189-4a11-45ce-a3ff-44d44ea1b5cf',
@@ -207,7 +207,7 @@ export const QUOTES = [
     planId: '76db280a-af2b-4f0b-b7f6-a98a7456fa42',
     makerId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
     isConfirmed: false,
-    isAssigned: false
+    isAssigned: true //변경된부분
   },
   {
     id: '5e58dca9-645d-447f-a460-693ea8f1dcc8',
@@ -247,7 +247,7 @@ export const QUOTES = [
     planId: '6d201a98-1d06-4497-806a-fa123599019a',
     makerId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
     isConfirmed: true,
-    isAssigned: false
+    isAssigned: true //변경된부분
   },
   {
     id: '45ec04f9-a890-4992-adca-7f309a5b2cdc',
