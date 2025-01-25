@@ -21,7 +21,7 @@ export default class ChatRepository {
     const skip = (page - 1) * pageSize;
     const chats = await this.chat.find({ chatRoomId }).skip(skip).limit(pageSize).sort({ createdAt: -1 });
 
-    const domainChats = chats?.map((chat) => new ChatMapper(chat).toDomain());
+    const domainChats = chats.map((chat) => new ChatMapper(chat).toDomain());
 
     return domainChats;
   }
