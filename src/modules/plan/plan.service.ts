@@ -2,9 +2,8 @@ import { Injectable } from '@nestjs/common';
 import PlanRepository from './plan.repository';
 import QuoteRepository from 'src/modules/quote/quote.repository';
 import QuoteService from 'src/modules/quote/quote.service';
-import UserRepository from 'src/modules/user/user.repository';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { PlanQueryOptions } from 'src/common/types/plan/plan.type';
+import { AssignData, PlanQueryOptions } from 'src/common/types/plan/plan.type';
 import { PlanToClientProperties } from 'src/common/types/plan/plan.properties';
 import NotFoundError from 'src/common/errors/notFoundError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
@@ -13,8 +12,6 @@ import { QuoteToClientProperties } from 'src/common/types/quote/quoteProperties'
 import { CreatePlanData } from 'src/common/types/plan/plan.type';
 import QuoteMapper from 'src/common/domains/quote/quote.mapper';
 import ForbiddenError from 'src/common/errors/forbiddenError';
-import { IUser } from 'src/common/domains/user/user.interface';
-import { IMakerProfile } from 'src/common/domains/user/profile.interface';
 import { ServiceArea } from 'src/common/constants/serviceArea.type';
 import { RoleEnum } from 'src/common/constants/role.type';
 import PlanMapper from 'src/common/domains/plan/plan.mapper';
@@ -22,6 +19,7 @@ import BadRequestError from 'src/common/errors/badRequestError';
 import { StatusEnum } from 'src/common/constants/status.type';
 import { GroupByCount } from 'src/common/types/plan/plan.dto';
 import { NotificationEventName } from 'src/common/types/notification/notification.types';
+import UserService from '../user/user.service';
 
 @Injectable()
 export default class PlanService {
@@ -29,7 +27,7 @@ export default class PlanService {
     private readonly planRepository: PlanRepository,
     private readonly quoteRepository: QuoteRepository,
     private readonly quoteService: QuoteService,
-    private readonly userRepository: UserRepository,
+    private readonly userService: UserService,
     private readonly eventEmitter: EventEmitter2
   ) {}
 
@@ -37,8 +35,8 @@ export default class PlanService {
     userId: string,
     options: PlanQueryOptions
   ): Promise<{ totalCount: number; groupByCount: GroupByCount; list: PlanToClientProperties[] }> {
-    const makerProfile: IMakerProfile = await this.userRepository.findMakerProfile(userId);
-    const serviceArea: ServiceArea[] = makerProfile.get().serviceArea;
+    const makerProfile = await this.userService.getProfile(RoleEnum.MAKER, userId);
+    const serviceArea: ServiceArea[] = makerProfile.serviceArea;
 
     options.serviceArea = serviceArea; //NOTE. 메이커의 서비스지역 필터링
     options.userId = userId;
@@ -119,26 +117,24 @@ export default class PlanService {
     return quote;
   }
 
-  async updatePlanAssign(id: string, userId: string, data: { assigneeId: string }): Promise<PlanToClientProperties> {
-    const assignee = await this.userRepository.findById(data.assigneeId);
-    const plan = await this.planRepository.findById(id);
+  async requestPlanAssign(data: AssignData): Promise<PlanToClientProperties> {
+    const { id, userId, assigneeId } = data;
+    const plan = await this.planRepository.findById(data.id);
+
+    if (!plan) {
+      throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
+    }
+
+    const assignee = await this.userService.getUser(assigneeId);
 
     if (!assignee) throw new NotFoundError(ErrorMessage.USER_NOT_FOUND);
-
-    if (assignee.getRole() !== RoleEnum.MAKER) {
+    if (assignee.role !== RoleEnum.MAKER) {
       throw new BadRequestError(ErrorMessage.PLAN_ASSIGN_NOT_MAKER);
     }
 
-    if (!plan) throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
-
-    if (plan.getDreamerId() !== userId) {
-      throw new ForbiddenError(ErrorMessage.USER_FORBIDDEN_NOT_OWNER);
-    }
-
-    plan.updateAssign(data);
+    plan.requestAssign(data);
     const updatedPlan = await this.planRepository.update(plan);
 
-    const assigneeId = data.assigneeId;
     const nickName = updatedPlan.getDreamerNickName();
     const tripType = updatedPlan.toClient().tripType;
     this.eventEmitter.emit('notification', {
@@ -146,6 +142,19 @@ export default class PlanService {
       event: NotificationEventName.ARRIVE_REQUEST,
       payload: { nickName, tripType }
     });
+
+    return updatedPlan.toClient();
+  }
+
+  async rejectPlanAssign(data: AssignData): Promise<PlanToClientProperties> {
+    const plan = await this.planRepository.findById(data.id);
+
+    if (!plan) {
+      throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
+    }
+
+    plan.rejectAssign(data);
+    const updatedPlan = await this.planRepository.update(plan);
 
     return updatedPlan.toClient();
   }

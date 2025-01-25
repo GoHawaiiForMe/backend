@@ -102,12 +102,16 @@ export default class PlanRepository {
   }
 
   async update(data: IPlan): Promise<IPlan> {
-    const { id, status, assigneeId } = data.toDB();
+    const { id, status, assigneeId, isAssigned } = data.toDB();
     const plan = await this.db.plan.update({
       where: { id },
       data: {
         ...(status && { status }),
-        assignees: assigneeId ? { connect: { id: assigneeId } } : undefined
+        assignees: assigneeId
+          ? isAssigned
+            ? { connect: { id: assigneeId } }
+            : { disconnect: { id: assigneeId } }
+          : undefined
       },
       include: {
         dreamer: true,
@@ -134,6 +138,8 @@ export default class PlanRepository {
     const domainPlan = new PlanMapper(plan).toDomain();
     return domainPlan;
   }
+
+  p;
 
   private buildWhereConditions(whereOptions: PlanQueryOptions): PlanWhereConditions {
     const { keyword, tripDate, tripType, serviceArea, isAssigned, userId, status, role } = whereOptions;

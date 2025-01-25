@@ -22,6 +22,7 @@ export interface PlanProperties {
   quotes: IQuote[];
   assignees: IUser[];
   assigneeId?: string;
+  isAssigned?: boolean;
   dreamer?: IUser | null;
   dreamerId?: string | null;
   review?: Review;

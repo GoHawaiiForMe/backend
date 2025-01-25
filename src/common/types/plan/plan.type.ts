@@ -45,11 +45,6 @@ export interface CreatePlanData {
   dreamerId?: string | null;
 }
 
-export interface UpdatePlanData {
-  status?: Status;
-  assigneeId?: string;
-}
-
 export interface PlanReference {
   id?: string;
   createdAt?: Date;
@@ -60,4 +55,11 @@ export interface PlanReference {
   details?: string;
   status?: Status;
   dreamer?: any; //NOTE. 임시로 any 사용
+}
+
+export interface AssignData {
+  id: string;
+  userId?: string;
+  assigneeId: string;
+  isAssigned?: boolean;
 }
