@@ -9,6 +9,8 @@ import { PlanProperties, PlanToClientProperties } from 'src/common/types/plan/pl
 import ConflictError from 'src/common/errors/conflictError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import BadRequestError from 'src/common/errors/badRequestError';
+import { AssignData } from 'src/common/types/plan/plan.type';
+import ForbiddenError from 'src/common/errors/forbiddenError';
 
 export default class Plan implements IPlan {
   private id?: string;
@@ -25,6 +27,7 @@ export default class Plan implements IPlan {
   private quotes: IQuote[];
   private assignees: IUser[];
   private assigneeId?: string;
+  private isAssigned: boolean;
   private dreamer?: IUser | null;
   private dreamerId?: string | null;
   private review: Review;
@@ -77,12 +80,18 @@ export default class Plan implements IPlan {
       address: this.address,
       status: this.status,
       dreamerId: this.dreamerId,
-      assigneeId: this.assigneeId
+      assigneeId: this.assigneeId,
+      isAssigned: this.isAssigned
     };
   }
 
-  updateAssign(data: { assigneeId: string }): IPlan {
-    const { assigneeId } = data;
+  requestAssign(data: AssignData): IPlan {
+    const { userId, assigneeId } = data;
+
+    if (this.dreamerId !== userId) {
+      throw new ForbiddenError(ErrorMessage.PLAN_UPDATE_FORBIDDEN);
+    }
+
     if (this.getAssigneeIds().includes(assigneeId)) {
       throw new ConflictError(ErrorMessage.PLAN_ASSIGN_CONFLICT);
     } //NOTE. 지정경적 요청을 한 사람이 중복인지 체크
@@ -90,8 +99,25 @@ export default class Plan implements IPlan {
     if (this.getStatus() !== StatusEnum.PENDING) {
       throw new BadRequestError(ErrorMessage.PLAN_ASSIGN_NOT_PENDING);
     } //NOTE. PENDING 상태인지 체크
-
     this.assigneeId = assigneeId;
+    this.isAssigned = true;
+
+    return this;
+  }
+
+  rejectAssign(data: AssignData): IPlan {
+    const { assigneeId } = data;
+
+    if (!this.getAssigneeIds().includes(assigneeId)) {
+      throw new ConflictError(ErrorMessage.PLAN_ASSIGN_BAD_REQUEST);
+    } //NOTE. 지정경적 요청을 받은사람이 맞는지 체크
+
+    if (this.getStatus() !== StatusEnum.PENDING) {
+      throw new BadRequestError(ErrorMessage.PLAN_ASSIGN_NOT_PENDING);
+    } //NOTE. PENDING 상태인지 체크
+    this.assigneeId = assigneeId;
+    this.isAssigned = false;
+
     return this;
   }
 
@@ -130,6 +156,7 @@ export default class Plan implements IPlan {
   getDreamerNickName(): string {
     return this.dreamer.toClient().nickName;
   }
+
   getStatus(): Status {
     return this.status;
   }

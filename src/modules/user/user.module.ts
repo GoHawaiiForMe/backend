@@ -15,6 +15,6 @@ import { JwtStrategy } from './jwt/jwt.strategy';
   ],
   controllers: [UserController],
   providers: [UserService, UserRepository, JwtStrategy],
-  exports: [UserRepository]
+  exports: [UserService]
 })
 export default class UserModule {}

@@ -83,12 +83,6 @@ export class PlanQueryOptionDTO {
   pageSize: number = 5;
 }
 
-export class UpdateAssignDataDTO {
-  @IsString()
-  @IsNotEmpty()
-  assigneeId: string;
-}
-
 export type GroupByCount = {
   tripType: TripType;
   count: number;

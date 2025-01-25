@@ -5,7 +5,6 @@ import PlanService from './plan.service';
 import { CreatePlanData } from 'src/common/types/plan/plan.type';
 import { CreateQuoteDataDTO, DreamerQuoteQueryOptionsDTO } from 'src/common/types/quote/quote.dto';
 import { QuoteToClientProperties } from 'src/common/types/quote/quoteProperties';
-import { UpdateAssignDataDTO } from 'src/common/types/plan/plan.dto';
 import { Role } from 'src/common/decorators/roleGuard.decorator';
 import { PlanToClientProperties } from 'src/common/types/plan/plan.properties';
 
@@ -71,13 +70,15 @@ export default class PlanController {
     return quote;
   }
 
-  @Patch(':id/assign')
-  async assignPlan(
+  @Role('DREAMER')
+  @Post(':id/assign')
+  async requestAssignment(
     @UserId() userId: string,
     @Param('id') id: string,
-    @Body() data: UpdateAssignDataDTO
+    @Body() data: { assigneeId: string }
   ): Promise<PlanToClientProperties> {
-    const plan = await this.planService.updatePlanAssign(id, userId, data);
+    const options = { userId, id, assigneeId: data.assigneeId };
+    const plan = await this.planService.requestPlanAssign(options);
     return plan;
   }
 
@@ -91,5 +92,12 @@ export default class PlanController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async deletePlan(@UserId() userId: string, @Param('id') id: string): Promise<void> {
     await this.planService.deletePlan(id, userId);
+  }
+
+  @Role('MAKER')
+  @Delete(':id/assign')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async rejectAssignment(@UserId() userId: string, @Param('id') id: string): Promise<void> {
+    await this.planService.rejectPlanAssign({ id, assigneeId: userId });
   }
 }
