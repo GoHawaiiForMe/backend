@@ -139,8 +139,6 @@ export default class PlanRepository {
     return domainPlan;
   }
 
-  p;
-
   private buildWhereConditions(whereOptions: PlanQueryOptions): PlanWhereConditions {
     const { keyword, tripDate, tripType, serviceArea, isAssigned, userId, status, role } = whereOptions;
 
