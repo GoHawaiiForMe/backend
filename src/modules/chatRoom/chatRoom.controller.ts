@@ -20,6 +20,7 @@ export default class ChatRoomController {
     const { totalCount, list } = await this.chatRoomService.getChatRooms({ userId, ...options });
     return { totalCount, list };
   }
+
   @Get(':chatRoomId')
   async getChatRoomById(
     @UserId() userId: string,
@@ -27,6 +28,16 @@ export default class ChatRoomController {
   ): Promise<ChatRoomProperties> {
     const chatRoom = await this.chatRoomService.getChatRoomById(userId, chatRoomId);
     return chatRoom;
+  }
+
+  @Get(':chatRoomId/chats')
+  async getChatsByChatRoomId(
+    @UserId() userId: string,
+    @Param('chatRoomId') chatRoomId: string,
+    @Query() options: ChatRoomQueryDTO
+  ): Promise<{ totalCount: number; list: ChatProperties[] }> {
+    const { totalCount, list } = await this.chatRoomService.getChatsByChatRoomId({ userId, chatRoomId, ...options });
+    return { totalCount, list };
   }
 
   @Post() //TO_DELETE. 테스트용

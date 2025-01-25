@@ -41,6 +41,14 @@ export default class ChatRoomService {
     return chatRoom.toClient();
   }
 
+  async getChatsByChatRoomId(options: ChatQueryOptions): Promise<{ totalCount: number; list: ChatProperties[] }> {
+    const { userId, chatRoomId } = options;
+
+    await this.getChatRoomById(userId, chatRoomId);
+    const { totalCount, list } = await this.chatService.getChatsByChatRoomId(options);
+    return { totalCount, list };
+  }
+
   async postChatRoom(userIds: string[]): Promise<ChatRoomProperties> {
     const chatRoomData = ChatRoom.create({ userIds, planId: 'b198135d-9865-445b-a04b-742ca9939ee1' });
 

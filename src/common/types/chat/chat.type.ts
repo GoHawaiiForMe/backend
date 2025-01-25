@@ -2,6 +2,7 @@ import { Types } from 'mongoose';
 
 export interface ChatQueryOptions {
   userId: string;
+  chatRoomId?: string;
   page: number;
   pageSize: number;
 }
