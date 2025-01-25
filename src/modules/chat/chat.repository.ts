@@ -5,6 +5,7 @@ import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import IChat from 'src/common/domains/chat/chat.interface';
 import ChatMapper from 'src/common/domains/chat/chat.mapper';
 import InternalServerError from 'src/common/errors/internalServerError';
+import { ChatQueryOptions } from 'src/common/types/chat/chat.type';
 import { Chat } from 'src/providers/database/mongoose/chat.schema';
 import { ChatRoom } from 'src/providers/database/mongoose/chatRoom.schema';
 
@@ -14,6 +15,21 @@ export default class ChatRepository {
     @InjectModel(ChatRoom.name) private chatRoom: Model<ChatRoom>,
     @InjectModel(Chat.name) private chat: Model<Chat>
   ) {}
+
+  async findChatsByChatRoomId(options: ChatQueryOptions): Promise<IChat[]> {
+    const { chatRoomId, page, pageSize } = options;
+    const skip = (page - 1) * pageSize;
+    const chats = await this.chat.find({ chatRoomId }).skip(skip).limit(pageSize).sort({ createdAt: -1 });
+
+    const domainChats = chats.map((chat) => new ChatMapper(chat).toDomain());
+
+    return domainChats;
+  }
+
+  async totalCount(chatRoomId: string): Promise<number> {
+    const totalCount = await this.chat.countDocuments({ chatRoomId });
+    return totalCount;
+  }
 
   async findChatById(id: string): Promise<IChat> {
     const chat = await this.chat.findById(id);
