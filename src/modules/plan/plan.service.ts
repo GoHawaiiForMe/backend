@@ -114,6 +114,14 @@ export default class PlanService {
     const domainQuote = new QuoteMapper({ ...data, planId, isAssigned, makerId: userId }).toDomain();
     const quote = await this.quoteService.createQuote(domainQuote);
 
+    const makerNickName = quote.maker.nickName;
+    const tripType = plan.toClient().tripType;
+    this.eventEmitter.emit('notification', {
+      userId: plan.getDreamerId(),
+      event: NotificationEventName.ARRIVE_QUOTE,
+      payload: { nickName: makerNickName, tripType }
+    });
+
     return quote;
   }
 
