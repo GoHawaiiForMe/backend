@@ -5,16 +5,18 @@ export default class FollowMapper {
   constructor(private readonly follow: FollowPropertiesFromDB) {}
 
   toDomain() {
-    const isFollowed = this.follow.maker.followers.length > 0 ? true : false;
+    if (!this.follow) return null;
+
+    const isFollowed = this.follow.maker?.followers.length > 0 ? true : false;
 
     return new Follow({
       id: this.follow.id,
       makerId: this.follow.makerId,
       maker: {
-        nickName: this.follow?.maker?.nickName,
-        image: this.follow?.maker?.makerProfile.image,
-        gallery: this.follow?.maker?.makerProfile.gallery,
-        serviceTypes: this.follow?.maker?.makerProfile.serviceTypes
+        nickName: this.follow.maker?.nickName,
+        image: this.follow.maker?.makerProfile.image,
+        gallery: this.follow.maker?.makerProfile.gallery,
+        serviceTypes: this.follow.maker?.makerProfile.serviceTypes
       },
       isFollowed,
       dreamerId: this.follow.dreamerId,

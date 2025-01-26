@@ -4,6 +4,7 @@ import { FollowProperties, FollowPropertiesWithMaker } from '../../types/follow/
 export default interface IFollow {
   getMakerId(): string;
   getMaker(): UserReference;
+  getId(): string;
   toDB(): FollowProperties;
   toClient(): FollowPropertiesWithMaker;
 }
