@@ -156,6 +156,15 @@ export default class PlanService {
     plan.rejectAssign(data);
     const updatedPlan = await this.planRepository.update(plan);
 
+    const makerNickName = plan.getDreamerNickName();
+    const planTitle = plan.toClient().title;
+    this.eventEmitter.emit('notification', {
+      userId: data.assigneeId,
+      event: NotificationEventName.REJECT_REQUEST,
+      payload: { nickName: makerNickName, planTitle }
+    });
+
+    console.log('견적 취소 완료!');
     return updatedPlan.toClient();
   }
 

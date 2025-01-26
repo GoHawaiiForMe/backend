@@ -59,8 +59,10 @@ export default class NotificationService {
     } = {
       ARRIVE_QUOTE: ({ nickName, tripType }) => `${nickName} Maker의 ${tripType} 견적이 도착했어요.`,
       CONFIRM_QUOTE: ({ nickName }) => `${nickName} Maker의 견적이 확정되었어요.`,
+      REJECT_REQUEST: ({ nickName, planTitle }) => `${nickName} Maker가 ${planTitle} 지정견적 요청을 반려했어요.`,
       ARRIVE_REQUEST: ({ nickName, tripType }) => `${nickName} Dreamer가 ${tripType} 지정견적을 요청했어요.`,
       CONFIRM_REQUEST: ({ nickName }) => `${nickName} Dreamer의 견적이 확정되었어요.`,
+      REJECT_QUOTE: ({ nickName, planTitle }) => `${nickName} Dreamer가 ${planTitle} 견적을 반려했어요.`,
       SCHEDULE: ({ planTitle }) => `내일은 ${planTitle} 여행 예정일이에요.`
     };
 

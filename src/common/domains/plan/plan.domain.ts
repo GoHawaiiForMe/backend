@@ -157,6 +157,13 @@ export default class Plan implements IPlan {
     return this.dreamer.toClient().nickName;
   }
 
+  getMakerNickName(makerId: string): string {
+    const maker = this.assignees.find((user) => user.getId() === makerId);
+    console.log('maker info:', maker);
+
+    return maker.toClient().nickName;
+  }
+
   getStatus(): Status {
     return this.status;
   }
