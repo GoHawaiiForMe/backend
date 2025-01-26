@@ -156,7 +156,7 @@ export default class PlanService {
     plan.rejectAssign(data);
     const updatedPlan = await this.planRepository.update(plan);
 
-    const makerNickName = plan.getDreamerNickName();
+    const makerNickName = plan.getMakerNickName(data.assigneeId);
     const planTitle = plan.toClient().title;
     this.eventEmitter.emit('notification', {
       userId: data.assigneeId,
@@ -164,7 +164,6 @@ export default class PlanService {
       payload: { nickName: makerNickName, planTitle }
     });
 
-    console.log('견적 취소 완료!');
     return updatedPlan.toClient();
   }
 
@@ -227,7 +226,6 @@ export default class PlanService {
     if (plan.getStatus() === StatusEnum.CONFIRMED) {
       throw new BadRequestError(ErrorMessage.PLAN_DELETE_BAD_REQUEST);
     }
-    //TODO. 삭제된 플랜의 견적자들에게 알림 필요
 
     const quotes = plan.getQuotes();
 
@@ -235,6 +233,16 @@ export default class PlanService {
     const deletedPlan = await this.planRepository.delete(id);
 
     await Promise.all([...deletedQuotes, deletedPlan]);
+
+    const dreamerNickName = plan.getDreamerNickName();
+    const planTitle = plan.toClient().title;
+    quotes.map((quote) =>
+      this.eventEmitter.emit('notification', {
+        userId: quote.getMakerId(),
+        event: NotificationEventName.REJECT_QUOTE,
+        payload: { nickName: dreamerNickName, planTitle }
+      })
+    );
 
     return deletedPlan.toClient();
   }

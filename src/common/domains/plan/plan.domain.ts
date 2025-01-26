@@ -159,7 +159,6 @@ export default class Plan implements IPlan {
 
   getMakerNickName(makerId: string): string {
     const maker = this.assignees.find((user) => user.getId() === makerId);
-    console.log('maker info:', maker);
 
     return maker.toClient().nickName;
   }
