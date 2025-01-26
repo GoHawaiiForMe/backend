@@ -157,6 +157,7 @@ export default class PlanRepository {
 
     if (role === RoleEnum.MAKER) {
       whereConditions.status = { in: status }; //NOTE. Maker 전용 api 조건
+      whereConditions.quotes = { some: { makerId: { not: userId } } };
     } else if (status && userId) {
       whereConditions.status = { in: status };
       whereConditions.dreamerId = userId; //NOTE. Dreamer 전용 api 조건

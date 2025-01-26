@@ -13,6 +13,7 @@ export interface PlanWhereConditions {
   serviceArea?: { in: ServiceArea[] };
   tripType?: { in: TripType[] };
   tripDate?: Date | string | { gte?: Date; lte?: Date };
+  quotes?: { some: { makerId: { not: string } } };
   assignees?: { some: { id: string } };
   status?: { in: StatusEnum[] };
   dreamerId?: string;
@@ -21,6 +22,7 @@ export interface PlanWhereConditions {
     dreamer?: { nickName?: { contains: string; mode: 'insensitive' } };
   }>;
 }
+
 export interface PlanQueryOptions {
   orderBy?: PlanOrder;
   keyword?: string;
