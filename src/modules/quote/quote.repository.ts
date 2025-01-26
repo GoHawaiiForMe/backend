@@ -38,7 +38,19 @@ export default class QuoteRepository {
     const quote = await this.db.quote.findUnique({
       where: { id, isDeletedAt: null },
       include: {
-        plan: true,
+        plan: {
+          select: {
+            id: true,
+            createdAt: true,
+            title: true,
+            tripDate: true,
+            tripType: true,
+            serviceArea: true,
+            details: true,
+            status: true,
+            dreamer: { select: { id: true, nickName: true } }
+          }
+        },
         maker: true
       }
     });
