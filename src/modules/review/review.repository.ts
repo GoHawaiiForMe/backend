@@ -34,7 +34,6 @@ export default class ReviewRepository {
       skip: pageSize * (page - 1),
       select
     });
-    console.log(reviews);
     return reviews.map((review) => new ReviewMapper(review).toDomain());
   }
 

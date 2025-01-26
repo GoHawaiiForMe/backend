@@ -26,7 +26,8 @@ export interface FollowPropertiesFromDB {
   maker?: {
     nickName: string;
     makerProfile: { image: ProfileImage; gallery: string; serviceTypes: TripType[] };
-    followers: { id: string }[];
+    followers?: { id: string }[];
+    followees?: { id: string }[];
   };
   dreamerId: string;
   createdAt?: Date;

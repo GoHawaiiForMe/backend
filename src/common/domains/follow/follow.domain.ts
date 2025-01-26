@@ -33,6 +33,10 @@ export default class Follow implements IFollow {
     return this.maker;
   }
 
+  getId(): string {
+    return this.id;
+  }
+
   toDB() {
     return {
       id: this.id,

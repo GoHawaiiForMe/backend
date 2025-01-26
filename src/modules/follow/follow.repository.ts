@@ -49,8 +49,8 @@ export default class FollowRepository {
     }
   }
 
-  async create(data: Partial<FollowProperties>): Promise<null> {
-    await this.db.follow.create({ data });
+  async create(data: IFollow): Promise<null> {
+    await this.db.follow.create({ data: data.toDB() });
     return;
   }
 
