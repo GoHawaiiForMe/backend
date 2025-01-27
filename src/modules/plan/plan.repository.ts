@@ -28,8 +28,8 @@ export default class PlanRepository {
       take: pageSize,
       skip: pageSize * (page - 1),
       include: {
-        dreamer: true,
-        assignees: true
+        dreamer: { select: { id: true, nickName: true } },
+        assignees: { select: { id: true, nickName: true } }
       }
     });
     const domainPlans = plans.map((plan) => new PlanMapper(plan).toDomain());
@@ -68,11 +68,12 @@ export default class PlanRepository {
     const plan = await this.db.plan.findUnique({
       where: { id, isDeletedAt: null },
       include: {
-        dreamer: true,
-        assignees: true,
-        quotes: true
+        dreamer: { select: { id: true, nickName: true } },
+        assignees: { select: { id: true, nickName: true } },
+        quotes: { select: { id: true, makerId: true, isConfirmed: true } }
       }
     });
+
     const domainPlan = new PlanMapper(plan).toDomain();
     return domainPlan;
   }
@@ -91,9 +92,8 @@ export default class PlanRepository {
         dreamer: { connect: { id: dreamerId } }
       },
       include: {
-        dreamer: true,
-        assignees: true,
-        quotes: true
+        dreamer: { select: { id: true, nickName: true } },
+        assignees: { select: { id: true, nickName: true } }
       }
     });
 
@@ -114,9 +114,8 @@ export default class PlanRepository {
           : undefined
       },
       include: {
-        dreamer: true,
-        assignees: true,
-        quotes: true
+        dreamer: { select: { id: true, nickName: true } },
+        assignees: { select: { id: true, nickName: true } }
       }
     });
 
@@ -129,9 +128,9 @@ export default class PlanRepository {
       where: { id, isDeletedAt: null },
       data: { isDeletedAt: new Date() },
       include: {
-        dreamer: true,
-        assignees: true,
-        quotes: true
+        dreamer: { select: { id: true, nickName: true } },
+        assignees: { select: { id: true, nickName: true } },
+        quotes: { select: { id: true, makerId: true } }
       }
     });
 

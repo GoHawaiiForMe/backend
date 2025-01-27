@@ -1,23 +1,33 @@
-GET http://localhost:4000/plans/maker
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMzJkN2JkNC0xMTZjLTQ2N2ItOTM1Mi1hMTRiMGQ0OTRlZjkiLCJyb2xlIjoiTUFLRVIiLCJpYXQiOjE3Mzc3ODM5MjUsImV4cCI6MTczNzg3MDMyNX0.tiEpOC9N3EW2ALFmyrhCs7g1Wuf8g5rgFZkIjrFOiEo
+@HOST_NAME=http://localhost:4000/plans
+@MAKER1_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMzJkN2JkNC0xMTZjLTQ2N2ItOTM1Mi1hMTRiMGQ0OTRlZjkiLCJyb2xlIjoiTUFLRVIiLCJpYXQiOjE3Mzc5ODM0MjYsImV4cCI6MTc0MTQzOTQyNn0.v5caBNbWAusy25h275WtSiJwYXPqyFC8vWPG3fO6r7E
+@DREAMER1_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Njg4NWEzYy01MGY0LTQyN2ItOGE5Mi0zNzAyYzY5NzZmYjAiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNzk4MzQ1MSwiZXhwIjoxNzQxNDM5NDUxfQ.V2qa2oB-m757NnAXYkefAWL_Vewwh526s97SYh2LuJc
+@PLAN1_ID=b198135d-9865-445b-a04b-742ca9939ee1
+@CONFIRMED_PLAN=9004bc52-a8b0-4587-af53-59914168582f
+@QUOTE1_ID=1c9cde67-ccbf-4c00-a53a-63d79f4772c3
+GET {{HOST_NAME}}/maker?pageSize=5
+Authorization: BeaRER {{MAKER1_TOKEN}}
 ###
-GET http://localhost:4000/plans/dreamer?status=PENDING
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Njg4NWEzYy01MGY0LTQyN2ItOGE5Mi0zNzAyYzY5NzZmYjAiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNzEyOTk2MCwiZXhwIjoxNzM3MjE2MzYwfQ.2o7m9QnpwhHU4otm8L-MapayoJWBsz1CTYnKQ2fQRTM
+GET {{HOST_NAME}}/dreamer?status=CONFIRMED&pageSize=5
+Authorization: Bearer {{DREAMER1_TOKEN}}
 ###
-POST http://localhost:4000/plans
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Njg4NWEzYy01MGY0LTQyN2ItOGE5Mi0zNzAyYzY5NzZmYjAiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNzE5NDY4MCwiZXhwIjoxNzM3MjgxMDgwfQ.NESpqyBh_8SHKaY1PvEXpqrAQrJ0Kx0fHEnt5iAWTq4
+GET {{HOST_NAME}}/{{CONFIRMED_PLAN}}
+Authorization: Bearer {{DREAMER1_TOKEN}}
+###
+POST {{HOST_NAME}}
+Authorization: Bearer {{DREAMER1_TOKEN}}
 Content-Type: application/json
 
 {
     "title": "제목",
     "tripDate": "2025-01-19T00:00:00.000Z",
-    "tripType": "FOOD_TOUR",
+    "tripType": "SHOPPING",
     "serviceArea": "SEOUL",
-    "details": "상세내용"
+    "details": "상세내용",
+    "address": "청와대 1호실"
 }
 ###
 
 
-GET http://localhost:4000/plans/dreamer?status=OVERDUE?keyword=제목
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Njg4NWEzYy01MGY0LTQyN2ItOGE5Mi0zNzAyYzY5NzZmYjAiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNzIxMjc2OSwiZXhwIjoxNzM3Mjk5MTY5fQ.SrI-qFEw1ngiNEanTNWry9V9kpg0xqlbI0zVWUqjsEY
+GET {{HOST_NAME}}/dreamer?status=OVERDUE&keyword=제목
+Authorization: Bearer {{DREAMER1_TOKEN}}
 ###

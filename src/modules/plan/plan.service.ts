@@ -13,7 +13,7 @@ import { CreatePlanData } from 'src/common/types/plan/plan.type';
 import QuoteMapper from 'src/common/domains/quote/quote.mapper';
 import ForbiddenError from 'src/common/errors/forbiddenError';
 import { ServiceArea } from 'src/common/constants/serviceArea.type';
-import { RoleEnum } from 'src/common/constants/role.type';
+import { Role, RoleEnum } from 'src/common/constants/role.type';
 import PlanMapper from 'src/common/domains/plan/plan.mapper';
 import BadRequestError from 'src/common/errors/badRequestError';
 import { StatusEnum } from 'src/common/constants/status.type';
@@ -69,11 +69,17 @@ export default class PlanService {
     return { totalCount, list: toClientList };
   }
 
-  async getPlanById(id: string): Promise<PlanToClientProperties> {
+  async getPlanById(id: string, userId?: string): Promise<PlanToClientProperties> {
     const plan = await this.planRepository.findById(id);
 
     if (!plan) {
       throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
+    }
+    const isPlanDreamer = plan.getDreamerId() === userId;
+    const onGoingMaker = plan.getConfirmedMakerId() === userId && plan.getStatus() === StatusEnum.CONFIRMED;
+
+    if (isPlanDreamer || onGoingMaker) {
+      return plan.toClientWithAddress();
     }
 
     return plan.toClient();
@@ -101,7 +107,7 @@ export default class PlanService {
   async postPlan(data: CreatePlanData): Promise<PlanToClientProperties> {
     const domainData = new PlanMapper(data).toDomain();
     const plan = await this.planRepository.create(domainData);
-    return plan.toClient();
+    return plan.toClientWithAddress();
   }
 
   async postQuote(data: CreateOptionalQuoteData, userId: string, planId: string): Promise<QuoteToClientProperties> {
@@ -164,7 +170,7 @@ export default class PlanService {
     plan.rejectAssign(data);
     const updatedPlan = await this.planRepository.update(plan);
 
-    const makerNickName = plan.getMakerNickName(data.assigneeId);
+    const makerNickName = plan.getAssigneeNickName(data.assigneeId);
     const planTitle = plan.getTitle();
     this.eventEmitter.emit('notification', {
       userId: data.assigneeId,
@@ -235,18 +241,19 @@ export default class PlanService {
       throw new BadRequestError(ErrorMessage.PLAN_DELETE_BAD_REQUEST);
     }
 
-    const quotes = plan.getQuotes();
-
-    const deletedQuotes = quotes.map(async (quote) => this.quoteRepository.delete(quote.getId()));
+    const quotes = plan.getQuoteIds();
+    const deletedQuotes = quotes.map(async (quoteId) => this.quoteRepository.delete(quoteId));
     const deletedPlan = await this.planRepository.delete(id);
 
     await Promise.all([...deletedQuotes, deletedPlan]);
 
     const dreamerNickName = plan.getDreamerNickName();
     const planTitle = plan.getTitle();
-    quotes.map((quote) =>
+
+    const makerIds = deletedPlan.getQuoteMakerIds();
+    makerIds.map((id) =>
       this.eventEmitter.emit('notification', {
-        userId: quote.getMakerId(),
+        userId: id,
         event: NotificationEventName.REJECT_QUOTE,
         payload: { nickName: dreamerNickName, planTitle }
       })

@@ -1,4 +1,3 @@
-import { Prisma, Review } from '@prisma/client';
 import PlanOrder from 'src/common/constants/planOrder.enum';
 import { Role } from 'src/common/constants/role.type';
 import { ServiceArea } from 'src/common/constants/serviceArea.type';

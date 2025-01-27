@@ -1,9 +1,7 @@
-import { TripType } from 'src/common/constants/tripType.type';
+import { TripType, TripTypeEnum } from 'src/common/constants/tripType.type';
 import IPlan from './plan.interface';
 import { ServiceArea } from 'src/common/constants/serviceArea.type';
 import { Status, StatusEnum } from 'src/common/constants/status.type';
-import IQuote from '../quote/quote.interface';
-import { IUser } from '../user/user.interface';
 import { Review } from '@prisma/client';
 import { PlanProperties, PlanToClientProperties } from 'src/common/types/plan/plan.properties';
 import ConflictError from 'src/common/errors/conflictError';
@@ -11,12 +9,12 @@ import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import BadRequestError from 'src/common/errors/badRequestError';
 import { AssignData } from 'src/common/types/plan/plan.type';
 import ForbiddenError from 'src/common/errors/forbiddenError';
+import { UserReference } from 'src/common/types/user/user.types';
 
 export default class Plan implements IPlan {
   private id?: string;
   private createdAt?: Date;
   private updatedAt?: Date;
-  private isDeletedAt?: Date | null;
   private title: string;
   private tripDate: Date;
   private tripType: TripType;
@@ -24,19 +22,17 @@ export default class Plan implements IPlan {
   private details: string;
   private address?: string;
   private status: Status;
-  private quotes: IQuote[];
-  private assignees: IUser[];
+  private quotes?: { id: string; makerId?: string; isConfirmed?: boolean }[];
+  private assignees: UserReference[];
   private assigneeId?: string;
   private isAssigned: boolean;
-  private dreamer?: IUser | null;
+  private dreamer?: UserReference | null;
   private dreamerId?: string | null;
-  private review: Review;
 
   constructor(planProperties: PlanProperties) {
     this.id = planProperties.id;
     this.createdAt = planProperties.createdAt;
     this.updatedAt = planProperties.updatedAt;
-    this.isDeletedAt = planProperties.isDeletedAt;
     this.title = planProperties.title;
     this.tripDate = planProperties.tripDate;
     this.tripType = planProperties.tripType;
@@ -48,7 +44,6 @@ export default class Plan implements IPlan {
     this.assignees = planProperties.assignees;
     this.dreamer = planProperties.dreamer;
     this.dreamerId = planProperties.dreamerId;
-    this.review = planProperties.review;
   }
 
   toClient(): PlanToClientProperties {
@@ -61,14 +56,30 @@ export default class Plan implements IPlan {
       tripType: this.tripType,
       serviceArea: this.serviceArea,
       details: this.details,
-      //address: this.address, //TODO. 컨펌이 되면 리스폰스로 돌려줘야함 상의필요.
       status: this.status,
-      quotes: this.quotes?.map((quote) => quote?.toClient()),
-      assignees: this.assignees?.map((assignee) => assignee?.toClient()),
-      dreamer: this.dreamer?.toClient(),
-      review: this.review
+      assignees: this.assignees,
+      dreamer: this.dreamer
     };
   }
+
+  toClientWithAddress(): PlanToClientProperties {
+    if (this.tripType !== TripTypeEnum.SHOPPING) return this.toClient();
+    return {
+      id: this.id,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+      title: this.title,
+      tripDate: this.tripDate,
+      tripType: this.tripType,
+      serviceArea: this.serviceArea,
+      details: this.details,
+      address: this.address,
+      status: this.status,
+      assignees: this.assignees,
+      dreamer: this.dreamer
+    };
+  }
+
   toDB(): Partial<PlanProperties> {
     return {
       id: this.id,
@@ -136,31 +147,31 @@ export default class Plan implements IPlan {
     return this;
   }
 
-  getQuotes(): IQuote[] {
-    return this.quotes;
+  getQuoteIds(): string[] {
+    return this.quotes.map((quote) => quote.id);
   }
+  getQuoteMakerIds(): string[] {
+    return this.quotes.map((quote) => quote.makerId);
+  }
+  getConfirmedMakerId(): string {
+    const confirmedQuote = this.quotes?.find((quote) => quote.isConfirmed === true);
+    return confirmedQuote?.makerId ?? null;
+  }
+
   getAssigneeIds(): string[] {
-    return this.assignees.map((assignee) => assignee.getId());
+    return this.assignees.map((assignee) => assignee.id);
   }
   getDreamerId(): string {
     return this.dreamerId;
   }
 
-  getConfirmedMakerId(): string {
-    const confirmedQuote = this.quotes.find((quote) => quote.getIsConfirmed() === true);
-    const makerId = confirmedQuote.getMakerId();
-
-    return makerId;
-  }
-
   getDreamerNickName(): string {
-    return this.dreamer.toClient().nickName;
+    return this.dreamer.nickName;
   }
 
-  getMakerNickName(makerId: string): string {
-    const maker = this.assignees.find((user) => user.getId() === makerId);
-
-    return maker.toClient().nickName;
+  getAssigneeNickName(makerId: string): string {
+    const maker = this.assignees.find((user) => user.id === makerId);
+    return maker.nickName;
   }
 
   getStatus(): Status {

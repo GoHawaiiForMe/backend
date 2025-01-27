@@ -1,9 +1,5 @@
 import { PlanMapperProperties } from 'src/common/types/plan/plan.properties';
 import IPlan from './plan.interface';
-import { IUser } from '../user/user.interface';
-import IQuote from '../quote/quote.interface';
-import UserMapper from '../user/user.mapper';
-import QuoteMapper from '../quote/quote.mapper';
 import Plan from './plan.domain';
 import { StatusEnum } from 'src/common/constants/status.type';
 
@@ -24,11 +20,10 @@ export default class PlanMapper {
       details: this.plan.details,
       address: this.plan.address,
       status: this.plan.status ?? StatusEnum.PENDING,
-      quotes: this.plan.quotes?.map((quote) => new QuoteMapper(quote)?.toDomain()),
-      assignees: this.plan.assignees?.map((assignee) => new UserMapper(assignee)?.toDomain()),
-      dreamer: new UserMapper(this.plan.dreamer)?.toDomain(),
-      dreamerId: this.plan.dreamerId,
-      review: this.plan.review
+      quotes: this.plan.quotes,
+      assignees: this.plan.assignees,
+      dreamer: this.plan.dreamer,
+      dreamerId: this.plan.dreamerId
     });
   }
 }
