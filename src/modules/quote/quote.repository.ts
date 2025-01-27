@@ -35,24 +35,11 @@ export default class QuoteRepository {
   }
 
   async findById(id: string): Promise<IQuote> {
+    const includeConditions = this.buildIncludeConditions();
+
     const quote = await this.db.quote.findUnique({
       where: { id, isDeletedAt: null },
-      include: {
-        plan: {
-          select: {
-            id: true,
-            createdAt: true,
-            title: true,
-            tripDate: true,
-            tripType: true,
-            serviceArea: true,
-            details: true,
-            status: true,
-            dreamer: { select: { id: true, nickName: true } }
-          }
-        },
-        maker: true
-      }
+      include: includeConditions
     });
 
     const domainQuote = new QuoteMapper(quote).toDomain();
@@ -76,8 +63,7 @@ export default class QuoteRepository {
         isAssigned,
         price,
         content
-      },
-      include: { maker: true }
+      }
     });
 
     const domainQuote = new QuoteMapper(quote);
@@ -138,12 +124,31 @@ export default class QuoteRepository {
     return whereConditions;
   }
 
-  private buildIncludeConditions(options: Partial<QuoteQueryOptions>): QuoteIncludeConditions {
+  private buildIncludeConditions(options: Partial<QuoteQueryOptions> | null = {}): QuoteIncludeConditions {
     const { planId } = options;
-    const includeConditions: QuoteIncludeConditions = { maker: true };
+    const includeConditions: QuoteIncludeConditions = {
+      maker: {
+        select: {
+          id: true,
+          nickName: true
+        }
+      }
+    };
 
     if (!planId) {
-      includeConditions.plan = true;
+      includeConditions.plan = {
+        select: {
+          id: true,
+          createdAt: true,
+          title: true,
+          tripDate: true,
+          tripType: true,
+          serviceArea: true,
+          details: true,
+          status: true,
+          dreamer: { select: { id: true, nickName: true } }
+        }
+      };
     }
 
     return includeConditions;

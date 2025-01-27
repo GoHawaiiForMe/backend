@@ -1,5 +1,4 @@
 import { StatusEnum } from 'src/common/constants/status.type';
-import { PlanReference } from '../plan/plan.type';
 
 export type QuoteWhereConditions = {
   isDeletedAt: Date | null;
@@ -11,8 +10,25 @@ export type QuoteWhereConditions = {
 };
 
 export type QuoteIncludeConditions = {
-  maker: boolean;
-  plan?: boolean;
+  maker?: {
+    select: {
+      id: boolean;
+      nickName: boolean;
+    };
+  };
+  plan?: {
+    select: {
+      id: boolean;
+      createdAt: boolean;
+      title: boolean;
+      tripDate: boolean;
+      tripType: boolean;
+      serviceArea: boolean;
+      details: boolean;
+      status: boolean;
+      dreamer: { select: { id: boolean; nickName: boolean } };
+    };
+  };
 };
 
 export interface QuoteQueryOptions {

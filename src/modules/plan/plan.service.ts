@@ -20,6 +20,7 @@ import { StatusEnum } from 'src/common/constants/status.type';
 import { GroupByCount } from 'src/common/types/plan/plan.dto';
 import { NotificationEventName } from 'src/common/types/notification/notification.types';
 import UserService from '../user/user.service';
+import Quote from 'src/common/domains/quote/quote.domain';
 
 @Injectable()
 export default class PlanService {
@@ -111,8 +112,7 @@ export default class PlanService {
 
     const assigneeIds = plan.getAssigneeIds();
     const isAssigned = assigneeIds.includes(userId);
-    const domainQuote = new QuoteMapper({ ...data, planId, isAssigned, makerId: userId }).toDomain();
-    const quote = await this.quoteService.createQuote(domainQuote);
+    const quote = await this.quoteService.createQuote({ ...data, planId, isAssigned, makerId: userId });
 
     const makerNickName = quote.maker.nickName;
     const tripType = plan.toClient().tripType;

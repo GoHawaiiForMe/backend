@@ -4,6 +4,8 @@ import { QuoteToClientProperties } from '../../common/types/quote/quotePropertie
 import { UserId } from 'src/common/decorators/user.decorator';
 import { MakerQuoteQueryOptionsDTO, UpdateQuoteDataDTO } from '../../common/types/quote/quote.dto';
 import { Role } from 'src/common/decorators/roleGuard.decorator';
+import { UserRole } from 'src/common/decorators/role.decorator';
+import { RoleEnum } from 'src/common/constants/role.type';
 
 @Controller('quotes')
 export default class QuoteController {
@@ -21,8 +23,12 @@ export default class QuoteController {
   }
 
   @Get(':id')
-  async getQuoteById(@UserId() userId: string, @Param('id') id: string): Promise<QuoteToClientProperties> {
-    const quote = await this.quoteService.getQuoteById(id, userId);
+  async getQuoteById(
+    @UserId() userId: string,
+    @UserRole() role: RoleEnum,
+    @Param('id') id: string
+  ): Promise<QuoteToClientProperties> {
+    const quote = await this.quoteService.getQuoteById(id, userId, role);
     return quote;
   }
 
