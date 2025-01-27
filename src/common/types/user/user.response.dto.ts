@@ -42,18 +42,22 @@ export class MakerProfileResponseDTO {
 
 export class ProfileCardResponseDTO {
   id?: string;
-  makerId?: string;
-  maker?: {
-    nickName?: string;
-    image?: ProfileImage;
-    gallery?: string;
-    serviceTypes?: TripType[];
-    averageRating: number;
-    totalReviews: number;
-    totalFollows: number;
-    totalConfirms: number;
-  };
-  dreamerId?: string;
+  nickName?: string;
+  image?: ProfileImage;
+  gallery?: string;
+  serviceTypes?: TripType[];
   isFollowed?: boolean;
+  averageRating: number;
+  totalReviews: number;
+  totalFollows: number;
+  totalConfirms: number;
+}
+
+export class followResponseDTO {
+  id?: string;
+  nickName?: string;
+  makerId?: string;
+  maker?: ProfileCardResponseDTO;
+  dreamerId?: string;
   createdAt?: Date;
 }

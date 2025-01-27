@@ -21,7 +21,7 @@ export default class User implements IUser {
   private password: string;
   private phoneNumber: string;
   private coconut: number;
-  private readonly followees: UserReference[];
+  private readonly followers: { dreamerId: string }[];
   private readonly makerProfile: Partial<MakerProfileProperties>;
   private readonly createdAt?: Date;
   private readonly updatedAt?: Date;
@@ -34,7 +34,7 @@ export default class User implements IUser {
     this.password = user.password;
     this.phoneNumber = user.phoneNumber;
     this.coconut = user.coconut;
-    this.followees = user?.followees;
+    this.followers = user?.followers;
     this.makerProfile = user?.makerProfile;
     this.createdAt = user?.createdAt;
     this.updatedAt = user?.updatedAt;
@@ -120,6 +120,6 @@ export default class User implements IUser {
   }
 
   isFollowed(dreamerId: string): boolean {
-    return this.followees.some((dreamer) => dreamer.id === dreamerId);
+    return this.followers?.some((follower) => follower.dreamerId === dreamerId);
   }
 }

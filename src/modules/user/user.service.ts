@@ -11,7 +11,7 @@ import UserStatsService from '../userStats/userStats.service';
 import { RoleEnum } from 'src/common/constants/role.type';
 import FollowService from '../follow/follow.service';
 import { PaginationQueryDTO } from 'src/common/types/user/query.dto';
-import { ProfileCardResponseDTO } from 'src/common/types/user/user.response.dto';
+import { followResponseDTO, ProfileCardResponseDTO } from 'src/common/types/user/user.response.dto';
 
 @Injectable()
 export default class UserService {
@@ -131,29 +131,30 @@ export default class UserService {
     return newProfile.get();
   }
 
-  async checkEmail(email: string) {
+  async checkEmail(email: string): Promise<boolean> {
     const user = await this.repository.findByEmail(email);
 
     return !user;
   }
 
-  async checkNickName(nickName: string) {
+  async checkNickName(nickName: string): Promise<boolean> {
     const user = await this.repository.findByNickName(nickName);
 
     return !user;
   }
 
-  async getProfileCardData(userId: string) {
-    const user = await this.repository.findById(userId);
+  async getProfileCardData(makerId: string, dreamerId: string): Promise<ProfileCardResponseDTO> {
+    const user = await this.repository.findByIdWithProfileAndFollow(makerId);
     const userData = user.get();
-    const profile = (await this.getProfile(RoleEnum.MAKER, userId)) as MakerProfileProperties;
-    const stats = await this.userStats.get(userId);
+    const profile = (await this.getProfile(RoleEnum.MAKER, makerId)) as MakerProfileProperties;
+    const stats = await this.userStats.get(makerId);
 
     return {
       nickName: userData.nickName,
       image: profile.image,
       gallery: profile.gallery,
       serviceTypes: profile.serviceTypes,
+      isFollowed: user.isFollowed(dreamerId),
       ...stats
     };
   }
@@ -161,11 +162,11 @@ export default class UserService {
   async getFollows(
     userId: string,
     options: PaginationQueryDTO
-  ): Promise<{ totalCount: number; list: ProfileCardResponseDTO[] }> {
+  ): Promise<{ totalCount: number; list: followResponseDTO[] }> {
     const { totalCount, followData } = await this.follow.get(userId, options);
     const list = await Promise.all(
       followData.map(async (follow) => {
-        const profile = await this.getProfileCardData(follow.makerId);
+        const profile = await this.getProfileCardData(follow.makerId, userId);
         return { ...follow, maker: { ...profile } };
       })
     );

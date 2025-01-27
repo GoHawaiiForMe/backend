@@ -7,6 +7,10 @@ export default class UserMapper {
   toDomain() {
     if (!this.user) return null;
 
+    const followerIds = this.user.followers?.map((follower) => {
+      return { dreamerId: follower.dreamerId };
+    });
+
     return new User({
       id: this.user.id,
       role: this.user.role,
@@ -15,7 +19,7 @@ export default class UserMapper {
       password: this.user.password,
       phoneNumber: this.user.phoneNumber,
       coconut: this.user.coconut,
-      followees: this.user?.followees,
+      followers: followerIds,
       makerProfile: this.user?.makerProfile,
       createdAt: this.user.createdAt,
       updatedAt: this.user.updatedAt

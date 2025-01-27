@@ -20,6 +20,7 @@ import SignupDTO from '../../common/types/user/signup.dto';
 import {
   DreamerProfileResponseDTO,
   FilteredUserResponseDTO,
+  followResponseDTO,
   MakerProfileResponseDTO,
   UserResponseDTO
 } from '../../common/types/user/user.response.dto';
@@ -92,7 +93,10 @@ export default class UserController {
 
   @Get('following')
   @Role('DREAMER')
-  async getFollowList(@UserId() userId: string, @Query() options: PaginationQueryDTO) {
+  async getFollowList(
+    @UserId() userId: string,
+    @Query() options: PaginationQueryDTO
+  ): Promise<{ totalCount: number; list: followResponseDTO[] }> {
     return await this.service.getFollows(userId, options);
   }
 
