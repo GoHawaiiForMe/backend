@@ -2,7 +2,6 @@ import { ProfileImage, ProfileImageEnum } from 'src/common/constants/image.type'
 import { RoleEnum } from 'src/common/constants/role.type';
 import { ServiceAreaEnum } from 'src/common/constants/serviceArea.type';
 import { TripType, TripTypeEnum } from 'src/common/constants/tripType.type';
-import { UserReference } from './user.types';
 
 export class UserResponseDTO {
   id?: string;
