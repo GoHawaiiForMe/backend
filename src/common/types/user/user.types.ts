@@ -23,7 +23,7 @@ export interface UserPropertiesFromDB {
   password: string;
   phoneNumber: string;
   coconut: number;
-  followees?: UserReference[];
+  followers?: { dreamerId: string }[];
   makerProfile?: Partial<MakerProfileProperties>;
   createdAt?: Date;
   updatedAt?: Date;

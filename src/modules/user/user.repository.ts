@@ -32,9 +32,7 @@ export default class UserRepository {
   }
 
   async findById(id: string): Promise<IUser> {
-    const data = await this.db.user.findUnique({
-      where: { id }
-    });
+    const data = await this.db.user.findUnique({ where: { id } });
 
     return new UserMapper(data).toDomain();
   }
@@ -50,7 +48,7 @@ export default class UserRepository {
         coconut: true,
         nickName: true,
         makerProfile: { select: { image: true, gallery: true, serviceTypes: true } },
-        followees: { select: { id: true } }
+        followers: { select: { dreamerId: true } }
       }
     });
 
