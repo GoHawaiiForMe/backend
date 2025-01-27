@@ -70,7 +70,7 @@ export default class User implements IUser {
   async updatePassword(data: PasswordProperties): Promise<void> {
     const isCorrectPassword = await this.validatePassword(data.password);
     if (!isCorrectPassword) {
-      throw new BadRequestError(ErrorMessage.USER_UNAUTHORIZED_PW);
+      throw new BadRequestError(ErrorMessage.USER_BAD_REQUEST_PW);
     }
 
     this.password = await HashingPassword(data.newPassword);
