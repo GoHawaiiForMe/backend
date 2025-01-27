@@ -166,4 +166,8 @@ export default class Plan implements IPlan {
   getStatus(): Status {
     return this.status;
   }
+
+  getTitle(): string {
+    return this.title;
+  }
 }

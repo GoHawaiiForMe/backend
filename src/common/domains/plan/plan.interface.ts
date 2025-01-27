@@ -17,4 +17,5 @@ export default interface IPlan {
   getDreamerNickName(): string;
   getMakerNickName(id: string): string;
   getConfirmedMakerId(): string;
+  getTitle(): string;
 }

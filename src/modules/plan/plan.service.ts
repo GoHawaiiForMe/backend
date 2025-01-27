@@ -165,7 +165,7 @@ export default class PlanService {
     const updatedPlan = await this.planRepository.update(plan);
 
     const makerNickName = plan.getMakerNickName(data.assigneeId);
-    const planTitle = plan.toClient().title;
+    const planTitle = plan.getTitle();
     this.eventEmitter.emit('notification', {
       userId: data.assigneeId,
       event: NotificationEventName.REJECT_REQUEST,
@@ -243,7 +243,7 @@ export default class PlanService {
     await Promise.all([...deletedQuotes, deletedPlan]);
 
     const dreamerNickName = plan.getDreamerNickName();
-    const planTitle = plan.toClient().title;
+    const planTitle = plan.getTitle();
     quotes.map((quote) =>
       this.eventEmitter.emit('notification', {
         userId: quote.getMakerId(),
