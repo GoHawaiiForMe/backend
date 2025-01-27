@@ -1,10 +1,17 @@
 import { Role } from 'src/common/constants/role.type';
-import { FilteredUserProperties, PasswordProperties, UserProperties } from '../../types/user/user.types';
+import {
+  FilteredUserProperties,
+  PasswordProperties,
+  UserProperties,
+  UserPropertiesFromDB,
+  UserReference
+} from '../../types/user/user.types';
 import { ComparePassword, HashingPassword } from '../../utilities/hashingPassword';
 import { IUser } from './user.interface';
 import BadRequestError from 'src/common/errors/badRequestError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import UnauthorizedError from 'src/common/errors/unauthorizedError';
+import { MakerProfileProperties } from 'src/common/types/user/profile.types';
 
 export default class User implements IUser {
   private readonly id?: string;
@@ -14,10 +21,12 @@ export default class User implements IUser {
   private password: string;
   private phoneNumber: string;
   private coconut: number;
+  private readonly followees: UserReference[];
+  private readonly makerProfile: Partial<MakerProfileProperties>;
   private readonly createdAt?: Date;
   private readonly updatedAt?: Date;
 
-  constructor(user: UserProperties) {
+  constructor(user: UserPropertiesFromDB) {
     this.id = user?.id;
     this.role = user.role;
     this.nickName = user.nickName;
@@ -25,6 +34,8 @@ export default class User implements IUser {
     this.password = user.password;
     this.phoneNumber = user.phoneNumber;
     this.coconut = user.coconut;
+    this.followees = user?.followees;
+    this.makerProfile = user?.makerProfile;
     this.createdAt = user?.createdAt;
     this.updatedAt = user?.updatedAt;
   }
@@ -106,5 +117,9 @@ export default class User implements IUser {
 
   getRole(): Role {
     return this.role;
+  }
+
+  isFollowed(dreamerId: string): boolean {
+    return this.followees.some((dreamer) => dreamer.id === dreamerId);
   }
 }

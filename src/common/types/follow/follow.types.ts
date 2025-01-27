@@ -33,12 +33,3 @@ export interface FollowPropertiesFromDB {
   createdAt?: Date;
   updatedAt?: Date;
 }
-
-export interface FollowPropertiesToClient extends FollowPropertiesWithMaker {
-  userStats: {
-    averageRating: number;
-    totalReviews: number;
-    totalFollows: number;
-    totalConfirms: number;
-  };
-}

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Patch, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Patch, Post, Query, Res } from '@nestjs/common';
 import UserService from './user.service';
 import { Cookies } from 'src/common/decorators/cookie.decorator';
 import { Public } from 'src/common/decorators/public.decorator';
@@ -30,8 +30,10 @@ import UpdateUserDTO from '../../common/types/user/updateUser.dto';
 import UnauthorizedError from 'src/common/errors/unauthorizedError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import { UserRole } from 'src/common/decorators/role.decorator';
+import { Role } from 'src/common/decorators/roleGuard.decorator';
+import { PaginationQueryDTO } from 'src/common/types/user/query.dto';
 
-@Controller('user')
+@Controller('users')
 export default class UserController {
   constructor(private readonly service: UserService) {}
 
@@ -73,6 +75,10 @@ export default class UserController {
   @ApiOkResponse({ type: UserResponseDTO })
   @ApiUnauthorizedResponse({ description: 'Access Token이 없거나 만료되었습니다' })
   async getUser(@UserId() userId: string): Promise<Omit<UserProperties, 'password'>> {
+    // TEST
+    const u = await this.service.getProfileCardData(userId);
+    console.log(u);
+
     return await this.service.getUser(userId);
   }
 
@@ -86,6 +92,12 @@ export default class UserController {
     @UserId() userId: string
   ): Promise<MakerProfileProperties | DreamerProfileProperties> {
     return await this.service.getProfile(role, userId);
+  }
+
+  @Get('following')
+  @Role('DREAMER')
+  async getFollowList(@UserId() userId: string, @Query() options: PaginationQueryDTO) {
+    return await this.service.getFollows(userId, options);
   }
 
   @Patch('update')

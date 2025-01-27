@@ -10,4 +10,5 @@ export interface IUser {
   toClientAll(): Omit<UserProperties, 'password'>;
   getId(): string;
   getRole(): Role;
+  isFollowed(dreamerId: string): boolean;
 }

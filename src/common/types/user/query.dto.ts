@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer';
 import { IsInt } from 'class-validator';
 
-export class GetFollowQueryDTO {
+export class PaginationQueryDTO {
   @Type(() => Number)
   @IsInt()
   page: number = 1;
