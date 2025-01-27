@@ -21,6 +21,8 @@ export interface NotificationEvent {
   CONFIRM_QUOTE: { nickName: string };
   ARRIVE_REQUEST: { nickName: string; tripType: TripType };
   CONFIRM_REQUEST: { nickName: string };
+  REJECT_REQUEST: { nickName: string; planTitle: string };
+  REJECT_QUOTE: { nickName: string; planTitle: string };
   SCHEDULE: { planTitle: string };
 }
 
@@ -29,5 +31,7 @@ export enum NotificationEventName {
   CONFIRM_QUOTE = 'CONFIRM_QUOTE',
   ARRIVE_REQUEST = 'ARRIVE_REQUEST',
   CONFIRM_REQUEST = 'CONFIRM_REQUEST',
+  REJECT_REQUEST = 'REJECT_REQUEST',
+  REJECT_QUOTE = 'REJECT_QUOTE',
   SCHEDULE = 'SCHEDULE'
 }
