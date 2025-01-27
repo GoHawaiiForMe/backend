@@ -7,17 +7,8 @@ export default class QuoteMapper {
 
   toDomain(): IQuote {
     if (!this.quote) return null;
-    let plan = null;
-    let maker = null;
-    let dreamer = null;
 
-    if (this.quote.maker) maker = this.quote.maker;
-
-    if (this.quote.plan) {
-      const { dreamer: dreamerData, address, ...restPlan } = this.quote.plan;
-      plan = restPlan;
-      dreamer = dreamerData;
-    }
+    const { dreamer, ...restPlan } = this.quote.plan || {};
 
     return new Quote({
       id: this.quote.id,
@@ -25,10 +16,10 @@ export default class QuoteMapper {
       updatedAt: this.quote.updatedAt,
       price: this.quote.price,
       content: this.quote.content,
-      plan,
+      plan: restPlan,
       planId: this.quote.planId,
       dreamer,
-      maker,
+      maker: this.quote.maker ?? null,
       makerId: this.quote.makerId,
       isAssigned: this.quote.isAssigned,
       isConfirmed: this.quote.isConfirmed
