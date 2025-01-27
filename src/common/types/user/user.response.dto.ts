@@ -1,7 +1,7 @@
-import { ProfileImageEnum } from 'src/common/constants/image.type';
+import { ProfileImage, ProfileImageEnum } from 'src/common/constants/image.type';
 import { RoleEnum } from 'src/common/constants/role.type';
 import { ServiceAreaEnum } from 'src/common/constants/serviceArea.type';
-import { TripTypeEnum } from 'src/common/constants/tripType.type';
+import { TripType, TripTypeEnum } from 'src/common/constants/tripType.type';
 
 export class UserResponseDTO {
   id?: string;
@@ -38,4 +38,22 @@ export class MakerProfileResponseDTO {
   detailDescription: string;
   createdAt?: Date;
   updatedAt?: Date;
+}
+
+export class ProfileCardResponseDTO {
+  id?: string;
+  makerId?: string;
+  maker?: {
+    nickName?: string;
+    image?: ProfileImage;
+    gallery?: string;
+    serviceTypes?: TripType[];
+    averageRating: number;
+    totalReviews: number;
+    totalFollows: number;
+    totalConfirms: number;
+  };
+  dreamerId?: string;
+  isFollowed?: boolean;
+  createdAt?: Date;
 }

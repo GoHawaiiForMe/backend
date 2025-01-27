@@ -7,12 +7,19 @@ import { JwtService } from '@nestjs/jwt';
 import { DreamerProfile, MakerProfile } from '../../common/domains/user/profile.domain';
 import { FilteredUserProperties, PasswordProperties, UserProperties } from '../../common/types/user/user.types';
 import { DreamerProfileProperties, MakerProfileProperties } from '../../common/types/user/profile.types';
+import UserStatsService from '../userStats/userStats.service';
+import { RoleEnum } from 'src/common/constants/role.type';
+import FollowService from '../follow/follow.service';
+import { PaginationQueryDTO } from 'src/common/types/user/query.dto';
+import { ProfileCardResponseDTO } from 'src/common/types/user/user.response.dto';
 
 @Injectable()
 export default class UserService {
   constructor(
     private readonly repository: UserRepository,
-    private readonly jwt: JwtService
+    private readonly jwt: JwtService,
+    private readonly userStats: UserStatsService,
+    private readonly follow: FollowService
   ) {}
 
   async createUser(data): Promise<null> {
@@ -134,5 +141,35 @@ export default class UserService {
     const user = await this.repository.findByNickName(nickName);
 
     return !user;
+  }
+
+  async getProfileCardData(userId: string) {
+    const user = await this.repository.findById(userId);
+    const userData = user.get();
+    const profile = (await this.getProfile(RoleEnum.MAKER, userId)) as MakerProfileProperties;
+    const stats = await this.userStats.get(userId);
+
+    return {
+      nickName: userData.nickName,
+      image: profile.image,
+      gallery: profile.gallery,
+      serviceTypes: profile.serviceTypes,
+      ...stats
+    };
+  }
+
+  async getFollows(
+    userId: string,
+    options: PaginationQueryDTO
+  ): Promise<{ totalCount: number; list: ProfileCardResponseDTO[] }> {
+    const { totalCount, followData } = await this.follow.get(userId, options);
+    const list = await Promise.all(
+      followData.map(async (follow) => {
+        const profile = await this.getProfileCardData(follow.makerId);
+        return { ...follow, maker: { ...profile } };
+      })
+    );
+
+    return { totalCount, list };
   }
 }

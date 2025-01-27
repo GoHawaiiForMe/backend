@@ -1,8 +1,8 @@
-import { UserProperties } from '../../types/user/user.types';
+import { UserPropertiesFromDB } from '../../types/user/user.types';
 import User from './user.domain';
 
 export default class UserMapper {
-  constructor(private readonly user: UserProperties) {}
+  constructor(private readonly user: UserPropertiesFromDB) {}
 
   toDomain() {
     if (!this.user) return null;
@@ -15,6 +15,8 @@ export default class UserMapper {
       password: this.user.password,
       phoneNumber: this.user.phoneNumber,
       coconut: this.user.coconut,
+      followees: this.user?.followees,
+      makerProfile: this.user?.makerProfile,
       createdAt: this.user.createdAt,
       updatedAt: this.user.updatedAt
     });

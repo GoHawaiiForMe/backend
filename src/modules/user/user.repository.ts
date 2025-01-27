@@ -18,9 +18,7 @@ export default class UserRepository {
       }
     });
 
-    if (data) {
-      return new UserMapper(data).toDomain();
-    }
+    return new UserMapper(data).toDomain();
   }
 
   async findByNickName(nickName: string): Promise<IUser> {
@@ -30,21 +28,33 @@ export default class UserRepository {
       }
     });
 
-    if (data) {
-      return new UserMapper(data).toDomain();
-    }
+    return new UserMapper(data).toDomain();
   }
 
   async findById(id: string): Promise<IUser> {
     const data = await this.db.user.findUnique({
-      where: {
-        id
+      where: { id }
+    });
+
+    return new UserMapper(data).toDomain();
+  }
+
+  async findByIdWithProfileAndFollow(id: string) {
+    const user = await this.db.user.findUnique({
+      where: { id },
+      select: {
+        role: true,
+        email: true,
+        password: true,
+        phoneNumber: true,
+        coconut: true,
+        nickName: true,
+        makerProfile: { select: { image: true, gallery: true, serviceTypes: true } },
+        followees: { select: { id: true } }
       }
     });
 
-    if (data) {
-      return new UserMapper(data).toDomain();
-    }
+    return new UserMapper(user).toDomain();
   }
 
   async create(user: Partial<UserProperties>): Promise<IUser> {
