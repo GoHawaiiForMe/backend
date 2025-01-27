@@ -1,4 +1,5 @@
 import { StatusEnum } from 'src/common/constants/status.type';
+import { PlanReference } from '../plan/plan.type';
 
 export type QuoteWhereConditions = {
   isDeletedAt: Date | null;
