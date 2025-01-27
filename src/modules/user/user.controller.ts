@@ -75,10 +75,6 @@ export default class UserController {
   @ApiOkResponse({ type: UserResponseDTO })
   @ApiUnauthorizedResponse({ description: 'Access Token이 없거나 만료되었습니다' })
   async getUser(@UserId() userId: string): Promise<Omit<UserProperties, 'password'>> {
-    // TEST
-    const u = await this.service.getProfileCardData(userId);
-    console.log(u);
-
     return await this.service.getUser(userId);
   }
 

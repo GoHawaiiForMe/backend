@@ -173,20 +173,3 @@ export default class UserService {
     return { totalCount, list };
   }
 }
-
-// async get(userId: string, options: GetFollowQueryDTO): Promise<{ totalCount: number; list: FollowProperties[] }> {
-// 	const follows = await this.repository.get(userId, options);
-
-// 	const list = await Promise.all(
-// 		follows.map(async (follow) => {
-// 			const makerStats = await this.userStats.get(follow.getMakerId());
-// 			const followData = follow.toClient();
-
-// 			return { ...followData, maker: { ...followData.maker, ...makerStats } };
-// 		})
-// 	);
-
-// 	const totalCount = await this.repository.count(userId);
-
-// 	return { totalCount, list };
-// }

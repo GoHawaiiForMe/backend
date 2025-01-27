@@ -23,9 +23,7 @@ export default class FollowService {
     const follows = await this.repository.get(userId, options);
     const totalCount = await this.repository.count(userId);
 
-    const followData = follows.map((follow) => {
-      return follow.toObject();
-    });
+    const followData = follows.map((follow) => follow.toObject());
 
     return { totalCount, followData };
   }
