@@ -60,7 +60,7 @@ export default class UserService {
 
     const isValidPassword = await user.validatePassword(password);
     if (!isValidPassword) {
-      throw new BadRequestError(ErrorMessage.USER_UNAUTHORIZED_PW);
+      throw new BadRequestError(ErrorMessage.USER_BAD_REQUEST_PW);
     }
 
     return user.toClient();

@@ -10,7 +10,6 @@ import { ComparePassword, HashingPassword } from '../../utilities/hashingPasswor
 import { IUser } from './user.interface';
 import BadRequestError from 'src/common/errors/badRequestError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
-import UnauthorizedError from 'src/common/errors/unauthorizedError';
 import { MakerProfileProperties } from 'src/common/types/user/profile.types';
 
 export default class User implements IUser {
@@ -71,7 +70,7 @@ export default class User implements IUser {
   async updatePassword(data: PasswordProperties): Promise<void> {
     const isCorrectPassword = await this.validatePassword(data.password);
     if (!isCorrectPassword) {
-      throw new UnauthorizedError(ErrorMessage.USER_UNAUTHORIZED_PW);
+      throw new BadRequestError(ErrorMessage.USER_BAD_REQUEST_PW);
     }
 
     this.password = await HashingPassword(data.newPassword);
