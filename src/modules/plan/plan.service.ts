@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import PlanRepository from './plan.repository';
-import QuoteRepository from 'src/modules/quote/quote.repository';
 import QuoteService from 'src/modules/quote/quote.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { AssignData, PlanQueryOptions } from 'src/common/types/plan/plan.type';
@@ -13,7 +12,7 @@ import { CreatePlanData } from 'src/common/types/plan/plan.type';
 import QuoteMapper from 'src/common/domains/quote/quote.mapper';
 import ForbiddenError from 'src/common/errors/forbiddenError';
 import { ServiceArea } from 'src/common/constants/serviceArea.type';
-import { Role, RoleEnum } from 'src/common/constants/role.type';
+import { RoleEnum } from 'src/common/constants/role.type';
 import PlanMapper from 'src/common/domains/plan/plan.mapper';
 import BadRequestError from 'src/common/errors/badRequestError';
 import { StatusEnum } from 'src/common/constants/status.type';
@@ -25,7 +24,6 @@ import UserService from '../user/user.service';
 export default class PlanService {
   constructor(
     private readonly planRepository: PlanRepository,
-    private readonly quoteRepository: QuoteRepository,
     private readonly quoteService: QuoteService,
     private readonly userService: UserService,
     private readonly eventEmitter: EventEmitter2
@@ -118,7 +116,7 @@ export default class PlanService {
     const assigneeIds = plan.getAssigneeIds();
     const isAssigned = assigneeIds.includes(userId);
     const domainQuote = new QuoteMapper({ ...data, planId, isAssigned, makerId: userId }).toDomain();
-    const quote = await this.quoteService.createQuote(domainQuote);
+    const quote = await this.quoteService.createQuote(domainQuote); //TODO. 여기도 수정
 
     const makerNickName = quote.maker.nickName;
     const tripType = plan.toClient().tripType;
@@ -241,14 +239,10 @@ export default class PlanService {
       throw new BadRequestError(ErrorMessage.PLAN_DELETE_BAD_REQUEST);
     }
 
-    const quotes = plan.getQuoteIds();
-    const deletedQuotes = quotes.map(async (quoteId) => this.quoteRepository.delete(quoteId));
     const deletedPlan = await this.planRepository.delete(id);
 
-    await Promise.all([...deletedQuotes, deletedPlan]);
-
-    const dreamerNickName = plan.getDreamerNickName();
-    const planTitle = plan.getTitle();
+    const dreamerNickName = deletedPlan.getDreamerNickName();
+    const planTitle = deletedPlan.getTitle();
 
     const makerIds = deletedPlan.getQuoteMakerIds();
     makerIds.map((id) =>

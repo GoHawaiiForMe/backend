@@ -126,7 +126,15 @@ export default class PlanRepository {
   async delete(id: string): Promise<IPlan> {
     const plan = await this.db.plan.update({
       where: { id, isDeletedAt: null },
-      data: { isDeletedAt: new Date() },
+      data: {
+        isDeletedAt: new Date(),
+        quotes: {
+          updateMany: {
+            where: { isDeletedAt: null },
+            data: { isDeletedAt: new Date() }
+          }
+        }
+      },
       include: {
         dreamer: { select: { id: true, nickName: true } },
         assignees: { select: { id: true, nickName: true } },
