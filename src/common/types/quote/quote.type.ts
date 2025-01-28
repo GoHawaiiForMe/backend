@@ -36,7 +36,3 @@ export interface CreateQuoteData {
   planId: string;
   isAssigned: boolean;
 }
-
-export interface QuoteReference {
-  id: string;
-}

@@ -15,7 +15,7 @@ export interface PlanProperties {
   details: string;
   address?: string;
   status: Status;
-  quotes?: { id: string; makerId?: string }[];
+  quotes?: { id: string; makerId?: string; isConfirmed?: boolean }[];
   assignees: UserReference[];
   assigneeId?: string;
   isAssigned?: boolean;
@@ -34,7 +34,6 @@ export interface PlanToClientProperties {
   details: string;
   address?: string;
   status: Status;
-  quotes?: { id: string; makerId?: string }[];
   assignees: UserReference[];
   dreamer?: UserReference | null;
 }
@@ -51,7 +50,7 @@ export interface PlanMapperProperties {
   details: string;
   address?: string;
   status?: Status;
-  quotes?: { id: string; makerId?: string }[];
+  quotes?: { id: string; makerId?: string; isConfirmed?: boolean }[];
   assignees?: UserReference[];
   dreamer?: UserReference | null;
   dreamerId?: string | null;

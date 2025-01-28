@@ -2,7 +2,6 @@ import { TripType, TripTypeEnum } from 'src/common/constants/tripType.type';
 import IPlan from './plan.interface';
 import { ServiceArea } from 'src/common/constants/serviceArea.type';
 import { Status, StatusEnum } from 'src/common/constants/status.type';
-import { Review } from '@prisma/client';
 import { PlanProperties, PlanToClientProperties } from 'src/common/types/plan/plan.properties';
 import ConflictError from 'src/common/errors/conflictError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
