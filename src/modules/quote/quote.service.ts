@@ -12,7 +12,6 @@ import BadRequestError from 'src/common/errors/badRequestError';
 import { Role, RoleEnum } from 'src/common/constants/role.type';
 import Quote from 'src/common/domains/quote/quote.domain';
 import UserService from '../user/user.service';
-import FollowService from '../follow/follow.service';
 
 @Injectable()
 export default class QuoteService {
@@ -55,7 +54,8 @@ export default class QuoteService {
     }
 
     if (role === RoleEnum.MAKER) return quote.toMaker();
-    else return this.mapToMakerProfile(quote, true);
+
+    return this.mapToMakerProfile(quote, true);
   }
 
   async createQuote(data: QuoteProperties): Promise<QuoteToClientProperties> {
