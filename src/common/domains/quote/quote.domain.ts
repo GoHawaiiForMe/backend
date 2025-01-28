@@ -72,7 +72,7 @@ export default class Quote implements IQuote {
       updatedAt: this.updatedAt,
       price: this.price,
       content: this.content,
-      ...(this.plan ? { plan: this.plan } : {}),
+      plan: this.plan,
       maker: this.maker,
       isConfirmed: this.isConfirmed,
       isAssigned: this.isAssigned
