@@ -29,8 +29,8 @@ export default class ChatRoomService {
   } //TODO. 유저 정보 더해서 주기
 
   async getChatRoomIds(userId: string): Promise<string[]> {
-    const list = await this.chatRoomRepository.findManyChatRooms({ userId });
-    return list.map((chatRoom) => chatRoom.getId());
+    const chatRoomIds = await this.chatRoomRepository.findChatRoomIdByUserId(userId);
+    return chatRoomIds;
   }
 
   async getChatRoomById(userId: string, chatRoomId: string): Promise<ChatRoomWithUserInfo> {

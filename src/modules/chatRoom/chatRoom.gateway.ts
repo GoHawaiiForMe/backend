@@ -28,12 +28,13 @@ export default class ChatRoomGateway implements OnGatewayConnection {
       const user = this.jwtGuard.getUserFromSocket(client);
 
       if (user) {
+        console.log(user);
         const { userId } = user;
         const userChatRoomIds = await this.chatRoomService.getChatRoomIds(userId);
 
         userChatRoomIds.forEach((chatRoomId) => {
           client.join(chatRoomId); // 채팅방에 유저를 연결
-          console.log(`User ${user.id} joined chat room ${chatRoomId}`);
+          console.log(`User ${user.userId} joined chat room ${chatRoomId}`);
         });
       }
     } catch (e) {
