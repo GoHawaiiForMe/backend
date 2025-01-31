@@ -1,33 +1,16 @@
-GET http://localhost:4000/plans/0373ced8-c000-4020-9ecc-66e9b908e174/quotes
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzMDEwNmE2MC0yMDBkLTQ2N2MtOGIwZC01ODE3ZWU2MDQ5MDQiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNjkyOTgwMiwiZXhwIjoxNzM3MDE2MjAyfQ.ywZMfSgdVQX9HqkBqc0cl-FpwJJkn8aHpy3MSSgevcM
-#Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0OWJlNjFiOC0wOTA1LTQ0OGEtODUzNC1mZTViMWEwMDA0YzIiLCJyb2xlIjoiTUFLRVIiLCJpYXQiOjE3MzY5Mjk4NTMsImV4cCI6MTczNzAxNjI1M30.8TlA_oXKIHm-bz-4YbDHaDUDehnWyWh4-XlcdqC2K4I
-#Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Njg4NWEzYy01MGY0LTQyN2ItOGE5Mi0zNzAyYzY5NzZmYjAiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNjkyOTkxMCwiZXhwIjoxNzM3MDE2MzEwfQ.1sNy1J2yCfOvuGDX36f0o33NNFI2fpc2_ccW2EWqm0Y
-###
+@MAKER1_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMzJkN2JkNC0xMTZjLTQ2N2ItOTM1Mi1hMTRiMGQ0OTRlZjkiLCJyb2xlIjoiTUFLRVIiLCJpYXQiOjE3Mzc5ODM0MjYsImV4cCI6MTc0MTQzOTQyNn0.v5caBNbWAusy25h275WtSiJwYXPqyFC8vWPG3fO6r7E
+@DREAMER1_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Njg4NWEzYy01MGY0LTQyN2ItOGE5Mi0zNzAyYzY5NzZmYjAiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNzk4MzQ1MSwiZXhwIjoxNzQxNDM5NDUxfQ.V2qa2oB-m757NnAXYkefAWL_Vewwh526s97SYh2LuJc
+@PLAN1_ID=b198135d-9865-445b-a04b-742ca9939ee1
+@QUOTE1_ID=1c9cde67-ccbf-4c00-a53a-63d79f4772c3
+GET http://localhost:4000/plans/{{PLAN1_ID}}/quotes
+Authorization: Bearer {{DREAMER1_TOKEN}}
+###메이커의 견적 리스트
 GET http://localhost:4000/quotes?isSent=true
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0OWJlNjFiOC0wOTA1LTQ0OGEtODUzNC1mZTViMWEwMDA0YzIiLCJyb2xlIjoiTUFLRVIiLCJpYXQiOjE3MzY5Mjk4NTMsImV4cCI6MTczNzAxNjI1M30.8TlA_oXKIHm-bz-4YbDHaDUDehnWyWh4-XlcdqC2K4I
-
-#Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Njg4NWEzYy01MGY0LTQyN2ItOGE5Mi0zNzAyYzY5NzZmYjAiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNjkzMDU2NSwiZXhwIjoxNzM3MDE2OTY1fQ.X3F1x1DAeA21Kd89aedXPIRUea0ej9LBsswvGFHh-Io
-###
-POST http://localhost:4000/plans/8fc4908-9269-4db3-ad7d-fb6e69b0ba0d/quotes
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0OWJlNjFiOC0wOTA1LTQ0OGEtODUzNC1mZTViMWEwMDA0YzIiLCJyb2xlIjoiTUFLRVIiLCJpYXQiOjE3MzY5MzA2MTEsImV4cCI6MTczNzAxNzAxMX0.PfTfVbI8Ppiwz9JXZkwbsKeCtmUp5MUDyxpGyUdIOLk
-Content-Type: application/json
-
-{
-    "price": 200,
-    "content": "제가 제일 잘해요"
-}
-###
-PATCH http://localhost:4000/quotes/080e2a29-1aca-4097-8d19-7b6801758eae
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1NTVkNDYzZS0zN2I2LTQxMGItOTA2MS0xMWE5ZDY4MjJiZGQiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNjkzMDgxMCwiZXhwIjoxNzM3MDE3MjEwfQ.-_3JgFvauEfE_xaxIu_rh8lPT5kfgdecGWb3i6AQpI0
-Content-Type: application/json
-
-{
-    "isConfirmed": true
-}
-###
-GET http://localhost:4000/plans/415037fb-b4da-43dc-a9e0-a68399fd5667/quotes
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Njg4NWEzYy01MGY0LTQyN2ItOGE5Mi0zNzAyYzY5NzZmYjAiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNzEyNTY1NCwiZXhwIjoxNzM3MjEyMDU0fQ.i_oXVFqPvXGLR0Jxz0C-KxrOZxvE0rXArb2VMMVyOTk
-###
-
-GET http://localhost:4000/quotes?isSent=false
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YjRkZWQ4Mi1lNjgwLTQxMGQtYjg2ZC1jZTY5NzRlNTNmMzciLCJyb2xlIjoiTUFLRVIiLCJpYXQiOjE3MzcxODg0ODgsImV4cCI6MTczNzI3NDg4OH0.a5MQpfsQD8ZkZemy1ZghAvmOVNIDzxPdjKMSV24cH80
+Authorization: Bearer {{MAKER1_TOKEN}}
+###드리머의 견적 리스트
+GET http://localhost:4000/quotes/{{QUOTE1_ID}}
+Authorization: Bearer {{MAKER1_TOKEN}}
+###메이커의 견적 상세보기
+GET http://localhost:4000/quotes/{{QUOTE1_ID}}
+Authorization: Bearer {{DREAMER1_TOKEN}}
+###드리머의 견적 상세보기

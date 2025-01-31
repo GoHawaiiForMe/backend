@@ -1,6 +1,7 @@
-import { IUser } from 'src/common/domains/user/user.interface';
-import { FilteredUserProperties, UserProperties } from '../user/user.types';
+import { FilteredUserProperties, UserProperties, UserReference } from '../user/user.types';
 import { PlanReference } from '../plan/plan.type';
+import { ProfileImage } from 'src/common/constants/image.type';
+import { TripType } from 'src/common/constants/tripType.type';
 
 export interface QuoteProperties {
   id?: string;
@@ -8,9 +9,10 @@ export interface QuoteProperties {
   updatedAt?: Date;
   price: number;
   content: string;
-  plan: PlanReference;
+  plan?: PlanReference;
   planId: string;
-  maker?: IUser;
+  dreamer?: UserReference;
+  maker?: UserReference;
   makerId?: string;
   isConfirmed?: boolean;
   isAssigned: boolean;
@@ -23,7 +25,8 @@ export interface QuoteToClientProperties {
   price: number;
   content: string;
   plan?: PlanReference;
-  maker?: FilteredUserProperties | null;
+  dreamer?: UserReference;
+  maker?: UserReference;
   isConfirmed: boolean;
   isAssigned: boolean;
 }
@@ -36,8 +39,11 @@ export interface QuoteMapperProperties {
   content: string;
   plan?: PlanReference;
   planId: string;
-  maker?: UserProperties | null;
-  makerId?: string | null;
+  maker?: {
+    id: string;
+    nickName: string;
+  };
+  makerId?: string;
   isConfirmed?: boolean;
   isAssigned?: boolean;
 }

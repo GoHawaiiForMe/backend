@@ -1,10 +1,10 @@
 import IQuote from './quote.interface';
 import ConflictError from 'src/common/errors/conflictError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
-import { IUser } from '../user/user.interface';
 import { QuoteProperties, QuoteToClientProperties } from 'src/common/types/quote/quoteProperties';
 import { Status } from 'src/common/constants/status.type';
 import { PlanReference } from 'src/common/types/plan/plan.type';
+import { UserReference } from 'src/common/types/user/user.types';
 
 export default class Quote implements IQuote {
   private id?: string;
@@ -14,7 +14,8 @@ export default class Quote implements IQuote {
   private content: string;
   private plan: PlanReference;
   private planId: string;
-  private maker?: IUser;
+  private dreamer?: UserReference;
+  private maker?: UserReference;
   private makerId?: string;
   private isConfirmed: boolean;
   private isAssigned: boolean;
@@ -27,10 +28,14 @@ export default class Quote implements IQuote {
     this.content = quoteProperties.content;
     this.plan = quoteProperties.plan;
     this.planId = quoteProperties.planId;
+    this.dreamer = quoteProperties?.dreamer;
     this.maker = quoteProperties?.maker;
     this.makerId = quoteProperties?.makerId;
     this.isConfirmed = quoteProperties?.isConfirmed || false;
     this.isAssigned = quoteProperties.isAssigned;
+  }
+  static create(data: QuoteProperties): IQuote {
+    return new Quote(data);
   }
 
   update(data: Partial<QuoteProperties>): IQuote {
@@ -40,6 +45,7 @@ export default class Quote implements IQuote {
     this.isConfirmed = data.isConfirmed;
     return this;
   }
+
   toDBForUpdate(): Partial<QuoteProperties> {
     return {
       id: this.id,
@@ -58,6 +64,7 @@ export default class Quote implements IQuote {
       isAssigned: this.isAssigned
     };
   }
+
   toClient(): QuoteToClientProperties {
     return {
       id: this.id,
@@ -66,7 +73,21 @@ export default class Quote implements IQuote {
       price: this.price,
       content: this.content,
       plan: this.plan,
-      maker: this.maker?.toClient(),
+      maker: this.maker,
+      isConfirmed: this.isConfirmed,
+      isAssigned: this.isAssigned
+    };
+  }
+  toMaker(): QuoteToClientProperties {
+    return {
+      id: this.id,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+      price: this.price,
+      content: this.content,
+      plan: this.plan,
+      dreamer: this.dreamer,
+      maker: this.maker,
       isConfirmed: this.isConfirmed,
       isAssigned: this.isAssigned
     };
@@ -79,7 +100,7 @@ export default class Quote implements IQuote {
       updatedAt: this.updatedAt,
       price: this.price,
       content: this.content,
-      maker: this.maker?.toClient(),
+      maker: this.maker,
       isConfirmed: this.isConfirmed,
       isAssigned: this.isAssigned
     };
@@ -94,7 +115,7 @@ export default class Quote implements IQuote {
   }
 
   getDreamerId(): string {
-    return this.plan.dreamer.id;
+    return this.dreamer?.id;
   }
 
   getPlanId(): string {

@@ -5,6 +5,7 @@ import { ServiceArea } from 'src/common/constants/serviceArea.type';
 import SortOrder from 'src/common/constants/sortOrder.enum';
 import { Status, StatusEnum } from 'src/common/constants/status.type';
 import { TripType } from 'src/common/constants/tripType.type';
+import { UserReference } from '../user/user.types';
 
 export type PlanOrderByField = { createdAt: SortOrder.DESC } | { tripDate: SortOrder.ASC };
 
@@ -55,8 +56,9 @@ export interface PlanReference {
   tripDate?: Date;
   serviceArea?: ServiceArea;
   details?: string;
+  address?: string;
   status?: Status;
-  dreamer?: any; //NOTE. 임시로 any 사용
+  dreamer?: UserReference;
 }
 
 export interface AssignData {

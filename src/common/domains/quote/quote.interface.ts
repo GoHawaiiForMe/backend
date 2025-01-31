@@ -6,6 +6,7 @@ export default interface IQuote {
   toDBForUpdate(): Partial<QuoteProperties>;
   toDB(): Partial<QuoteProperties>;
   toClient(): QuoteToClientProperties;
+  toMaker(): QuoteToClientProperties;
   toClientWithoutPlan(): QuoteToClientProperties;
   getId(): string;
   getMakerId(): string;
