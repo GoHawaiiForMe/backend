@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import ChatService from './chat.service';
-import ChatGateway from './chat.gateway';
 import WebSocketJwtGuard from 'src/common/guards/webSocket.guard';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -21,7 +20,7 @@ import PlanModule from '../plan/plan.module';
     PlanModule
   ],
   controllers: [],
-  providers: [ChatGateway, ChatService, ChatRepository, WebSocketJwtGuard],
+  providers: [ChatService, ChatRepository, WebSocketJwtGuard],
   exports: [ChatService]
 })
 export default class ChatModule {}

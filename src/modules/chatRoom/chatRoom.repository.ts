@@ -12,16 +12,19 @@ export default class ChatRoomRepository {
 
   async findManyChatRooms(options: ChatQueryOptions): Promise<IChatRoom[]> {
     const { userId, page, pageSize } = options;
-    const chatRooms = await this.chatRoom
-      .find({ userIds: userId })
-      .skip((page - 1) * pageSize)
-      .limit(pageSize)
-      .populate({
-        path: 'chatIds',
-        model: 'Chat',
-        options: { sort: { createdAt: -1 }, limit: 1 },
-        select: 'content'
-      });
+
+    const query = this.chatRoom.find({ userIds: userId });
+
+    if (page && pageSize) {
+      query.skip((page - 1) * pageSize).limit(pageSize);
+    }
+
+    const chatRooms = await query.populate({
+      path: 'chatIds',
+      model: 'Chat',
+      options: { sort: { createdAt: -1 }, limit: 1 },
+      select: 'content'
+    });
 
     const domainChatRooms = chatRooms.map((chatRoom) => new ChatRoomMapper(chatRoom).toDomain());
     return domainChatRooms;

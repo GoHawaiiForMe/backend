@@ -45,6 +45,10 @@ export default class ChatRoom implements IChatRoom {
     };
   }
 
+  getId(): string {
+    return this.id;
+  }
+
   getUserIds(): string[] {
     return this.userIds;
   }

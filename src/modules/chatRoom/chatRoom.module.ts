@@ -7,6 +7,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import ChatRoomSchema, { ChatRoom } from 'src/providers/database/mongoose/chatRoom.schema';
 import PlanModule from '../plan/plan.module';
 import ChatModule from '../chat/chat.module';
+import ChatRoomGateway from './chatRoom.gateway';
+import WebSocketJwtGuard from 'src/common/guards/webSocket.guard';
 import UserModule from '../user/user.module';
 
 @Module({
@@ -20,6 +22,7 @@ import UserModule from '../user/user.module';
     UserModule
   ],
   controllers: [ChatRoomController],
-  providers: [ChatRoomRepository, ChatRoomService]
+
+  providers: [ChatRoomRepository, ChatRoomService, ChatRoomGateway, WebSocketJwtGuard]
 })
 export default class ChatRoomModule {}
