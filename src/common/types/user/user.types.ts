@@ -47,4 +47,5 @@ export interface UserReference {
   image?: ProfileImage;
   gallery?: string;
   serviceTypes?: TripType[];
+  isFollowed?: boolean;
 }
