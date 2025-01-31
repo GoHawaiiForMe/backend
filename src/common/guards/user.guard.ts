@@ -22,16 +22,12 @@ export class UserGuard extends AuthGuard('jwt') {
 
     // @Public() 데코레이터가 있어도 jwt 토큰 있을 경우 검증 실행 후 통과
     const request = context.switchToHttp().getRequest();
-    console.log('request');
     const authHeader = request.headers?.authorization?.startsWith('Bearer ');
-    console.log(authHeader);
     if (isPublic) {
-      console.log('isPublic');
       if (authHeader) {
         const canActivate = await super.canActivate(context);
         if (!canActivate) return false; // 토큰이 있지만 만료된 경우
       }
-      console.log('go true!');
       return true;
     }
 
