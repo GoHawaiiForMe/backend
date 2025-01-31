@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { UserId } from 'src/common/decorators/user.decorator';
-import { ChatRoomProperties } from 'src/common/domains/chatRoom/chatRoom.properties';
+import { ChatRoomProperties, ChatRoomWithUserInfo } from 'src/common/domains/chatRoom/chatRoom.properties';
 import { ChatRoomQueryDTO } from 'src/common/types/chat/chat.dto';
 import ChatRoomService from './chatRoom.service';
 import { Types } from 'mongoose';
@@ -16,7 +16,7 @@ export default class ChatRoomController {
   async getChatRooms(
     @UserId() userId: string,
     @Query() options: ChatRoomQueryDTO
-  ): Promise<{ totalCount: number; list: ChatRoomProperties[] }> {
+  ): Promise<{ totalCount: number; list: ChatRoomWithUserInfo[] }> {
     const { totalCount, list } = await this.chatRoomService.getChatRooms({ userId, ...options });
     return { totalCount, list };
   }
@@ -25,7 +25,7 @@ export default class ChatRoomController {
   async getChatRoomById(
     @UserId() userId: string,
     @Param('chatRoomId') chatRoomId: string
-  ): Promise<ChatRoomProperties> {
+  ): Promise<ChatRoomWithUserInfo> {
     const chatRoom = await this.chatRoomService.getChatRoomById(userId, chatRoomId);
     return chatRoom;
   }
