@@ -149,7 +149,7 @@ export default class UserService {
 
   async getProfileCardData(makerId: string, dreamerId: string, withDetails?: boolean): Promise<ProfileCardResponseDTO> {
     const user = await this.repository.findByIdWithProfileAndFollow(makerId);
-    const userData = user.getWithMakerProfile(withDetails ? true : false);
+    const userData = user.getWithMakerProfile(withDetails);
     const stats = await this.userStats.get(makerId);
 
     return {
