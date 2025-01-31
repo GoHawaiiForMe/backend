@@ -124,8 +124,8 @@ export default class QuoteRepository {
     return whereConditions;
   }
 
-  private buildIncludeConditions(options: Partial<QuoteQueryOptions> | null = {}): QuoteIncludeConditions {
-    const { planId } = options;
+  private buildIncludeConditions(options?: Partial<QuoteQueryOptions>): QuoteIncludeConditions {
+    const { planId } = options || {};
     const includeConditions: QuoteIncludeConditions = {
       maker: {
         select: {
