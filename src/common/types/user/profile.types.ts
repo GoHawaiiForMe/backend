@@ -18,3 +18,12 @@ export interface MakerProfileProperties extends BaseProfile {
   description: string;
   detailDescription: string;
 }
+
+export interface MakerInfoAndProfileProperties extends MakerProfileProperties {
+  id: string;
+  nickName: string;
+  averageRating: number;
+  totalReviews: number;
+  totalFollows: number;
+  totalConfirms: number;
+}

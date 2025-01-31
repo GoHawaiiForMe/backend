@@ -6,7 +6,11 @@ import User from '../../common/domains/user/user.domain';
 import { JwtService } from '@nestjs/jwt';
 import { DreamerProfile, MakerProfile } from '../../common/domains/user/profile.domain';
 import { FilteredUserProperties, PasswordProperties, UserProperties } from '../../common/types/user/user.types';
-import { DreamerProfileProperties, MakerProfileProperties } from '../../common/types/user/profile.types';
+import {
+  DreamerProfileProperties,
+  MakerInfoAndProfileProperties,
+  MakerProfileProperties
+} from '../../common/types/user/profile.types';
 import UserStatsService from '../userStats/userStats.service';
 import { RoleEnum } from 'src/common/constants/role.type';
 import FollowService from '../follow/follow.service';
@@ -143,17 +147,13 @@ export default class UserService {
     return !user;
   }
 
-  async getProfileCardData(makerId: string, dreamerId: string): Promise<ProfileCardResponseDTO> {
+  async getProfileCardData(makerId: string, dreamerId: string, withDetails?: boolean): Promise<ProfileCardResponseDTO> {
     const user = await this.repository.findByIdWithProfileAndFollow(makerId);
-    const userData = user.get();
-    const profile = (await this.getProfile(RoleEnum.MAKER, makerId)) as MakerProfileProperties;
+    const userData = user.getWithMakerProfile(withDetails);
     const stats = await this.userStats.get(makerId);
 
     return {
-      nickName: userData.nickName,
-      image: profile.image,
-      gallery: profile.gallery,
-      serviceTypes: profile.serviceTypes,
+      ...userData,
       isFollowed: user.isFollowed(dreamerId),
       ...stats
     };
