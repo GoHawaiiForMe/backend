@@ -1,11 +1,7 @@
-import { Review } from '@prisma/client';
 import { ServiceArea } from 'src/common/constants/serviceArea.type';
 import { Status } from 'src/common/constants/status.type';
 import { TripType } from 'src/common/constants/tripType.type';
-import IQuote from 'src/common/domains/quote/quote.interface';
-import { IUser } from 'src/common/domains/user/user.interface';
-import { QuoteMapperProperties, QuoteToClientProperties } from 'src/common/types/quote/quoteProperties';
-import { FilteredUserProperties, UserProperties } from 'src/common/types/user/user.types';
+import { UserReference } from 'src/common/types/user/user.types';
 
 export interface PlanProperties {
   id?: string;
@@ -19,13 +15,12 @@ export interface PlanProperties {
   details: string;
   address?: string;
   status: Status;
-  quotes: IQuote[];
-  assignees: IUser[];
+  quotes?: { id: string; makerId?: string; isConfirmed?: boolean }[];
+  assignees: UserReference[];
   assigneeId?: string;
   isAssigned?: boolean;
-  dreamer?: IUser | null;
+  dreamer?: UserReference | null;
   dreamerId?: string | null;
-  review?: Review;
 }
 
 export interface PlanToClientProperties {
@@ -39,10 +34,8 @@ export interface PlanToClientProperties {
   details: string;
   address?: string;
   status: Status;
-  quotes: QuoteToClientProperties[];
-  assignees: FilteredUserProperties[];
-  dreamer?: FilteredUserProperties | null;
-  review?: Review;
+  assignees: UserReference[];
+  dreamer?: UserReference | null;
 }
 
 export interface PlanMapperProperties {
@@ -57,9 +50,8 @@ export interface PlanMapperProperties {
   details: string;
   address?: string;
   status?: Status;
-  quotes?: QuoteMapperProperties[];
-  assignees?: UserProperties[];
-  dreamer?: UserProperties | null;
+  quotes?: { id: string; makerId?: string; isConfirmed?: boolean }[];
+  assignees?: UserReference[];
+  dreamer?: UserReference | null;
   dreamerId?: string | null;
-  review?: Review;
 }

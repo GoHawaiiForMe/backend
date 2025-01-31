@@ -33,8 +33,8 @@ export default class PlanController {
   }
 
   @Get(':id')
-  async getPlanById(@Param('id') id: string): Promise<PlanToClientProperties> {
-    const plan = await this.planService.getPlanById(id);
+  async getPlanById(@UserId() userId: string, @Param('id') id: string): Promise<PlanToClientProperties> {
+    const plan = await this.planService.getPlanById(id, userId);
     return plan;
   }
 
