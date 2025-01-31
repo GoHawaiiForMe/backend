@@ -47,7 +47,7 @@ export default class UserRepository {
         phoneNumber: true,
         coconut: true,
         nickName: true,
-        makerProfile: { select: { image: true, gallery: true, serviceTypes: true } },
+        makerProfile: true,
         followers: { select: { dreamerId: true } }
       }
     });

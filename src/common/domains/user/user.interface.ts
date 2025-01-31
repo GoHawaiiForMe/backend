@@ -1,4 +1,5 @@
 import { Role } from 'src/common/constants/role.type';
+import { MakerInfoAndProfileProperties } from 'src/common/types/user/profile.types';
 import { FilteredUserProperties, PasswordProperties, UserProperties } from 'src/common/types/user/user.types';
 
 export interface IUser {
@@ -11,4 +12,5 @@ export interface IUser {
   getId(): string;
   getRole(): Role;
   isFollowed(dreamerId: string): boolean;
+  getWithMakerProfile(withDetails?: boolean): Partial<MakerInfoAndProfileProperties>;
 }

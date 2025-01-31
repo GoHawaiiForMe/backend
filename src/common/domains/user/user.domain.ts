@@ -10,7 +10,7 @@ import { ComparePassword, HashingPassword } from '../../utilities/hashingPasswor
 import { IUser } from './user.interface';
 import BadRequestError from 'src/common/errors/badRequestError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
-import { MakerProfileProperties } from 'src/common/types/user/profile.types';
+import { MakerInfoAndProfileProperties, MakerProfileProperties } from 'src/common/types/user/profile.types';
 
 export default class User implements IUser {
   private readonly id?: string;
@@ -120,5 +120,25 @@ export default class User implements IUser {
 
   isFollowed(dreamerId: string): boolean {
     return this.followers?.some((follower) => follower.dreamerId === dreamerId);
+  }
+
+  getWithMakerProfile(withDetails?: boolean): Partial<MakerInfoAndProfileProperties> {
+    const profile = {
+      id: this.id,
+      nickName: this.nickName,
+      image: this.makerProfile.image,
+      gallery: this.makerProfile.gallery,
+      serviceTypes: this.makerProfile.serviceTypes
+    };
+
+    if (withDetails) {
+      return {
+        ...profile,
+        serviceArea: this.makerProfile.serviceArea,
+        description: this.makerProfile.description,
+        detailDescription: this.makerProfile.detailDescription
+      };
+    }
+    return profile;
   }
 }

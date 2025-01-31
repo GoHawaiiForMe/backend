@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Patch, Post, Query, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, Res } from '@nestjs/common';
 import UserService from './user.service';
 import { Cookies } from 'src/common/decorators/cookie.decorator';
 import { Public } from 'src/common/decorators/public.decorator';
@@ -91,6 +91,12 @@ export default class UserController {
     return await this.service.getProfile(role, userId);
   }
 
+  @Public()
+  @Get('profile/:makerId')
+  async getProfileById(@Param('makerId') makerId: string, @UserId() dreamerId: string) {
+    return await this.service.getProfileCardData(makerId, dreamerId, true);
+  }
+
   @Get('following')
   @Role('DREAMER')
   async getFollowList(
@@ -123,9 +129,8 @@ export default class UserController {
   ) {
     if (role === 'DREAMER') {
       return await this.service.updateDreamerProfile(userId, data);
-    } else {
-      return await this.service.updateMakerProfile(userId, data);
     }
+    return await this.service.updateMakerProfile(userId, data);
   }
 
   @Public()
