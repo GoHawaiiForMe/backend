@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import PlanOrder from 'src/common/constants/planOrder.enum';
 import { RoleEnum } from 'src/common/constants/role.type';
 import SortOrder from 'src/common/constants/sortOrder.enum';
+import { StatusEnum } from 'src/common/constants/status.type';
 import { TRIP_TYPE } from 'src/common/constants/tripType.type';
 import IPlan from 'src/common/domains/plan/plan.interface';
 import PlanMapper from 'src/common/domains/plan/plan.mapper';
@@ -16,8 +17,8 @@ export default class PlanRepository {
   constructor(private readonly db: DBClient) {}
 
   async findMany(options: PlanQueryOptions): Promise<IPlan[]> {
-    const { orderBy, page, pageSize, hasReview } = options || {};
-    const isHasReview = hasReview === true || hasReview === false;
+    const { orderBy, page, pageSize, reviewed } = options || {};
+    const isHasReview = reviewed === true || reviewed === false;
 
     const whereConditions = this.buildWhereConditions(options);
     const orderByField: PlanOrderByField =
@@ -91,7 +92,7 @@ export default class PlanRepository {
   }
 
   async create(data: IPlan): Promise<IPlan> {
-    const { title, tripDate, tripType, serviceArea, details, address, status, dreamerId } = data.toDB();
+    const { title, tripDate, tripType, serviceArea, details, address, dreamerId } = data.toDB();
     const plan = await this.db.plan.create({
       data: {
         title,
@@ -100,7 +101,7 @@ export default class PlanRepository {
         serviceArea,
         details,
         address,
-        status,
+        status: StatusEnum.PENDING,
         dreamer: { connect: { id: dreamerId } }
       },
       include: {
@@ -159,7 +160,7 @@ export default class PlanRepository {
   }
 
   private buildWhereConditions(whereOptions: PlanQueryOptions): PlanWhereConditions {
-    const { keyword, tripDate, tripType, serviceArea, isAssigned, userId, status, role, hasReview } = whereOptions;
+    const { keyword, tripDate, tripType, serviceArea, isAssigned, userId, status, role, reviewed } = whereOptions;
 
     const whereConditions: PlanWhereConditions = {
       isDeletedAt: null
@@ -181,8 +182,8 @@ export default class PlanRepository {
     } else if (userId) {
       whereConditions.dreamerId = userId; //NOTE. Dreamer 전용 api 조건
       if (status) whereConditions.status = { in: status };
-      if (hasReview === true) whereConditions.review = { isNot: null };
-      else if (hasReview === false) whereConditions.review = { is: null };
+      if (reviewed === true) whereConditions.review = { isNot: null };
+      else if (reviewed === false) whereConditions.review = { is: null };
     }
 
     if (keyword) {
@@ -206,5 +207,4 @@ export default class PlanRepository {
 
     return whereConditions;
   }
-  private buildSelectConditions() {}
 }

@@ -36,7 +36,7 @@ export interface PlanQueryOptions {
   status?: StatusEnum[];
   userId?: string;
   role?: Role;
-  hasReview?: boolean;
+  reviewed?: boolean;
   readyToComplete?: boolean;
 }
 

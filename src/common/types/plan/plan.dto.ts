@@ -52,7 +52,7 @@ export class MyPlanQueryDTO {
     if (value === 'true') return true;
     if (value === 'false') return false;
   })
-  hasReview: boolean;
+  reviewed: boolean;
 
   @IsOptional()
   @Transform(({ value }) => {

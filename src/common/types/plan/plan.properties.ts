@@ -15,7 +15,7 @@ export interface PlanProperties {
   serviceArea: ServiceArea;
   details: string;
   address?: string;
-  status: Status;
+  status?: Status;
   quotes?: {
     id?: string;
     makerId?: string;
@@ -27,7 +27,7 @@ export interface PlanProperties {
       image?: ProfileImage;
     };
   }[];
-  assignees: UserReference[];
+  assignees?: UserReference[];
   assigneeId?: string;
   isAssigned?: boolean;
   dreamer?: UserReference | null;

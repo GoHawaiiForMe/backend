@@ -21,7 +21,7 @@ export default class Plan implements IPlan {
   private serviceArea: ServiceArea;
   private details: string;
   private address?: string;
-  private status: Status;
+  private status?: Status;
   private quotes?: {
     id?: string;
     makerId?: string;
@@ -33,7 +33,7 @@ export default class Plan implements IPlan {
       image?: ProfileImage;
     };
   }[];
-  private assignees: UserReference[];
+  private assignees?: UserReference[];
   private assigneeId?: string;
   private isAssigned: boolean;
   private dreamer?: UserReference | null;
@@ -50,10 +50,14 @@ export default class Plan implements IPlan {
     this.details = planProperties.details;
     this.address = planProperties.address;
     this.status = planProperties.status;
-    this.quotes = planProperties.quotes;
+    this.quotes = planProperties.quotes; // 타입보다 더 많은거는 신경 안씀
     this.assignees = planProperties.assignees;
     this.dreamer = planProperties.dreamer;
     this.dreamerId = planProperties.dreamerId;
+  }
+
+  static create(data: PlanProperties): IPlan {
+    return new Plan(data);
   }
 
   toClient(): PlanToClientProperties {
