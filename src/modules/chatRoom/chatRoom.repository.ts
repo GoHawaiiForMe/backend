@@ -32,6 +32,11 @@ export default class ChatRoomRepository {
     return totalCount;
   }
 
+  async findChatRoomIdByUserId(userId: string): Promise<string[]> {
+    const chatRooms = await this.chatRoom.find({ userIds: userId, isDeletedAt: null, isActive: true }).select('_id');
+    return chatRooms.map((chatRoom) => chatRoom._id.toString());
+  }
+
   async findChatRoomById(id: string): Promise<IChatRoom> {
     const chatRoom = await this.chatRoom.findById(id).exec();
     const domainChatRoom = new ChatRoomMapper(chatRoom).toDomain();

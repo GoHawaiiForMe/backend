@@ -5,35 +5,44 @@ import {
   SubscribeMessage,
   WebSocketGateway
 } from '@nestjs/websockets';
-import ChatService from './chat.service';
 import { Socket } from 'socket.io';
 import WebSocketJwtGuard from 'src/common/guards/webSocket.guard';
+import ChatRoomService from './chatRoom.service';
 
 @WebSocketGateway()
-export default class ChatGateway implements OnGatewayConnection {
+export default class ChatRoomGateway implements OnGatewayConnection {
   constructor(
     private readonly jwtGuard: WebSocketJwtGuard,
-    private readonly chatService: ChatService
+    private readonly chatRoomService: ChatRoomService
   ) {}
   handleDisconnection(client: Socket) {
-    return;
+    client.rooms.forEach((room) => {
+      client.leave(room); // 모든 방에서 유저를 제거
+      console.log(`User left chat room ${room}`);
+    });
   }
 
   async handleConnection(client: Socket) {
     try {
-      //const
       await this.jwtGuard.handleConnection(client);
       const user = this.jwtGuard.getUserFromSocket(client);
 
       if (user) {
-        // this.chatService.register
+        console.log(user);
+        const { userId } = user;
+        const userChatRoomIds = await this.chatRoomService.getChatRoomIds(userId);
+
+        userChatRoomIds.forEach((chatRoomId) => {
+          client.join(chatRoomId); // 채팅방에 유저를 연결
+          console.log(`User ${user.userId} joined chat room ${chatRoomId}`);
+        });
       }
     } catch (e) {
       //로그. 인증 실패 로그남기기
       client.disconnect();
     }
   }
-  @SubscribeMessage('joinChatRoom')
+  @SubscribeMessage('joinChatRoom') //NOTE. 임시용
   async joinChatRoom(@MessageBody() chatRoomId: string, @ConnectedSocket() client: Socket) {}
 
   @SubscribeMessage('receiveMessage')

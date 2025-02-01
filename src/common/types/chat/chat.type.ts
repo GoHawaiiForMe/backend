@@ -1,10 +1,8 @@
-import { Types } from 'mongoose';
-
 export interface ChatQueryOptions {
   userId: string;
   chatRoomId?: string;
-  page: number;
-  pageSize: number;
+  page?: number;
+  pageSize?: number;
 }
 
 export interface ChatCreateData {

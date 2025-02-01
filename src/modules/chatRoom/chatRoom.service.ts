@@ -28,6 +28,11 @@ export default class ChatRoomService {
     return { list: toClientList, totalCount };
   } //TODO. 유저 정보 더해서 주기
 
+  async getChatRoomIds(userId: string): Promise<string[]> {
+    const chatRoomIds = await this.chatRoomRepository.findChatRoomIdByUserId(userId);
+    return chatRoomIds;
+  }
+
   async getChatRoomById(userId: string, chatRoomId: string): Promise<ChatRoomWithUserInfo> {
     //TODO. 유저 정보 더해서 주기, 플랜 정보 더해서 주기
     const chatRoom = await this.chatRoomRepository.findChatRoomById(chatRoomId);
@@ -40,8 +45,8 @@ export default class ChatRoomService {
       throw new ForbiddenError(ErrorMessage.CHAT_ROOM_FORBIDDEN_ID);
     }
 
-    const response = await this.fetchAndFormatUserInfo(chatRoom.toClient());
-    return response;
+    const chatRoomWithUserInfo = await this.fetchAndFormatUserInfo(chatRoom.toClient());
+    return chatRoomWithUserInfo;
   }
 
   async getChatsByChatRoomId(options: ChatQueryOptions): Promise<{ totalCount: number; list: ChatProperties[] }> {
