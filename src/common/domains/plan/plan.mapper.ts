@@ -8,7 +8,7 @@ export default class PlanMapper {
   toDomain(): IPlan {
     if (!this.plan) return null;
 
-    return new Plan({
+    const returnPlan = new Plan({
       id: this.plan.id,
       createdAt: this.plan.createdAt,
       updatedAt: this.plan.updatedAt,
@@ -20,10 +20,18 @@ export default class PlanMapper {
       details: this.plan.details,
       address: this.plan.address,
       status: this.plan.status ?? StatusEnum.PENDING,
-      quotes: this.plan.quotes,
+      quotes: this.plan.quotes?.map((quote) => ({
+        ...quote,
+        maker: {
+          ...quote.maker,
+          image: quote.maker?.makerProfile?.image,
+          makerProfile: undefined
+        }
+      })),
       assignees: this.plan.assignees,
       dreamer: this.plan.dreamer,
       dreamerId: this.plan.dreamerId
     });
+    return returnPlan;
   }
 }

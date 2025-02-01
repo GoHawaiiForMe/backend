@@ -16,7 +16,8 @@ export default class PlanRepository {
   constructor(private readonly db: DBClient) {}
 
   async findMany(options: PlanQueryOptions): Promise<IPlan[]> {
-    const { orderBy, page, pageSize } = options || {};
+    const { orderBy, page, pageSize, hasReview } = options || {};
+    const isHasReview = hasReview === true || hasReview === false;
 
     const whereConditions = this.buildWhereConditions(options);
     const orderByField: PlanOrderByField =
@@ -29,9 +30,20 @@ export default class PlanRepository {
       skip: pageSize * (page - 1),
       include: {
         dreamer: { select: { id: true, nickName: true } },
-        assignees: { select: { id: true, nickName: true } }
+        assignees: { select: { id: true, nickName: true } },
+        quotes: isHasReview
+          ? {
+              where: { isConfirmed: true },
+              select: {
+                id: true,
+                price: true,
+                maker: { select: { id: true, nickName: true, makerProfile: { select: { image: true } } } }
+              }
+            }
+          : {}
       }
     });
+
     const domainPlans = plans.map((plan) => new PlanMapper(plan).toDomain());
     return domainPlans;
   }
@@ -147,7 +159,7 @@ export default class PlanRepository {
   }
 
   private buildWhereConditions(whereOptions: PlanQueryOptions): PlanWhereConditions {
-    const { keyword, tripDate, tripType, serviceArea, isAssigned, userId, status, role } = whereOptions;
+    const { keyword, tripDate, tripType, serviceArea, isAssigned, userId, status, role, hasReview } = whereOptions;
 
     const whereConditions: PlanWhereConditions = {
       isDeletedAt: null
@@ -156,7 +168,7 @@ export default class PlanRepository {
     if (tripDate) {
       whereConditions.tripDate = { lte: tripDate };
       whereConditions.status = { in: status };
-    } //NOTE.스케줄러 조건
+    } //NOTE.스케줄러 조건 + readyToCompete 조건
 
     if (serviceArea) whereConditions.serviceArea = { in: serviceArea };
 
@@ -165,12 +177,13 @@ export default class PlanRepository {
     if (role === RoleEnum.MAKER) {
       whereConditions.status = { in: status }; //NOTE. Maker 전용 api 조건
       whereConditions.quotes = { some: { makerId: { not: userId } } };
-    } else if (status && userId) {
-      whereConditions.status = { in: status };
+      if (isAssigned === true) whereConditions.assignees = { some: { id: userId } }; //NOTE. 지정견적 조회 API
+    } else if (userId) {
       whereConditions.dreamerId = userId; //NOTE. Dreamer 전용 api 조건
+      if (status) whereConditions.status = { in: status };
+      if (hasReview === true) whereConditions.review = { isNot: null };
+      else if (hasReview === false) whereConditions.review = { is: null };
     }
-
-    if (isAssigned === true) whereConditions.assignees = { some: { id: userId } }; //NOTE. 지정견적 조회 API
 
     if (keyword) {
       whereConditions.OR = [
@@ -193,4 +206,5 @@ export default class PlanRepository {
 
     return whereConditions;
   }
+  private buildSelectConditions() {}
 }

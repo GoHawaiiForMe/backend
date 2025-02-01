@@ -1,9 +1,9 @@
-import { IsString, IsOptional, IsDate, IsEnum, IsNotEmpty, IsInt, IsBoolean, IsArray } from 'class-validator';
+import { IsString, IsOptional, IsDate, IsEnum, IsNotEmpty, IsInt, IsArray } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import PlanOrder from 'src/common/constants/planOrder.enum';
 import validateBooleanValue from 'src/common/utilities/validateBooleanValue';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
-import { Status, StatusEnum } from 'src/common/constants/status.type';
+import { StatusEnum } from 'src/common/constants/status.type';
 import { TripType, TripTypeEnum } from 'src/common/constants/tripType.type';
 import { ServiceAreaEnum } from 'src/common/constants/serviceArea.type';
 
@@ -44,7 +44,22 @@ export class MyPlanQueryDTO {
   })
   @IsArray()
   @IsEnum(StatusEnum, { each: true })
+  @IsOptional()
   status: StatusEnum[];
+
+  @IsOptional()
+  @Transform(({ value }) => {
+    if (value === 'true') return true;
+    if (value === 'false') return false;
+  })
+  hasReview: boolean;
+
+  @IsOptional()
+  @Transform(({ value }) => {
+    if (value === 'true') return true;
+    if (value === 'false') return false;
+  })
+  readyToComplete: boolean;
 
   @Type(() => Number)
   @IsInt()
