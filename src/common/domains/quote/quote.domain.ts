@@ -5,6 +5,7 @@ import { QuoteProperties, QuoteToClientProperties } from 'src/common/types/quote
 import { Status } from 'src/common/constants/status.type';
 import { PlanReference } from 'src/common/types/plan/plan.type';
 import { UserReference } from 'src/common/types/user/user.types';
+import { toChatRoomData } from 'src/common/types/quote/quote.type';
 
 export default class Quote implements IQuote {
   private id?: string;
@@ -78,6 +79,7 @@ export default class Quote implements IQuote {
       isAssigned: this.isAssigned
     };
   }
+
   toMaker(): QuoteToClientProperties {
     return {
       id: this.id,
@@ -103,6 +105,16 @@ export default class Quote implements IQuote {
       maker: this.maker,
       isConfirmed: this.isConfirmed,
       isAssigned: this.isAssigned
+    };
+  }
+
+  toChatRoom(): toChatRoomData {
+    return {
+      userIds: [this.dreamer.id, this.makerId],
+      planId: this.planId,
+      planTitle: this.plan.title,
+      planTripDate: this.plan.tripDate,
+      quotePrice: this.price
     };
   }
 

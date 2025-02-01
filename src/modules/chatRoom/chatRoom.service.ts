@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { ChatCreateData, ChatQueryOptions } from 'src/common/types/chat/chat.type';
 import ChatRoomRepository from './chatRoom.repository';
 import { ChatRoomProperties, ChatRoomWithUserInfo } from 'src/common/domains/chatRoom/chatRoom.properties';
-import PlanService from '../plan/plan.service';
 import ForbiddenError from 'src/common/errors/forbiddenError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import ChatRoom from 'src/common/domains/chatRoom/chatRoom.domain';
@@ -16,7 +15,6 @@ export default class ChatRoomService {
   constructor(
     private readonly chatRoomRepository: ChatRoomRepository,
     private readonly chatService: ChatService,
-    private readonly planService: PlanService,
     private readonly userService: UserService
   ) {}
 
@@ -57,12 +55,12 @@ export default class ChatRoomService {
     return { totalCount, list };
   }
 
-  async postChatRoom(userIds: string[]): Promise<ChatRoomProperties> {
-    const chatRoomData = ChatRoom.create({ userIds, planId: 'b198135d-9865-445b-a04b-742ca9939ee1' });
+  async postChatRoom(data: ChatRoomProperties): Promise<ChatRoomProperties> {
+    const chatRoomData = ChatRoom.create(data);
 
     const chatRoom = await this.chatRoomRepository.createChatRoom(chatRoomData);
     return chatRoom.toClient();
-  } //NOTE. 테스트용
+  }
 
   async postChat(data: ChatCreateData): Promise<ChatProperties> {
     const { senderId, chatRoomId } = data;

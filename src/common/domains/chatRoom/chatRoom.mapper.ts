@@ -19,6 +19,9 @@ export default class ChatRoomMapper {
       createdAt: this.chatRoom.createdAt,
       updatedAt: this.chatRoom.updatedAt,
       planId: this.chatRoom.planId,
+      planTitle: this.chatRoom.planTitle,
+      planTripDate: this.chatRoom.planTripDate,
+      quotePrice: this.chatRoom.quotePrice,
       userIds: this.chatRoom.userIds,
       isActive: this.chatRoom.isActive,
       lastChat

@@ -10,7 +10,7 @@ Authorization: BeaRER {{MAKER1_TOKEN}}
 GET {{HOST_NAME}}/dreamer?pageSize=2&hasReview=false
 Authorization: Bearer {{DREAMER1_TOKEN}}
 ###
-GET {{HOST_NAME}}/{{CONFIRMED_PLAN}}
+GET {{HOST_NAME}}/16865772-f792-4bb6-8ac8-504fcb4064e3
 Authorization: Bearer {{DREAMER1_TOKEN}}
 ###
 POST {{HOST_NAME}}

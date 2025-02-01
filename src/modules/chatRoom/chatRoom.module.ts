@@ -17,12 +17,12 @@ import UserModule from '../user/user.module';
       secret: process.env.JWT_SECRET
     }),
     MongooseModule.forFeature([{ name: ChatRoom.name, schema: ChatRoomSchema }]),
-    PlanModule,
     ChatModule,
     UserModule
   ],
   controllers: [ChatRoomController],
 
-  providers: [ChatRoomRepository, ChatRoomService, ChatRoomGateway, WebSocketJwtGuard]
+  providers: [ChatRoomRepository, ChatRoomService, ChatRoomGateway, WebSocketJwtGuard],
+  exports: [ChatRoomService]
 })
 export default class ChatRoomModule {}

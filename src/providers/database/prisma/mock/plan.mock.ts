@@ -6,7 +6,7 @@ export const PLANS = [
     id: 'b198135d-9865-445b-a04b-742ca9939ee1',
     createdAt: '2024-07-25T00:00:00.000Z', // 5개월 전
     title: '플랜1타이틀',
-    tripDate: '2025-04-05T00:00:00.000Z',
+    tripDate: '2024-12-05T00:00:00.000Z',
     tripType: TripType.ACTIVITY,
     serviceArea: ServiceArea.SEOUL,
     details: '플랜1디테일',

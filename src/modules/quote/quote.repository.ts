@@ -76,7 +76,17 @@ export default class QuoteRepository {
 
     const quote = await this.db.quote.update({
       where: { id },
-      data: { isConfirmed }
+      data: {
+        isConfirmed,
+        plan: isConfirmed
+          ? {
+              update: {
+                status: StatusEnum.CONFIRMED
+              }
+            }
+          : {}
+      },
+      include: { plan: { select: { id: true, title: true, tripDate: true, dreamer: { select: { id: true } } } } }
     });
 
     const domainQuote = new QuoteMapper(quote).toDomain();

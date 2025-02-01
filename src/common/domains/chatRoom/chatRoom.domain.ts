@@ -7,6 +7,9 @@ export default class ChatRoom implements IChatRoom {
   private updatedAt?: Date;
   private userIds: string[];
   private planId: string;
+  private planTitle: string;
+  private planTripDate: Date;
+  private quotePrice: number;
   private chatIds: string[];
   private lastChat: string;
   private isActive?: boolean;
@@ -16,12 +19,15 @@ export default class ChatRoom implements IChatRoom {
     this.createdAt = chatRoom.createdAt;
     this.updatedAt = chatRoom.updatedAt;
     this.planId = chatRoom.planId;
+    this.planTitle = chatRoom.planTitle;
+    this.planTripDate = chatRoom.planTripDate;
+    this.quotePrice = chatRoom.quotePrice;
     this.userIds = chatRoom.userIds;
     this.lastChat = chatRoom.lastChat;
     this.isActive = chatRoom.isActive;
   }
 
-  static create(data: { planId: string; userIds: string[] }) {
+  static create(data: ChatRoomProperties): IChatRoom {
     return new ChatRoom(data);
   }
 
@@ -29,7 +35,10 @@ export default class ChatRoom implements IChatRoom {
     return {
       id: this.id,
       userIds: this.userIds,
-      planId: this.planId
+      planId: this.planId,
+      planTitle: this.planTitle,
+      planTripDate: this.planTripDate,
+      quotePrice: this.quotePrice
     };
   }
 
@@ -40,6 +49,9 @@ export default class ChatRoom implements IChatRoom {
       updatedAt: this.updatedAt,
       userIds: this.userIds,
       planId: this.planId,
+      planTitle: this.planTitle,
+      planTripDate: this.planTripDate,
+      quotePrice: this.quotePrice,
       lastChat: this.lastChat,
       isActive: this.isActive
     };

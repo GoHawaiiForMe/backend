@@ -23,8 +23,8 @@ export default class PlanMapper {
       quotes: this.plan.quotes?.map((quote) => ({
         ...quote,
         maker: {
-          id: quote.maker.id,
-          nickName: quote.maker.nickName,
+          id: quote.maker?.id,
+          nickName: quote.maker?.nickName,
           image: quote.maker?.makerProfile?.image
         }
       })),
