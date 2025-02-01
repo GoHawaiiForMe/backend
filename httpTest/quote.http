@@ -1,16 +1,21 @@
+@HOST_NAME=http://localhost:4000/quotes
 @MAKER1_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMzJkN2JkNC0xMTZjLTQ2N2ItOTM1Mi1hMTRiMGQ0OTRlZjkiLCJyb2xlIjoiTUFLRVIiLCJpYXQiOjE3Mzc5ODM0MjYsImV4cCI6MTc0MTQzOTQyNn0.v5caBNbWAusy25h275WtSiJwYXPqyFC8vWPG3fO6r7E
 @DREAMER1_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Njg4NWEzYy01MGY0LTQyN2ItOGE5Mi0zNzAyYzY5NzZmYjAiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNzk4MzQ1MSwiZXhwIjoxNzQxNDM5NDUxfQ.V2qa2oB-m757NnAXYkefAWL_Vewwh526s97SYh2LuJc
-@PLAN1_ID=b198135d-9865-445b-a04b-742ca9939ee1
-@QUOTE1_ID=1c9cde67-ccbf-4c00-a53a-63d79f4772c3
-GET http://localhost:4000/plans/{{PLAN1_ID}}/quotes
+@PLAN1_ID=16865772-f792-4bb6-8ac8-504fcb4064e3
+@PLAN2_ID=6d201a98-1d06-4497-806a-fa123599019a
+@QUOTE1_ID=a6d79d0c-c834-498a-a0bd-e4727ee938f5
+@QUOTE2_ID=45ec04f9-a890-4992-adca-7f309a5b2cdc
+GET http://localhost:4000/plans/{{PLAN2_ID}}/quotes
 Authorization: Bearer {{DREAMER1_TOKEN}}
-###메이커의 견적 리스트
+###드리머의 견적 리스트
 GET http://localhost:4000/quotes?isSent=true
 Authorization: Bearer {{MAKER1_TOKEN}}
-###드리머의 견적 리스트
+###메이커의 견적 리스트
 GET http://localhost:4000/quotes/{{QUOTE1_ID}}
-Authorization: Bearer {{MAKER1_TOKEN}}
+Authorization: Bearer {{DREAMER1_TOKEN}}
 ###메이커의 견적 상세보기
 GET http://localhost:4000/quotes/{{QUOTE1_ID}}
 Authorization: Bearer {{DREAMER1_TOKEN}}
 ###드리머의 견적 상세보기
+PATCH {{HOST_NAME}}/{{QUOTE1_ID}}
+Authorization: Bearer {{DREAMER1_TOKEN}}

@@ -12,12 +12,14 @@ import BadRequestError from 'src/common/errors/badRequestError';
 import { Role, RoleEnum } from 'src/common/constants/role.type';
 import Quote from 'src/common/domains/quote/quote.domain';
 import UserService from '../user/user.service';
+import ChatRoomService from '../chatRoom/chatRoom.service';
 
 @Injectable()
 export default class QuoteService {
   constructor(
     private readonly quoteRepository: QuoteRepository,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly chatRoomService: ChatRoomService
   ) {}
 
   async getQuotesByPlanId(
@@ -78,8 +80,16 @@ export default class QuoteService {
       throw new ForbiddenError(ErrorMessage.QUOTE_FORBIDDEN_DREAMER);
     }
 
-    const returnQuote = await this.quoteRepository.update(quote.update(data));
-    return returnQuote.toClient();
+    const planStatus = quote.getPlanStatus();
+    if (planStatus !== StatusEnum.PENDING) {
+      //여기서 에러잡기
+    }
+
+    const updatedQuote = await this.quoteRepository.update(quote.update(data));
+
+    await this.chatRoomService.postChatRoom(updatedQuote.toChatRoom());
+
+    return updatedQuote.toClient();
   }
 
   async deleteQuote(id: string, userId: string): Promise<void> {

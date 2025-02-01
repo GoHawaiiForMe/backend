@@ -5,6 +5,9 @@ export interface ChatRoomProperties {
   createdAt?: Date;
   updatedAt?: Date;
   planId: string;
+  planTitle: string;
+  planTripDate: Date;
+  quotePrice: number;
   userIds: string[];
   chatIds?: string[] | { content: string };
   lastChat?: string;
@@ -16,6 +19,9 @@ export interface ChatRoomWithUserInfo {
   createdAt?: Date;
   updatedAt?: Date;
   planId: string;
+  planTitle: string;
+  planTripDate: Date;
+  quotePrice: number;
   users: {
     id: string;
     nickName: string;

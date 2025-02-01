@@ -10,6 +10,15 @@ export class ChatRoom {
   @Prop({ required: true, type: String })
   planId: string;
 
+  @Prop({ required: true, type: String })
+  planTitle: string;
+
+  @Prop({ required: true, type: Date })
+  planTripDate: Date;
+
+  @Prop({ required: true, type: Number })
+  quotePrice: number;
+
   @Prop({ type: [String] })
   userIds: string[];
 

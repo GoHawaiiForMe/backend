@@ -6,7 +6,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import ChatRoomSchema, { ChatRoom } from 'src/providers/database/mongoose/chatRoom.schema';
 import ChatSchema, { Chat } from 'src/providers/database/mongoose/chat.schema';
 import ChatRepository from './chat.repository';
-import PlanModule from '../plan/plan.module';
 
 @Module({
   imports: [
@@ -16,8 +15,7 @@ import PlanModule from '../plan/plan.module';
     MongooseModule.forFeature([
       { name: ChatRoom.name, schema: ChatRoomSchema },
       { name: Chat.name, schema: ChatSchema }
-    ]),
-    PlanModule
+    ])
   ],
   controllers: [],
   providers: [ChatService, ChatRepository, WebSocketJwtGuard],

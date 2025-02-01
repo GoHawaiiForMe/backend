@@ -53,3 +53,11 @@ export interface CreateQuoteData {
   planId: string;
   isAssigned: boolean;
 }
+
+export interface toChatRoomData {
+  userIds: string[];
+  planId: string;
+  planTitle: string;
+  planTripDate: Date;
+  quotePrice: number;
+}

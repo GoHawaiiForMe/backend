@@ -9,7 +9,6 @@ import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import { CreateOptionalQuoteData, QuoteQueryOptions } from 'src/common/types/quote/quote.type';
 import { QuoteToClientProperties } from 'src/common/types/quote/quoteProperties';
 import { CreatePlanData } from 'src/common/types/plan/plan.type';
-import QuoteMapper from 'src/common/domains/quote/quote.mapper';
 import ForbiddenError from 'src/common/errors/forbiddenError';
 import { ServiceArea } from 'src/common/constants/serviceArea.type';
 import { RoleEnum } from 'src/common/constants/role.type';
@@ -19,7 +18,6 @@ import { StatusEnum } from 'src/common/constants/status.type';
 import { GroupByCount } from 'src/common/types/plan/plan.dto';
 import { NotificationEventName } from 'src/common/types/notification/notification.types';
 import UserService from '../user/user.service';
-import Quote from 'src/common/domains/quote/quote.domain';
 
 @Injectable()
 export default class PlanService {

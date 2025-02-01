@@ -44,9 +44,12 @@ export default class ChatRoomRepository {
   }
 
   async createChatRoom(data: IChatRoom): Promise<IChatRoom> {
-    const { planId, userIds } = data.toDB();
+    const { userIds, planId, planTitle, planTripDate, quotePrice } = data.toDB();
     const chatRoom = await this.chatRoom.create({
       planId,
+      planTitle,
+      planTripDate,
+      quotePrice,
       userIds,
       chatIds: []
     });
