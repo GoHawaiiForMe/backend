@@ -17,6 +17,7 @@ export interface PlanWhereConditions {
   assignees?: { some: { id: string } };
   status?: { in: StatusEnum[] };
   dreamerId?: string;
+  review?: { is: null } | { isNot: null };
   OR?: Array<{
     title?: { contains: string; mode: 'insensitive' };
     dreamer?: { nickName?: { contains: string; mode: 'insensitive' } };
@@ -27,7 +28,7 @@ export interface PlanQueryOptions {
   orderBy?: PlanOrder;
   keyword?: string;
   tripType?: TripType[];
-  tripDate?: Date; //NOTE. 스케줄러를 위한 필드
+  tripDate?: Date; //NOTE. 스케줄러를 위한 필드 + 완료를 누르기 위한 필드
   serviceArea?: ServiceArea[];
   page?: number;
   pageSize?: number;
@@ -35,6 +36,8 @@ export interface PlanQueryOptions {
   status?: StatusEnum[];
   userId?: string;
   role?: Role;
+  reviewed?: boolean;
+  readyToComplete?: boolean;
 }
 
 export interface CreatePlanData {

@@ -9,17 +9,15 @@ import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import { CreateOptionalQuoteData, QuoteQueryOptions } from 'src/common/types/quote/quote.type';
 import { QuoteToClientProperties } from 'src/common/types/quote/quoteProperties';
 import { CreatePlanData } from 'src/common/types/plan/plan.type';
-import QuoteMapper from 'src/common/domains/quote/quote.mapper';
 import ForbiddenError from 'src/common/errors/forbiddenError';
 import { ServiceArea } from 'src/common/constants/serviceArea.type';
 import { RoleEnum } from 'src/common/constants/role.type';
-import PlanMapper from 'src/common/domains/plan/plan.mapper';
 import BadRequestError from 'src/common/errors/badRequestError';
 import { StatusEnum } from 'src/common/constants/status.type';
 import { GroupByCount } from 'src/common/types/plan/plan.dto';
 import { NotificationEventName } from 'src/common/types/notification/notification.types';
 import UserService from '../user/user.service';
-import Quote from 'src/common/domains/quote/quote.domain';
+import Plan from 'src/common/domains/plan/plan.domain';
 
 @Injectable()
 export default class PlanService {
@@ -58,13 +56,27 @@ export default class PlanService {
     userId: string,
     options: PlanQueryOptions
   ): Promise<{ totalCount: number; list: PlanToClientProperties[] }> {
+    const { reviewed, readyToComplete } = options || {};
+    const isReviewQuery = reviewed === true || reviewed === false;
+    const isWithQuote = isReviewQuery || readyToComplete;
+
     options.userId = userId;
+    if (isReviewQuery) options.status = [StatusEnum.COMPLETED]; //NOTE. status COMPLETE 지정
+
+    if (readyToComplete) {
+      const today = new Date(); //NOTE. 완료할 수 있는 플랜 필터링
+      const koreaTime = today.toLocaleString('en-US', { timeZone: 'Asia/Seoul' });
+      const tripDate = new Date(koreaTime.split(',')[0]);
+      options.status = [StatusEnum.CONFIRMED];
+      options.tripDate = tripDate; //NOTE. CONFIRMED 상태로 지정 및 tripDate 지정
+    }
+
     const [totalCount, list] = await Promise.all([
       this.planRepository.totalCount(options),
       this.planRepository.findMany(options)
     ]);
 
-    const toClientList = list.map((plan) => plan.toClient());
+    const toClientList = list.map((plan) => (isWithQuote ? plan.toClientWithQuotes() : plan.toClient()));
     return { totalCount, list: toClientList };
   }
 
@@ -104,7 +116,7 @@ export default class PlanService {
   }
 
   async postPlan(data: CreatePlanData): Promise<PlanToClientProperties> {
-    const domainData = new PlanMapper(data).toDomain();
+    const domainData = Plan.create(data);
     const plan = await this.planRepository.create(domainData);
     return plan.toClientWithAddress();
   }
@@ -119,7 +131,7 @@ export default class PlanService {
     const quote = await this.quoteService.createQuote({ ...data, planId, isAssigned, makerId: userId });
 
     const makerNickName = quote.maker.nickName;
-    const tripType = plan.toClient().tripType;
+    const tripType = plan.getTripType();
     this.eventEmitter.emit('notification', {
       userId: plan.getDreamerId(),
       event: NotificationEventName.ARRIVE_QUOTE,
@@ -148,7 +160,7 @@ export default class PlanService {
     const updatedPlan = await this.planRepository.update(plan);
 
     const nickName = updatedPlan.getDreamerNickName();
-    const tripType = updatedPlan.toClient().tripType;
+    const tripType = updatedPlan.getTripType();
     this.eventEmitter.emit('notification', {
       userId: assigneeId,
       event: NotificationEventName.ARRIVE_REQUEST,

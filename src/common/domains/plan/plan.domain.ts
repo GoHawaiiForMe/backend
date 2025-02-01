@@ -9,6 +9,7 @@ import BadRequestError from 'src/common/errors/badRequestError';
 import { AssignData } from 'src/common/types/plan/plan.type';
 import ForbiddenError from 'src/common/errors/forbiddenError';
 import { UserReference } from 'src/common/types/user/user.types';
+import { ProfileImage } from 'src/common/constants/image.type';
 
 export default class Plan implements IPlan {
   private id?: string;
@@ -20,9 +21,19 @@ export default class Plan implements IPlan {
   private serviceArea: ServiceArea;
   private details: string;
   private address?: string;
-  private status: Status;
-  private quotes?: { id: string; makerId?: string; isConfirmed?: boolean }[];
-  private assignees: UserReference[];
+  private status?: Status;
+  private quotes?: {
+    id?: string;
+    makerId?: string;
+    isConfirmed?: boolean;
+    price?: number;
+    maker?: {
+      id: string;
+      nickName: string;
+      image?: ProfileImage;
+    };
+  }[];
+  private assignees?: UserReference[];
   private assigneeId?: string;
   private isAssigned: boolean;
   private dreamer?: UserReference | null;
@@ -39,10 +50,14 @@ export default class Plan implements IPlan {
     this.details = planProperties.details;
     this.address = planProperties.address;
     this.status = planProperties.status;
-    this.quotes = planProperties.quotes;
+    this.quotes = planProperties.quotes; // 타입보다 더 많은거는 신경 안씀
     this.assignees = planProperties.assignees;
     this.dreamer = planProperties.dreamer;
     this.dreamerId = planProperties.dreamerId;
+  }
+
+  static create(data: PlanProperties): IPlan {
+    return new Plan(data);
   }
 
   toClient(): PlanToClientProperties {
@@ -76,6 +91,24 @@ export default class Plan implements IPlan {
       status: this.status,
       assignees: this.assignees,
       dreamer: this.dreamer
+    };
+  }
+
+  toClientWithQuotes(): PlanToClientProperties {
+    return {
+      id: this.id,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+      title: this.title,
+      tripDate: this.tripDate,
+      tripType: this.tripType,
+      serviceArea: this.serviceArea,
+      details: this.details,
+      address: this.address,
+      status: this.status,
+      assignees: this.assignees,
+      dreamer: this.dreamer,
+      quotes: this.quotes
     };
   }
 
@@ -149,9 +182,11 @@ export default class Plan implements IPlan {
   getQuoteIds(): string[] {
     return this.quotes.map((quote) => quote.id);
   }
+
   getQuoteMakerIds(): string[] {
     return this.quotes.map((quote) => quote.makerId);
   }
+
   getConfirmedMakerId(): string {
     const confirmedQuote = this.quotes?.find((quote) => quote.isConfirmed === true);
     return confirmedQuote?.makerId ?? null;
@@ -179,5 +214,9 @@ export default class Plan implements IPlan {
 
   getTitle(): string {
     return this.title;
+  }
+
+  getTripType(): TripType {
+    return this.tripType;
   }
 }

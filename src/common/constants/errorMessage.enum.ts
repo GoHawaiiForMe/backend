@@ -30,6 +30,8 @@ export enum ErrorMessage {
   PLAN_ASSIGN_BAD_REQUEST = '지정견적 요청을 받은적이 없어 거부할 수 없습니다.',
   PLAN_ASSIGN_NOT_MAKER = 'Maker에게만 지정견적 요청을 할 수 있습니다.',
   PLAN_ASSIGN_NOT_PENDING = 'PENDING 상태일 때만 지정견적 요청과 거부를 할 수 있습니다.',
+  PLAN_READY_TO_REVIEW_BAD_REQUEST = '완료할 수 있는 플랜 필터링은 CONFIRMED 상태만 가능합니다.',
+  PLAN_REVIEW_FILTER_BAD_REQUEST = '리뷰는 OVERDUE와 PENDING 상태의 플랜에는 있을 수 없습니다.',
   PLAN_DELETE_BAD_REQUEST = 'CONFIRMED 상태의 진행중인 플랜은 삭제할 수 없습니다.',
   PLAN_IS_ASSIGNED_BAD_REQUEST = 'IS_ASSIGNED 값은 true와 false 혹은 입력하지 않아야 합니다.',
   PLAN_CANNOT_CREATE_CHATROOM_BAD_REQUEST = '해당 플랜은 채팅방을 만들 수 없습니다. CONFIRMED상태의 플랜만 가능합니다.',
