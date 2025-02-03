@@ -71,20 +71,6 @@ export default class ChatRoomService {
     return chatRoomWithUserInfo;
   }
 
-  async getChatRoomDomainById(options: FindChatRoomByIdOptions): Promise<IChatRoom> {
-    const { userId, chatRoomId } = options;
-    const chatRoom = await this.chatRoomRepository.findChatRoomById(chatRoomId);
-
-    if (!chatRoom) {
-      throw new NotFoundError(ErrorMessage.CHAT_ROOM_NOTFOUND);
-    }
-
-    if (!chatRoom.getUserIds().includes(userId)) {
-      throw new ForbiddenError(ErrorMessage.CHAT_ROOM_FORBIDDEN_ID);
-    }
-    return chatRoom;
-  }
-
   async getChatsByChatRoomId(options: ChatQueryOptions): Promise<{ totalCount: number; list: ChatProperties[] }> {
     const { userId, chatRoomId } = options;
 

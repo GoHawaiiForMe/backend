@@ -1,9 +1,8 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import ChatRepository from './chat.repository';
 import { ChatCreateData, ChatQueryOptions } from 'src/common/types/chat/chat.type';
-import IChat from 'src/common/domains/chat/chat.interface';
 import Chat from 'src/common/domains/chat/chat.domain';
-import { ChatProperties, ChatToClientProperties } from 'src/common/domains/chat/chat.properties';
+import { ChatToClientProperties } from 'src/common/domains/chat/chat.properties';
 import ChatRoomService from '../chatRoom/chatRoom.service';
 import ForbiddenError from 'src/common/errors/forbiddenError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
@@ -16,7 +15,9 @@ export default class ChatService {
     private readonly chatRoomService: ChatRoomService
   ) {}
 
-  async getChatsByChatRoomId(options: ChatQueryOptions): Promise<{ totalCount: number; list: ChatProperties[] }> {
+  async getChatsByChatRoomId(
+    options: ChatQueryOptions
+  ): Promise<{ totalCount: number; list: ChatToClientProperties[] }> {
     const [totalCount, list] = await Promise.all([
       this.chatRepository.totalCount(options.chatRoomId),
       this.chatRepository.findChatsByChatRoomId(options)

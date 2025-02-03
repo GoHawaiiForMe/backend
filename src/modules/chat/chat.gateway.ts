@@ -1,14 +1,10 @@
 import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
-import WebSocketJwtGuard from 'src/common/guards/webSocket.guard';
 import ChatService from './chat.service';
 
 @WebSocketGateway()
 export default class ChatGateway {
-  constructor(
-    private readonly jwtGuard: WebSocketJwtGuard,
-    private readonly chatService: ChatService
-  ) {}
+  constructor(private readonly chatService: ChatService) {}
 
   @SubscribeMessage('ClientToServerMessage')
   async receiveMessage(
