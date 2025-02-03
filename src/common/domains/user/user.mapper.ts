@@ -21,6 +21,7 @@ export default class UserMapper {
       coconut: this.user.coconut,
       followers: followerIds,
       makerProfile: this.user?.makerProfile,
+      stats: this.user?.stats,
       createdAt: this.user.createdAt,
       updatedAt: this.user.updatedAt
     });

@@ -56,6 +56,18 @@ async function main(prisma: PrismaDBClient) {
     data: QUOTES,
     skipDuplicates: true
   });
+
+  for (const USER of USERS) {
+    await prisma.userStats.create({
+      data: {
+        userId: USER.id,
+        averageRating: 0,
+        totalReviews: 0,
+        totalFollows: 0,
+        totalConfirms: 0
+      }
+    });
+  }
   // await prisma.$transaction(async (tx) => {
   //   await tx.quote.deleteMany();
   //   await tx.plan.deleteMany();

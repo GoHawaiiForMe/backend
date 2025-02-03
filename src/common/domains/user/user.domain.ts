@@ -3,14 +3,14 @@ import {
   FilteredUserProperties,
   PasswordProperties,
   UserProperties,
-  UserPropertiesFromDB,
-  UserReference
+  UserPropertiesFromDB
 } from '../../types/user/user.types';
 import { ComparePassword, HashingPassword } from '../../utilities/hashingPassword';
 import { IUser } from './user.interface';
 import BadRequestError from 'src/common/errors/badRequestError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import { MakerInfoAndProfileProperties, MakerProfileProperties } from 'src/common/types/user/profile.types';
+import { UserStatsProperties, UserStatsToClientProperties } from 'src/common/types/userStats/userStats.types';
 
 export default class User implements IUser {
   private readonly id?: string;
@@ -22,6 +22,7 @@ export default class User implements IUser {
   private coconut: number;
   private readonly followers: { dreamerId: string }[];
   private readonly makerProfile: Partial<MakerProfileProperties>;
+  private readonly stats: UserStatsProperties;
   private readonly createdAt?: Date;
   private readonly updatedAt?: Date;
 
@@ -35,6 +36,7 @@ export default class User implements IUser {
     this.coconut = user.coconut;
     this.followers = user?.followers;
     this.makerProfile = user?.makerProfile;
+    this.stats = user?.stats;
     this.createdAt = user?.createdAt;
     this.updatedAt = user?.updatedAt;
   }
@@ -140,5 +142,14 @@ export default class User implements IUser {
       };
     }
     return profile;
+  }
+
+  getStats(): UserStatsToClientProperties {
+    return {
+      averageRating: this.stats.averageRating,
+      totalReviews: this.stats.totalReviews,
+      totalFollows: this.stats.totalFollows,
+      totalConfirms: this.stats.totalConfirms
+    };
   }
 }
