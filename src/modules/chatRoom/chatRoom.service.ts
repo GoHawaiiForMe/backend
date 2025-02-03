@@ -9,14 +9,38 @@ import ChatService from '../chat/chat.service';
 import BadRequestError from 'src/common/errors/badRequestError';
 import { ChatProperties } from 'src/common/domains/chat/chat.properties';
 import UserService from '../user/user.service';
+import { Socket } from 'socket.io';
+import { ChatReference, FindChatRoomByIdOptions } from 'src/common/types/chat/chatRoom.type.ts/chatRoom.typs';
+import NotFoundError from 'src/common/errors/notFoundError';
+import IChatRoom from 'src/common/domains/chatRoom/chatRoom.interface';
 
 @Injectable()
 export default class ChatRoomService {
+  private readonly connectedClients = new Map<string, Socket>();
   constructor(
     private readonly chatRoomRepository: ChatRoomRepository,
     private readonly chatService: ChatService,
     private readonly userService: UserService
   ) {}
+
+  registerClient(userId: string, client: Socket) {
+    this.connectedClients.set(userId, client);
+  }
+
+  removeClient(userId: string) {
+    this.connectedClients.delete(userId);
+  }
+
+  isClient(userId: string): boolean {
+    const client = this.connectedClients.get(userId);
+    return !!client;
+  }
+
+  async joinUserRooms(userId: string, client: Socket) {
+    const userChatRoomIds = await this.getChatRoomIds(userId);
+
+    userChatRoomIds.forEach((chatRoomId) => client.join(chatRoomId));
+  }
 
   async getChatRooms(options: ChatQueryOptions): Promise<{ totalCount: number; list: ChatRoomWithUserInfo[] }> {
     const totalCount = await this.chatRoomRepository.totalCount(options.userId);
@@ -27,16 +51,16 @@ export default class ChatRoomService {
   } //TODO. 유저 정보 더해서 주기
 
   async getChatRoomIds(userId: string): Promise<string[]> {
-    const chatRoomIds = await this.chatRoomRepository.findChatRoomIdByUserId(userId);
+    const chatRoomIds = await this.chatRoomRepository.findActiveChatRoomIdByUserId(userId);
     return chatRoomIds;
   }
 
-  async getChatRoomById(userId: string, chatRoomId: string): Promise<ChatRoomWithUserInfo> {
-    //TODO. 유저 정보 더해서 주기, 플랜 정보 더해서 주기
+  async getChatRoomById(options: FindChatRoomByIdOptions): Promise<ChatRoomWithUserInfo> {
+    const { userId, chatRoomId } = options;
     const chatRoom = await this.chatRoomRepository.findChatRoomById(chatRoomId);
 
     if (!chatRoom) {
-      throw new BadRequestError(ErrorMessage.CHAT_ROOM_NOTFOUND);
+      throw new NotFoundError(ErrorMessage.CHAT_ROOM_NOTFOUND);
     }
 
     if (!chatRoom.getUserIds().includes(userId)) {
@@ -47,10 +71,24 @@ export default class ChatRoomService {
     return chatRoomWithUserInfo;
   }
 
+  async getChatRoomDomainById(options: FindChatRoomByIdOptions): Promise<IChatRoom> {
+    const { userId, chatRoomId } = options;
+    const chatRoom = await this.chatRoomRepository.findChatRoomById(chatRoomId);
+
+    if (!chatRoom) {
+      throw new NotFoundError(ErrorMessage.CHAT_ROOM_NOTFOUND);
+    }
+
+    if (!chatRoom.getUserIds().includes(userId)) {
+      throw new ForbiddenError(ErrorMessage.CHAT_ROOM_FORBIDDEN_ID);
+    }
+    return chatRoom;
+  }
+
   async getChatsByChatRoomId(options: ChatQueryOptions): Promise<{ totalCount: number; list: ChatProperties[] }> {
     const { userId, chatRoomId } = options;
 
-    await this.getChatRoomById(userId, chatRoomId);
+    await this.getChatRoomById({ userId, chatRoomId });
     const { totalCount, list } = await this.chatService.getChatsByChatRoomId(options);
     return { totalCount, list };
   }
@@ -62,24 +100,11 @@ export default class ChatRoomService {
     return chatRoom.toClient();
   }
 
-  async postChat(data: ChatCreateData): Promise<ChatProperties> {
-    const { senderId, chatRoomId } = data;
-    const chatRoom = await this.chatRoomRepository.findChatRoomById(chatRoomId);
-    if (!chatRoom) {
-      throw new BadRequestError(ErrorMessage.CHAT_ROOM_NOTFOUND);
-    }
-    const userIds = chatRoom.getUserIds();
+  async sendMessageToChatRoom(chat: ChatReference) {
+    const { id, senderId, chatRoomId } = chat;
 
-    if (!userIds.includes(senderId)) {
-      throw new ForbiddenError(ErrorMessage.CHAT_ROOM_FORBIDDEN_ID);
-    }
-
-    if (!chatRoom.getIsActive()) {
-      throw new BadRequestError(ErrorMessage.CHAT_ROOM_NOT_IS_ACTIVE);
-    }
-
-    const chat = await this.chatService.postChat(data);
-    return chat;
+    const client = this.connectedClients.get(senderId);
+    client.to(chatRoomId).emit('ServerToClientMessage', chat);
   }
 
   async fetchAndFormatUserInfo(chatRoom: ChatRoomProperties): Promise<ChatRoomWithUserInfo> {

@@ -44,6 +44,7 @@ export enum ErrorMessage {
   QUOTE_BAD_REQUEST_IS_SENT = 'isSent는 boolean 값인 true와 false만 입력이 가능합니다. 필수 입력사항입니다.',
   QUOTE_BAD_REQUEST_IS_ASSIGNED = 'isAssigned는 boolean 값인 true와 false만 입력이 가능합니다. 필수 입력사항입니다.',
   QUOTE_BAD_REQUEST_IS_CONFIRMED = 'isConfirmed는 boolean 값인 true와 false만 입력이 가능합니다.',
+  QUOTE_BAD_REQUEST_UPDATE_NOT_PENDING = 'PENDING 상태인 플랜의 견적만 업데이트 할 수 있습니다.',
   QUOTE_CONFLICT = '해당 플랜에 이미 견적서를 작성하셨습니다. 하나의 플랜에는 하나의 견적서만 쓸 수 있습니다.',
   QUOTE_DELETE_BAD_REQUEST_STATUS = '견적의 플랜이 PENDING 상태 일 때만 삭제할 수 있습니다.',
 
@@ -58,6 +59,8 @@ export enum ErrorMessage {
   CHAT_ROOM_NOT_IS_ACTIVE = '해당 채팅방은 사용할 수 있는 기간이 지나 사용할 수 없습니다.',
 
   CHAT_POST_BAD_ID = '채팅방의 id가 잘못된 형식입니다.',
+
+  CLIENT_NOT_CONNECTED = '연결되지 않은 클라이언트입니다.',
 
   INTERNAL_SERVER_ERROR = '내부 서버 오류',
   INTERNAL_SERVER_ERROR_CHAT_ROOM_UPDATE = '채팅방 업데이트 실패'

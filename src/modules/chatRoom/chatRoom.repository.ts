@@ -32,7 +32,7 @@ export default class ChatRoomRepository {
     return totalCount;
   }
 
-  async findChatRoomIdByUserId(userId: string): Promise<string[]> {
+  async findActiveChatRoomIdByUserId(userId: string): Promise<string[]> {
     const chatRooms = await this.chatRoom.find({ userIds: userId, isDeletedAt: null, isActive: true }).select('_id');
     return chatRooms.map((chatRoom) => chatRoom._id.toString());
   }

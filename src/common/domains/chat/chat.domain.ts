@@ -1,5 +1,5 @@
 import IChat from './chat.interface';
-import { ChatProperties } from './chat.properties';
+import { ChatProperties, ChatToClientProperties } from './chat.properties';
 
 export default class Chat implements IChat {
   private id?: string;
@@ -31,7 +31,7 @@ export default class Chat implements IChat {
     };
   }
 
-  toClient(): ChatProperties {
+  toClient(): ChatToClientProperties {
     return {
       id: this.id,
       createdAt: this.createdAt,

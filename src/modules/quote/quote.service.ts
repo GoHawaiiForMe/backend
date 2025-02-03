@@ -82,7 +82,7 @@ export default class QuoteService {
 
     const planStatus = quote.getPlanStatus();
     if (planStatus !== StatusEnum.PENDING) {
-      //여기서 에러잡기
+      throw new BadRequestError(ErrorMessage.QUOTE_BAD_REQUEST_UPDATE_NOT_PENDING);
     }
 
     const updatedQuote = await this.quoteRepository.update(quote.update(data));
