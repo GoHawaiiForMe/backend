@@ -1,10 +1,4 @@
-import {
-  ConnectedSocket,
-  MessageBody,
-  OnGatewayConnection,
-  SubscribeMessage,
-  WebSocketGateway
-} from '@nestjs/websockets';
+import { OnGatewayConnection, WebSocketGateway } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
 import WebSocketJwtGuard from 'src/common/guards/webSocket.guard';
 import ChatRoomService from './chatRoom.service';
@@ -16,10 +10,10 @@ export default class ChatRoomGateway implements OnGatewayConnection {
     private readonly chatRoomService: ChatRoomService
   ) {}
   handleDisconnection(client: Socket) {
-    client.rooms.forEach((room) => {
-      client.leave(room); // 모든 방에서 유저를 제거
-      console.log(`User left chat room ${room}`);
-    });
+    const user = client.data.user;
+    if (user) {
+      this.chatRoomService.removeClient(user.userId);
+    }
   }
 
   async handleConnection(client: Socket) {
@@ -28,35 +22,13 @@ export default class ChatRoomGateway implements OnGatewayConnection {
       const user = this.jwtGuard.getUserFromSocket(client);
 
       if (user) {
-        console.log(user);
         const { userId } = user;
-        const userChatRoomIds = await this.chatRoomService.getChatRoomIds(userId);
-
-        userChatRoomIds.forEach((chatRoomId) => {
-          client.join(chatRoomId); // 채팅방에 유저를 연결
-          console.log(`User ${user.userId} joined chat room ${chatRoomId}`);
-        });
+        this.chatRoomService.registerClient(userId, client);
+        await this.chatRoomService.joinUserRooms(userId, client);
       }
     } catch (e) {
-      //로그. 인증 실패 로그남기기
+      //TO.LOG 로그. 인증 실패 로그남기기
       client.disconnect();
     }
-  }
-  @SubscribeMessage('joinChatRoom') //NOTE. 임시용
-  async joinChatRoom(@MessageBody() chatRoomId: string, @ConnectedSocket() client: Socket) {}
-
-  @SubscribeMessage('receiveMessage')
-  async receiveMessage(@MessageBody() data: { message: string }, @ConnectedSocket() client: Socket) {
-    console.log('receiveMessage');
-    console.log(data);
-    console.log(client);
-  }
-
-  @SubscribeMessage('sendMessage')
-  async sendMessage(@MessageBody() data: { message: string }, @ConnectedSocket() client: Socket) {
-    client.emit('sendMessage', {
-      ...data,
-      from: 'server'
-    });
   }
 }

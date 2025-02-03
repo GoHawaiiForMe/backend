@@ -7,6 +7,7 @@ import { Types } from 'mongoose';
 import BadRequestError from 'src/common/errors/badRequestError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import { ChatProperties } from 'src/common/domains/chat/chat.properties';
+import IChatRoom from 'src/common/domains/chatRoom/chatRoom.interface';
 
 @Controller('chatRooms')
 export default class ChatRoomController {
@@ -26,7 +27,7 @@ export default class ChatRoomController {
     @UserId() userId: string,
     @Param('chatRoomId') chatRoomId: string
   ): Promise<ChatRoomWithUserInfo> {
-    const chatRoom = await this.chatRoomService.getChatRoomById(userId, chatRoomId);
+    const chatRoom = await this.chatRoomService.getChatRoomById({ userId, chatRoomId });
     return chatRoom;
   }
 
@@ -38,19 +39,5 @@ export default class ChatRoomController {
   ): Promise<{ totalCount: number; list: ChatProperties[] }> {
     const { totalCount, list } = await this.chatRoomService.getChatsByChatRoomId({ userId, chatRoomId, ...options });
     return { totalCount, list };
-  }
-
-  @Post(':chatRoomId/chats') //TO_DELETE 테스트용
-  async postChat(
-    @UserId() userId: string,
-    @Param('chatRoomId') chatRoomId: string,
-    @Body('content') content: string
-  ): Promise<ChatProperties> {
-    if (!Types.ObjectId.isValid(chatRoomId)) {
-      throw new BadRequestError(ErrorMessage.CHAT_POST_BAD_ID);
-    }
-
-    const chat = await this.chatRoomService.postChat({ senderId: userId, chatRoomId, content });
-    return chat;
   }
 }

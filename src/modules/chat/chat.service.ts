@@ -1,25 +1,23 @@
-import { Injectable } from '@nestjs/common';
-import { Socket } from 'socket.io';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import ChatRepository from './chat.repository';
 import { ChatCreateData, ChatQueryOptions } from 'src/common/types/chat/chat.type';
-import IChat from 'src/common/domains/chat/chat.interface';
 import Chat from 'src/common/domains/chat/chat.domain';
-import { ChatProperties } from 'src/common/domains/chat/chat.properties';
+import { ChatToClientProperties } from 'src/common/domains/chat/chat.properties';
+import ChatRoomService from '../chatRoom/chatRoom.service';
+import ForbiddenError from 'src/common/errors/forbiddenError';
+import ErrorMessage from 'src/common/constants/errorMessage.enum';
 
 @Injectable()
 export default class ChatService {
-  private readonly connectedClients = new Map<string, Socket>();
+  constructor(
+    private readonly chatRepository: ChatRepository,
+    @Inject(forwardRef(() => ChatRoomService))
+    private readonly chatRoomService: ChatRoomService
+  ) {}
 
-  constructor(private readonly chatRepository: ChatRepository) {}
-
-  registerClient(userId: string, client: Socket) {
-    this.connectedClients.set(userId, client);
-  }
-
-  removeClient(userId: string) {
-    this.connectedClients.delete(userId);
-  }
-  async getChatsByChatRoomId(options: ChatQueryOptions): Promise<{ totalCount: number; list: ChatProperties[] }> {
+  async getChatsByChatRoomId(
+    options: ChatQueryOptions
+  ): Promise<{ totalCount: number; list: ChatToClientProperties[] }> {
     const [totalCount, list] = await Promise.all([
       this.chatRepository.totalCount(options.chatRoomId),
       this.chatRepository.findChatsByChatRoomId(options)
@@ -29,9 +27,13 @@ export default class ChatService {
     return { totalCount, list: toClientList };
   }
 
-  async postChat(data: ChatCreateData): Promise<ChatProperties> {
+  async postChat(data: ChatCreateData): Promise<void> {
+    const { senderId, chatRoomId } = data;
     const chatData = Chat.create(data);
+    const client = this.chatRoomService.isClient(data.senderId);
+    if (!client) throw new ForbiddenError(ErrorMessage.CLIENT_NOT_CONNECTED);
+    await this.chatRoomService.getChatRoomById({ userId: senderId, chatRoomId });
     const chat = await this.chatRepository.createChat(chatData);
-    return chat.toClient(); //NOTE. 테스트용
+    await this.chatRoomService.sendMessageToChatRoom(chat.toClient());
   }
 }
