@@ -40,18 +40,4 @@ export default class ChatRoomController {
     const { totalCount, list } = await this.chatRoomService.getChatsByChatRoomId({ userId, chatRoomId, ...options });
     return { totalCount, list };
   }
-
-  // @Post(':chatRoomId/chats') //TO_DELETE 테스트용
-  // async postChat(
-  //   @UserId() userId: string,
-  //   @Param('chatRoomId') chatRoomId: string,
-  //   @Body('content') content: string
-  // ): Promise<ChatProperties> {
-  //   if (!Types.ObjectId.isValid(chatRoomId)) {
-  //     throw new BadRequestError(ErrorMessage.CHAT_POST_BAD_ID);
-  //   }
-
-  //   const chat = await this.chatRoomService.postChat({ senderId: userId, chatRoomId, content });
-  //   return chat;
-  // }
 }
