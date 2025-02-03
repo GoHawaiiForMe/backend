@@ -9,20 +9,20 @@ export default class UserStatsRepository {
   constructor(private readonly db: DBClient) {}
 
   async getByUserId(userId: string): Promise<IUserStats> {
-    const user = await this.db.userStats.findUnique({ where: { userId } });
+    const stats = await this.db.userStats.findUnique({ where: { userId } });
 
-    return new UserStatsMapper(user).toDomain();
+    return new UserStatsMapper(stats).toDomain();
   }
 
   async create(userId: string, data: Partial<UserStatsProperties>): Promise<IUserStats> {
-    const user = await this.db.userStats.create({ data: { userId, ...data } });
+    const stats = await this.db.userStats.create({ data: { userId, ...data } });
 
-    return new UserStatsMapper(user).toDomain();
+    return new UserStatsMapper(stats).toDomain();
   }
 
   async update(userId: string, data: Partial<UserStatsProperties>): Promise<IUserStats> {
-    const user = await this.db.userStats.update({ where: { userId }, data });
+    const stats = await this.db.userStats.update({ where: { userId }, data });
 
-    return new UserStatsMapper(user).toDomain();
+    return new UserStatsMapper(stats).toDomain();
   }
 }

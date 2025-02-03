@@ -15,24 +15,25 @@ export default class UserStatsService {
 
   async get(userId: string): Promise<UserStatsToClientProperties> {
     const stats = await this.redis.getStats(userId);
-    let user: IUserStats = new UserStatsMapper({ ...stats, userId }).toDomain();
+    let userStats: IUserStats = new UserStatsMapper({ ...stats, userId }).toDomain();
 
-    if (!user.isValidStats()) {
-      user = await this.repository.getByUserId(userId);
-      if (!user) {
-        user = UserStats.create({ userId });
+    if (!userStats.isValidStats()) {
+      userStats = await this.repository.getByUserId(userId);
+      if (!userStats) {
+        // TODO. UserStats 목데이터 추가 후 삭제
+        userStats = UserStats.create({ userId });
       }
-      await this.redis.cacheStats(userId, user.toObject());
+      await this.redis.cacheStats(userId, userStats.toObject());
     }
 
-    return user.toObject();
+    return userStats.toObject();
   }
 
   async update(userId: string, data: Partial<UserStatsProperties>): Promise<UserStatsToClientProperties> {
-    const user = await this.repository.getByUserId(userId);
+    const stats = await this.repository.getByUserId(userId);
 
-    if (user !== null) {
-      user.update(data);
+    if (stats !== null) {
+      stats.update(data);
       const updatedUser = await this.repository.update(userId, data);
 
       return updatedUser.toObject();
@@ -42,9 +43,9 @@ export default class UserStatsService {
   }
 
   async create(userId: string, data: Partial<UserStatsProperties>): Promise<UserStatsToClientProperties> {
-    const user = UserStats.create({ ...data, userId });
-    const newUser = await this.repository.create(userId, user.toObject());
+    const stats = UserStats.create({ ...data, userId });
+    const newUserStats = await this.repository.create(userId, stats.toObject());
 
-    return newUser.toObject();
+    return newUserStats.toObject();
   }
 }

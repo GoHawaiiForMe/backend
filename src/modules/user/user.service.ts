@@ -93,9 +93,7 @@ export default class UserService {
     options: GetMakerListQueryDTO
   ): Promise<{ totalCount: number; list: Partial<MakerInfoAndProfileProperties>[] }> {
     const users = await this.repository.findMany(options);
-    const list = users.map((user) => {
-      return { ...user.getWithMakerProfile(true), ...user.getStats() };
-    });
+    const list = users.map((user) => ({ ...user.getWithMakerProfile(true), ...user.getStats() }));
     const totalCount = await this.repository.count(options);
 
     return { totalCount, list };
