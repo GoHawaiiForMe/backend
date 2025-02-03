@@ -1,11 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import DBClient from 'src/providers/database/prisma/DB.client';
 import UserMapper from '../../common/domains/user/user.mapper';
-import { UserProperties } from '../../common/types/user/user.types';
+import { MakerOrderBy, MakerOrderByField, UserProperties } from '../../common/types/user/user.types';
 import { DreamerProfileProperties, MakerProfileProperties } from '../../common/types/user/profile.types';
 import { DreamerProfileMapper, MakerProfileMapper } from '../../common/domains/user/profile.mapper';
 import { IUser } from '../../common/domains/user/user.interface';
 import { IDreamerProfile, IMakerProfile } from '../../common/domains/user/profile.interface';
+import { RoleEnum } from 'src/common/constants/role.type';
+import SortOrder from 'src/common/constants/sortOrder.enum';
+import { GetMakerListQueryDTO } from 'src/common/types/user/query.dto';
 
 @Injectable()
 export default class UserRepository {
@@ -53,6 +56,56 @@ export default class UserRepository {
     });
 
     return new UserMapper(user).toDomain();
+  }
+
+  async findMany(options: GetMakerListQueryDTO): Promise<IUser[]> {
+    // 검색어, 지역 필터, 서비스 필터, 정렬(리뷰 많은순, 평점 높은순, 확정 많은순)
+    const { page, pageSize, orderBy, serviceArea, serviceType, keyword } = options;
+
+    let sortOption: MakerOrderByField;
+    switch (orderBy) {
+      case MakerOrderBy.RATINGS:
+        sortOption = { stats: { averageRating: SortOrder.DESC } };
+        break;
+      case MakerOrderBy.CONFIRMS:
+        sortOption = { stats: { totalConfirms: SortOrder.DESC } };
+        break;
+      case MakerOrderBy.REVIEWS:
+      default:
+        sortOption = { stats: { totalReviews: SortOrder.DESC } };
+    }
+
+    const users = await this.db.user.findMany({
+      where: {
+        AND: [
+          { role: RoleEnum.MAKER },
+          keyword ? { nickName: { contains: keyword, mode: 'insensitive' } } : {},
+          serviceArea ? { makerProfile: { serviceArea: { has: serviceArea } } } : {},
+          serviceType ? { makerProfile: { serviceTypes: { has: serviceType } } } : {}
+        ]
+      },
+      include: { makerProfile: true, stats: true },
+      orderBy: sortOption,
+      take: pageSize,
+      skip: pageSize * (page - 1)
+    });
+
+    return users.map((user) => new UserMapper(user).toDomain());
+  }
+
+  async count(options: GetMakerListQueryDTO): Promise<number> {
+    const { serviceArea, serviceType, keyword } = options;
+
+    return await this.db.user.count({
+      where: {
+        AND: [
+          { role: RoleEnum.MAKER },
+          keyword ? { nickName: { contains: keyword, mode: 'insensitive' } } : {},
+          serviceArea ? { makerProfile: { serviceArea: { has: serviceArea } } } : {},
+          serviceType ? { makerProfile: { serviceTypes: { has: serviceType } } } : {}
+        ]
+      }
+    });
   }
 
   async create(user: Partial<UserProperties>): Promise<IUser> {

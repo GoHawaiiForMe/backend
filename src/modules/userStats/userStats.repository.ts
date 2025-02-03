@@ -1,30 +1,28 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
 import { IUserStats } from 'src/common/domains/userStats/userStats.interface';
 import UserStatsMapper from 'src/common/domains/userStats/userStats.mapper';
 import { UserStatsProperties } from 'src/common/types/userStats/userStats.types';
-import { UserStats } from 'src/providers/database/mongoose/userStats.schema';
+import DBClient from 'src/providers/database/prisma/DB.client';
 
 @Injectable()
 export default class UserStatsRepository {
-  constructor(@InjectModel(UserStats.name) private db: Model<UserStats>) {}
+  constructor(private readonly db: DBClient) {}
 
   async getByUserId(userId: string): Promise<IUserStats> {
-    const user = await this.db.findOne({ userId }).exec();
+    const stats = await this.db.userStats.findUnique({ where: { userId } });
 
-    return new UserStatsMapper(user).toDomain();
+    return new UserStatsMapper(stats).toDomain();
   }
 
   async create(userId: string, data: Partial<UserStatsProperties>): Promise<IUserStats> {
-    const user = await this.db.create({ userId, ...data });
+    const stats = await this.db.userStats.create({ data: { userId, ...data } });
 
-    return new UserStatsMapper(user).toDomain();
+    return new UserStatsMapper(stats).toDomain();
   }
 
   async update(userId: string, data: Partial<UserStatsProperties>): Promise<IUserStats> {
-    const user = await this.db.findOneAndUpdate({ userId }, { $set: data }, { new: true });
+    const stats = await this.db.userStats.update({ where: { userId }, data });
 
-    return new UserStatsMapper(user).toDomain();
+    return new UserStatsMapper(stats).toDomain();
   }
 }

@@ -32,7 +32,7 @@ import UnauthorizedError from 'src/common/errors/unauthorizedError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import { UserRole } from 'src/common/decorators/role.decorator';
 import { Role } from 'src/common/decorators/roleGuard.decorator';
-import { PaginationQueryDTO } from 'src/common/types/user/query.dto';
+import { GetMakerListQueryDTO, PaginationQueryDTO } from 'src/common/types/user/query.dto';
 
 @Controller('users')
 export default class UserController {
@@ -70,7 +70,7 @@ export default class UserController {
     res.json({ accessToken });
   }
 
-  @Get()
+  @Get('me')
   @ApiBearerAuth('accessToken')
   @ApiOperation({ summary: '유저 정보 조회', description: '로그인한 유저의 기본 정보를 조회합니다' })
   @ApiOkResponse({ type: UserResponseDTO })
@@ -104,6 +104,12 @@ export default class UserController {
     @Query() options: PaginationQueryDTO
   ): Promise<{ totalCount: number; list: followResponseDTO[] }> {
     return await this.service.getFollows(userId, options);
+  }
+
+  @Public()
+  @Get('makers')
+  async getMakerList(@Query() options: GetMakerListQueryDTO) {
+    return await this.service.getMakers(options);
   }
 
   @Patch('update')

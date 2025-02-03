@@ -56,6 +56,7 @@ async function main(prisma: PrismaDBClient) {
     data: QUOTES,
     skipDuplicates: true
   });
+
   // await prisma.$transaction(async (tx) => {
   //   await tx.quote.deleteMany();
   //   await tx.plan.deleteMany();

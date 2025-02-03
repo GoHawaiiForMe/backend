@@ -2,6 +2,8 @@ import { ProfileImage } from 'src/common/constants/image.type';
 import { Role } from 'src/common/constants/role.type';
 import { TripType } from 'src/common/constants/tripType.type';
 import { MakerProfileProperties } from './profile.types';
+import SortOrder from 'src/common/constants/sortOrder.enum';
+import { UserStatsProperties } from '../userStats/userStats.types';
 
 export interface UserProperties {
   id?: string;
@@ -25,6 +27,7 @@ export interface UserPropertiesFromDB {
   coconut: number;
   followers?: { dreamerId: string }[];
   makerProfile?: Partial<MakerProfileProperties>;
+  stats?: UserStatsProperties;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -48,4 +51,15 @@ export interface UserReference {
   gallery?: string;
   serviceTypes?: TripType[];
   isFollowed?: boolean;
+}
+
+export type MakerOrderByField =
+  | { stats: { averageRating: SortOrder.DESC } }
+  | { stats: { totalConfirms: SortOrder.DESC } }
+  | { stats: { totalReviews: SortOrder.DESC } };
+
+export enum MakerOrderBy {
+  RATINGS = 'averageRating',
+  CONFIRMS = 'totalConfirms',
+  REVIEWS = 'totalReviews'
 }

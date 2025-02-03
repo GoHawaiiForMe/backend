@@ -36,6 +36,7 @@ model User {
 
   dreamerProfile DreamerProfile?
   makerProfile   MakerProfile?
+  stats          UserStats?
 }
 
 model DreamerProfile {
@@ -61,6 +62,15 @@ model MakerProfile {
   detailDescription String
   user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId            String        @unique
+}
+
+model UserStats {
+  user          User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String @unique
+  averageRating Float  @default(0)
+  totalReviews  Int    @default(0)
+  totalFollows  Int    @default(0)
+  totalConfirms Int    @default(0)
 }
 
 model Review {

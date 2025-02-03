@@ -12,9 +12,8 @@ import {
   MakerProfileProperties
 } from '../../common/types/user/profile.types';
 import UserStatsService from '../userStats/userStats.service';
-import { RoleEnum } from 'src/common/constants/role.type';
 import FollowService from '../follow/follow.service';
-import { PaginationQueryDTO } from 'src/common/types/user/query.dto';
+import { GetMakerListQueryDTO, PaginationQueryDTO } from 'src/common/types/user/query.dto';
 import { followResponseDTO, ProfileCardResponseDTO } from 'src/common/types/user/user.response.dto';
 
 @Injectable()
@@ -53,6 +52,10 @@ export default class UserService {
       const profileData = MakerProfile.create({ ...profile, userId: newUser.id });
       await this.repository.createMaker(profileData.get());
     }
+
+    // 유저 생성시 기본값으로 UserStats 생성
+    await this.userStats.create(savedUser.getId(), {});
+
     return;
   }
 
@@ -84,6 +87,16 @@ export default class UserService {
 
     const profile = await this.repository.findMakerProfile(userId);
     return profile.get();
+  }
+
+  async getMakers(
+    options: GetMakerListQueryDTO
+  ): Promise<{ totalCount: number; list: Partial<MakerInfoAndProfileProperties>[] }> {
+    const users = await this.repository.findMany(options);
+    const list = users.map((user) => ({ ...user.getWithMakerProfile(true), ...user.getStats() }));
+    const totalCount = await this.repository.count(options);
+
+    return { totalCount, list };
   }
 
   createTokens(payload: { userId: string; role: string }) {
