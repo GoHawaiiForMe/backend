@@ -558,5 +558,166 @@ export const QUOTES = [
     makerId: '6b4ded82-e680-410d-b86d-ce6974e53f37',
     isConfirmed: true,
     isAssigned: false
+  },
+  /** dreamer1, maker1 리뷰 생성용 목데이터 */
+  {
+    id: 'b9af04c8-eef2-4c09-a3de-ace146df24f8',
+    createdAt: '2024-12-28T00:00:00.000Z',
+    price: 100,
+    content: '높은 곳 좋아합니다!',
+    planId: 'cf7abc6d-eca3-405a-bf6e-9071802b78ca',
+    makerId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
+    isConfirmed: true,
+    isAssigned: false
+  },
+  {
+    id: 'ae15710e-e6b9-464d-be7e-54ee8a95280f',
+    createdAt: '2024-12-28T00:00:00.000Z',
+    price: 100,
+    content: '높은 곳 좋아합니다!',
+    planId: 'fc83c658-e960-4f50-bbad-390deda3979c',
+    makerId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
+    isConfirmed: true,
+    isAssigned: false
+  },
+  {
+    id: '875d3d33-d1aa-4e59-b1cf-e7e306b182fd',
+    createdAt: '2024-12-28T00:00:00.000Z',
+    price: 100,
+    content: '높은 곳 좋아합니다!',
+    planId: 'feccc484-4dce-48c0-8ccb-ffaeba1aca91',
+    makerId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
+    isConfirmed: true,
+    isAssigned: false
+  },
+  {
+    id: '4a6d62bc-2066-436c-be21-b45dd7b4e5a2',
+    createdAt: '2024-12-28T00:00:00.000Z',
+    price: 100,
+    content: '높은 곳 좋아합니다!',
+    planId: '62fa5235-b585-4e9a-8656-9bdc193f7349',
+    makerId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
+    isConfirmed: true,
+    isAssigned: false
+  },
+  {
+    id: '8d903f01-6181-4a36-a2cf-2f1543e09a77',
+    createdAt: '2024-12-28T00:00:00.000Z',
+    price: 100,
+    content: '높은 곳 좋아합니다!',
+    planId: '0f61f8b9-7b29-4b82-86c7-f7ce8e418baa',
+    makerId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
+    isConfirmed: true,
+    isAssigned: false
+  },
+  {
+    id: '2dee7206-f5d3-442c-8613-8d22ff6e98c7',
+    createdAt: '2024-12-28T00:00:00.000Z',
+    price: 100,
+    content: '높은 곳 좋아합니다!',
+    planId: 'b89de5c8-da59-4400-b6b8-87a2badae2ab',
+    makerId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
+    isConfirmed: true,
+    isAssigned: false
+  },
+  {
+    id: '5cc47a4d-13d7-463c-94a7-42d8e0df02b1',
+    createdAt: '2024-12-28T00:00:00.000Z',
+    price: 100,
+    content: '높은 곳 좋아합니다!',
+    planId: '0a171359-56da-4384-9f54-36cb796e5412',
+    makerId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
+    isConfirmed: true,
+    isAssigned: false
+  },
+  {
+    id: 'f65e4f26-bdfd-4fe3-ba7a-d9d4c3db070c',
+    createdAt: '2024-12-28T00:00:00.000Z',
+    price: 100,
+    content: '높은 곳 좋아합니다!',
+    planId: '8c10d119-d5fe-4773-bd26-0d47cd57f530',
+    makerId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
+    isConfirmed: true,
+    isAssigned: false
+  },
+  {
+    id: 'ae1e7476-5ef9-4f09-a92c-c71063772158',
+    createdAt: '2024-12-28T00:00:00.000Z',
+    price: 100,
+    content: '높은 곳 좋아합니다!',
+    planId: '9a411e0b-7a54-4c84-b9fb-53cddbce5485',
+    makerId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
+    isConfirmed: true,
+    isAssigned: false
+  },
+  {
+    id: '413aecda-26cb-4ad3-92cb-f058d51a3940',
+    createdAt: '2024-12-28T00:00:00.000Z',
+    price: 100,
+    content: '높은 곳 좋아합니다!',
+    planId: 'e6df9e0b-f3d2-42cf-a4b9-998ca536f93e',
+    makerId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
+    isConfirmed: true,
+    isAssigned: false
+  },
+  {
+    id: 'c305e4c4-d967-4a38-9246-1cb9f76181cb',
+    createdAt: '2024-12-28T00:00:00.000Z',
+    price: 100,
+    content: '높은 곳 좋아합니다!',
+    planId: '095e42af-53af-4656-8335-2802b1cb369a',
+    makerId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
+    isConfirmed: true,
+    isAssigned: false
+  },
+  {
+    id: 'd4c62e20-232e-46ce-ae84-57b5c11911b3',
+    createdAt: '2024-12-28T00:00:00.000Z',
+    price: 100,
+    content: '높은 곳 좋아합니다!',
+    planId: '5b345767-eec1-4107-925f-0ba60d940f7e',
+    makerId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
+    isConfirmed: true,
+    isAssigned: false
+  },
+  {
+    id: '706879e4-c1db-4392-8cf5-5ad66690bd01',
+    createdAt: '2024-12-28T00:00:00.000Z',
+    price: 100,
+    content: '높은 곳 좋아합니다!',
+    planId: '01ec63ec-2c10-4a56-8aa2-638c8138ac8b',
+    makerId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
+    isConfirmed: true,
+    isAssigned: false
+  },
+  {
+    id: 'ff80eeb6-8b0f-41fd-8edf-e89c5384a56b',
+    createdAt: '2024-12-28T00:00:00.000Z',
+    price: 100,
+    content: '높은 곳 좋아합니다!',
+    planId: '1e747bc1-d11f-449b-9f4e-4b061a4129e0',
+    makerId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
+    isConfirmed: true,
+    isAssigned: false
+  },
+  {
+    id: '09e18ed9-b0f6-4053-b5b3-b64770afec6a',
+    createdAt: '2024-12-28T00:00:00.000Z',
+    price: 100,
+    content: '높은 곳 좋아합니다!',
+    planId: 'bc9ad582-18f1-4825-9645-fe7d26bd0a78',
+    makerId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
+    isConfirmed: true,
+    isAssigned: false
+  },
+  {
+    id: '7f6babc8-5f5c-47e3-a626-bc9da5687b16',
+    createdAt: '2024-12-28T00:00:00.000Z',
+    price: 100,
+    content: '높은 곳 좋아합니다!',
+    planId: 'ded63481-0cbb-4556-acc5-9c193fd1643b',
+    makerId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
+    isConfirmed: true,
+    isAssigned: false
   }
 ];

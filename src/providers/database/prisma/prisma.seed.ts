@@ -8,6 +8,8 @@ import { MAKER_PROFILES } from './mock/makerProfile.mock';
 import { FOLLOWS } from './mock/follow.mock';
 import { HashingPassword } from 'src/common/utilities/hashingPassword';
 import { QUOTES } from './mock/quote.mock';
+import { USER_STATS } from './mock/userStats.mock';
+import { REVIEWS } from './mock/review.mock';
 
 async function main(prisma: PrismaDBClient) {
   const users = await Promise.all(
@@ -16,11 +18,13 @@ async function main(prisma: PrismaDBClient) {
       password: await HashingPassword(user.password)
     }))
   );
+  await prisma.review.deleteMany();
   await prisma.quote.deleteMany();
   await prisma.plan.deleteMany();
   await prisma.follow.deleteMany();
   await prisma.makerProfile.deleteMany();
   await prisma.dreamerProfile.deleteMany();
+  await prisma.userStats.deleteMany();
   await prisma.user.deleteMany();
 
   await prisma.user.createMany({
@@ -54,6 +58,14 @@ async function main(prisma: PrismaDBClient) {
 
   await prisma.quote.createMany({
     data: QUOTES,
+    skipDuplicates: true
+  });
+  await prisma.userStats.createMany({
+    data: USER_STATS,
+    skipDuplicates: true
+  });
+  await prisma.review.createMany({
+    data: REVIEWS,
     skipDuplicates: true
   });
 
