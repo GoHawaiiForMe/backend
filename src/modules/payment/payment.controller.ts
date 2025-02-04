@@ -20,5 +20,8 @@ export default class PaymentController {
     return await this.service.create(userId, body);
   }
 
-  // TODO: 결제 완료 API
+  @Post()
+  async completePayment(@Body() body) {
+    return await this.service.syncPayment(body.paymentId);
+  }
 }

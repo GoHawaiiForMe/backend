@@ -31,6 +31,10 @@ export default class Payment implements IPayment {
     return this.userId;
   }
 
+  getAmount(): number {
+    return this.amount;
+  }
+
   get(): PaymentProperties {
     return {
       id: this.id,
