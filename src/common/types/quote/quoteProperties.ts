@@ -8,7 +8,7 @@ export interface QuoteProperties {
   price: number;
   content: string;
   plan?: PlanReference;
-  shoppingAddress?: string;
+  dreamerAddress?: string;
   planId: string;
   dreamer?: UserReference;
   maker?: UserReference;

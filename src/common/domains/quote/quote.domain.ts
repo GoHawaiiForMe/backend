@@ -15,7 +15,7 @@ export default class Quote implements IQuote {
   private price: number;
   private content: string;
   private plan?: PlanReference;
-  private shoppingAddress?: string;
+  private dreamerAddress?: string;
   private planId: string;
   private dreamer?: UserReference;
   private maker?: UserReference;
@@ -30,7 +30,7 @@ export default class Quote implements IQuote {
     this.price = quoteProperties.price;
     this.content = quoteProperties.content;
     this.plan = quoteProperties.plan;
-    this.shoppingAddress = quoteProperties.shoppingAddress;
+    this.dreamerAddress = quoteProperties.dreamerAddress;
     this.planId = quoteProperties.planId;
     this.dreamer = quoteProperties?.dreamer;
     this.maker = quoteProperties?.maker;
@@ -70,14 +70,14 @@ export default class Quote implements IQuote {
   }
 
   toClient(): QuoteToClientProperties {
-    const isShowAddress = this.plan.tripType === TripTypeEnum.SHOPPING;
+    const showAddress = this.plan.tripType === TripTypeEnum.SHOPPING;
     return {
       id: this.id,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       price: this.price,
       content: this.content,
-      plan: isShowAddress ? { ...this.plan, address: this.shoppingAddress } : this.plan,
+      plan: showAddress ? { ...this.plan, address: this.dreamerAddress } : this.plan,
       maker: this.maker,
       isConfirmed: this.isConfirmed,
       isAssigned: this.isAssigned
@@ -85,7 +85,7 @@ export default class Quote implements IQuote {
   }
 
   toMaker(): QuoteToClientProperties {
-    const isShowAddress =
+    const showAddress =
       this.plan.status === StatusEnum.CONFIRMED &&
       this.plan.tripType === TripTypeEnum.SHOPPING &&
       this.isConfirmed === true;
@@ -95,7 +95,7 @@ export default class Quote implements IQuote {
       updatedAt: this.updatedAt,
       price: this.price,
       content: this.content,
-      plan: isShowAddress ? { ...this.plan, address: this.shoppingAddress } : this.plan,
+      plan: showAddress ? { ...this.plan, address: this.dreamerAddress } : this.plan,
       dreamer: this.dreamer,
       maker: this.maker,
       isConfirmed: this.isConfirmed,

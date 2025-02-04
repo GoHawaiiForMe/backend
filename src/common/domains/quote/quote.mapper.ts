@@ -17,7 +17,7 @@ export default class QuoteMapper {
       price: this.quote.price,
       content: this.quote.content,
       plan: restPlan,
-      shoppingAddress: address,
+      dreamerAddress: address,
       planId: this.quote.planId,
       dreamer,
       maker: this.quote.maker ?? null,
