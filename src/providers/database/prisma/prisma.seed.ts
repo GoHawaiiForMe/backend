@@ -18,14 +18,14 @@ async function main(prisma: PrismaDBClient) {
       password: await HashingPassword(user.password)
     }))
   );
+  await prisma.review.deleteMany();
   await prisma.quote.deleteMany();
   await prisma.plan.deleteMany();
   await prisma.follow.deleteMany();
   await prisma.makerProfile.deleteMany();
   await prisma.dreamerProfile.deleteMany();
-  await prisma.user.deleteMany();
-  await prisma.review.deleteMany();
   await prisma.userStats.deleteMany();
+  await prisma.user.deleteMany();
 
   await prisma.user.createMany({
     data: users,

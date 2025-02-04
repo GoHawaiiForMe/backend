@@ -457,5 +457,182 @@ export const PLANS = [
     status: Status.PENDING,
     dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0',
     assignees: [{ id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }]
+  },
+  /** dreamer1, maker1 리뷰 생성용 목데이터 */
+  {
+    id: 'cf7abc6d-eca3-405a-bf6e-9071802b78ca',
+    createdAt: '2024-12-27T00:00:00.000Z',
+    title: '잠실 스카이타워 대신 올라가주세요',
+    tripDate: '2025-01-27T00:00:00.000Z',
+    tripType: TripType.ACTIVITY,
+    serviceArea: ServiceArea.SEOUL,
+    details: '고소공포증이 있어서 메이커님이 대신 제가 스카이타워 올라가는 것처럼 영상 찍어주세요',
+    status: Status.COMPLETED,
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0'
+  },
+  {
+    id: 'fc83c658-e960-4f50-bbad-390deda3979c',
+    createdAt: '2024-12-27T00:00:00.000Z',
+    title: '잠실 스카이타워 대신 올라가주세요',
+    tripDate: '2025-01-27T00:00:00.000Z',
+    tripType: TripType.ACTIVITY,
+    serviceArea: ServiceArea.SEOUL,
+    details: '고소공포증이 있어서 메이커님이 대신 제가 스카이타워 올라가는 것처럼 영상 찍어주세요',
+    status: Status.COMPLETED,
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0'
+  },
+  {
+    id: 'feccc484-4dce-48c0-8ccb-ffaeba1aca91',
+    createdAt: '2024-12-27T00:00:00.000Z',
+    title: '잠실 스카이타워 대신 올라가주세요',
+    tripDate: '2025-01-27T00:00:00.000Z',
+    tripType: TripType.ACTIVITY,
+    serviceArea: ServiceArea.SEOUL,
+    details: '고소공포증이 있어서 메이커님이 대신 제가 스카이타워 올라가는 것처럼 영상 찍어주세요',
+    status: Status.COMPLETED,
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0'
+  },
+  {
+    id: '62fa5235-b585-4e9a-8656-9bdc193f7349',
+    createdAt: '2024-12-27T00:00:00.000Z',
+    title: '잠실 스카이타워 대신 올라가주세요',
+    tripDate: '2025-01-27T00:00:00.000Z',
+    tripType: TripType.ACTIVITY,
+    serviceArea: ServiceArea.SEOUL,
+    details: '고소공포증이 있어서 메이커님이 대신 제가 스카이타워 올라가는 것처럼 영상 찍어주세요',
+    status: Status.COMPLETED,
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0'
+  },
+  {
+    id: '0f61f8b9-7b29-4b82-86c7-f7ce8e418baa',
+    createdAt: '2024-12-27T00:00:00.000Z',
+    title: '잠실 스카이타워 대신 올라가주세요',
+    tripDate: '2025-01-27T00:00:00.000Z',
+    tripType: TripType.ACTIVITY,
+    serviceArea: ServiceArea.SEOUL,
+    details: '고소공포증이 있어서 메이커님이 대신 제가 스카이타워 올라가는 것처럼 영상 찍어주세요',
+    status: Status.COMPLETED,
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0'
+  },
+  {
+    id: 'b89de5c8-da59-4400-b6b8-87a2badae2ab',
+    createdAt: '2024-12-27T00:00:00.000Z',
+    title: '잠실 스카이타워 대신 올라가주세요',
+    tripDate: '2025-01-27T00:00:00.000Z',
+    tripType: TripType.ACTIVITY,
+    serviceArea: ServiceArea.SEOUL,
+    details: '고소공포증이 있어서 메이커님이 대신 제가 스카이타워 올라가는 것처럼 영상 찍어주세요',
+    status: Status.COMPLETED,
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0'
+  },
+  {
+    id: '0a171359-56da-4384-9f54-36cb796e5412',
+    createdAt: '2024-12-27T00:00:00.000Z',
+    title: '잠실 스카이타워 대신 올라가주세요',
+    tripDate: '2025-01-27T00:00:00.000Z',
+    tripType: TripType.ACTIVITY,
+    serviceArea: ServiceArea.SEOUL,
+    details: '고소공포증이 있어서 메이커님이 대신 제가 스카이타워 올라가는 것처럼 영상 찍어주세요',
+    status: Status.COMPLETED,
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0'
+  },
+  {
+    id: '8c10d119-d5fe-4773-bd26-0d47cd57f530',
+    createdAt: '2024-12-27T00:00:00.000Z',
+    title: '잠실 스카이타워 대신 올라가주세요',
+    tripDate: '2025-01-27T00:00:00.000Z',
+    tripType: TripType.ACTIVITY,
+    serviceArea: ServiceArea.SEOUL,
+    details: '고소공포증이 있어서 메이커님이 대신 제가 스카이타워 올라가는 것처럼 영상 찍어주세요',
+    status: Status.COMPLETED,
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0'
+  },
+  {
+    id: '9a411e0b-7a54-4c84-b9fb-53cddbce5485',
+    createdAt: '2024-12-27T00:00:00.000Z',
+    title: '잠실 스카이타워 대신 올라가주세요',
+    tripDate: '2025-01-27T00:00:00.000Z',
+    tripType: TripType.ACTIVITY,
+    serviceArea: ServiceArea.SEOUL,
+    details: '고소공포증이 있어서 메이커님이 대신 제가 스카이타워 올라가는 것처럼 영상 찍어주세요',
+    status: Status.COMPLETED,
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0'
+  },
+  {
+    id: 'e6df9e0b-f3d2-42cf-a4b9-998ca536f93e',
+    createdAt: '2024-12-27T00:00:00.000Z',
+    title: '잠실 스카이타워 대신 올라가주세요',
+    tripDate: '2025-01-27T00:00:00.000Z',
+    tripType: TripType.ACTIVITY,
+    serviceArea: ServiceArea.SEOUL,
+    details: '고소공포증이 있어서 메이커님이 대신 제가 스카이타워 올라가는 것처럼 영상 찍어주세요',
+    status: Status.COMPLETED,
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0'
+  },
+  {
+    id: '095e42af-53af-4656-8335-2802b1cb369a',
+    createdAt: '2024-12-27T00:00:00.000Z',
+    title: '잠실 스카이타워 대신 올라가주세요',
+    tripDate: '2025-01-27T00:00:00.000Z',
+    tripType: TripType.ACTIVITY,
+    serviceArea: ServiceArea.SEOUL,
+    details: '고소공포증이 있어서 메이커님이 대신 제가 스카이타워 올라가는 것처럼 영상 찍어주세요',
+    status: Status.COMPLETED,
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0'
+  },
+  {
+    id: '5b345767-eec1-4107-925f-0ba60d940f7e',
+    createdAt: '2024-12-27T00:00:00.000Z',
+    title: '잠실 스카이타워 대신 올라가주세요',
+    tripDate: '2025-01-27T00:00:00.000Z',
+    tripType: TripType.ACTIVITY,
+    serviceArea: ServiceArea.SEOUL,
+    details: '고소공포증이 있어서 메이커님이 대신 제가 스카이타워 올라가는 것처럼 영상 찍어주세요',
+    status: Status.COMPLETED,
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0'
+  },
+  {
+    id: '01ec63ec-2c10-4a56-8aa2-638c8138ac8b',
+    createdAt: '2024-12-27T00:00:00.000Z',
+    title: '잠실 스카이타워 대신 올라가주세요',
+    tripDate: '2025-01-27T00:00:00.000Z',
+    tripType: TripType.ACTIVITY,
+    serviceArea: ServiceArea.SEOUL,
+    details: '고소공포증이 있어서 메이커님이 대신 제가 스카이타워 올라가는 것처럼 영상 찍어주세요',
+    status: Status.COMPLETED,
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0'
+  },
+  {
+    id: '1e747bc1-d11f-449b-9f4e-4b061a4129e0',
+    createdAt: '2024-12-27T00:00:00.000Z',
+    title: '잠실 스카이타워 대신 올라가주세요',
+    tripDate: '2025-01-27T00:00:00.000Z',
+    tripType: TripType.ACTIVITY,
+    serviceArea: ServiceArea.SEOUL,
+    details: '고소공포증이 있어서 메이커님이 대신 제가 스카이타워 올라가는 것처럼 영상 찍어주세요',
+    status: Status.COMPLETED,
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0'
+  },
+  {
+    id: 'bc9ad582-18f1-4825-9645-fe7d26bd0a78',
+    createdAt: '2024-12-27T00:00:00.000Z',
+    title: '잠실 스카이타워 대신 올라가주세요',
+    tripDate: '2025-01-27T00:00:00.000Z',
+    tripType: TripType.ACTIVITY,
+    serviceArea: ServiceArea.SEOUL,
+    details: '고소공포증이 있어서 메이커님이 대신 제가 스카이타워 올라가는 것처럼 영상 찍어주세요',
+    status: Status.COMPLETED,
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0'
+  },
+  {
+    id: 'ded63481-0cbb-4556-acc5-9c193fd1643b',
+    createdAt: '2024-12-27T00:00:00.000Z',
+    title: '잠실 스카이타워 대신 올라가주세요',
+    tripDate: '2025-01-27T00:00:00.000Z',
+    tripType: TripType.ACTIVITY,
+    serviceArea: ServiceArea.SEOUL,
+    details: '고소공포증이 있어서 메이커님이 대신 제가 스카이타워 올라가는 것처럼 영상 찍어주세요',
+    status: Status.COMPLETED,
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0'
   }
 ];
