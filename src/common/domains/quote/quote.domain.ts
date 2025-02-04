@@ -2,10 +2,11 @@ import IQuote from './quote.interface';
 import ConflictError from 'src/common/errors/conflictError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import { QuoteProperties, QuoteToClientProperties } from 'src/common/types/quote/quoteProperties';
-import { Status } from 'src/common/constants/status.type';
+import { Status, StatusEnum } from 'src/common/constants/status.type';
 import { PlanReference } from 'src/common/types/plan/plan.type';
 import { UserReference } from 'src/common/types/user/user.types';
 import { toChatRoomData } from 'src/common/types/quote/quote.type';
+import { TripTypeEnum } from 'src/common/constants/tripType.type';
 
 export default class Quote implements IQuote {
   private id?: string;
@@ -13,7 +14,8 @@ export default class Quote implements IQuote {
   private updatedAt?: Date;
   private price: number;
   private content: string;
-  private plan: PlanReference;
+  private plan?: PlanReference;
+  private shoppingAddress?: string;
   private planId: string;
   private dreamer?: UserReference;
   private maker?: UserReference;
@@ -28,6 +30,7 @@ export default class Quote implements IQuote {
     this.price = quoteProperties.price;
     this.content = quoteProperties.content;
     this.plan = quoteProperties.plan;
+    this.shoppingAddress = quoteProperties.shoppingAddress;
     this.planId = quoteProperties.planId;
     this.dreamer = quoteProperties?.dreamer;
     this.maker = quoteProperties?.maker;
@@ -67,13 +70,14 @@ export default class Quote implements IQuote {
   }
 
   toClient(): QuoteToClientProperties {
+    const isShowAddress = this.plan.tripType === TripTypeEnum.SHOPPING;
     return {
       id: this.id,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       price: this.price,
       content: this.content,
-      plan: this.plan,
+      plan: isShowAddress ? { ...this.plan, address: this.shoppingAddress } : this.plan,
       maker: this.maker,
       isConfirmed: this.isConfirmed,
       isAssigned: this.isAssigned
@@ -81,13 +85,17 @@ export default class Quote implements IQuote {
   }
 
   toMaker(): QuoteToClientProperties {
+    const isShowAddress =
+      this.plan.status === StatusEnum.CONFIRMED &&
+      this.plan.tripType === TripTypeEnum.SHOPPING &&
+      this.isConfirmed === true;
     return {
       id: this.id,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       price: this.price,
       content: this.content,
-      plan: this.plan,
+      plan: isShowAddress ? { ...this.plan, address: this.shoppingAddress } : this.plan,
       dreamer: this.dreamer,
       maker: this.maker,
       isConfirmed: this.isConfirmed,

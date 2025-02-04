@@ -27,6 +27,7 @@ export type QuoteIncludeConditions = {
       details: boolean;
       status: boolean;
       dreamer: { select: { id: boolean; nickName: boolean } };
+      address: boolean;
     };
   };
 };

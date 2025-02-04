@@ -156,7 +156,8 @@ export default class QuoteRepository {
           serviceArea: true,
           details: true,
           status: true,
-          dreamer: { select: { id: true, nickName: true } }
+          dreamer: { select: { id: true, nickName: true } },
+          address: true
         }
       };
     }

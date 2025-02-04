@@ -36,7 +36,8 @@ export const PLANS = [
     details: '플랜3디테일',
     status: Status.OVERDUE,
     dreamerId: '30106a60-200d-467c-8b0d-5817ee604904',
-    assignees: [{ id: 'ef846519-2b73-4be4-807e-f6ef1c07eb60' }, { id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }]
+    assignees: [{ id: 'ef846519-2b73-4be4-807e-f6ef1c07eb60' }, { id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }],
+    address: '하와이 CU 4거리 빨간색 지붕'
   },
   {
     id: 'febaa030-b1ee-4bc5-9e99-1c554831ac83',
@@ -86,7 +87,8 @@ export const PLANS = [
     details: '플랜7디테일',
     status: Status.PENDING,
     dreamerId: '555d463e-37b6-410b-9061-11a9d6822bdd',
-    assignees: [{ id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }]
+    assignees: [{ id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }],
+    address: '하와이 CU 4거리 빨간색 지붕'
   },
   {
     id: 'e329c3de-3f36-46e2-8f01-baafcecbd8e4',
@@ -98,7 +100,8 @@ export const PLANS = [
     details: '플랜8디테일',
     status: Status.PENDING,
     dreamerId: '555d463e-37b6-410b-9061-11a9d6822bdd',
-    assignees: [{ id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }]
+    assignees: [{ id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }],
+    address: '하와이 CU 4거리 빨간색 지붕'
   },
   {
     id: '437bf5e9-f755-4764-bb4c-9c716632e8aa',
@@ -134,7 +137,8 @@ export const PLANS = [
     details: '플랜11디테일',
     status: Status.PENDING,
     dreamerId: '4cb5e51b-072e-4ca2-a4ae-bf432ea8ef76',
-    assignees: [{ id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }]
+    assignees: [{ id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }],
+    address: '하와이 CU 4거리 빨간색 지붕'
   },
   {
     id: '62d8e271-03e2-4080-8428-44180813cde6',
@@ -184,7 +188,8 @@ export const PLANS = [
     details: '플랜15디테일',
     status: Status.CONFIRMED,
     dreamerId: '555d463e-37b6-410b-9061-11a9d6822bdd',
-    assignees: [{ id: 'a08d9856-adfa-4f83-9e9a-48401f3d0ef3' }]
+    assignees: [{ id: 'a08d9856-adfa-4f83-9e9a-48401f3d0ef3' }],
+    address: '하와이 CU 4거리 빨간색 지붕'
   },
   {
     id: '07cb9492-2685-4890-806c-c0e502b9853e',
@@ -229,7 +234,8 @@ export const PLANS = [
     serviceArea: ServiceArea.GYEONGGI,
     details: '플랜19디테일',
     status: Status.CONFIRMED,
-    dreamerId: '4cb5e51b-072e-4ca2-a4ae-bf432ea8ef76'
+    dreamerId: '4cb5e51b-072e-4ca2-a4ae-bf432ea8ef76',
+    address: '하와이 CU 4거리 빨간색 지붕'
   },
   {
     id: '3cb4fe49-de44-43cc-b8b7-a52c6cc1c7a3',
@@ -277,7 +283,8 @@ export const PLANS = [
     serviceArea: ServiceArea.SEOUL,
     details: '플랜23디테일',
     status: Status.COMPLETED,
-    dreamerId: '555d463e-37b6-410b-9061-11a9d6822bdd'
+    dreamerId: '555d463e-37b6-410b-9061-11a9d6822bdd',
+    address: '하와이 CU 4거리 빨간색 지붕'
   },
   {
     id: 'b4faa9ff-a867-481f-9fb4-a6e595c4efe0',
@@ -324,7 +331,8 @@ export const PLANS = [
     details: '플랜27디테일',
     status: Status.COMPLETED,
     dreamerId: '4cb5e51b-072e-4ca2-a4ae-bf432ea8ef76',
-    assignees: [{ id: 'a08d9856-adfa-4f83-9e9a-48401f3d0ef3' }]
+    assignees: [{ id: 'a08d9856-adfa-4f83-9e9a-48401f3d0ef3' }],
+    address: '하와이 CU 4거리 빨간색 지붕'
   },
   {
     id: '5fea4a39-5853-40c2-802a-41960bdc4fcb',
@@ -408,7 +416,8 @@ export const PLANS = [
     details: '플랜1디테일',
     status: Status.PENDING,
     dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0',
-    assignees: [{ id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }]
+    assignees: [{ id: '032d7bd4-116c-467b-9352-a14b0d494ef9' }],
+    address: '하와이 CU 4거리 빨간색 지붕'
   },
   {
     id: '34a5c86e-f587-4bf0-b671-8a177fa2331f',

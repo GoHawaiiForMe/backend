@@ -1,7 +1,5 @@
-import { FilteredUserProperties, UserProperties, UserReference } from '../user/user.types';
+import { UserReference } from '../user/user.types';
 import { PlanReference } from '../plan/plan.type';
-import { ProfileImage } from 'src/common/constants/image.type';
-import { TripType } from 'src/common/constants/tripType.type';
 
 export interface QuoteProperties {
   id?: string;
@@ -10,6 +8,7 @@ export interface QuoteProperties {
   price: number;
   content: string;
   plan?: PlanReference;
+  shoppingAddress?: string;
   planId: string;
   dreamer?: UserReference;
   maker?: UserReference;
