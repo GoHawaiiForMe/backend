@@ -18,6 +18,15 @@ export default class NotificationController {
     });
   }
 
+  @Post('2')
+  async createNotification2(@UserId() userId: string) {
+    return await this.service.create({
+      userId,
+      event: NotificationEventName.SCHEDULE,
+      payload: { planTitle: '가현님이 좋아하는 플랜' }
+    });
+  }
+
   @Get()
   async getNotifications(@UserId() userId: string): Promise<NotificationProperties[]> {
     return await this.service.get(userId);
