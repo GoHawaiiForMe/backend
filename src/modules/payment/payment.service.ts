@@ -1,15 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
 import PaymentRepository from './payment.repository';
-import { PaymentStatusEnum } from 'src/common/constants/paymentStatus.type';
-import { PaymentToClientProperties } from 'src/common/types/payment/payment.type';
+import { PaymentStatusEnum, PaymentToClientProperties } from 'src/common/types/payment/payment.type';
 import Payment from 'src/common/domains/payment/payment.domain';
 import UnauthorizedError from 'src/common/errors/unauthorizedError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import { PaymentClient } from '@portone/server-sdk';
 import NotFoundError from 'src/common/errors/notFoundError';
-import { GetPaymentError, Payment as PaymentType } from '@portone/server-sdk/payment';
+import { PaidPayment, Payment as PaymentType } from '@portone/server-sdk/payment';
 import InternalServerError from 'src/common/errors/internalServerError';
 import BadRequestError from 'src/common/errors/badRequestError';
+import { SavePaymentDTO } from 'src/common/types/payment/payment.dto';
 
 @Injectable()
 export default class PaymentService {
@@ -28,35 +28,35 @@ export default class PaymentService {
     return payment.toClient();
   }
 
-  async create(userId: string, data: { amount: number }): Promise<PaymentToClientProperties> {
-    const payment = Payment.create({ userId, amount: data.amount, status: PaymentStatusEnum.PENDING });
-    const savedPayment = await this.repository.create(payment.get());
+  async create(userId: string, data: SavePaymentDTO): Promise<PaymentToClientProperties> {
+    const payment = Payment.create({ userId, ...data, status: PaymentStatusEnum.PENDING });
+    const savedPayment = await this.repository.create(payment.toDB());
 
     return savedPayment.toClient();
   }
 
-  async syncPayment(paymentId: string) {
+  async syncPayment(id: string): Promise<PaymentToClientProperties> {
     // DB에 결제 정보가 들어왔는지 확인하기
-    const payment = await this.repository.findById(paymentId);
+    const payment = await this.repository.findById(id);
     if (!payment) {
       throw new NotFoundError(ErrorMessage.PAYMENT_NOT_FOUND);
     }
+    const paymentId = payment.getPaymentId();
 
     // 실제 결제된 정보를 PG사에서 불러오기
     let actualPayment: PaymentType;
     try {
       actualPayment = await this.portone.getPayment({ paymentId });
     } catch (e) {
-      if (e instanceof GetPaymentError) return false;
-      throw e;
+      throw new InternalServerError(ErrorMessage.PAYMENT_SERVER_ERROR);
     }
 
     if (actualPayment.status !== PaymentStatusEnum.PAID) {
-      throw new BadRequestError(ErrorMessage.PAYMENT_IN_PROGRESS);
+      throw new BadRequestError(ErrorMessage.PAYMENT_STATUS_BAD_REQUEST);
     }
 
     // 실결제 정보와 DB 결제 정보 검증 및 동기화
-    const isValidPayment = actualPayment.amount.total === payment.getAmount();
+    const isValidPayment = (actualPayment as PaidPayment).amount.total === payment.getAmount();
     if (!isValidPayment) {
       await this.portone.cancelPayment({ paymentId, reason: ErrorMessage.PAYMENT_AMOUNT_ERROR });
       throw new InternalServerError(ErrorMessage.PAYMENT_AMOUNT_ERROR);
