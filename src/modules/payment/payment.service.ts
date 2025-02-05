@@ -1,21 +1,20 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import PaymentRepository from './payment.repository';
 import { PaymentStatusEnum, PaymentToClientProperties } from 'src/common/types/payment/payment.type';
 import Payment from 'src/common/domains/payment/payment.domain';
 import UnauthorizedError from 'src/common/errors/unauthorizedError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
-import { PaymentClient } from '@portone/server-sdk';
 import NotFoundError from 'src/common/errors/notFoundError';
-import { PaidPayment, Payment as PaymentType } from '@portone/server-sdk/payment';
 import InternalServerError from 'src/common/errors/internalServerError';
 import BadRequestError from 'src/common/errors/badRequestError';
 import { SavePaymentDTO } from 'src/common/types/payment/payment.dto';
+import { PGService } from 'src/providers/pg/pg.service';
 
 @Injectable()
 export default class PaymentService {
   constructor(
     private readonly repository: PaymentRepository,
-    @Inject('PAYMENT_CLIENT') private readonly portone: PaymentClient
+    private readonly pg: PGService
   ) {}
 
   // 클라이언트 측에서 결제 완료 확인용
@@ -44,21 +43,17 @@ export default class PaymentService {
     const paymentId = payment.getPaymentId();
 
     // 실제 결제된 정보를 PG사에서 불러오기
-    let actualPayment: PaymentType;
-    try {
-      actualPayment = await this.portone.getPayment({ paymentId });
-    } catch (e) {
-      throw new InternalServerError(ErrorMessage.PAYMENT_SERVER_ERROR);
-    }
+    const actualPayment = await this.pg.getPayment(paymentId);
 
     if (actualPayment.status !== PaymentStatusEnum.PAID) {
       throw new BadRequestError(ErrorMessage.PAYMENT_STATUS_BAD_REQUEST);
     }
 
     // 실결제 정보와 DB 결제 정보 검증 및 동기화
-    const isValidPayment = (actualPayment as PaidPayment).amount.total === payment.getAmount();
+    const isValidPayment = actualPayment.amount.total === payment.getAmount();
     if (!isValidPayment) {
-      await this.portone.cancelPayment({ paymentId, reason: ErrorMessage.PAYMENT_AMOUNT_ERROR });
+      const reason = ErrorMessage.PAYMENT_AMOUNT_ERROR;
+      await this.pg.cancelPayment(paymentId, reason);
       throw new InternalServerError(ErrorMessage.PAYMENT_AMOUNT_ERROR);
     }
     payment.update(PaymentStatusEnum.PAID);

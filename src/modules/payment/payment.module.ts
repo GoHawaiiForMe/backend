@@ -4,23 +4,12 @@ import PaymentService from './payment.service';
 import PaymentRepository from './payment.repository';
 import PaymentSchema, { Payment } from 'src/providers/database/mongoose/payment.schema';
 import { MongooseModule } from '@nestjs/mongoose';
-import { PaymentClient } from '@portone/server-sdk';
+import { PGModule } from 'src/providers/pg/pg.module';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Payment.name, schema: PaymentSchema }])],
+  imports: [MongooseModule.forFeature([{ name: Payment.name, schema: PaymentSchema }]), PGModule.register()],
   controllers: [PaymentController],
-  providers: [
-    {
-      provide: 'PAYMENT_CLIENT',
-      useFactory: () => {
-        return PaymentClient({
-          secret: process.env.V2_API_SECRET
-        });
-      }
-    },
-    PaymentService,
-    PaymentRepository
-  ],
+  providers: [PaymentService, PaymentRepository],
   exports: []
 })
 export default class PaymentModule {}
