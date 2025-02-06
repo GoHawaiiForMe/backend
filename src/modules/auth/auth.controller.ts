@@ -39,7 +39,7 @@ export default class AuthController {
   @ApiBody({ type: LoginDTO })
   @ApiCreatedResponse({ description: '{ accessToken }' })
   @ApiBadRequestResponse({ description: '이메일 또는 비밀번호가 유저 정보와 일치하지 않습니다' })
-  async login(@Body() data: LoginDTO, @Res() res: Response): Promise<void> {
+  async login(@Body() data: LoginDTO, @Res() res: Response): Promise<Response> {
     const user = await this.service.login(data.email, data.password);
     const tokenPayload = { userId: user.id, role: user.role };
     const { accessToken, refreshToken } = this.service.createTokens(tokenPayload);
@@ -52,7 +52,7 @@ export default class AuthController {
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
 
-    res.json({ accessToken });
+    return res.json({ accessToken });
   }
 
   @Public()
@@ -63,10 +63,18 @@ export default class AuthController {
   @Public()
   @UseGuards(AuthGuard('google'))
   @Get('google/callback')
-  async loginByGoogle(@User() user: OAuthProperties, @Res() res: Response): Promise<{ accessToken: string }> {
-    const { accessToken, refreshToken } = await this.service.googleLogin(user);
+  async loginByGoogle(@User() user: OAuthProperties, @Res() res: Response): Promise<Response> {
+    const tokens = await this.service.googleLogin(user);
 
-    res.cookie('refreshToken', refreshToken, {
+    console.log(tokens);
+    // 최초 로그인의 경우 해당 값을 프로필과 함께 등록시 회원 가입 진행
+    if (!tokens) {
+      console.log('토큰 없고 유저 드림:', user);
+      return res.json(user);
+    }
+
+    // 기존 회원의 경우 토큰 반환
+    res.cookie('refreshToken', tokens.refreshToken, {
       path: '/user/token/refresh',
       httpOnly: true,
       sameSite: 'none',
@@ -74,7 +82,7 @@ export default class AuthController {
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
 
-    return { accessToken };
+    return res.json({ accessToken: tokens.accessToken });
   }
 
   @Public()
@@ -83,10 +91,7 @@ export default class AuthController {
   @ApiOperation({ summary: '토큰 재발급', description: '유저의 Refresh Token을 확인하여 토큰을 재발급합니다' })
   @ApiCreatedResponse({ description: '{ accessToken }' })
   @ApiUnauthorizedResponse({ description: 'Refresh Token이 없거나 만료되었습니다' })
-  async getNewToken(
-    @Cookies('refreshToken') refreshToken: string,
-    @Res() res: Response
-  ): Promise<{ accessToken: string }> {
+  async getNewToken(@Cookies('refreshToken') refreshToken: string, @Res() res: Response): Promise<Response> {
     if (!refreshToken) {
       throw new UnauthorizedError(ErrorMessage.REFRESH_TOKEN_NOT_FOUND);
     }
@@ -101,7 +106,7 @@ export default class AuthController {
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
 
-    return { accessToken };
+    return res.json({ accessToken });
   }
 
   @Public()

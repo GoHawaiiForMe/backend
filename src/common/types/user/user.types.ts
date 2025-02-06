@@ -21,16 +21,17 @@ export interface UserProperties {
 
 export interface SignupProperties {
   role: Role;
-  email: string;
+  email?: string;
   nickName: string;
-  password: string;
+  password?: string;
   phoneNumber: string;
+  provider?: string;
+  providerId?: string;
 }
 
 export interface OAuthProperties {
   provider: string;
   providerId: string;
-  email: string;
 }
 
 export interface UserPropertiesFromDB {

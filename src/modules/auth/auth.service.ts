@@ -70,23 +70,19 @@ export default class AuthService {
   }
 
   async googleLogin(data: OAuthProperties) {
-    let user = await this.repository.findByProviderId(data.providerId);
-
-    const userData = await User.socialLogin(data);
-    if (!user) {
-      user = await this.repository.create(userData.OAuthData());
-    }
+    const user = await this.repository.findByProviderId(data.providerId);
+    if (!user) return null;
 
     return this.createTokens({ userId: user.getId(), role: user.getRole() });
   }
 
-  createTokens(payload: { userId: string; role?: Role | null }) {
+  createTokens(payload: { userId: string; role: Role }) {
     const accessToken = this.jwt.sign(
-      { userId: payload.userId, role: payload.role ?? null },
+      { userId: payload.userId, role: payload.role },
       { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
     );
     const refreshToken = this.jwt.sign(
-      { userId: payload.userId, role: payload.role ?? null },
+      { userId: payload.userId, role: payload.role },
       { expiresIn: process.env.REFRESH_TOKEN_EXPIRY }
     );
 
