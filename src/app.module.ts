@@ -19,6 +19,7 @@ import TaskModule from './modules/task/task.module';
 import { RedisModule } from './providers/cache/redis.module';
 import ReviewModule from './modules/review/review.module';
 import ChatRoomModule from './modules/chatRoom/chatRoom.module';
+import AuthModule from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import ChatRoomModule from './modules/chatRoom/chatRoom.module';
     BullmqModule,
     RedisModule,
     PrismaModule,
+    AuthModule,
     UserModule,
     NotificationModule,
     FollowModule,

@@ -1,6 +1,12 @@
 import { Role } from 'src/common/constants/role.type';
 import { MakerInfoAndProfileProperties } from 'src/common/types/user/profile.types';
-import { FilteredUserProperties, PasswordProperties, UserProperties } from 'src/common/types/user/user.types';
+import {
+  FilteredUserProperties,
+  OAuthProperties,
+  PasswordProperties,
+  SignupProperties,
+  UserProperties
+} from 'src/common/types/user/user.types';
 import { UserStatsToClientProperties } from 'src/common/types/userStats/userStats.types';
 
 export interface IUser {
@@ -10,8 +16,10 @@ export interface IUser {
   get(): UserProperties;
   toClient(): FilteredUserProperties;
   toClientAll(): Omit<UserProperties, 'password'>;
+  signupData(): SignupProperties;
+  OAuthData(): OAuthProperties;
   getId(): string;
-  getRole(): Role;
+  getRole(): Role | null;
   isFollowed(dreamerId: string): boolean;
   getWithMakerProfile(withDetails?: boolean): Partial<MakerInfoAndProfileProperties>;
   getStats(): UserStatsToClientProperties;

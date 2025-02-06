@@ -7,24 +7,42 @@ import { UserStatsProperties } from '../userStats/userStats.types';
 
 export interface UserProperties {
   id?: string;
-  role: Role;
-  nickName: string;
+  role?: Role;
+  nickName?: string;
   email: string;
-  password: string;
-  phoneNumber: string;
-  coconut: number;
+  password?: string;
+  phoneNumber?: string;
+  coconut?: number;
+  provider?: string;
+  providerId?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
-export interface UserPropertiesFromDB {
-  id?: string;
+export interface SignupProperties {
   role: Role;
-  nickName: string;
   email: string;
+  nickName: string;
   password: string;
   phoneNumber: string;
-  coconut: number;
+}
+
+export interface OAuthProperties {
+  provider: string;
+  providerId: string;
+  email: string;
+}
+
+export interface UserPropertiesFromDB {
+  id?: string;
+  role?: Role;
+  nickName?: string;
+  email: string;
+  password?: string;
+  phoneNumber?: string;
+  coconut?: number;
+  provider?: string;
+  providerId?: string;
   followers?: { dreamerId: string }[];
   makerProfile?: Partial<MakerProfileProperties>;
   stats?: UserStatsProperties;

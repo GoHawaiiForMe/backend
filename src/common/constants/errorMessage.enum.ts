@@ -11,6 +11,8 @@ export enum ErrorMessage {
   USER_FORBIDDEN_NOT_DREAMER = 'Dreamer 역할을 가진 사용자만 Plan을 생성할 수 있습니다. 권한을 확인해 주세요.',
   USER_COCONUT_INVALID = '포인트는 0코코넛 이상이어야 합니다.',
 
+  OAUTH_GOOGLE_SERVER_ERROR = '구글 프로필 정보를 가져올 수 없습니다.',
+
   TOKEN_UNAUTHORIZED_NOTFOUND = '토큰이 없습니다. 로그인이 필요합니다',
   TOKEN_UNAUTHORIZED_VALIDATION = '유효하지 않은 토큰입니다',
   REFRESH_TOKEN_NOT_FOUND = '리프레시 토큰이 없습니다',
