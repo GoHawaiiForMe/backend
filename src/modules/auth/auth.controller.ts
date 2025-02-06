@@ -66,12 +66,8 @@ export default class AuthController {
   async loginByGoogle(@User() user: OAuthProperties, @Res() res: Response): Promise<Response> {
     const tokens = await this.service.googleLogin(user);
 
-    console.log(tokens);
     // 최초 로그인의 경우 해당 값을 프로필과 함께 등록시 회원 가입 진행
-    if (!tokens) {
-      console.log('토큰 없고 유저 드림:', user);
-      return res.json(user);
-    }
+    if (!tokens) return res.json(user);
 
     // 기존 회원의 경우 토큰 반환
     res.cookie('refreshToken', tokens.refreshToken, {
