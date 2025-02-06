@@ -18,7 +18,7 @@ export default class PlanRepository {
 
   async findMany(options: PlanQueryOptions): Promise<IPlan[]> {
     const { orderBy, page, pageSize, reviewed } = options || {};
-    const isHasReview = reviewed === true || reviewed === false;
+    const isReviewed = reviewed === true || reviewed === false;
 
     const whereConditions = this.buildWhereConditions(options);
     const orderByField: PlanOrderByField =
@@ -32,7 +32,7 @@ export default class PlanRepository {
       include: {
         dreamer: { select: { id: true, nickName: true } },
         assignees: { select: { id: true, nickName: true } },
-        quotes: isHasReview
+        quotes: isReviewed
           ? {
               where: { isConfirmed: true },
               select: {

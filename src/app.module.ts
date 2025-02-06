@@ -20,6 +20,7 @@ import { RedisModule } from './providers/cache/redis.module';
 import ReviewModule from './modules/review/review.module';
 import ChatRoomModule from './modules/chatRoom/chatRoom.module';
 import AuthModule from './modules/auth/auth.module';
+import S3Module from './providers/storage/s3/s3.module';
 
 @Module({
   imports: [
@@ -43,7 +44,8 @@ import AuthModule from './modules/auth/auth.module';
     TaskModule,
     ChatRoomModule,
     ChatModule,
-    ReviewModule
+    ReviewModule,
+    S3Module
   ],
   providers: [
     {

@@ -20,7 +20,7 @@ export default class ChatRoomRepository {
         path: 'chatIds',
         model: 'Chat',
         options: { sort: { createdAt: -1 }, limit: 1 },
-        select: 'content'
+        select: 'content type'
       });
 
     const domainChatRooms = chatRooms.map((chatRoom) => new ChatRoomMapper(chatRoom).toDomain());

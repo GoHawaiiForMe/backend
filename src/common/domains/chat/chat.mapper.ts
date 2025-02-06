@@ -12,6 +12,7 @@ export default class ChatMapper {
       id: this.chat._id.toString(),
       createdAt: this.chat.createdAt,
       updatedAt: this.chat.updatedAt,
+      type: this.chat.type,
       senderId: this.chat.senderId,
       chatRoomId: this.chat.chatRoomId.toString(),
       content: this.chat.content

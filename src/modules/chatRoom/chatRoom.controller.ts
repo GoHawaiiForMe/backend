@@ -1,13 +1,12 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, UploadedFile, UseInterceptors, UsePipes } from '@nestjs/common';
 import { UserId } from 'src/common/decorators/user.decorator';
 import { ChatRoomWithUserInfo } from 'src/common/domains/chatRoom/chatRoom.properties';
 import { ChatRoomQueryDTO } from 'src/common/types/chat/chat.dto';
 import ChatRoomService from './chatRoom.service';
-import { Types } from 'mongoose';
-import BadRequestError from 'src/common/errors/badRequestError';
-import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import { ChatProperties } from 'src/common/domains/chat/chat.properties';
-import IChatRoom from 'src/common/domains/chatRoom/chatRoom.interface';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ChatType, MB } from 'src/common/constants/chat.type';
+import { FileValidationPipe } from 'src/common/pipes/file-validation.pipe';
 
 @Controller('chatRooms')
 export default class ChatRoomController {
@@ -39,5 +38,18 @@ export default class ChatRoomController {
   ): Promise<{ totalCount: number; list: ChatProperties[] }> {
     const { totalCount, list } = await this.chatRoomService.getChatsByChatRoomId({ userId, chatRoomId, ...options });
     return { totalCount, list };
+  }
+
+  @Post(':chatRoomId/chats')
+  @UseInterceptors(FileInterceptor('file'))
+  @UsePipes(FileValidationPipe)
+  async filesUpload(
+    @UserId() userId: string,
+    @Param('chatRoomId') chatRoomId: string,
+    @UploadedFile() file: Express.Multer.File,
+    @Body('type') type: ChatType
+  ) {
+    const response = await this.chatRoomService.fileUpload({ senderId: userId, chatRoomId, file, type });
+    return response;
   }
 }

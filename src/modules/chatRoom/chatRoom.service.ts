@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { ChatCreateData, ChatQueryOptions } from 'src/common/types/chat/chat.type';
 import ChatRoomRepository from './chatRoom.repository';
 import { ChatRoomProperties, ChatRoomWithUserInfo } from 'src/common/domains/chatRoom/chatRoom.properties';
@@ -6,13 +6,13 @@ import ForbiddenError from 'src/common/errors/forbiddenError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import ChatRoom from 'src/common/domains/chatRoom/chatRoom.domain';
 import ChatService from '../chat/chat.service';
-import BadRequestError from 'src/common/errors/badRequestError';
-import { ChatProperties } from 'src/common/domains/chat/chat.properties';
+import { ChatProperties, ChatToClientProperties } from 'src/common/domains/chat/chat.properties';
 import UserService from '../user/user.service';
 import { Socket } from 'socket.io';
-import { ChatReference, FindChatRoomByIdOptions } from 'src/common/types/chat/chatRoom.type.ts/chatRoom.typs';
+import { ChatReference, FileUploadData, FindChatRoomByIdOptions } from 'src/common/types/chatRoom/chatRoom.type';
 import NotFoundError from 'src/common/errors/notFoundError';
 import IChatRoom from 'src/common/domains/chatRoom/chatRoom.interface';
+import BadRequestError from 'src/common/errors/badRequestError';
 
 @Injectable()
 export default class ChatRoomService {
@@ -33,12 +33,12 @@ export default class ChatRoomService {
 
   isClient(userId: string): boolean {
     const client = this.connectedClients.get(userId);
+    if (!client) throw new ForbiddenError(ErrorMessage.CLIENT_NOT_CONNECTED);
     return !!client;
   }
 
   async joinUserRooms(userId: string, client: Socket) {
     const userChatRoomIds = await this.getChatRoomIds(userId);
-
     userChatRoomIds.forEach((chatRoomId) => client.join(chatRoomId));
   }
 
@@ -55,10 +55,9 @@ export default class ChatRoomService {
     return chatRoomIds;
   }
 
-  async getChatRoomById(options: FindChatRoomByIdOptions): Promise<ChatRoomWithUserInfo> {
+  async getChatRoomDomainById(options: FindChatRoomByIdOptions): Promise<IChatRoom> {
     const { userId, chatRoomId } = options;
     const chatRoom = await this.chatRoomRepository.findChatRoomById(chatRoomId);
-
     if (!chatRoom) {
       throw new NotFoundError(ErrorMessage.CHAT_ROOM_NOTFOUND);
     }
@@ -66,8 +65,13 @@ export default class ChatRoomService {
     if (!chatRoom.getUserIds().includes(userId)) {
       throw new ForbiddenError(ErrorMessage.CHAT_ROOM_FORBIDDEN_ID);
     }
+    return chatRoom;
+  }
 
+  async getChatRoomById(options: FindChatRoomByIdOptions): Promise<ChatRoomWithUserInfo> {
+    const chatRoom = await this.getChatRoomDomainById(options);
     const chatRoomWithUserInfo = await this.fetchAndFormatUserInfo(chatRoom.toClient());
+
     return chatRoomWithUserInfo;
   }
 
@@ -86,11 +90,34 @@ export default class ChatRoomService {
     return chatRoom.toClient();
   }
 
+  async postChat(data: ChatCreateData): Promise<ChatToClientProperties> {
+    const { senderId, chatRoomId } = data;
+
+    this.isClient(senderId);
+    const chatRoom = await this.getChatRoomDomainById({ userId: senderId, chatRoomId });
+    if (chatRoom.getIsActive() === false) throw new BadRequestError(ErrorMessage.CHAT_ROOM_NOT_IS_ACTIVE);
+
+    const chatData = await this.chatService.postChat(data);
+    await this.sendMessageToChatRoom(chatData);
+
+    return chatData;
+  }
+
+  async fileUpload(data: FileUploadData) {
+    const { chatRoomId, senderId } = data;
+    const chatRoom = await this.getChatRoomDomainById({ chatRoomId, userId: senderId });
+
+    if (chatRoom.getIsActive() === false) throw new BadRequestError(ErrorMessage.CHAT_ROOM_NOT_IS_ACTIVE);
+    const chatData = await this.chatService.fileUpload(data);
+    this.sendMessageToChatRoom(chatData);
+    return chatData;
+  }
+
   async sendMessageToChatRoom(chat: ChatReference) {
-    const { id, senderId, chatRoomId } = chat;
+    const { senderId, chatRoomId } = chat;
 
     const client = this.connectedClients.get(senderId);
-    client.to(chatRoomId).emit('ServerToClientMessage', chat);
+    client?.to(chatRoomId)?.emit('ServerToClientMessage', chat);
   }
 
   async fetchAndFormatUserInfo(chatRoom: ChatRoomProperties): Promise<ChatRoomWithUserInfo> {

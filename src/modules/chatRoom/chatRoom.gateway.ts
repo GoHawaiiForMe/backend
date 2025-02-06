@@ -1,9 +1,19 @@
-import { OnGatewayConnection, WebSocketGateway } from '@nestjs/websockets';
+import {
+  ConnectedSocket,
+  MessageBody,
+  OnGatewayConnection,
+  SubscribeMessage,
+  WebSocketGateway
+} from '@nestjs/websockets';
 import { Socket } from 'socket.io';
 import WebSocketJwtGuard from 'src/common/guards/webSocket.guard';
 import ChatRoomService from './chatRoom.service';
+import { ChatType } from 'src/common/constants/chat.type';
+import SocketExceptionFilter from 'src/common/filters/socketExceptionFilter';
+import { UseFilters } from '@nestjs/common';
 
 @WebSocketGateway()
+@UseFilters(SocketExceptionFilter)
 export default class ChatRoomGateway implements OnGatewayConnection {
   constructor(
     private readonly jwtGuard: WebSocketJwtGuard,
@@ -11,9 +21,7 @@ export default class ChatRoomGateway implements OnGatewayConnection {
   ) {}
   handleDisconnection(client: Socket) {
     const user = client.data.user;
-    if (user) {
-      this.chatRoomService.removeClient(user.userId);
-    }
+    if (user) this.chatRoomService.removeClient(user.userId);
   }
 
   async handleConnection(client: Socket) {
@@ -27,8 +35,16 @@ export default class ChatRoomGateway implements OnGatewayConnection {
         await this.chatRoomService.joinUserRooms(userId, client);
       }
     } catch (e) {
-      //TO.LOG 로그. 인증 실패 로그남기기
       client.disconnect();
     }
+  }
+
+  @SubscribeMessage('ClientToServerMessage')
+  async receiveMessage(
+    @MessageBody() data: { chatRoomId: string; content: string; type: ChatType },
+    @ConnectedSocket() client: Socket
+  ) {
+    const senderId = client.data.user.userId;
+    await this.chatRoomService.postChat({ senderId, ...data });
   }
 }

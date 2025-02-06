@@ -38,7 +38,8 @@ export default class ChatRoom implements IChatRoom {
       planId: this.planId,
       planTitle: this.planTitle,
       planTripDate: this.planTripDate,
-      quotePrice: this.quotePrice
+      quotePrice: this.quotePrice,
+      isActive: this.isActive
     };
   }
 
@@ -52,8 +53,8 @@ export default class ChatRoom implements IChatRoom {
       planTitle: this.planTitle,
       planTripDate: this.planTripDate,
       quotePrice: this.quotePrice,
-      lastChat: this.lastChat,
-      isActive: this.isActive
+      isActive: this.isActive,
+      lastChat: this.lastChat
     };
   }
 

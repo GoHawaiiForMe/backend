@@ -1,3 +1,5 @@
+import { ChatType } from 'src/common/constants/chat.type';
+
 export interface ChatQueryOptions {
   userId: string;
   chatRoomId?: string;
@@ -7,6 +9,7 @@ export interface ChatQueryOptions {
 
 export interface ChatCreateData {
   senderId: string;
+  type: ChatType;
   chatRoomId: string;
   content: string;
 }

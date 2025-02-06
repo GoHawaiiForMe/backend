@@ -67,6 +67,11 @@ export enum ErrorMessage {
   CHAT_ROOM_NOT_IS_ACTIVE = '해당 채팅방은 사용할 수 있는 기간이 지나 사용할 수 없습니다.',
 
   CHAT_POST_BAD_ID = '채팅방의 id가 잘못된 형식입니다.',
+  CHAT_UPLOAD_TYPE_TEXT = '업로드 파일의 타입이 없거나 TEXT입니다.',
+  CHAT_NOT_FILE_REQUEST = '서버에 전해진 업로드할 파일이 없습니다.',
+  CHAT_FILE_SIZE_NOT_VIDEO = '동영상을 제외한 모든 파일 크기 제한은 2MB입니다.',
+  CHAT_FILE_SIZE_VIDEO = '동영상의 파일 크기 제한은 100MB입니다.',
+  CHAT_FILE_TYPE_NOT_SUPPORTED = '지원하지 않는 파일 형식입니다',
 
   CLIENT_NOT_CONNECTED = '연결되지 않은 클라이언트입니다.',
 
