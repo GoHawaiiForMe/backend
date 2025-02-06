@@ -73,7 +73,6 @@ export default class AuthService {
     let user = await this.repository.findByProviderId(data.providerId);
 
     const userData = await User.socialLogin(data);
-    console.log(userData.OAuthData());
     if (!user) {
       user = await this.repository.create(userData.OAuthData());
     }
