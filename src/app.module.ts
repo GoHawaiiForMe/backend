@@ -19,6 +19,7 @@ import TaskModule from './modules/task/task.module';
 import { RedisModule } from './providers/cache/redis.module';
 import ReviewModule from './modules/review/review.module';
 import ChatRoomModule from './modules/chatRoom/chatRoom.module';
+import S3Module from './providers/storage/s3/s3.module';
 
 @Module({
   imports: [
@@ -41,7 +42,8 @@ import ChatRoomModule from './modules/chatRoom/chatRoom.module';
     TaskModule,
     ChatRoomModule,
     ChatModule,
-    ReviewModule
+    ReviewModule,
+    S3Module
   ],
   providers: [
     {

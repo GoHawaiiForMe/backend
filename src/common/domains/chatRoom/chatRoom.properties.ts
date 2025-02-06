@@ -1,3 +1,4 @@
+import { ChatType } from 'src/common/constants/chat.type';
 import { ProfileImage } from 'src/common/constants/image.type';
 
 export interface ChatRoomProperties {
@@ -9,7 +10,7 @@ export interface ChatRoomProperties {
   planTripDate: Date;
   quotePrice: number;
   userIds: string[];
-  chatIds?: string[] | { content: string };
+  chatIds?: string[] | { content: string; type: ChatType };
   lastChat?: string;
   isActive?: boolean;
 }

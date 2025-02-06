@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UnauthorizedException } from '@nestjs/common';
 import { Socket } from 'socket.io';
 import UnauthorizedError from '../errors/unauthorizedError';
 import ErrorMessage from '../constants/errorMessage.enum';
@@ -11,7 +10,8 @@ export default class WebSocketJwtGuard {
 
   // 클라이언트가 웹소켓 연결 시 JWT 토큰을 검증하는 메소드
   async handleConnection(client: Socket): Promise<void> {
-    const token = client.handshake.auth.token;
+    const token = client.handshake.auth.token || client.handshake.headers['authorization']?.split(' ')[1];
+
     if (!token) {
       throw new UnauthorizedError(ErrorMessage.TOKEN_UNAUTHORIZED_NOTFOUND);
     }

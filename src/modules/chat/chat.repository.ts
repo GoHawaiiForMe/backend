@@ -39,12 +39,13 @@ export default class ChatRepository {
   }
 
   async createChat(data: IChat): Promise<IChat> {
-    const { senderId, chatRoomId, content } = data.toDB();
+    const { senderId, chatRoomId, content, type } = data.toDB();
 
     const chat = await this.chat.create({
       senderId,
       chatRoomId,
-      content
+      content,
+      type
     });
 
     const chatRoom = await this.chatRoom.updateOne(

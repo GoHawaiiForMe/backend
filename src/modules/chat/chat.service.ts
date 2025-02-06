@@ -1,18 +1,17 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import ChatRepository from './chat.repository';
 import { ChatCreateData, ChatQueryOptions } from 'src/common/types/chat/chat.type';
 import Chat from 'src/common/domains/chat/chat.domain';
 import { ChatToClientProperties } from 'src/common/domains/chat/chat.properties';
-import ChatRoomService from '../chatRoom/chatRoom.service';
-import ForbiddenError from 'src/common/errors/forbiddenError';
-import ErrorMessage from 'src/common/constants/errorMessage.enum';
+import { FileUploadData } from 'src/common/types/chatRoom/chatRoom.type';
+import { S3Service } from 'src/providers/storage/s3/s3.service';
+import { ChatType } from 'src/common/constants/chat.type';
 
 @Injectable()
 export default class ChatService {
   constructor(
     private readonly chatRepository: ChatRepository,
-    @Inject(forwardRef(() => ChatRoomService))
-    private readonly chatRoomService: ChatRoomService
+    private readonly s3Service: S3Service
   ) {}
 
   async getChatsByChatRoomId(
@@ -23,17 +22,31 @@ export default class ChatService {
       this.chatRepository.findChatsByChatRoomId(options)
     ]);
 
-    const toClientList = list?.map((chat) => chat.toClient());
+    const toClientListPromise = list?.map((chat) => this.convertS3PresignedUrl(chat.toClient()));
+    const toClientList = await Promise.all(toClientListPromise);
     return { totalCount, list: toClientList };
   }
 
-  async postChat(data: ChatCreateData): Promise<void> {
-    const { senderId, chatRoomId } = data;
+  async postChat(data: ChatCreateData): Promise<ChatToClientProperties> {
     const chatData = Chat.create(data);
-    const client = this.chatRoomService.isClient(data.senderId);
-    if (!client) throw new ForbiddenError(ErrorMessage.CLIENT_NOT_CONNECTED);
-    await this.chatRoomService.getChatRoomById({ userId: senderId, chatRoomId });
     const chat = await this.chatRepository.createChat(chatData);
-    await this.chatRoomService.sendMessageToChatRoom(chat.toClient());
+    return chat.toClient();
+  }
+
+  async fileUpload(data: FileUploadData) {
+    const chatData = Chat.create(data);
+    const s3key = await this.s3Service.uploadFile(chatData.toS3());
+    chatData.setS3Key(s3key);
+    const chat = await this.chatRepository.createChat(chatData);
+    const chatWithPresignedUrl = await this.convertS3PresignedUrl(chat.toClient());
+    return chatWithPresignedUrl;
+  }
+
+  private async convertS3PresignedUrl(chatData: ChatToClientProperties): Promise<ChatToClientProperties> {
+    const { type, content } = chatData;
+    if (type === ChatType.TEXT) return chatData;
+
+    const presignedUrl = await this.s3Service.generatePresignedUrl(content);
+    return { ...chatData, content: presignedUrl };
   }
 }
