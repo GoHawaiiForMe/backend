@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ArrayNotEmpty, IsEmail, IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { ArrayNotEmpty, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { ProfileImage, ProfileImageEnum } from 'src/common/constants/image.type';
+import { OAuthProviderEnum } from 'src/common/constants/oauth.type';
 import { Role, RoleEnum } from 'src/common/constants/role.type';
 import { ServiceArea, ServiceAreaEnum } from 'src/common/constants/serviceArea.type';
 import { TripType, TripTypeEnum } from 'src/common/constants/tripType.type';
@@ -15,16 +16,24 @@ export class SignupUserDTO {
   nickName: string;
 
   @IsEmail()
-  @IsNotEmpty()
+  @IsOptional()
   email: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   password: string;
 
   @IsString()
   @IsNotEmpty()
   phoneNumber: string;
+
+  @IsString()
+  @IsOptional()
+  provider: OAuthProviderEnum;
+
+  @IsString()
+  @IsOptional()
+  providerId: string;
 }
 
 export class SignupProfileDTO {
