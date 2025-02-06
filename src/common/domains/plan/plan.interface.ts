@@ -12,6 +12,7 @@ export default interface IPlan {
   rejectAssign(data: AssignData): IPlan;
   updateComplete(): IPlan;
   updateByScheduler(): IPlan;
+  getId(): string;
   getQuoteIds(): string[];
   getQuoteMakerIds(): string[];
   getConfirmedMakerId(): string;

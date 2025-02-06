@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import PlanOrder from 'src/common/constants/planOrder.enum';
 import { RoleEnum } from 'src/common/constants/role.type';
 import SortOrder from 'src/common/constants/sortOrder.enum';
-import { StatusEnum } from 'src/common/constants/status.type';
+import { Status, StatusEnum } from 'src/common/constants/status.type';
 import { TRIP_TYPE } from 'src/common/constants/tripType.type';
 import IPlan from 'src/common/domains/plan/plan.interface';
 import PlanMapper from 'src/common/domains/plan/plan.mapper';
@@ -134,6 +134,16 @@ export default class PlanRepository {
 
     const domainPlan = new PlanMapper(plan).toDomain();
     return domainPlan;
+  }
+
+  async updateMany(data: { ids: string[]; status: Status }): Promise<number> {
+    const { ids, status } = data;
+    const results = await this.db.plan.updateMany({
+      where: { id: { in: ids } },
+      data: { status }
+    });
+
+    return results.count; // 업데이트된 문서의 수 반환
   }
 
   async delete(id: string): Promise<IPlan> {

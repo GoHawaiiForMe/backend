@@ -62,4 +62,15 @@ export default class ChatRoomRepository {
     const chatRoom = await this.chatRoom.findOne({ planId });
     return !!chatRoom;
   }
+
+  async update(planId: string): Promise<IChatRoom> {
+    const chatRoom = await this.chatRoom.findOneAndUpdate({ planId }, { isActive: false }, { new: true });
+    const domainChatRoom = new ChatRoomMapper(chatRoom).toDomain();
+    return domainChatRoom;
+  }
+
+  async updateMany(planIds: string[]): Promise<number> {
+    const result = await this.chatRoom.updateMany({ planId: { $in: planIds } }, { $set: { isActive: false } });
+    return result.modifiedCount;
+  }
 }

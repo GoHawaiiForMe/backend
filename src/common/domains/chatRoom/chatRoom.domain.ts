@@ -1,5 +1,7 @@
 import IChatRoom from './chatRoom.interface';
 import { ChatRoomProperties } from './chatRoom.properties';
+import ErrorMessage from 'src/common/constants/errorMessage.enum';
+import ConflictError from 'src/common/errors/conflictError';
 
 export default class ChatRoom implements IChatRoom {
   private id?: string;

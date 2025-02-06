@@ -10,7 +10,7 @@ export interface ChatReference {
 }
 
 export interface FindChatRoomByIdOptions {
-  userId: string;
+  userId?: string;
   chatRoomId: string;
 }
 export interface FileUploadData {

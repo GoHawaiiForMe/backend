@@ -13,6 +13,7 @@ import { ChatReference, FileUploadData, FindChatRoomByIdOptions } from 'src/comm
 import NotFoundError from 'src/common/errors/notFoundError';
 import IChatRoom from 'src/common/domains/chatRoom/chatRoom.interface';
 import BadRequestError from 'src/common/errors/badRequestError';
+import handleMongooseError from 'src/common/utilities/handle.mongoose.error';
 
 @Injectable()
 export default class ChatRoomService {
@@ -62,7 +63,7 @@ export default class ChatRoomService {
       throw new NotFoundError(ErrorMessage.CHAT_ROOM_NOTFOUND);
     }
 
-    if (!chatRoom.getUserIds().includes(userId)) {
+    if (userId && !chatRoom.getUserIds().includes(userId)) {
       throw new ForbiddenError(ErrorMessage.CHAT_ROOM_FORBIDDEN_ID);
     }
     return chatRoom;
@@ -111,6 +112,18 @@ export default class ChatRoomService {
     const chatData = await this.chatService.fileUpload(data);
     this.sendMessageToChatRoom(chatData);
     return chatData;
+  }
+
+  async updateDeActive(planId: string | string[]): Promise<void> {
+    try {
+      if (typeof planId === 'string') {
+        await this.chatRoomRepository.update(planId);
+      } else {
+        await this.chatRoomRepository.updateMany(planId);
+      }
+    } catch (e) {
+      handleMongooseError(e);
+    }
   }
 
   async sendMessageToChatRoom(chat: ChatReference) {
