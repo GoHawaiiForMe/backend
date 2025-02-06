@@ -15,7 +15,9 @@ export class S3Service {
 
   async uploadFile(data: ChatToS3Properties) {
     const { file, chatRoomId } = data;
-    const s3key = `${chatRoomId}/${file.originalname}`;
+    const timestamp = new Date().toISOString().replace(/[-:T.]/g, '');
+    const s3key = `${chatRoomId}/${file.originalname}/${timestamp}`;
+    console.log(s3key);
 
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
