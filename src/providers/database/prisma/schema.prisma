@@ -19,13 +19,15 @@ model User {
   updatedAt   DateTime  @updatedAt
   isDeletedAt DateTime?
 
-  email       String @unique
-  nickName    String @unique
-  phoneNumber String
-  password    String
-  coconut     Int    @default(0)
+  email       String  @unique
+  nickName    String? @unique
+  phoneNumber String?
+  password    String?
+  coconut     Int     @default(0)
+  provider    String? @default("local")
+  providerId  String? @unique
 
-  role            Role
+  role            Role?
   receivedReviews Review[] @relation("owner")
   writtenReviews  Review[] @relation("writer")
   followers       Follow[] @relation("maker")

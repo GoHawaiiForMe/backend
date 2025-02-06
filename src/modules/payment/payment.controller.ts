@@ -2,6 +2,7 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import PaymentService from './payment.service';
 import { UserId } from 'src/common/decorators/user.decorator';
 import { PaymentToClientProperties } from 'src/common/types/payment/payment.type';
+import { SavePaymentDTO } from 'src/common/types/payment/payment.dto';
 
 @Controller('payments')
 export default class PaymentController {
@@ -16,9 +17,12 @@ export default class PaymentController {
   }
 
   @Post()
-  async savePayment(@UserId() userId: string, @Body() body: { amount: number }): Promise<PaymentToClientProperties> {
+  async savePayment(@UserId() userId: string, @Body() body: SavePaymentDTO): Promise<PaymentToClientProperties> {
     return await this.service.create(userId, body);
   }
 
-  // TODO: 결제 완료 API
+  @Post('complete')
+  async completePayment(@Body() body: { paymentId: string }): Promise<PaymentToClientProperties> {
+    return await this.service.syncPayment(body.paymentId);
+  }
 }

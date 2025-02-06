@@ -11,6 +11,8 @@ export enum ErrorMessage {
   USER_FORBIDDEN_NOT_DREAMER = 'Dreamer 역할을 가진 사용자만 Plan을 생성할 수 있습니다. 권한을 확인해 주세요.',
   USER_COCONUT_INVALID = '포인트는 0코코넛 이상이어야 합니다.',
 
+  OAUTH_GOOGLE_SERVER_ERROR = '구글 프로필 정보를 가져올 수 없습니다.',
+
   TOKEN_UNAUTHORIZED_NOTFOUND = '토큰이 없습니다. 로그인이 필요합니다',
   TOKEN_UNAUTHORIZED_VALIDATION = '유효하지 않은 토큰입니다',
   REFRESH_TOKEN_NOT_FOUND = '리프레시 토큰이 없습니다',
@@ -49,6 +51,12 @@ export enum ErrorMessage {
   QUOTE_DELETE_BAD_REQUEST_STATUS = '견적의 플랜이 PENDING 상태 일 때만 삭제할 수 있습니다.',
 
   PAYMENT_BAD_REQUEST = '결제 정보가 잘못되어 결제를 완료할 수 없습니다.',
+  PAYMENT_AMOUNT_ERROR = '실제 결제한 금액이 결제 요청한 금액과 맞지 않습니다.',
+  PAYMENT_STATUS_BAD_REQUEST = 'PG사에서 결제가 아직 진행 중이거나 문제가 발생했습니다.',
+  PAYMENT_NOT_FOUND = '해당 결제 정보를 찾을 수 없습니다',
+  PAYMENT_CANCEL_SERVER_ERROR = 'PG사에서 결제를 취소하지 못했습니다.',
+  PAYMENT_SERVER_ERROR = 'PG사에서 해당 결제 정보를 찾는 데 오류가 발생했습니다.',
+
   EVENT_NOT_FOUND = '큐에 설정되지 않은 이벤트는 추가할 수 없습니다',
 
   REVIEW_BAD_REQUEST = '플랜 상태가 완료 처리된 후에 리뷰를 작성할 수 있습니다',
