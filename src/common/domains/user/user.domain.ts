@@ -52,10 +52,6 @@ export default class User implements IUser {
     return new User({ ...data, password: hashedPassword });
   }
 
-  static async socialLogin(data: OAuthProperties): Promise<IUser> {
-    return new User(data);
-  }
-
   async validatePassword(password: string): Promise<boolean> {
     return ComparePassword(password, this.password);
   }
@@ -125,18 +121,19 @@ export default class User implements IUser {
   signupData(): SignupProperties {
     return {
       role: this.role,
-      email: this.email,
+      email: this?.email,
       nickName: this.nickName,
-      password: this.password,
-      phoneNumber: this.phoneNumber
+      password: this?.password,
+      phoneNumber: this.phoneNumber,
+      provider: this?.provider,
+      providerId: this?.providerId
     };
   }
 
   OAuthData(): OAuthProperties {
     return {
       provider: this.provider,
-      providerId: this.providerId,
-      email: this.email
+      providerId: this.providerId
     };
   }
 
