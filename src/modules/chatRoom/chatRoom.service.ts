@@ -120,11 +120,6 @@ export default class ChatRoomService {
     client?.to(chatRoomId)?.emit('ServerToClientMessage', chat);
   }
 
-  async sendErrorMessageToClient(data: { client?: Socket; statusCode: HttpStatus; message: string }) {
-    const { client, statusCode, message } = data;
-    client?.emit('Error', { statusCode, message });
-  }
-
   async fetchAndFormatUserInfo(chatRoom: ChatRoomProperties): Promise<ChatRoomWithUserInfo> {
     const { userIds, chatIds, ...restChatRoomData } = chatRoom;
 

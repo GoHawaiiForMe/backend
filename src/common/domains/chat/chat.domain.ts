@@ -56,8 +56,7 @@ export default class Chat implements IChat {
     };
   }
 
-  setS3Key(s3key: string): IChat {
+  setS3Key(s3key: string): void {
     this.content = s3key;
-    return this;
   }
 }
