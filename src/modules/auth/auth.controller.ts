@@ -63,7 +63,7 @@ export default class AuthController {
   @Public()
   @UseGuards(AuthGuard('google'))
   @Get('google/callback')
-  async loginByGoogle(@User() user: OAuthProperties, @Res() res: Response) {
+  async loginByGoogle(@User() user: OAuthProperties, @Res() res: Response): Promise<{ accessToken: string }> {
     const { accessToken, refreshToken } = await this.service.googleLogin(user);
 
     res.cookie('refreshToken', refreshToken, {
@@ -74,7 +74,7 @@ export default class AuthController {
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
 
-    res.json({ accessToken });
+    return { accessToken };
   }
 
   @Public()
@@ -83,7 +83,10 @@ export default class AuthController {
   @ApiOperation({ summary: '토큰 재발급', description: '유저의 Refresh Token을 확인하여 토큰을 재발급합니다' })
   @ApiCreatedResponse({ description: '{ accessToken }' })
   @ApiUnauthorizedResponse({ description: 'Refresh Token이 없거나 만료되었습니다' })
-  async getNewToken(@Cookies('refreshToken') refreshToken: string, @Res() res: Response): Promise<void> {
+  async getNewToken(
+    @Cookies('refreshToken') refreshToken: string,
+    @Res() res: Response
+  ): Promise<{ accessToken: string }> {
     if (!refreshToken) {
       throw new UnauthorizedError(ErrorMessage.REFRESH_TOKEN_NOT_FOUND);
     }
@@ -98,7 +101,7 @@ export default class AuthController {
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
 
-    res.json({ accessToken });
+    return { accessToken };
   }
 
   @Public()

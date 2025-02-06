@@ -7,7 +7,7 @@ import { DreamerProfile, MakerProfile } from 'src/common/domains/user/profile.do
 import UserStatsService from '../userStats/userStats.service';
 import { FilteredUserProperties, OAuthProperties, UserProperties } from 'src/common/types/user/user.types';
 import AuthRepository from './auth.repository';
-import { Role } from 'src/common/constants/role.type';
+import { Role, RoleEnum } from 'src/common/constants/role.type';
 import { DreamerProfileProperties, MakerProfileProperties } from 'src/common/types/user/profile.types';
 
 @Injectable()
@@ -41,7 +41,7 @@ export default class AuthService {
     const newUser = savedUser.get();
 
     // 역할에 따라 프로필 등록
-    if (newUser.role === 'DREAMER') {
+    if (newUser.role === RoleEnum.DREAMER) {
       const profileData = DreamerProfile.create({ ...profile, userId: newUser.id });
       await this.repository.createDreamer(profileData);
     } else {
