@@ -1,7 +1,9 @@
 import { Role } from 'src/common/constants/role.type';
 import {
   FilteredUserProperties,
+  OAuthProperties,
   PasswordProperties,
+  SignupProperties,
   UserProperties,
   UserPropertiesFromDB
 } from '../../types/user/user.types';
@@ -14,12 +16,14 @@ import { UserStatsProperties, UserStatsToClientProperties } from 'src/common/typ
 
 export default class User implements IUser {
   private readonly id?: string;
-  private readonly role: Role;
-  private nickName: string;
+  private role?: Role;
+  private nickName?: string;
   private readonly email: string;
-  private password: string;
-  private phoneNumber: string;
+  private password?: string;
+  private phoneNumber?: string;
   private coconut: number;
+  private readonly provider: string;
+  private readonly providerId: string;
   private readonly followers: { dreamerId: string }[];
   private readonly makerProfile: Partial<MakerProfileProperties>;
   private readonly stats: UserStatsProperties;
@@ -28,12 +32,14 @@ export default class User implements IUser {
 
   constructor(user: UserPropertiesFromDB) {
     this.id = user?.id;
-    this.role = user.role;
-    this.nickName = user.nickName;
+    this.role = user?.role;
+    this.nickName = user?.nickName;
     this.email = user.email;
-    this.password = user.password;
-    this.phoneNumber = user.phoneNumber;
-    this.coconut = user.coconut;
+    this.password = user?.password;
+    this.phoneNumber = user?.phoneNumber;
+    this.coconut = user.coconut ?? 0;
+    this.provider = user?.provider;
+    this.providerId = user?.providerId;
     this.followers = user?.followers;
     this.makerProfile = user?.makerProfile;
     this.stats = user?.stats;
@@ -41,9 +47,13 @@ export default class User implements IUser {
     this.updatedAt = user?.updatedAt;
   }
 
-  static async create(data) {
+  static async create(data: UserPropertiesFromDB): Promise<IUser> {
     const hashedPassword = await HashingPassword(data.password);
     return new User({ ...data, password: hashedPassword });
+  }
+
+  static async socialLogin(data: OAuthProperties): Promise<IUser> {
+    return new User(data);
   }
 
   async validatePassword(password: string): Promise<boolean> {
@@ -112,12 +122,30 @@ export default class User implements IUser {
     };
   }
 
+  signupData(): SignupProperties {
+    return {
+      role: this.role,
+      email: this.email,
+      nickName: this.nickName,
+      password: this.password,
+      phoneNumber: this.phoneNumber
+    };
+  }
+
+  OAuthData(): OAuthProperties {
+    return {
+      provider: this.provider,
+      providerId: this.providerId,
+      email: this.email
+    };
+  }
+
   getId(): string {
     return this.id;
   }
 
-  getRole(): Role {
-    return this.role;
+  getRole(): Role | null {
+    return this.role ?? null;
   }
 
   isFollowed(dreamerId: string): boolean {

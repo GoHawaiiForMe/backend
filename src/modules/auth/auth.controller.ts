@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
 import AuthService from './auth.service';
 import { Public } from 'src/common/decorators/public.decorator';
 import {
@@ -15,9 +15,12 @@ import { Cookies } from 'src/common/decorators/cookie.decorator';
 import UnauthorizedError from 'src/common/errors/unauthorizedError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import { Response } from 'express';
+import { AuthGuard } from '@nestjs/passport';
+import { User } from 'src/common/decorators/user.decorator';
+import { OAuthProperties } from 'src/common/types/user/user.types';
 
 @Controller('auth')
-export default class UserController {
+export default class AuthController {
   constructor(private readonly service: AuthService) {}
 
   @Public()
@@ -40,6 +43,28 @@ export default class UserController {
     const user = await this.service.login(data.email, data.password);
     const tokenPayload = { userId: user.id, role: user.role };
     const { accessToken, refreshToken } = this.service.createTokens(tokenPayload);
+
+    res.cookie('refreshToken', refreshToken, {
+      path: '/user/token/refresh',
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    });
+
+    res.json({ accessToken });
+  }
+
+  @Public()
+  @Get('google')
+  @UseGuards(AuthGuard('google'))
+  async toGoogle() {} // 구글 로그인 페이지로 Redirect
+
+  @Public()
+  @UseGuards(AuthGuard('google'))
+  @Get('google/callback')
+  async loginByGoogle(@User() user: OAuthProperties, @Res() res: Response) {
+    const { accessToken, refreshToken } = await this.service.googleLogin(user);
 
     res.cookie('refreshToken', refreshToken, {
       path: '/user/token/refresh',

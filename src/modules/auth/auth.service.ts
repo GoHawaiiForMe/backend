@@ -5,8 +5,10 @@ import { Injectable } from '@nestjs/common';
 import User from 'src/common/domains/user/user.domain';
 import { DreamerProfile, MakerProfile } from 'src/common/domains/user/profile.domain';
 import UserStatsService from '../userStats/userStats.service';
-import { FilteredUserProperties } from 'src/common/types/user/user.types';
+import { FilteredUserProperties, OAuthProperties, UserProperties } from 'src/common/types/user/user.types';
 import AuthRepository from './auth.repository';
+import { Role } from 'src/common/constants/role.type';
+import { DreamerProfileProperties, MakerProfileProperties } from 'src/common/types/user/profile.types';
 
 @Injectable()
 export default class AuthService {
@@ -16,7 +18,10 @@ export default class AuthService {
     private readonly userStats: UserStatsService
   ) {}
 
-  async createUser(data): Promise<null> {
+  async createUser(data: {
+    user: UserProperties;
+    profile: DreamerProfileProperties | MakerProfileProperties;
+  }): Promise<null> {
     const { user, profile } = data;
 
     // FIXME: transaction utility 만들어서 적용하자
@@ -32,7 +37,7 @@ export default class AuthService {
     }
 
     const userData = await User.create(user);
-    const savedUser = await this.repository.create(userData.get());
+    const savedUser = await this.repository.create(userData.signupData());
     const newUser = savedUser.get();
 
     // 역할에 따라 프로필 등록
@@ -64,9 +69,27 @@ export default class AuthService {
     return user.toClient();
   }
 
-  createTokens(payload: { userId: string; role: string }) {
-    const accessToken = this.jwt.sign(payload, { expiresIn: process.env.ACCESS_TOKEN_EXPIRY });
-    const refreshToken = this.jwt.sign(payload, { expiresIn: process.env.REFRESH_TOKEN_EXPIRY });
+  async googleLogin(data: OAuthProperties) {
+    let user = await this.repository.findByProviderId(data.providerId);
+
+    const userData = await User.socialLogin(data);
+    console.log(userData.OAuthData());
+    if (!user) {
+      user = await this.repository.create(userData.OAuthData());
+    }
+
+    return this.createTokens({ userId: user.getId(), role: user.getRole() });
+  }
+
+  createTokens(payload: { userId: string; role?: Role | null }) {
+    const accessToken = this.jwt.sign(
+      { userId: payload.userId, role: payload.role ?? null },
+      { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
+    );
+    const refreshToken = this.jwt.sign(
+      { userId: payload.userId, role: payload.role ?? null },
+      { expiresIn: process.env.REFRESH_TOKEN_EXPIRY }
+    );
 
     return { accessToken, refreshToken };
   }

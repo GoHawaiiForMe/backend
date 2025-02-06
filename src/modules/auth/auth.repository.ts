@@ -4,7 +4,7 @@ import { DreamerProfileMapper, MakerProfileMapper } from 'src/common/domains/use
 import { IUser } from 'src/common/domains/user/user.interface';
 import UserMapper from 'src/common/domains/user/user.mapper';
 import { DreamerProfileProperties, MakerProfileProperties } from 'src/common/types/user/profile.types';
-import { UserProperties } from 'src/common/types/user/user.types';
+import { SignupProperties, OAuthProperties } from 'src/common/types/user/user.types';
 import DBClient from 'src/providers/database/prisma/DB.client';
 
 @Injectable()
@@ -12,21 +12,13 @@ export default class AuthRepository {
   constructor(private readonly db: DBClient) {}
 
   async findByEmail(email: string): Promise<IUser> {
-    const data = await this.db.user.findUnique({
-      where: {
-        email
-      }
-    });
+    const data = await this.db.user.findUnique({ where: { email } });
 
     return new UserMapper(data).toDomain();
   }
 
   async findByNickName(nickName: string): Promise<IUser> {
-    const data = await this.db.user.findUnique({
-      where: {
-        nickName
-      }
-    });
+    const data = await this.db.user.findUnique({ where: { nickName } });
 
     return new UserMapper(data).toDomain();
   }
@@ -37,16 +29,14 @@ export default class AuthRepository {
     return new UserMapper(data).toDomain();
   }
 
-  async create(user: Partial<UserProperties>): Promise<IUser> {
-    const data = await this.db.user.create({
-      data: {
-        role: user.role,
-        email: user.email,
-        nickName: user.nickName,
-        password: user.password,
-        phoneNumber: user.phoneNumber
-      }
-    });
+  async findByProviderId(providerId: string): Promise<IUser> {
+    const data = await this.db.user.findUnique({ where: { providerId } });
+
+    return new UserMapper(data).toDomain();
+  }
+
+  async create(user: SignupProperties | OAuthProperties): Promise<IUser> {
+    const data = await this.db.user.create({ data: user });
 
     return new UserMapper(data).toDomain();
   }

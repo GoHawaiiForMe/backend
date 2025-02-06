@@ -5,6 +5,8 @@ import { JwtStrategy } from './strategy/jwt.strategy';
 import UserStatsModule from '../userStats/userStats.module';
 import AuthRepository from './auth.repository';
 import AuthService from './auth.service';
+import { GoogleStrategy } from './strategy/google.strategy';
+import AuthController from './auth.controller';
 
 @Module({
   imports: [
@@ -14,8 +16,8 @@ import AuthService from './auth.service';
     }),
     UserStatsModule
   ],
-  controllers: [],
-  providers: [AuthService, AuthRepository, JwtStrategy],
+  controllers: [AuthController],
+  providers: [AuthService, AuthRepository, JwtStrategy, GoogleStrategy],
   exports: []
 })
 export default class AuthModule {}
