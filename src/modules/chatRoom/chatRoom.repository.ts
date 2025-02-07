@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import IChatRoom from 'src/common/domains/chatRoom/chatRoom.interface';
 import ChatRoomMapper from 'src/common/domains/chatRoom/chatRoom.mapper';
 import { ChatQueryOptions } from 'src/common/types/chat/chat.type';
+import { FindChatRoomByIdOptions } from 'src/common/types/chatRoom/chatRoom.type';
 import { ChatRoom } from 'src/providers/database/mongoose/chatRoom.schema';
 
 @Injectable()
@@ -31,16 +32,21 @@ export default class ChatRoomRepository {
     const totalCount = await this.chatRoom.count({ userIds: userId });
     return totalCount;
   }
+  async findChatRoom(options: FindChatRoomByIdOptions): Promise<IChatRoom> {
+    const { chatRoomId, planId, chatId, isActive } = options;
+    const chatRoom = await this.chatRoom
+      .findOne({
+        $or: [{ _id: chatRoomId }, { planId }, { chatIds: chatId }, { isActive }]
+      })
+      .exec();
+
+    const domainChatRoom = new ChatRoomMapper(chatRoom).toDomain();
+    return domainChatRoom;
+  }
 
   async findActiveChatRoomIdByUserId(userId: string): Promise<string[]> {
     const chatRooms = await this.chatRoom.find({ userIds: userId, isDeletedAt: null, isActive: true }).select('_id');
     return chatRooms.map((chatRoom) => chatRoom._id.toString());
-  }
-
-  async findChatRoomById(id: string): Promise<IChatRoom> {
-    const chatRoom = await this.chatRoom.findById(id).exec();
-    const domainChatRoom = new ChatRoomMapper(chatRoom).toDomain();
-    return domainChatRoom;
   }
 
   async createChatRoom(data: IChatRoom): Promise<IChatRoom> {
@@ -58,13 +64,9 @@ export default class ChatRoomRepository {
     return domainChatRoom;
   }
 
-  async exists(planId: string): Promise<boolean> {
-    const chatRoom = await this.chatRoom.findOne({ planId });
-    return !!chatRoom;
-  }
-
-  async update(planId: string): Promise<IChatRoom> {
-    const chatRoom = await this.chatRoom.findOneAndUpdate({ planId }, { isActive: false }, { new: true });
+  async update(data: IChatRoom): Promise<IChatRoom> {
+    const { planId, isActive } = data.toDB();
+    const chatRoom = await this.chatRoom.findOneAndUpdate({ planId }, { isActive }, { new: true });
     const domainChatRoom = new ChatRoomMapper(chatRoom).toDomain();
     return domainChatRoom;
   }
