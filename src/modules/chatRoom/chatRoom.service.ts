@@ -115,12 +115,14 @@ export default class ChatRoomService {
     return chatData;
   }
 
-  async updateDeActive(planId: string | string[]): Promise<void> {
-    if (typeof planId === 'string') {
+  async deActive(data: { planId?: string; planIds?: string[] }): Promise<void> {
+    const { planId, planIds } = data || {};
+    if (planId) {
       const chatRoom = await this.getChatRoomDomain({ planId });
       chatRoom.update();
       await this.chatRoomRepository.update(chatRoom);
-    } else await this.chatRoomRepository.updateMany(planId);
+    }
+    if (planIds) await this.chatRoomRepository.updateMany(planIds);
   }
 
   async sendMessageToChatRoom(chat: ChatReference) {

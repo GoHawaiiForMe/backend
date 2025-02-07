@@ -202,7 +202,8 @@ export default class PlanService {
 
     plan.updateComplete();
     const updatedPlan = await this.planRepository.update(plan);
-    await this.chatRoomService.updateDeActive(plan.getId());
+    const planId = plan.getId();
+    await this.chatRoomService.deActive({ planId });
     return updatedPlan.toClient();
   }
 
@@ -238,7 +239,7 @@ export default class PlanService {
 
       await this.planRepository.updateMany({ ids: planIds, status: updateStatus });
       if (status === StatusValues.CONFIRMED) {
-        await this.chatRoomService.updateDeActive(planIds);
+        await this.chatRoomService.deActive({ planIds });
       }
     }
   }
