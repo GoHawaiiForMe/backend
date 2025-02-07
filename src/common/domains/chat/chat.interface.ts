@@ -5,4 +5,7 @@ export default interface IChat {
   toClient(): ChatToClientProperties;
   toS3(): ChatToS3Properties;
   setS3Key(s3key: string): void;
+  getChatRoomId(): string;
+  getSenderId(): string;
+  getIsDeletedAt(): Date;
 }

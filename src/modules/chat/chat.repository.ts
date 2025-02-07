@@ -54,7 +54,7 @@ export default class ChatRepository {
     );
     if (chatRoom.modifiedCount === 0) {
       throw new InternalServerError(ErrorMessage.INTERNAL_SERVER_ERROR_CHAT_ROOM_UPDATE);
-    }
+    } //TODO. 레포분리 및 transaction
 
     const domainChat = new ChatMapper(chat).toDomain();
 

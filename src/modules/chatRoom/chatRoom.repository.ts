@@ -6,6 +6,7 @@ import ChatRoomMapper from 'src/common/domains/chatRoom/chatRoom.mapper';
 import { ChatQueryOptions } from 'src/common/types/chat/chat.type';
 import { FindChatRoomByIdOptions } from 'src/common/types/chatRoom/chatRoom.type';
 import { ChatRoom } from 'src/providers/database/mongoose/chatRoom.schema';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export default class ChatRoomRepository {
@@ -32,11 +33,13 @@ export default class ChatRoomRepository {
     const totalCount = await this.chatRoom.count({ userIds: userId });
     return totalCount;
   }
+
   async findChatRoom(options: FindChatRoomByIdOptions): Promise<IChatRoom> {
-    const { chatRoomId, planId, chatId } = options;
+    const { chatRoomId, planId } = options || {};
+
     const chatRoom = await this.chatRoom
       .findOne({
-        $or: [{ _id: chatRoomId }, { planId }, { chatIds: chatId }]
+        $or: [{ _id: chatRoomId }, { planId }]
       })
       .exec();
 
@@ -44,7 +47,7 @@ export default class ChatRoomRepository {
     return domainChatRoom;
   }
 
-  async findActiveChatRoomIdByUserId(userId: string): Promise<string[]> {
+  async findActiveChatRoomIdsByUserId(userId: string): Promise<string[]> {
     const chatRooms = await this.chatRoom.find({ userIds: userId, isDeletedAt: null, isActive: true }).select('_id');
     return chatRooms.map((chatRoom) => chatRoom._id.toString());
   }

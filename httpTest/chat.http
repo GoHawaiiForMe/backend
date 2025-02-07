@@ -1,16 +1,16 @@
 @DREAMER1_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Njg4NWEzYy01MGY0LTQyN2ItOGE5Mi0zNzAyYzY5NzZmYjAiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNzk4MzQ1MSwiZXhwIjoxNzQxNDM5NDUxfQ.V2qa2oB-m757NnAXYkefAWL_Vewwh526s97SYh2LuJc
 @CHATROOM1_ID=67a4e29ba4b7b6ddc6ef5ac6
-
+@EXAMPLE_CHAT_ROOM=67a4e29ba4b7b6ddc6ef5ac6
 GET http://localhost:4000/chatRooms
 Authorization: Bearer {{DREAMER1_TOKEN}}
 ###
-GET http://localhost:4000/chatRooms/{{CHATROOM1_ID}}
+GET http://localhost:4000/chatRooms/{{EXAMPLE_CHAT_ROOM}}/chats
 Authorization: Bearer {{DREAMER1_TOKEN}}
 ###
 GET http://localhost:4000/chatRooms/{{CHATROOM1_ID}}/chats
 Authorization: Bearer {{DREAMER1_TOKEN}}
 ###
-DELETE http://localhost:4000/chats/67a4e2f016d81504cec91f72
+DELETE http://localhost:4000/chats/67a5beeed80a6a8eb3a6c3d6
 Authorization: Bearer {{DREAMER1_TOKEN}}
 ###
 POST http://localhost:4000/chatRooms

@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ChatCreateData, ChatQueryOptions } from 'src/common/types/chat/chat.type';
 import ChatRoomRepository from './chatRoom.repository';
 import { ChatRoomProperties, ChatRoomWithUserInfo } from 'src/common/domains/chatRoom/chatRoom.properties';
@@ -51,13 +51,13 @@ export default class ChatRoomService {
   }
 
   async getActiveChatRoomIds(userId: string): Promise<string[]> {
-    const chatRoomIds = await this.chatRoomRepository.findActiveChatRoomIdByUserId(userId);
+    const chatRoomIds = await this.chatRoomRepository.findActiveChatRoomIdsByUserId(userId);
     return chatRoomIds;
   }
 
   async getChatRoomDomain(options: FindChatRoomByIdOptions): Promise<IChatRoom> {
-    const { userId, chatRoomId } = options;
-    const chatRoom = await this.chatRoomRepository.findChatRoom({ chatRoomId: chatRoomId });
+    const { userId } = options || {};
+    const chatRoom = await this.chatRoomRepository.findChatRoom(options);
 
     if (!chatRoom) {
       throw new NotFoundError(ErrorMessage.CHAT_ROOM_NOTFOUND);
@@ -70,11 +70,16 @@ export default class ChatRoomService {
     return chatRoom;
   }
 
-  async getChatRoomById(options: FindChatRoomByIdOptions): Promise<ChatRoomWithUserInfo> {
+  async getChatRoomById(options: { userId: string; chatRoomId: string }): Promise<ChatRoomWithUserInfo> {
     const chatRoom = await this.getChatRoomDomain(options);
     const chatRoomWithUserInfo = await this.fetchAndFormatUserInfo(chatRoom.toClient());
 
     return chatRoomWithUserInfo;
+  }
+
+  async getIsActiveById(id: string): Promise<boolean> {
+    const isActive = (await this.getChatRoomDomain({ chatRoomId: id })).getIsActive();
+    return isActive;
   }
 
   async getChatsByChatRoomId(options: ChatQueryOptions): Promise<{ totalCount: number; list: ChatProperties[] }> {
