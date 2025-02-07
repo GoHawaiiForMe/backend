@@ -1,8 +1,8 @@
 import { Transform, Type } from 'class-transformer';
 import { IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
 import { MakerOrderBy } from './user.types';
-import { ServiceArea, ServiceAreaEnum } from 'src/common/constants/serviceArea.type';
-import { TripType, TripTypeEnum } from 'src/common/constants/tripType.type';
+import { ServiceArea, ServiceAreaValues } from 'src/common/constants/serviceArea.type';
+import { TripType, TripTypeValues } from 'src/common/constants/tripType.type';
 
 export class PaginationQueryDTO {
   @Type(() => Number)
@@ -27,11 +27,11 @@ export class GetMakerListQueryDTO {
   orderBy: MakerOrderBy = MakerOrderBy.REVIEWS;
 
   @IsOptional()
-  @IsEnum(ServiceAreaEnum)
+  @IsEnum(ServiceAreaValues)
   serviceArea: ServiceArea;
 
   @IsOptional()
-  @IsEnum(TripTypeEnum)
+  @IsEnum(TripTypeValues)
   serviceType: TripType;
 
   @IsOptional()

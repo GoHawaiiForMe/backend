@@ -13,6 +13,7 @@ import BadRequestError from 'src/common/errors/badRequestError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import { MakerInfoAndProfileProperties, MakerProfileProperties } from 'src/common/types/user/profile.types';
 import { UserStatsProperties, UserStatsToClientProperties } from 'src/common/types/userStats/userStats.types';
+import { OAuthProvider } from 'src/common/constants/oauth.type';
 
 export default class User implements IUser {
   private readonly id?: string;
@@ -22,7 +23,7 @@ export default class User implements IUser {
   private password?: string;
   private phoneNumber?: string;
   private coconut: number;
-  private readonly provider: string;
+  private readonly provider: OAuthProvider;
   private readonly providerId: string;
   private readonly followers: { dreamerId: string }[];
   private readonly makerProfile: Partial<MakerProfileProperties>;
@@ -48,12 +49,11 @@ export default class User implements IUser {
   }
 
   static async create(data: UserPropertiesFromDB): Promise<IUser> {
-    const hashedPassword = await HashingPassword(data.password);
+    let hashedPassword: string;
+    if (data.password) {
+      hashedPassword = await HashingPassword(data.password);
+    }
     return new User({ ...data, password: hashedPassword });
-  }
-
-  static async socialLogin(data: OAuthProperties): Promise<IUser> {
-    return new User(data);
   }
 
   async validatePassword(password: string): Promise<boolean> {
@@ -125,18 +125,19 @@ export default class User implements IUser {
   signupData(): SignupProperties {
     return {
       role: this.role,
-      email: this.email,
+      email: this?.email,
       nickName: this.nickName,
-      password: this.password,
-      phoneNumber: this.phoneNumber
+      password: this?.password,
+      phoneNumber: this.phoneNumber,
+      provider: this?.provider,
+      providerId: this?.providerId
     };
   }
 
   OAuthData(): OAuthProperties {
     return {
       provider: this.provider,
-      providerId: this.providerId,
-      email: this.email
+      providerId: this.providerId
     };
   }
 

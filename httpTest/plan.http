@@ -32,7 +32,7 @@ Content-Type: application/json
 ###
 
 
-GET {{HOST_NAME}}/dreamer?status=OVERDUE&keyword=제목
+GET {{HOST_NAME}}/dreamer?status=OVERDUE
 Authorization: Bearer {{DREAMER1_TOKEN}}
 ###
 PATCH {{HOST_NAME}}/{{CONFIRMED_PLAN1}}/complete

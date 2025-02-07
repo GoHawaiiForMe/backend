@@ -12,6 +12,8 @@ export enum ErrorMessage {
   USER_COCONUT_INVALID = '포인트는 0코코넛 이상이어야 합니다.',
 
   OAUTH_GOOGLE_SERVER_ERROR = '구글 프로필 정보를 가져올 수 없습니다.',
+  OAUTH_KAKAO_SERVER_ERROR = '카카오 프로필 정보를 가져올 수 없습니다.',
+  OAUTH_NAVER_SERVER_ERROR = '네이버 프로필 정보를 가져올 수 없습니다.',
 
   TOKEN_UNAUTHORIZED_NOTFOUND = '토큰이 없습니다. 로그인이 필요합니다',
   TOKEN_UNAUTHORIZED_VALIDATION = '유효하지 않은 토큰입니다',

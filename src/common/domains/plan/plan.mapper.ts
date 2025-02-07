@@ -1,7 +1,7 @@
 import { PlanMapperProperties } from 'src/common/types/plan/plan.properties';
 import IPlan from './plan.interface';
 import Plan from './plan.domain';
-import { StatusEnum } from 'src/common/constants/status.type';
+import { StatusValues } from 'src/common/constants/status.type';
 
 export default class PlanMapper {
   constructor(private readonly plan: PlanMapperProperties) {}

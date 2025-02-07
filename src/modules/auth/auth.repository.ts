@@ -4,7 +4,7 @@ import { DreamerProfileMapper, MakerProfileMapper } from 'src/common/domains/use
 import { IUser } from 'src/common/domains/user/user.interface';
 import UserMapper from 'src/common/domains/user/user.mapper';
 import { DreamerProfileProperties, MakerProfileProperties } from 'src/common/types/user/profile.types';
-import { SignupProperties, OAuthProperties } from 'src/common/types/user/user.types';
+import { SignupProperties } from 'src/common/types/user/user.types';
 import DBClient from 'src/providers/database/prisma/DB.client';
 
 @Injectable()
@@ -35,7 +35,7 @@ export default class AuthRepository {
     return new UserMapper(data).toDomain();
   }
 
-  async create(user: SignupProperties | OAuthProperties): Promise<IUser> {
+  async create(user: SignupProperties): Promise<IUser> {
     const data = await this.db.user.create({ data: user });
 
     return new UserMapper(data).toDomain();

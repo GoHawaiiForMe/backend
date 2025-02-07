@@ -4,6 +4,7 @@ import { TripType } from 'src/common/constants/tripType.type';
 import { MakerProfileProperties } from './profile.types';
 import SortOrder from 'src/common/constants/sortOrder.enum';
 import { UserStatsProperties } from '../userStats/userStats.types';
+import { OAuthProvider } from 'src/common/constants/oauth.type';
 
 export interface UserProperties {
   id?: string;
@@ -13,7 +14,7 @@ export interface UserProperties {
   password?: string;
   phoneNumber?: string;
   coconut?: number;
-  provider?: string;
+  provider?: OAuthProvider;
   providerId?: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -21,16 +22,17 @@ export interface UserProperties {
 
 export interface SignupProperties {
   role: Role;
-  email: string;
+  email?: string;
   nickName: string;
-  password: string;
+  password?: string;
   phoneNumber: string;
+  provider?: OAuthProvider;
+  providerId?: string;
 }
 
 export interface OAuthProperties {
-  provider: string;
+  provider: OAuthProvider;
   providerId: string;
-  email: string;
 }
 
 export interface UserPropertiesFromDB {
@@ -41,7 +43,7 @@ export interface UserPropertiesFromDB {
   password?: string;
   phoneNumber?: string;
   coconut?: number;
-  provider?: string;
+  provider?: OAuthProvider;
   providerId?: string;
   followers?: { dreamerId: string }[];
   makerProfile?: Partial<MakerProfileProperties>;

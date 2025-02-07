@@ -7,8 +7,9 @@ import { DreamerProfile, MakerProfile } from 'src/common/domains/user/profile.do
 import UserStatsService from '../userStats/userStats.service';
 import { FilteredUserProperties, OAuthProperties, UserProperties } from 'src/common/types/user/user.types';
 import AuthRepository from './auth.repository';
-import { Role, RoleEnum } from 'src/common/constants/role.type';
+import { Role, RoleValues } from 'src/common/constants/role.type';
 import { DreamerProfileProperties, MakerProfileProperties } from 'src/common/types/user/profile.types';
+import { IUser } from 'src/common/domains/user/user.interface';
 
 @Injectable()
 export default class AuthService {
@@ -23,14 +24,13 @@ export default class AuthService {
     profile: DreamerProfileProperties | MakerProfileProperties;
   }): Promise<null> {
     const { user, profile } = data;
-
-    // FIXME: transaction utility 만들어서 적용하자
-    // 유저 등록
-    const existingEmail = await this.repository.findByEmail(user.email);
-    if (existingEmail) {
-      throw new BadRequestError(ErrorMessage.USER_EXIST);
+    // 유저 등록: 소셜 로그인의 경우 이메일이 없어 중복 확인 패스
+    if (!user.provider) {
+      const existingEmail = await this.repository.findByEmail(user.email);
+      if (existingEmail) {
+        throw new BadRequestError(ErrorMessage.USER_EXIST);
+      }
     }
-
     const existingNickName = await this.repository.findByNickName(user.nickName);
     if (existingNickName) {
       throw new BadRequestError(ErrorMessage.USER_NICKNAME_EXIST);
@@ -38,14 +38,13 @@ export default class AuthService {
 
     const userData = await User.create(user);
     const savedUser = await this.repository.create(userData.signupData());
-    const newUser = savedUser.get();
 
     // 역할에 따라 프로필 등록
-    if (newUser.role === RoleEnum.DREAMER) {
-      const profileData = DreamerProfile.create({ ...profile, userId: newUser.id });
+    if (savedUser.getRole() === RoleValues.DREAMER) {
+      const profileData = DreamerProfile.create({ ...profile, userId: savedUser.getId() });
       await this.repository.createDreamer(profileData);
     } else {
-      const profileData = MakerProfile.create({ ...profile, userId: newUser.id });
+      const profileData = MakerProfile.create({ ...profile, userId: savedUser.getId() });
       await this.repository.createMaker(profileData.get());
     }
 
@@ -69,24 +68,20 @@ export default class AuthService {
     return user.toClient();
   }
 
-  async googleLogin(data: OAuthProperties) {
-    let user = await this.repository.findByProviderId(data.providerId);
-
-    const userData = await User.socialLogin(data);
-    if (!user) {
-      user = await this.repository.create(userData.OAuthData());
-    }
+  async socialLogin(data: OAuthProperties) {
+    const user = await this.repository.findByProviderId(data.providerId);
+    if (!user) return null;
 
     return this.createTokens({ userId: user.getId(), role: user.getRole() });
   }
 
-  createTokens(payload: { userId: string; role?: Role | null }) {
+  createTokens(payload: { userId: string; role: Role }) {
     const accessToken = this.jwt.sign(
-      { userId: payload.userId, role: payload.role ?? null },
+      { userId: payload.userId, role: payload.role },
       { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
     );
     const refreshToken = this.jwt.sign(
-      { userId: payload.userId, role: payload.role ?? null },
+      { userId: payload.userId, role: payload.role },
       { expiresIn: process.env.REFRESH_TOKEN_EXPIRY }
     );
 

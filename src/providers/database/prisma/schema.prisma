@@ -19,15 +19,15 @@ model User {
   updatedAt   DateTime  @updatedAt
   isDeletedAt DateTime?
 
-  email       String  @unique
-  nickName    String? @unique
-  phoneNumber String?
+  email       String?       @unique
+  nickName    String        @unique
+  phoneNumber String
   password    String?
-  coconut     Int     @default(0)
-  provider    String? @default("local")
-  providerId  String? @unique
+  coconut     Int           @default(0)
+  provider    OAuthProvider @default(LOCAL)
+  providerId  String?       @unique
 
-  role            Role?
+  role            Role
   receivedReviews Review[] @relation("owner")
   writtenReviews  Review[] @relation("writer")
   followers       Follow[] @relation("maker")
@@ -186,4 +186,11 @@ enum Status {
   CONFIRMED
   COMPLETED
   OVERDUE
+}
+
+enum OAuthProvider {
+  LOCAL
+  GOOGLE
+  KAKAO
+  NAVER
 }

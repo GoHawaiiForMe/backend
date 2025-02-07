@@ -1,13 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ArrayNotEmpty, IsEmail, IsEnum, IsNotEmpty, IsString } from 'class-validator';
-import { ProfileImage, ProfileImageEnum } from 'src/common/constants/image.type';
-import { Role, RoleEnum } from 'src/common/constants/role.type';
-import { ServiceArea, ServiceAreaEnum } from 'src/common/constants/serviceArea.type';
-import { TripType, TripTypeEnum } from 'src/common/constants/tripType.type';
+import { ArrayNotEmpty, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { ProfileImage, ProfileImageValues } from 'src/common/constants/image.type';
+import { OAuthProvider } from 'src/common/constants/oauth.type';
+import { Role, RoleValues } from 'src/common/constants/role.type';
+import { ServiceArea, ServiceAreaValues } from 'src/common/constants/serviceArea.type';
+import { TripType, TripTypeValues } from 'src/common/constants/tripType.type';
 
 export class SignupUserDTO {
-  @ApiProperty({ example: 'DEFAULT_1', enum: RoleEnum })
-  @IsEnum(RoleEnum)
+  @ApiProperty({ example: 'DEFAULT_1', enum: RoleValues })
+  @IsEnum(RoleValues)
   @IsNotEmpty()
   role: Role;
 
@@ -15,31 +16,39 @@ export class SignupUserDTO {
   nickName: string;
 
   @IsEmail()
-  @IsNotEmpty()
+  @IsOptional()
   email: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   password: string;
 
   @IsString()
   @IsNotEmpty()
   phoneNumber: string;
+
+  @IsString()
+  @IsOptional()
+  provider: OAuthProvider;
+
+  @IsString()
+  @IsOptional()
+  providerId: string;
 }
 
 export class SignupProfileDTO {
-  @ApiProperty({ example: 'DEFAULT_1', enum: ProfileImageEnum })
-  @IsEnum(ProfileImageEnum)
+  @ApiProperty({ example: 'DEFAULT_1', enum: ProfileImageValues })
+  @IsEnum(ProfileImageValues)
   @IsNotEmpty()
   image: ProfileImage;
 
-  @ApiProperty({ example: ['FOOD_TOUR'], enum: TripTypeEnum })
-  @IsEnum(TripTypeEnum, { each: true })
+  @ApiProperty({ example: ['FOOD_TOUR'], enum: TripTypeValues })
+  @IsEnum(TripTypeValues, { each: true })
   @ArrayNotEmpty()
   tripTypes: TripType[];
 
-  @ApiProperty({ example: ['SEOUL', 'INCHEON'], enum: ServiceAreaEnum })
-  @IsEnum(ServiceAreaEnum, { each: true })
+  @ApiProperty({ example: ['SEOUL', 'INCHEON'], enum: ServiceAreaValues })
+  @IsEnum(ServiceAreaValues, { each: true })
   @ArrayNotEmpty()
   serviceArea: ServiceArea[];
 }

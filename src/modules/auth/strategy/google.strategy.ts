@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Profile, Strategy } from 'passport-google-oauth20';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
+import { OAuthProviderValues } from 'src/common/constants/oauth.type';
 import InternalServerError from 'src/common/errors/internalServerError';
 
 @Injectable()
@@ -18,16 +19,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   validate(accessToken: string, refreshToken: string, profile: Profile) {
     if (!profile) throw new InternalServerError(ErrorMessage.OAUTH_GOOGLE_SERVER_ERROR);
 
-    const { id, emails } = profile;
-    if (!emails || emails.length === 0) {
-      throw new InternalServerError(ErrorMessage.OAUTH_GOOGLE_SERVER_ERROR);
-    }
-
-    const user = {
-      provider: 'google',
-      providerId: id,
-      email: emails[0].value
-    };
+    const user = { provider: OAuthProviderValues.GOOGLE, providerId: profile.id };
 
     return user;
   }
