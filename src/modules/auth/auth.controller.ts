@@ -57,8 +57,10 @@ export default class AuthController {
 
   @Public()
   @Get('google')
-  @UseGuards(AuthGuard('google'))
-  async toGoogle() {} // 구글 로그인 페이지로 Redirect
+  toGoogle(): { redirectUrl: string } {
+    const redirectUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=${process.env.GOOGLE_REDIRECT}&response_type=code&scope=email profile`;
+    return { redirectUrl };
+  }
 
   @Public()
   @UseGuards(AuthGuard('google'))
@@ -83,10 +85,9 @@ export default class AuthController {
 
   @Public()
   @Get('kakao')
-  @UseGuards(AuthGuard('kakao'))
-  toKakao(@Res() res: Response): void {
-    const kakaoUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.KAKAO_REDIRECT}`;
-    return res.redirect(kakaoUrl);
+  toKakao(): { redirectUrl: string } {
+    const redirectUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.KAKAO_REDIRECT}`;
+    return { redirectUrl };
   }
 
   @Public()
