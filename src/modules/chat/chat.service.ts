@@ -65,19 +65,19 @@ export default class ChatService {
     if (isDeletedAt) {
       rest.isDeleted = true;
       switch (chatData.type) {
-        case 'TEXT':
+        case ChatType.TEXT:
           updatedContent = '삭제된 메시지입니다.';
           break;
-        case 'IMAGE':
+        case ChatType.IMAGE:
           updatedContent = '삭제된 이미지입니다.';
           break;
-        case 'VIDEO':
+        case ChatType.VIDEO:
           updatedContent = '삭제된 동영상입니다.';
           break;
       }
     } else {
       rest.isDeleted = false;
-      if (chatData.type === 'TEXT') {
+      if (chatData.type === ChatType.TEXT) {
         updatedContent = content;
       } else {
         updatedContent = await this.s3Service.generatePresignedUrl(content);
