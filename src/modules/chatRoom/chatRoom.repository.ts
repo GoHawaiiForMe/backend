@@ -33,10 +33,10 @@ export default class ChatRoomRepository {
     return totalCount;
   }
   async findChatRoom(options: FindChatRoomByIdOptions): Promise<IChatRoom> {
-    const { chatRoomId, planId, chatId, isActive } = options;
+    const { chatRoomId, planId, chatId } = options;
     const chatRoom = await this.chatRoom
       .findOne({
-        $or: [{ _id: chatRoomId }, { planId }, { chatIds: chatId }, { isActive }]
+        $or: [{ _id: chatRoomId }, { planId }, { chatIds: chatId }]
       })
       .exec();
 

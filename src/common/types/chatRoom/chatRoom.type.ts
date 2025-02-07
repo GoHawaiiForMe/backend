@@ -14,7 +14,6 @@ export interface FindChatRoomByIdOptions {
   chatRoomId?: string;
   planId?: string;
   chatId?: string;
-  isActive?: boolean;
 }
 
 export interface FileUploadData {
