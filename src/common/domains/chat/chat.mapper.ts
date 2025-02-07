@@ -8,14 +8,17 @@ export default class ChatMapper {
   toDomain(): IChat {
     if (!this.chat) return null;
 
-    return new Chat({
+    const result = new Chat({
       id: this.chat._id.toString(),
       createdAt: this.chat.createdAt,
       updatedAt: this.chat.updatedAt,
+      isDeletedAt: this.chat.isDeletedAt,
       type: this.chat.type,
       senderId: this.chat.senderId,
       chatRoomId: this.chat.chatRoomId.toString(),
       content: this.chat.content
     });
+    //console.log(result);
+    return result;
   }
 }

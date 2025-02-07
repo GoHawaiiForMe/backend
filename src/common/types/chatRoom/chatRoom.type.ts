@@ -4,6 +4,7 @@ export interface ChatReference {
   id: string;
   createdAt: Date;
   updatedAt: Date;
+  isDeleted?: boolean;
   chatRoomId: string;
   senderId: string | null;
   content: string;

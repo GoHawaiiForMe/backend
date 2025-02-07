@@ -6,6 +6,7 @@ export default class Chat implements IChat {
   private id?: string;
   private createdAt?: Date;
   private updatedAt?: Date;
+  private isDeletedAt?: Date | null;
   private type: ChatType;
   private senderId: string | null;
   private chatRoomId: string;
@@ -16,6 +17,7 @@ export default class Chat implements IChat {
     this.id = chat?.id;
     this.createdAt = chat.createdAt;
     this.updatedAt = chat.updatedAt;
+    this.isDeletedAt = chat.isDeletedAt;
     this.type = chat.type;
     this.senderId = chat.senderId;
     this.chatRoomId = chat.chatRoomId;
@@ -42,6 +44,7 @@ export default class Chat implements IChat {
       id: this.id,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
+      isDeletedAt: this.isDeletedAt,
       type: this.type,
       senderId: this.senderId,
       chatRoomId: this.chatRoomId,

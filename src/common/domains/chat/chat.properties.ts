@@ -4,6 +4,7 @@ export interface ChatProperties {
   id?: string;
   createdAt?: Date;
   updatedAt?: Date;
+  isDeletedAt?: Date | null;
   type: ChatType;
   chatRoomId: string;
   senderId: string | null;
@@ -15,6 +16,8 @@ export interface ChatToClientProperties {
   id: string;
   createdAt: Date;
   updatedAt: Date;
+  isDeletedAt?: Date | null;
+  isDeleted?: boolean;
   type: ChatType;
   chatRoomId: string;
   senderId: string | null;

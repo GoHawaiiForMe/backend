@@ -72,6 +72,7 @@ export enum ErrorMessage {
   CHAT_ROOM_BAD_VALUE = '입력한 채팅방의 값이 잘못되었습니다.',
 
   CHAT_POST_BAD_ID = '채팅방의 id가 잘못된 형식입니다.',
+  CHAT_NOT_FOUND_ERROR = '이미 삭제됐거나 없는 채팅입니다.',
   CHAT_UPLOAD_TYPE_TEXT = '업로드 파일의 타입이 없거나 TEXT입니다.',
   CHAT_NOT_FILE_REQUEST = '서버에 전해진 업로드할 파일이 없습니다.',
   CHAT_FILE_SIZE_NOT_VIDEO = '동영상을 제외한 모든 파일 크기 제한은 2MB입니다.',

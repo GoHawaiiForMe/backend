@@ -32,8 +32,9 @@ export default class ChatRoomRepository {
     const totalCount = await this.chatRoom.count({ userIds: userId });
     return totalCount;
   }
+
   async findChatRoom(options: FindChatRoomByIdOptions): Promise<IChatRoom> {
-    const { chatRoomId, planId, chatId } = options;
+    const { chatRoomId, planId, chatId } = options || {};
     const chatRoom = await this.chatRoom
       .findOne({
         $or: [{ _id: chatRoomId }, { planId }, { chatIds: chatId }]
@@ -44,7 +45,7 @@ export default class ChatRoomRepository {
     return domainChatRoom;
   }
 
-  async findActiveChatRoomIdByUserId(userId: string): Promise<string[]> {
+  async findActiveChatRoomIdsByUserId(userId: string): Promise<string[]> {
     const chatRooms = await this.chatRoom.find({ userIds: userId, isDeletedAt: null, isActive: true }).select('_id');
     return chatRooms.map((chatRoom) => chatRoom._id.toString());
   }
