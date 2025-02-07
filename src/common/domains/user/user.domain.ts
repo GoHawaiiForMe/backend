@@ -13,7 +13,7 @@ import BadRequestError from 'src/common/errors/badRequestError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import { MakerInfoAndProfileProperties, MakerProfileProperties } from 'src/common/types/user/profile.types';
 import { UserStatsProperties, UserStatsToClientProperties } from 'src/common/types/userStats/userStats.types';
-import { OAuthProviderEnum } from 'src/common/constants/oauth.type';
+import { OAuthProvider } from 'src/common/constants/oauth.type';
 
 export default class User implements IUser {
   private readonly id?: string;
@@ -23,7 +23,7 @@ export default class User implements IUser {
   private password?: string;
   private phoneNumber?: string;
   private coconut: number;
-  private readonly provider: OAuthProviderEnum;
+  private readonly provider: OAuthProvider;
   private readonly providerId: string;
   private readonly followers: { dreamerId: string }[];
   private readonly makerProfile: Partial<MakerProfileProperties>;
