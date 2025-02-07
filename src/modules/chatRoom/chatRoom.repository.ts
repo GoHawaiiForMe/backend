@@ -6,6 +6,7 @@ import ChatRoomMapper from 'src/common/domains/chatRoom/chatRoom.mapper';
 import { ChatQueryOptions } from 'src/common/types/chat/chat.type';
 import { FindChatRoomByIdOptions } from 'src/common/types/chatRoom/chatRoom.type';
 import { ChatRoom } from 'src/providers/database/mongoose/chatRoom.schema';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export default class ChatRoomRepository {
@@ -35,9 +36,11 @@ export default class ChatRoomRepository {
 
   async findChatRoom(options: FindChatRoomByIdOptions): Promise<IChatRoom> {
     const { chatRoomId, planId, chatId } = options || {};
+    const typeChatId = new ObjectId(chatId); //NOTE. in 연산자는 string을 인식못함.
+
     const chatRoom = await this.chatRoom
       .findOne({
-        $or: [{ _id: chatRoomId }, { planId }, { chatIds: chatId }]
+        $or: [{ _id: chatRoomId }, { planId }, { chatIds: { $in: typeChatId } }]
       })
       .exec();
 

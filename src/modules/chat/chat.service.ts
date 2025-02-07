@@ -56,11 +56,10 @@ export default class ChatService {
     }
     const chat = await this.chatRepository.delete(id); //TODO. transaction
     if (!chat) throw new NotFoundError(ErrorMessage.CHAT_NOT_FOUND_ERROR);
-    console.log(this.convertToClient(chat.toClient()));
   }
 
   private async convertToClient(chatData: ChatToClientProperties): Promise<ChatToClientProperties> {
-    const { content, isDeletedAt, ...rest }: ChatToClientProperties = chatData;
+    const { content, isDeletedAt, ...rest } = chatData;
     let updatedContent = content;
 
     if (isDeletedAt) {

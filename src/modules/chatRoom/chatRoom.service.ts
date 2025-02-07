@@ -79,8 +79,6 @@ export default class ChatRoomService {
 
   async isActiveByChatId(chatId: string): Promise<boolean> {
     const isActive = (await this.getChatRoomDomain({ chatId })).getIsActive();
-
-    console.log(isActive);
     return isActive;
   }
 

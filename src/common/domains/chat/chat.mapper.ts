@@ -18,7 +18,6 @@ export default class ChatMapper {
       chatRoomId: this.chat.chatRoomId.toString(),
       content: this.chat.content
     });
-    //console.log(result);
     return result;
   }
 }
