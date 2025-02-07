@@ -175,10 +175,10 @@ export default class User implements IUser {
 
   getStats(): UserStatsToClientProperties {
     return {
-      averageRating: this.stats.averageRating,
-      totalReviews: this.stats.totalReviews,
-      totalFollows: this.stats.totalFollows,
-      totalConfirms: this.stats.totalConfirms
+      averageRating: this.stats?.averageRating ?? 0,
+      totalReviews: this.stats?.totalReviews ?? 0,
+      totalFollows: this.stats?.totalFollows ?? 0,
+      totalConfirms: this.stats?.totalConfirms ?? 0
     };
   }
 }
