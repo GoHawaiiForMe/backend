@@ -9,7 +9,7 @@ import { FilteredUserProperties, OAuthProperties, UserProperties } from 'src/com
 import AuthRepository from './auth.repository';
 import { Role, RoleValues } from 'src/common/constants/role.type';
 import { DreamerProfileProperties, MakerProfileProperties } from 'src/common/types/user/profile.types';
-import { IUser } from 'src/common/domains/user/user.interface';
+import { OAuthProvider } from 'src/common/constants/oauth.type';
 
 @Injectable()
 export default class AuthService {
@@ -76,14 +76,8 @@ export default class AuthService {
   }
 
   createTokens(payload: { userId: string; role: Role }) {
-    const accessToken = this.jwt.sign(
-      { userId: payload.userId, role: payload.role },
-      { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
-    );
-    const refreshToken = this.jwt.sign(
-      { userId: payload.userId, role: payload.role },
-      { expiresIn: process.env.REFRESH_TOKEN_EXPIRY }
-    );
+    const accessToken = this.jwt.sign(payload, { expiresIn: process.env.ACCESS_TOKEN_EXPIRY });
+    const refreshToken = this.jwt.sign(payload, { expiresIn: process.env.REFRESH_TOKEN_EXPIRY });
 
     return { accessToken, refreshToken };
   }
@@ -91,6 +85,12 @@ export default class AuthService {
   createNewToken(oldToken: string) {
     const { userId, role } = this.jwt.verify(oldToken);
     return this.createTokens({ userId, role });
+  }
+
+  createOAuthToken(payload: { provider: OAuthProvider; providerId: string }) {
+    const OAuthToken = this.jwt.sign(payload, { expiresIn: process.env.ACCESS_TOKEN_EXPIRY });
+
+    return { OAuthToken };
   }
 
   async checkEmail(email: string): Promise<boolean> {
