@@ -64,12 +64,39 @@ export default class AuthController {
   @UseGuards(AuthGuard('google'))
   @Get('google/callback')
   async loginByGoogle(@User() user: OAuthProperties, @Res() res: Response): Promise<Response> {
-    const tokens = await this.service.googleLogin(user);
+    const tokens = await this.service.socialLogin(user);
 
     // 최초 로그인의 경우 해당 값을 프로필과 함께 등록시 회원 가입 진행
     if (!tokens) return res.json(user);
 
     // 기존 회원의 경우 토큰 반환
+    res.cookie('refreshToken', tokens.refreshToken, {
+      path: '/user/token/refresh',
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    });
+
+    return res.json({ accessToken: tokens.accessToken });
+  }
+
+  @Public()
+  @Get('kakao')
+  @UseGuards(AuthGuard('kakao'))
+  toKakao(@Res() res: Response): void {
+    const kakaoUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.KAKAO_REDIRECT}`;
+    return res.redirect(kakaoUrl);
+  }
+
+  @Public()
+  @UseGuards(AuthGuard('kakao'))
+  @Get('kakao/callback')
+  async loginByKakao(@User() user: OAuthProperties, @Res() res: Response): Promise<Response> {
+    const tokens = await this.service.socialLogin(user);
+
+    if (!tokens) return res.json(user);
+
     res.cookie('refreshToken', tokens.refreshToken, {
       path: '/user/token/refresh',
       httpOnly: true,

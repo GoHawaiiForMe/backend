@@ -68,7 +68,7 @@ export default class AuthService {
     return user.toClient();
   }
 
-  async googleLogin(data: OAuthProperties) {
+  async socialLogin(data: OAuthProperties) {
     const user = await this.repository.findByProviderId(data.providerId);
     if (!user) return null;
 
