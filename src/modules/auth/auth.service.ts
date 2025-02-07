@@ -24,25 +24,20 @@ export default class AuthService {
     profile: DreamerProfileProperties | MakerProfileProperties;
   }): Promise<null> {
     const { user, profile } = data;
-    console.log('welcome to signup', user);
     // 유저 등록: 소셜 로그인의 경우 이메일이 없어 중복 확인 패스
     if (!user.provider) {
       const existingEmail = await this.repository.findByEmail(user.email);
-      console.log('이메일 체크 완료');
       if (existingEmail) {
         throw new BadRequestError(ErrorMessage.USER_EXIST);
       }
     }
     const existingNickName = await this.repository.findByNickName(user.nickName);
-    console.log('닉네임 체크 완료');
     if (existingNickName) {
       throw new BadRequestError(ErrorMessage.USER_NICKNAME_EXIST);
     }
 
     const userData = await User.create(user);
-    console.log('도메인 생성 완료');
     const savedUser = await this.repository.create(userData.signupData());
-    console.log('DB 저장 완료');
 
     // 역할에 따라 프로필 등록
     if (savedUser.getRole() === RoleEnum.DREAMER) {
@@ -53,10 +48,8 @@ export default class AuthService {
       await this.repository.createMaker(profileData.get());
     }
 
-    console.log('프로필 저장 완료');
     // 유저 생성시 기본값으로 UserStats 생성
     await this.userStats.create(savedUser.getId(), {});
-    console.log('stats 저장 완료');
 
     return;
   }
