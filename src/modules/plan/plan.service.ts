@@ -18,6 +18,7 @@ import { GroupByCount } from 'src/common/types/plan/plan.dto';
 import { NotificationEventName } from 'src/common/types/notification/notification.types';
 import UserService from '../user/user.service';
 import Plan from 'src/common/domains/plan/plan.domain';
+import ChatRoomService from '../chatRoom/chatRoom.service';
 
 @Injectable()
 export default class PlanService {
@@ -25,6 +26,7 @@ export default class PlanService {
     private readonly planRepository: PlanRepository,
     private readonly quoteService: QuoteService,
     private readonly userService: UserService,
+    private readonly chatRoomService: ChatRoomService,
     private readonly eventEmitter: EventEmitter2
   ) {}
 
@@ -200,11 +202,13 @@ export default class PlanService {
 
     plan.updateComplete();
     const updatedPlan = await this.planRepository.update(plan);
-
+    const planId = plan.getId();
+    await this.chatRoomService.deActive({ planId });
     return updatedPlan.toClient();
   }
 
   async autoUpdateStatus(status: typeof StatusValues.PENDING | typeof StatusValues.CONFIRMED): Promise<void> {
+    const updateStatus = status === StatusValues.PENDING ? StatusValues.OVERDUE : StatusValues.COMPLETED;
     const today = new Date();
     today.setUTCHours(0, 0, 0, 0);
     today.setDate(today.getDate() + 1);
@@ -228,13 +232,15 @@ export default class PlanService {
         hasMoreData = false;
         break;
       }
-
-      const update = plans.map(async (plan) => {
+      const planIds = plans.map((plan) => {
         plan.updateByScheduler();
-        await this.planRepository.update(plan);
+        return plan.getId();
       });
 
-      await Promise.allSettled(update);
+      await this.planRepository.updateMany({ ids: planIds, status: updateStatus });
+      if (status === StatusValues.CONFIRMED) {
+        await this.chatRoomService.deActive({ planIds });
+      }
     }
   }
 

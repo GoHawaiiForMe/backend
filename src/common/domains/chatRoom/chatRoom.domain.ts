@@ -1,5 +1,7 @@
 import IChatRoom from './chatRoom.interface';
 import { ChatRoomProperties } from './chatRoom.properties';
+import ErrorMessage from 'src/common/constants/errorMessage.enum';
+import ConflictError from 'src/common/errors/conflictError';
 
 export default class ChatRoom implements IChatRoom {
   private id?: string;
@@ -56,6 +58,13 @@ export default class ChatRoom implements IChatRoom {
       isActive: this.isActive,
       lastChat: this.lastChat
     };
+  }
+
+  update(): void {
+    if (this.isActive === false) {
+      throw new ConflictError(ErrorMessage.CHAT_ROOM_IS_ACTIVE_CONFLICT);
+    }
+    this.isActive = false;
   }
 
   getId(): string {

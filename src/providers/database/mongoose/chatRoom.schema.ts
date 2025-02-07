@@ -7,7 +7,7 @@ export class ChatRoom {
   @Prop({ default: null })
   isDeletedAt: Date | null;
 
-  @Prop({ required: true, type: String })
+  @Prop({ required: true, type: String, unique: true })
   planId: string;
 
   @Prop({ required: true, type: String })

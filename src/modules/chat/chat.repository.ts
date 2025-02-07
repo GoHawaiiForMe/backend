@@ -60,4 +60,16 @@ export default class ChatRepository {
 
     return domainChat;
   }
+
+  async delete(id: string): Promise<IChat> {
+    const chat = await this.chat.findOneAndUpdate(
+      { _id: id, isDeletedAt: null },
+      { isDeletedAt: new Date() },
+      { new: true }
+    );
+
+    const domainChat = new ChatMapper(chat).toDomain();
+
+    return domainChat;
+  }
 }

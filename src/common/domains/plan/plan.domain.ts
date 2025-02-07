@@ -192,6 +192,10 @@ export default class Plan implements IPlan {
     return confirmedQuote?.makerId ?? null;
   }
 
+  getId(): string {
+    return this.id;
+  }
+
   getAssigneeIds(): string[] {
     return this.assignees.map((assignee) => assignee.id);
   }

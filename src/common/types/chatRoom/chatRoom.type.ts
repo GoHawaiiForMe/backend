@@ -10,9 +10,12 @@ export interface ChatReference {
 }
 
 export interface FindChatRoomByIdOptions {
-  userId: string;
-  chatRoomId: string;
+  userId?: string;
+  chatRoomId?: string;
+  planId?: string;
+  chatId?: string;
 }
+
 export interface FileUploadData {
   type: ChatType;
   senderId: string;

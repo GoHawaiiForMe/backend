@@ -38,7 +38,7 @@ export default class ChatRoomService {
   }
 
   async joinUserRooms(userId: string, client: Socket) {
-    const userChatRoomIds = await this.getChatRoomIds(userId);
+    const userChatRoomIds = await this.getActiveChatRoomIds(userId);
     userChatRoomIds.forEach((chatRoomId) => client.join(chatRoomId));
   }
 
@@ -48,28 +48,30 @@ export default class ChatRoomService {
     const toClientList = await Promise.all(list?.map((chatRoom) => this.fetchAndFormatUserInfo(chatRoom.toClient())));
 
     return { list: toClientList, totalCount };
-  } //TODO. 유저 정보 더해서 주기
+  }
 
-  async getChatRoomIds(userId: string): Promise<string[]> {
+  async getActiveChatRoomIds(userId: string): Promise<string[]> {
     const chatRoomIds = await this.chatRoomRepository.findActiveChatRoomIdByUserId(userId);
     return chatRoomIds;
   }
 
-  async getChatRoomDomainById(options: FindChatRoomByIdOptions): Promise<IChatRoom> {
+  async getChatRoomDomain(options: FindChatRoomByIdOptions): Promise<IChatRoom> {
     const { userId, chatRoomId } = options;
-    const chatRoom = await this.chatRoomRepository.findChatRoomById(chatRoomId);
+    const chatRoom = await this.chatRoomRepository.findChatRoom({ chatRoomId: chatRoomId });
+
     if (!chatRoom) {
       throw new NotFoundError(ErrorMessage.CHAT_ROOM_NOTFOUND);
     }
 
-    if (!chatRoom.getUserIds().includes(userId)) {
+    if (userId && !chatRoom.getUserIds().includes(userId)) {
       throw new ForbiddenError(ErrorMessage.CHAT_ROOM_FORBIDDEN_ID);
     }
+
     return chatRoom;
   }
 
   async getChatRoomById(options: FindChatRoomByIdOptions): Promise<ChatRoomWithUserInfo> {
-    const chatRoom = await this.getChatRoomDomainById(options);
+    const chatRoom = await this.getChatRoomDomain(options);
     const chatRoomWithUserInfo = await this.fetchAndFormatUserInfo(chatRoom.toClient());
 
     return chatRoomWithUserInfo;
@@ -94,7 +96,7 @@ export default class ChatRoomService {
     const { senderId, chatRoomId } = data;
 
     this.isClient(senderId);
-    const chatRoom = await this.getChatRoomDomainById({ userId: senderId, chatRoomId });
+    const chatRoom = await this.getChatRoomDomain({ userId: senderId, chatRoomId });
     if (chatRoom.getIsActive() === false) throw new BadRequestError(ErrorMessage.CHAT_ROOM_NOT_IS_ACTIVE);
 
     const chatData = await this.chatService.postChat(data);
@@ -105,12 +107,22 @@ export default class ChatRoomService {
 
   async fileUpload(data: FileUploadData) {
     const { chatRoomId, senderId } = data;
-    const chatRoom = await this.getChatRoomDomainById({ chatRoomId, userId: senderId });
+    const chatRoom = await this.getChatRoomDomain({ chatRoomId, userId: senderId });
 
     if (chatRoom.getIsActive() === false) throw new BadRequestError(ErrorMessage.CHAT_ROOM_NOT_IS_ACTIVE);
     const chatData = await this.chatService.fileUpload(data);
     this.sendMessageToChatRoom(chatData);
     return chatData;
+  }
+
+  async deActive(data: { planId?: string; planIds?: string[] }): Promise<void> {
+    const { planId, planIds } = data || {};
+    if (planId) {
+      const chatRoom = await this.getChatRoomDomain({ planId });
+      chatRoom.update();
+      await this.chatRoomRepository.update(chatRoom);
+    }
+    if (planIds) await this.chatRoomRepository.updateMany(planIds);
   }
 
   async sendMessageToChatRoom(chat: ChatReference) {

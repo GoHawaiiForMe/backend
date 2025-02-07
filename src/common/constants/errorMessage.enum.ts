@@ -67,6 +67,9 @@ export enum ErrorMessage {
   CHAT_ROOM_NOTFOUND = '해당 채팅방을 찾을 수 없습니다.',
   CHAT_ROOM_POST_CONFLICT = '해당 플랜의 채팅방은 이미 생성하셨습니다. 하나의 플랜에는 하나의 채팅방만 만들 수 있습니다.',
   CHAT_ROOM_NOT_IS_ACTIVE = '해당 채팅방은 사용할 수 있는 기간이 지나 사용할 수 없습니다.',
+  CHAT_ROOM_IS_ACTIVE_CONFLICT = '해당 채팅방은 이미 비활성화 상태입니다.',
+  CHAT_ROOM_CONFLICT = '이미 존재하는 값으로는 수정하지 못합니다.',
+  CHAT_ROOM_BAD_VALUE = '입력한 채팅방의 값이 잘못되었습니다.',
 
   CHAT_POST_BAD_ID = '채팅방의 id가 잘못된 형식입니다.',
   CHAT_UPLOAD_TYPE_TEXT = '업로드 파일의 타입이 없거나 TEXT입니다.',
@@ -78,6 +81,7 @@ export enum ErrorMessage {
   CLIENT_NOT_CONNECTED = '연결되지 않은 클라이언트입니다.',
 
   INTERNAL_SERVER_ERROR = '내부 서버 오류',
-  INTERNAL_SERVER_ERROR_CHAT_ROOM_UPDATE = '채팅방 업데이트 실패'
+  INTERNAL_SERVER_ERROR_CHAT_ROOM_UPDATE = '채팅방 업데이트 실패',
+  INTERNAL_SERVER_ERROR_MONGOOSE = '내부 서버 몽구스 오류'
 }
 export default ErrorMessage;
