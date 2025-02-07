@@ -1,11 +1,11 @@
-import { ProfileImage, ProfileImageEnum } from 'src/common/constants/image.type';
-import { RoleEnum } from 'src/common/constants/role.type';
-import { ServiceAreaEnum } from 'src/common/constants/serviceArea.type';
-import { TripType, TripTypeEnum } from 'src/common/constants/tripType.type';
+import { ProfileImage } from 'src/common/constants/image.type';
+import { Role } from 'src/common/constants/role.type';
+import { ServiceArea } from 'src/common/constants/serviceArea.type';
+import { TripType } from 'src/common/constants/tripType.type';
 
 export class UserResponseDTO {
   id?: string;
-  role: RoleEnum;
+  role: Role;
   nickName: string;
   email: string;
   phoneNumber: string;
@@ -14,25 +14,25 @@ export class UserResponseDTO {
 
 export class FilteredUserResponseDTO {
   id?: string;
-  role: RoleEnum;
+  role: Role;
   nickName: string;
   coconut: number;
 }
 
 export class DreamerProfileResponseDTO {
   userId?: string;
-  image: ProfileImageEnum;
-  serviceArea: ServiceAreaEnum[];
-  tripTypes: TripTypeEnum[];
+  image: ProfileImage;
+  serviceArea: ServiceArea[];
+  tripTypes: TripType[];
   createdAt?: Date;
   updatedAt?: Date;
 }
 
 export class MakerProfileResponseDTO {
   userId?: string;
-  image: ProfileImageEnum;
-  serviceArea: ServiceAreaEnum[];
-  serviceTypes: TripTypeEnum[];
+  image: ProfileImage;
+  serviceArea: ServiceArea[];
+  serviceTypes: TripType[];
   gallery: string;
   description: string;
   detailDescription: string;

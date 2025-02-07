@@ -1,7 +1,7 @@
-import { TripType, TripTypeEnum } from 'src/common/constants/tripType.type';
+import { TripType, TripTypeValues } from 'src/common/constants/tripType.type';
 import IPlan from './plan.interface';
 import { ServiceArea } from 'src/common/constants/serviceArea.type';
-import { Status, StatusEnum } from 'src/common/constants/status.type';
+import { Status, StatusValues } from 'src/common/constants/status.type';
 import { PlanProperties, PlanToClientProperties } from 'src/common/types/plan/plan.properties';
 import ConflictError from 'src/common/errors/conflictError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
@@ -77,7 +77,7 @@ export default class Plan implements IPlan {
   }
 
   toClientWithAddress(): PlanToClientProperties {
-    if (this.tripType !== TripTypeEnum.SHOPPING) return this.toClient();
+    if (this.tripType !== TripTypeValues.SHOPPING) return this.toClient();
     return {
       id: this.id,
       createdAt: this.createdAt,
@@ -139,7 +139,7 @@ export default class Plan implements IPlan {
       throw new ConflictError(ErrorMessage.PLAN_ASSIGN_CONFLICT);
     } //NOTE. 지정경적 요청을 한 사람이 중복인지 체크
 
-    if (this.getStatus() !== StatusEnum.PENDING) {
+    if (this.getStatus() !== StatusValues.PENDING) {
       throw new BadRequestError(ErrorMessage.PLAN_ASSIGN_NOT_PENDING);
     } //NOTE. PENDING 상태인지 체크
     this.assigneeId = assigneeId;
@@ -155,7 +155,7 @@ export default class Plan implements IPlan {
       throw new ConflictError(ErrorMessage.PLAN_ASSIGN_BAD_REQUEST);
     } //NOTE. 지정경적 요청을 받은사람이 맞는지 체크
 
-    if (this.getStatus() !== StatusEnum.PENDING) {
+    if (this.getStatus() !== StatusValues.PENDING) {
       throw new BadRequestError(ErrorMessage.PLAN_ASSIGN_NOT_PENDING);
     } //NOTE. PENDING 상태인지 체크
     this.assigneeId = assigneeId;
@@ -165,17 +165,17 @@ export default class Plan implements IPlan {
   }
 
   updateComplete(): IPlan {
-    if (this.status !== StatusEnum.CONFIRMED) {
+    if (this.status !== StatusValues.CONFIRMED) {
       throw new BadRequestError(ErrorMessage.PLAN_COMPLETED_BAD_REQUEST);
     }
 
-    this.status = StatusEnum.COMPLETED;
+    this.status = StatusValues.COMPLETED;
     return this;
   }
 
   updateByScheduler(): IPlan {
-    if (this.status === StatusEnum.PENDING) this.status = StatusEnum.OVERDUE;
-    else if (this.status === StatusEnum.CONFIRMED) this.status = StatusEnum.COMPLETED;
+    if (this.status === StatusValues.PENDING) this.status = StatusValues.OVERDUE;
+    else if (this.status === StatusValues.CONFIRMED) this.status = StatusValues.COMPLETED;
     return this;
   }
 

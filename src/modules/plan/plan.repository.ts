@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import PlanOrder from 'src/common/constants/planOrder.enum';
-import { RoleEnum } from 'src/common/constants/role.type';
+import { RoleValues } from 'src/common/constants/role.type';
 import SortOrder from 'src/common/constants/sortOrder.enum';
-import { StatusEnum } from 'src/common/constants/status.type';
-import { TRIP_TYPE } from 'src/common/constants/tripType.type';
+import { StatusValues } from 'src/common/constants/status.type';
 import IPlan from 'src/common/domains/plan/plan.interface';
 import PlanMapper from 'src/common/domains/plan/plan.mapper';
 import { GroupByCount } from 'src/common/types/plan/plan.dto';
@@ -60,7 +59,7 @@ export default class PlanRepository {
   }
 
   async groupByCount(options: PlanQueryOptions): Promise<GroupByCount> {
-    const groupByField = TRIP_TYPE;
+    const groupByField = 'tripType';
     const whereConditions = this.buildWhereConditions(options);
 
     const groupByCount = await this.db.plan.groupBy({
@@ -101,7 +100,7 @@ export default class PlanRepository {
         serviceArea,
         details,
         address,
-        status: StatusEnum.PENDING,
+        status: StatusValues.PENDING,
         dreamer: { connect: { id: dreamerId } }
       },
       include: {
@@ -175,7 +174,7 @@ export default class PlanRepository {
 
     if (tripType) whereConditions.tripType = { in: tripType };
 
-    if (role === RoleEnum.MAKER) {
+    if (role === RoleValues.MAKER) {
       whereConditions.status = { in: status }; //NOTE. Maker 전용 api 조건
       whereConditions.quotes = { some: { makerId: { not: userId } } };
       if (isAssigned === true) whereConditions.assignees = { some: { id: userId } }; //NOTE. 지정견적 조회 API

@@ -2,11 +2,11 @@ import IQuote from './quote.interface';
 import ConflictError from 'src/common/errors/conflictError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import { QuoteProperties, QuoteToClientProperties } from 'src/common/types/quote/quoteProperties';
-import { Status, StatusEnum } from 'src/common/constants/status.type';
+import { Status, StatusValues } from 'src/common/constants/status.type';
 import { PlanReference } from 'src/common/types/plan/plan.type';
 import { UserReference } from 'src/common/types/user/user.types';
 import { toChatRoomData } from 'src/common/types/quote/quote.type';
-import { TripTypeEnum } from 'src/common/constants/tripType.type';
+import { TripTypeValues } from 'src/common/constants/tripType.type';
 
 export default class Quote implements IQuote {
   private id?: string;
@@ -70,7 +70,7 @@ export default class Quote implements IQuote {
   }
 
   toClient(): QuoteToClientProperties {
-    const showAddress = this.plan.tripType === TripTypeEnum.SHOPPING;
+    const showAddress = this.plan.tripType === TripTypeValues.SHOPPING;
     return {
       id: this.id,
       createdAt: this.createdAt,
@@ -86,8 +86,8 @@ export default class Quote implements IQuote {
 
   toMaker(): QuoteToClientProperties {
     const showAddress =
-      this.plan.status === StatusEnum.CONFIRMED &&
-      this.plan.tripType === TripTypeEnum.SHOPPING &&
+      this.plan.status === StatusValues.CONFIRMED &&
+      this.plan.tripType === TripTypeValues.SHOPPING &&
       this.isConfirmed === true;
     return {
       id: this.id,

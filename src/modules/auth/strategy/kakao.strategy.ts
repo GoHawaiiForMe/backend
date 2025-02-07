@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Profile, Strategy } from 'passport-kakao';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
-import { OAuthProviderEnum } from 'src/common/constants/oauth.type';
+import { OAuthProviderValues } from 'src/common/constants/oauth.type';
 import InternalServerError from 'src/common/errors/internalServerError';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
     if (!profile) throw new InternalServerError(ErrorMessage.OAUTH_KAKAO_SERVER_ERROR);
 
     const { _json } = profile;
-    const user = { provider: OAuthProviderEnum.KAKAO, providerId: String(_json.id) };
+    const user = { provider: OAuthProviderValues.KAKAO, providerId: String(_json.id) };
 
     return user;
   }

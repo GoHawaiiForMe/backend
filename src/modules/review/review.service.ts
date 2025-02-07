@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import ReviewRepository from './review.repository';
 import PlanService from '../plan/plan.service';
-import { StatusEnum } from 'src/common/constants/status.type';
+import { StatusValues } from 'src/common/constants/status.type';
 import BadRequestError from 'src/common/errors/badRequestError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import { CreateReviewDTO, GetReviewsQueryDTO, GetReviewsResponseDTO } from 'src/common/types/review/review.dto';
@@ -41,7 +41,7 @@ export default class ReviewService {
 
   async create(writerId: string, data: CreateReviewDTO) {
     const plan = await this.plan.getPlanById(data.planId);
-    if (plan.status !== StatusEnum.COMPLETED) {
+    if (plan.status !== StatusValues.COMPLETED) {
       throw new BadRequestError(ErrorMessage.REVIEW_BAD_REQUEST);
     }
 
