@@ -10,6 +10,8 @@ import ChatRoomService from '../chatRoom/chatRoom.service';
 import BadRequestError from 'src/common/errors/badRequestError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import NotFoundError from 'src/common/errors/notFoundError';
+import ForbiddenError from 'src/common/errors/forbiddenError';
+import ConflictError from 'src/common/errors/conflictError';
 
 @Injectable()
 export default class ChatService {
@@ -32,6 +34,22 @@ export default class ChatService {
     return { totalCount, list: toClientList };
   }
 
+  async getChatDomain(data: { id: string; userId?: string }) {
+    const { id, userId } = data || {};
+    const chat = await this.chatRepository.findChatById(id);
+
+    if (!chat) {
+      throw new NotFoundError(ErrorMessage.CHAT_NOT_FOUND_ERROR);
+    }
+
+    if (userId) {
+      const chatRoomId = chat.getChatRoomId();
+      await this.chatRoomService.getChatRoomById({ userId, chatRoomId });
+    } // NOTE. userId가 있으면 userId에 대한 권한체크
+
+    return chat;
+  }
+
   async postChat(data: ChatCreateData): Promise<ChatToClientProperties> {
     const chatData = Chat.create(data);
     const chat = await this.chatRepository.createChat(chatData);
@@ -49,13 +67,23 @@ export default class ChatService {
     return convertChat;
   }
 
-  async deleteChat(id: string): Promise<void> {
-    const isActive = await this.chatRoomService.isActiveByChatId(id);
-    if (!isActive) {
-      throw new BadRequestError(ErrorMessage.CHAT_ROOM_NOT_IS_ACTIVE);
+  async deleteChat(data: { id: string; userId: string }): Promise<void> {
+    const { id, userId } = data;
+    const chatDomain = await this.getChatDomain({ id });
+
+    if (chatDomain.getSenderId() !== userId) {
+      throw new ForbiddenError(ErrorMessage.CHAT_FORBIDDEN_DELETE);
     }
-    const chat = await this.chatRepository.delete(id); //TODO. transaction
-    if (!chat) throw new NotFoundError(ErrorMessage.CHAT_NOT_FOUND_ERROR);
+
+    if (chatDomain.getIsDeletedAt()) {
+      throw new ConflictError(ErrorMessage.CHAT_CONFLICT_DELETE);
+    }
+
+    const chatRoomId = chatDomain.getChatRoomId();
+    const isActive = await this.chatRoomService.getIsActiveById(chatRoomId);
+    if (!isActive) throw new BadRequestError(ErrorMessage.CHAT_ROOM_NOT_IS_ACTIVE);
+
+    await this.chatRepository.delete(id); //TODO. transaction
   }
 
   private async convertToClient(chatData: ChatToClientProperties): Promise<ChatToClientProperties> {

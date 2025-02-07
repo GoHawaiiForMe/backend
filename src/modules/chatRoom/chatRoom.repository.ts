@@ -35,12 +35,11 @@ export default class ChatRoomRepository {
   }
 
   async findChatRoom(options: FindChatRoomByIdOptions): Promise<IChatRoom> {
-    const { chatRoomId, planId, chatId } = options || {};
-    const typeChatId = new ObjectId(chatId); //NOTE. in 연산자는 string을 인식못함.
+    const { chatRoomId, planId } = options || {};
 
     const chatRoom = await this.chatRoom
       .findOne({
-        $or: [{ _id: chatRoomId }, { planId }, { chatIds: { $in: typeChatId } }]
+        $or: [{ _id: chatRoomId }, { planId }]
       })
       .exec();
 

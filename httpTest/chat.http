@@ -4,7 +4,7 @@
 GET http://localhost:4000/chatRooms
 Authorization: Bearer {{DREAMER1_TOKEN}}
 ###
-GET http://localhost:4000/chatRooms/{{EXAMPLE_CHAT_ROOM}}
+GET http://localhost:4000/chatRooms/{{EXAMPLE_CHAT_ROOM}}/chats
 Authorization: Bearer {{DREAMER1_TOKEN}}
 ###
 GET http://localhost:4000/chatRooms/{{CHATROOM1_ID}}/chats

@@ -62,4 +62,16 @@ export default class Chat implements IChat {
   setS3Key(s3key: string): void {
     this.content = s3key;
   }
+
+  getChatRoomId(): string {
+    return this.chatRoomId;
+  }
+
+  getSenderId(): string {
+    return this.senderId;
+  }
+
+  getIsDeletedAt(): Date {
+    return this.isDeletedAt;
+  }
 }
