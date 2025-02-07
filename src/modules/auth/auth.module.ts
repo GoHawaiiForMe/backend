@@ -7,6 +7,7 @@ import AuthRepository from './auth.repository';
 import AuthService from './auth.service';
 import { GoogleStrategy } from './strategy/google.strategy';
 import AuthController from './auth.controller';
+import { KakaoStrategy } from './strategy/kakao.strategy';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import AuthController from './auth.controller';
     UserStatsModule
   ],
   controllers: [AuthController],
-  providers: [AuthService, AuthRepository, JwtStrategy, GoogleStrategy],
+  providers: [AuthService, AuthRepository, JwtStrategy, GoogleStrategy, KakaoStrategy],
   exports: []
 })
 export default class AuthModule {}

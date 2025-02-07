@@ -19,10 +19,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   validate(accessToken: string, refreshToken: string, profile: Profile) {
     if (!profile) throw new InternalServerError(ErrorMessage.OAUTH_GOOGLE_SERVER_ERROR);
 
-    const user = {
-      provider: OAuthProviderEnum.GOOGLE,
-      providerId: profile.id
-    };
+    const user = { provider: OAuthProviderEnum.GOOGLE, providerId: profile.id };
 
     return user;
   }
