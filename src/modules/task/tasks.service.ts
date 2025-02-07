@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import PlanService from '../plan/plan.service';
-import { StatusEnum } from 'src/common/constants/status.type';
+import { StatusValues } from 'src/common/constants/status.type';
 
 @Injectable()
 export class TasksService {
@@ -9,7 +9,7 @@ export class TasksService {
 
   @Cron('0 0 0 * * *', { timeZone: 'Asia/Seoul' })
   async updatePlanStatus() {
-    await this.planService.autoUpdateStatus(StatusEnum.PENDING);
-    await this.planService.autoUpdateStatus(StatusEnum.CONFIRMED);
+    await this.planService.autoUpdateStatus(StatusValues.PENDING);
+    await this.planService.autoUpdateStatus(StatusValues.CONFIRMED);
   } //TODO. 로그
 }

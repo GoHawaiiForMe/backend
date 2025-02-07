@@ -2,7 +2,7 @@ import PlanOrder from 'src/common/constants/planOrder.enum';
 import { Role } from 'src/common/constants/role.type';
 import { ServiceArea } from 'src/common/constants/serviceArea.type';
 import SortOrder from 'src/common/constants/sortOrder.enum';
-import { Status, StatusEnum } from 'src/common/constants/status.type';
+import { Status } from 'src/common/constants/status.type';
 import { TripType } from 'src/common/constants/tripType.type';
 import { UserReference } from '../user/user.types';
 
@@ -15,7 +15,7 @@ export interface PlanWhereConditions {
   tripDate?: Date | string | { gte?: Date; lte?: Date };
   quotes?: { some: { makerId: { not: string } } };
   assignees?: { some: { id: string } };
-  status?: { in: StatusEnum[] };
+  status?: { in: Status[] };
   dreamerId?: string;
   review?: { is: null } | { isNot: null };
   OR?: Array<{
@@ -33,7 +33,7 @@ export interface PlanQueryOptions {
   page?: number;
   pageSize?: number;
   isAssigned?: boolean;
-  status?: StatusEnum[];
+  status?: Status[];
   userId?: string;
   role?: Role;
   reviewed?: boolean;

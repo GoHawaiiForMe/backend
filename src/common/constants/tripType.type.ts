@@ -1,12 +1,10 @@
-export type TripType = 'FOOD_TOUR' | 'SHOPPING' | 'RELAXATION' | 'CULTURE' | 'ACTIVITY' | 'FESTIVAL';
+export const TripTypeValues = {
+  FOOD_TOUR: 'FOOD_TOUR',
+  SHOPPING: 'SHOPPING',
+  RELAXATION: 'RELAXATION',
+  CULTURE: 'CULTURE',
+  ACTIVITY: 'ACTIVITY',
+  FESTIVAL: 'FESTIVAL'
+} as const;
 
-export enum TripTypeEnum {
-  FOOD_TOUR = 'FOOD_TOUR',
-  SHOPPING = 'SHOPPING',
-  RELAXATION = 'RELAXATION',
-  CULTURE = 'CULTURE',
-  ACTIVITY = 'ACTIVITY',
-  FESTIVAL = 'FESTIVAL'
-}
-
-export const TRIP_TYPE = 'tripType';
+export type TripType = keyof typeof TripTypeValues;

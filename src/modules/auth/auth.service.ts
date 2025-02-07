@@ -7,7 +7,7 @@ import { DreamerProfile, MakerProfile } from 'src/common/domains/user/profile.do
 import UserStatsService from '../userStats/userStats.service';
 import { FilteredUserProperties, OAuthProperties, UserProperties } from 'src/common/types/user/user.types';
 import AuthRepository from './auth.repository';
-import { Role, RoleEnum } from 'src/common/constants/role.type';
+import { Role, RoleValues } from 'src/common/constants/role.type';
 import { DreamerProfileProperties, MakerProfileProperties } from 'src/common/types/user/profile.types';
 import { IUser } from 'src/common/domains/user/user.interface';
 
@@ -40,7 +40,7 @@ export default class AuthService {
     const savedUser = await this.repository.create(userData.signupData());
 
     // 역할에 따라 프로필 등록
-    if (savedUser.getRole() === RoleEnum.DREAMER) {
+    if (savedUser.getRole() === RoleValues.DREAMER) {
       const profileData = DreamerProfile.create({ ...profile, userId: savedUser.getId() });
       await this.repository.createDreamer(profileData);
     } else {

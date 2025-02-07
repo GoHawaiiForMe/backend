@@ -1,15 +1,8 @@
-export type Status = 'PENDING' | 'CONFIRMED' | 'COMPLETED' | 'OVERDUE';
+export const StatusValues = {
+  PENDING: 'PENDING',
+  CONFIRMED: 'CONFIRMED',
+  COMPLETED: 'COMPLETED',
+  OVERDUE: 'OVERDUE'
+} as const;
 
-export enum StatusEnum {
-  PENDING = 'PENDING',
-  CONFIRMED = 'CONFIRMED',
-  COMPLETED = 'COMPLETED',
-  OVERDUE = 'OVERDUE'
-}
-
-// export const Status = {
-//   PENDING: 'PENDING',
-//   CONFIRMED: 'CONFIRMED',
-//   COMPLETED: 'COMPLETED',
-//   OVERDUE: 'OVERDUE'
-// } as const;
+export type Status = keyof typeof StatusValues;

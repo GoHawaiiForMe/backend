@@ -4,7 +4,7 @@ import SortOrder from 'src/common/constants/sortOrder.enum';
 import { QuoteIncludeConditions, QuoteQueryOptions, QuoteWhereConditions } from '../../common/types/quote/quote.type';
 import IQuote from 'src/common/domains/quote/quote.interface';
 import QuoteMapper from 'src/common/domains/quote/quote.mapper';
-import { StatusEnum } from 'src/common/constants/status.type';
+import { StatusValues } from 'src/common/constants/status.type';
 
 @Injectable()
 export default class QuoteRepository {
@@ -81,7 +81,7 @@ export default class QuoteRepository {
         plan: isConfirmed
           ? {
               update: {
-                status: StatusEnum.CONFIRMED
+                status: StatusValues.CONFIRMED
               }
             }
           : {}
@@ -120,7 +120,7 @@ export default class QuoteRepository {
         ...whereConditions,
         OR: [
           { isConfirmed: true }, // 내가 뽑힌 견적
-          { isConfirmed: false, plan: { status: StatusEnum.PENDING } } // 반려되지 않은 견적 중 plan이 PENDING인 경우
+          { isConfirmed: false, plan: { status: StatusValues.PENDING } } // 반려되지 않은 견적 중 plan이 PENDING인 경우
         ]
       };
     } else if (isSent === false) {
@@ -128,7 +128,7 @@ export default class QuoteRepository {
       whereConditions = {
         ...whereConditions,
         isConfirmed: false, // isConfirmed가 false여야 함
-        plan: { status: { in: [StatusEnum.CONFIRMED, StatusEnum.COMPLETED, StatusEnum.OVERDUE] } } // 반려된 견적의 상태
+        plan: { status: { in: [StatusValues.CONFIRMED, StatusValues.COMPLETED, StatusValues.OVERDUE] } } // 반려된 견적의 상태
       };
     }
     return whereConditions;

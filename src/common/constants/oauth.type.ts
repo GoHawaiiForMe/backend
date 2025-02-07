@@ -1,8 +1,8 @@
-export type OAuthProvider = 'LOCAL' | 'GOOGLE' | 'KAKAO' | 'NAVER';
+export const OAuthProviderValues = {
+  LOCAL: 'LOCAL',
+  GOOGLE: 'GOOGLE',
+  KAKAO: 'KAKAO',
+  NAVER: 'NAVER'
+} as const;
 
-export enum OAuthProviderEnum {
-  LOCAL = 'LOCAL',
-  GOOGLE = 'GOOGLE',
-  KAKAO = 'KAKAO',
-  NAVER = 'NAVER'
-}
+export type OAuthProvider = keyof typeof OAuthProviderValues;

@@ -1,6 +1,6 @@
-export type Role = 'DREAMER' | 'MAKER';
+export const RoleValues = {
+  DREAMER: 'DREAMER',
+  MAKER: 'MAKER'
+} as const;
 
-export enum RoleEnum {
-  DREAMER = 'DREAMER',
-  MAKER = 'MAKER'
-}
+export type Role = keyof typeof RoleValues;

@@ -1,14 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ArrayNotEmpty, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { ProfileImage, ProfileImageEnum } from 'src/common/constants/image.type';
-import { OAuthProviderEnum } from 'src/common/constants/oauth.type';
-import { Role, RoleEnum } from 'src/common/constants/role.type';
-import { ServiceArea, ServiceAreaEnum } from 'src/common/constants/serviceArea.type';
-import { TripType, TripTypeEnum } from 'src/common/constants/tripType.type';
+import { ProfileImage, ProfileImageValues } from 'src/common/constants/image.type';
+import { OAuthProvider } from 'src/common/constants/oauth.type';
+import { Role, RoleValues } from 'src/common/constants/role.type';
+import { ServiceArea, ServiceAreaValues } from 'src/common/constants/serviceArea.type';
+import { TripType, TripTypeValues } from 'src/common/constants/tripType.type';
 
 export class SignupUserDTO {
-  @ApiProperty({ example: 'DEFAULT_1', enum: RoleEnum })
-  @IsEnum(RoleEnum)
+  @ApiProperty({ example: 'DEFAULT_1', enum: RoleValues })
+  @IsEnum(RoleValues)
   @IsNotEmpty()
   role: Role;
 
@@ -29,7 +29,7 @@ export class SignupUserDTO {
 
   @IsString()
   @IsOptional()
-  provider: OAuthProviderEnum;
+  provider: OAuthProvider;
 
   @IsString()
   @IsOptional()
@@ -37,18 +37,18 @@ export class SignupUserDTO {
 }
 
 export class SignupProfileDTO {
-  @ApiProperty({ example: 'DEFAULT_1', enum: ProfileImageEnum })
-  @IsEnum(ProfileImageEnum)
+  @ApiProperty({ example: 'DEFAULT_1', enum: ProfileImageValues })
+  @IsEnum(ProfileImageValues)
   @IsNotEmpty()
   image: ProfileImage;
 
-  @ApiProperty({ example: ['FOOD_TOUR'], enum: TripTypeEnum })
-  @IsEnum(TripTypeEnum, { each: true })
+  @ApiProperty({ example: ['FOOD_TOUR'], enum: TripTypeValues })
+  @IsEnum(TripTypeValues, { each: true })
   @ArrayNotEmpty()
   tripTypes: TripType[];
 
-  @ApiProperty({ example: ['SEOUL', 'INCHEON'], enum: ServiceAreaEnum })
-  @IsEnum(ServiceAreaEnum, { each: true })
+  @ApiProperty({ example: ['SEOUL', 'INCHEON'], enum: ServiceAreaValues })
+  @IsEnum(ServiceAreaValues, { each: true })
   @ArrayNotEmpty()
   serviceArea: ServiceArea[];
 }

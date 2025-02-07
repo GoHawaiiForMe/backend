@@ -3,9 +3,9 @@ import { Transform, Type } from 'class-transformer';
 import PlanOrder from 'src/common/constants/planOrder.enum';
 import validateBooleanValue from 'src/common/utilities/validateBooleanValue';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
-import { StatusEnum } from 'src/common/constants/status.type';
-import { TripType, TripTypeEnum } from 'src/common/constants/tripType.type';
-import { ServiceAreaEnum } from 'src/common/constants/serviceArea.type';
+import { StatusValues, Status } from 'src/common/constants/status.type';
+import { TripType, TripTypeValues } from 'src/common/constants/tripType.type';
+import { ServiceArea, ServiceAreaValues } from 'src/common/constants/serviceArea.type';
 
 export class CreatePlanDataDTO {
   @IsString()
@@ -17,13 +17,13 @@ export class CreatePlanDataDTO {
   @IsNotEmpty()
   tripDate: Date;
 
-  @IsEnum(TripTypeEnum)
+  @IsEnum(TripTypeValues)
   @IsNotEmpty()
-  tripType: TripTypeEnum;
+  tripType: TripType;
 
-  @IsEnum(ServiceAreaEnum)
+  @IsEnum(ServiceAreaValues)
   @IsNotEmpty()
-  serviceArea: ServiceAreaEnum;
+  serviceArea: ServiceArea;
 
   @IsString()
   @IsNotEmpty()
@@ -43,9 +43,9 @@ export class MyPlanQueryDTO {
     return Array.isArray(value) ? value : value ? [value] : [];
   })
   @IsArray()
-  @IsEnum(StatusEnum, { each: true })
+  @IsEnum(StatusValues, { each: true })
   @IsOptional()
-  status: StatusEnum[];
+  status: Status[];
 
   @IsOptional()
   @Transform(({ value }) => {
@@ -75,11 +75,11 @@ export class PlanQueryOptionDTO {
   orderBy: PlanOrder = PlanOrder.RECENT;
 
   @IsOptional()
-  @IsEnum(TripTypeEnum, { each: true })
+  @IsEnum(TripTypeValues, { each: true })
   @Transform(({ value }) => {
     return Array.isArray(value) ? value : value ? [value] : [];
   })
-  tripType: TripTypeEnum[];
+  tripType: TripType[];
 
   @IsOptional()
   @Transform(({ value }) => validateBooleanValue(value, ErrorMessage.PLAN_IS_ASSIGNED_BAD_REQUEST))

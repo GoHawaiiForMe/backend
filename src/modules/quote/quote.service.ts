@@ -5,11 +5,11 @@ import NotFoundError from 'src/common/errors/notFoundError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import ForbiddenError from 'src/common/errors/forbiddenError';
 import { QuoteQueryOptions } from '../../common/types/quote/quote.type';
-import { StatusEnum } from 'src/common/constants/status.type';
+import { StatusValues } from 'src/common/constants/status.type';
 import ConflictError from 'src/common/errors/conflictError';
 import IQuote from '../../common/domains/quote/quote.interface';
 import BadRequestError from 'src/common/errors/badRequestError';
-import { Role, RoleEnum } from 'src/common/constants/role.type';
+import { Role, RoleValues } from 'src/common/constants/role.type';
 import Quote from 'src/common/domains/quote/quote.domain';
 import UserService from '../user/user.service';
 import ChatRoomService from '../chatRoom/chatRoom.service';
@@ -55,7 +55,7 @@ export default class QuoteService {
       throw new ForbiddenError(ErrorMessage.QUOTE_FORBIDDEN_ID);
     }
 
-    if (role === RoleEnum.MAKER) return quote.toMaker();
+    if (role === RoleValues.MAKER) return quote.toMaker();
 
     return this.mapToMakerProfile(quote, true);
   }
@@ -81,7 +81,7 @@ export default class QuoteService {
     }
 
     const planStatus = quote.getPlanStatus();
-    if (planStatus !== StatusEnum.PENDING) {
+    if (planStatus !== StatusValues.PENDING) {
       throw new BadRequestError(ErrorMessage.QUOTE_BAD_REQUEST_UPDATE_NOT_PENDING);
     }
 
@@ -98,7 +98,7 @@ export default class QuoteService {
     if (!quote) throw new NotFoundError(ErrorMessage.QUOTE_NOT_FOUND);
     if (userId !== quote.getMakerId()) throw new ForbiddenError(ErrorMessage.QUOTE_FORBIDDEN_MAKER);
 
-    if (quote.getPlanStatus() !== StatusEnum.PENDING) {
+    if (quote.getPlanStatus() !== StatusValues.PENDING) {
       throw new BadRequestError(ErrorMessage.QUOTE_DELETE_BAD_REQUEST_STATUS);
     }
 

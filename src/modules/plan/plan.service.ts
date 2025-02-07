@@ -11,9 +11,9 @@ import { QuoteToClientProperties } from 'src/common/types/quote/quoteProperties'
 import { CreatePlanData } from 'src/common/types/plan/plan.type';
 import ForbiddenError from 'src/common/errors/forbiddenError';
 import { ServiceArea } from 'src/common/constants/serviceArea.type';
-import { RoleEnum } from 'src/common/constants/role.type';
+import { RoleValues } from 'src/common/constants/role.type';
 import BadRequestError from 'src/common/errors/badRequestError';
-import { StatusEnum } from 'src/common/constants/status.type';
+import { StatusValues } from 'src/common/constants/status.type';
 import { GroupByCount } from 'src/common/types/plan/plan.dto';
 import { NotificationEventName } from 'src/common/types/notification/notification.types';
 import UserService from '../user/user.service';
@@ -32,13 +32,13 @@ export default class PlanService {
     userId: string,
     options: PlanQueryOptions
   ): Promise<{ totalCount: number; groupByCount: GroupByCount; list: PlanToClientProperties[] }> {
-    const makerProfile = await this.userService.getProfile(RoleEnum.MAKER, userId);
+    const makerProfile = await this.userService.getProfile(RoleValues.MAKER, userId);
     const serviceArea: ServiceArea[] = makerProfile.serviceArea;
 
     options.serviceArea = serviceArea; //NOTE. 메이커의 서비스지역 필터링
     options.userId = userId;
-    options.status = [StatusEnum.PENDING];
-    options.role = RoleEnum.MAKER;
+    options.status = [StatusValues.PENDING];
+    options.role = RoleValues.MAKER;
 
     const groupOptions = { ...options, tripType: undefined };
 
@@ -61,13 +61,13 @@ export default class PlanService {
     const isWithQuote = isReviewQuery || readyToComplete;
 
     options.userId = userId;
-    if (isReviewQuery) options.status = [StatusEnum.COMPLETED]; //NOTE. status COMPLETE 지정
+    if (isReviewQuery) options.status = [StatusValues.COMPLETED]; //NOTE. status COMPLETE 지정
 
     if (readyToComplete) {
       const today = new Date(); //NOTE. 완료할 수 있는 플랜 필터링
       const koreaTime = today.toLocaleString('en-US', { timeZone: 'Asia/Seoul' });
       const tripDate = new Date(koreaTime.split(',')[0]);
-      options.status = [StatusEnum.CONFIRMED];
+      options.status = [StatusValues.CONFIRMED];
       options.tripDate = tripDate; //NOTE. CONFIRMED 상태로 지정 및 tripDate 지정
     }
 
@@ -87,7 +87,7 @@ export default class PlanService {
       throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
     }
     const isPlanDreamer = plan.getDreamerId() === userId;
-    const onGoingMaker = plan.getConfirmedMakerId() === userId && plan.getStatus() === StatusEnum.CONFIRMED;
+    const onGoingMaker = plan.getConfirmedMakerId() === userId && plan.getStatus() === StatusValues.CONFIRMED;
 
     if (isPlanDreamer || onGoingMaker) {
       return plan.toClientWithAddress();
@@ -152,7 +152,7 @@ export default class PlanService {
     const assignee = await this.userService.getUser(assigneeId);
 
     if (!assignee) throw new NotFoundError(ErrorMessage.USER_NOT_FOUND);
-    if (assignee.role !== RoleEnum.MAKER) {
+    if (assignee.role !== RoleValues.MAKER) {
       throw new BadRequestError(ErrorMessage.PLAN_ASSIGN_NOT_MAKER);
     }
 
@@ -204,7 +204,7 @@ export default class PlanService {
     return updatedPlan.toClient();
   }
 
-  async autoUpdateStatus(status: StatusEnum.PENDING | StatusEnum.CONFIRMED): Promise<void> {
+  async autoUpdateStatus(status: typeof StatusValues.PENDING | typeof StatusValues.CONFIRMED): Promise<void> {
     const today = new Date();
     today.setUTCHours(0, 0, 0, 0);
     today.setDate(today.getDate() + 1);
@@ -212,7 +212,7 @@ export default class PlanService {
     const bufferDate = new Date(today);
     bufferDate.setDate(today.getDate() - 7);
 
-    const tripDate = status === StatusEnum.PENDING ? today : bufferDate;
+    const tripDate = status === StatusValues.PENDING ? today : bufferDate;
     const options = {
       status: [status],
       tripDate,
@@ -247,7 +247,7 @@ export default class PlanService {
       throw new ForbiddenError(ErrorMessage.USER_FORBIDDEN_NOT_OWNER);
     }
 
-    if (plan.getStatus() === StatusEnum.CONFIRMED) {
+    if (plan.getStatus() === StatusValues.CONFIRMED) {
       throw new BadRequestError(ErrorMessage.PLAN_DELETE_BAD_REQUEST);
     }
 

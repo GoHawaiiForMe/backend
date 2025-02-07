@@ -6,7 +6,7 @@ import { DreamerProfileProperties, MakerProfileProperties } from '../../common/t
 import { DreamerProfileMapper, MakerProfileMapper } from '../../common/domains/user/profile.mapper';
 import { IUser } from '../../common/domains/user/user.interface';
 import { IDreamerProfile, IMakerProfile } from '../../common/domains/user/profile.interface';
-import { RoleEnum } from 'src/common/constants/role.type';
+import { RoleValues } from 'src/common/constants/role.type';
 import SortOrder from 'src/common/constants/sortOrder.enum';
 import { GetMakerListQueryDTO } from 'src/common/types/user/query.dto';
 
@@ -58,7 +58,7 @@ export default class UserRepository {
     const users = await this.db.user.findMany({
       where: {
         AND: [
-          { role: RoleEnum.MAKER },
+          { role: RoleValues.MAKER },
           keyword ? { nickName: { contains: keyword, mode: 'insensitive' } } : {},
           serviceArea ? { makerProfile: { serviceArea: { has: serviceArea } } } : {},
           serviceType ? { makerProfile: { serviceTypes: { has: serviceType } } } : {}
@@ -79,7 +79,7 @@ export default class UserRepository {
     return await this.db.user.count({
       where: {
         AND: [
-          { role: RoleEnum.MAKER },
+          { role: RoleValues.MAKER },
           keyword ? { nickName: { contains: keyword, mode: 'insensitive' } } : {},
           serviceArea ? { makerProfile: { serviceArea: { has: serviceArea } } } : {},
           serviceType ? { makerProfile: { serviceTypes: { has: serviceType } } } : {}
