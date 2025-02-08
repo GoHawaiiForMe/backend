@@ -114,6 +114,36 @@ export default class AuthController {
   }
 
   @Public()
+  @Get('naver')
+  toNaver(): { redirectUrl: string } {
+    const state = Math.random().toString(36).substring(7);
+    const redirectUrl = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.NAVER_CLIENT_ID}&redirect_uri=${process.env.NAVER_REDIRECT}&state=${state}`;
+
+    return { redirectUrl };
+  }
+
+  @Public()
+  @UseGuards(AuthGuard('naver'))
+  @Get('naver/callback')
+  async loginByNaver(@User() user: OAuthProperties, @Res() res: Response): Promise<void> {
+    const tokens = await this.service.socialLogin(user);
+
+    if ('OAuthToken' in tokens) {
+      return res.redirect(`${process.env.CLIENT_REDIRECT}/signup/oauth?auth=${tokens.OAuthToken}`);
+    }
+
+    res.cookie('refreshToken', tokens.refreshToken, {
+      path: '/user/token/refresh',
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    });
+
+    return res.redirect(`${process.env.CLIENT_REDIRECT}?auth=${tokens.accessToken}`);
+  }
+
+  @Public()
   @Post('refresh/token')
   @ApiCookieAuth('refreshToken')
   @ApiOperation({ summary: '토큰 재발급', description: '유저의 Refresh Token을 확인하여 토큰을 재발급합니다' })
