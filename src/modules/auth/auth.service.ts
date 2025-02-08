@@ -9,7 +9,7 @@ import { FilteredUserProperties, OAuthProperties, UserProperties } from 'src/com
 import AuthRepository from './auth.repository';
 import { Role, RoleValues } from 'src/common/constants/role.type';
 import { DreamerProfileProperties, MakerProfileProperties } from 'src/common/types/user/profile.types';
-import { IUser } from 'src/common/domains/user/user.interface';
+import { OAuthProvider } from 'src/common/constants/oauth.type';
 
 @Injectable()
 export default class AuthService {
@@ -68,22 +68,18 @@ export default class AuthService {
     return user.toClient();
   }
 
-  async socialLogin(data: OAuthProperties) {
+  async socialLogin(
+    data: OAuthProperties
+  ): Promise<{ accessToken: string; refreshToken: string } | { OAuthToken: string }> {
     const user = await this.repository.findByProviderId(data.providerId);
-    if (!user) return null;
+    if (!user) return this.createOAuthToken({ provider: data.provider, providerId: data.providerId });
 
     return this.createTokens({ userId: user.getId(), role: user.getRole() });
   }
 
   createTokens(payload: { userId: string; role: Role }) {
-    const accessToken = this.jwt.sign(
-      { userId: payload.userId, role: payload.role },
-      { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
-    );
-    const refreshToken = this.jwt.sign(
-      { userId: payload.userId, role: payload.role },
-      { expiresIn: process.env.REFRESH_TOKEN_EXPIRY }
-    );
+    const accessToken = this.jwt.sign(payload, { expiresIn: process.env.ACCESS_TOKEN_EXPIRY });
+    const refreshToken = this.jwt.sign(payload, { expiresIn: process.env.REFRESH_TOKEN_EXPIRY });
 
     return { accessToken, refreshToken };
   }
@@ -91,6 +87,12 @@ export default class AuthService {
   createNewToken(oldToken: string) {
     const { userId, role } = this.jwt.verify(oldToken);
     return this.createTokens({ userId, role });
+  }
+
+  createOAuthToken(payload: { provider: OAuthProvider; providerId: string }) {
+    const OAuthToken = this.jwt.sign(payload, { expiresIn: process.env.ACCESS_TOKEN_EXPIRY });
+
+    return { OAuthToken };
   }
 
   async checkEmail(email: string): Promise<boolean> {
