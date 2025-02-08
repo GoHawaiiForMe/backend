@@ -65,11 +65,13 @@ export default class AuthController {
   @Public()
   @UseGuards(AuthGuard('google'))
   @Get('google/callback')
-  async loginByGoogle(@User() user: OAuthProperties, @Res() res: Response): Promise<Response> {
+  async loginByGoogle(@User() user: OAuthProperties, @Res() res: Response): Promise<void> {
     const tokens = await this.service.socialLogin(user);
 
     // 최초 로그인의 경우 해당 값을 프로필과 함께 등록시 회원 가입 진행
-    if (!tokens) return res.json(user);
+    if ('OAuthToken' in tokens) {
+      return res.redirect(`${process.env.CLIENT_REDIRECT}/signup/oauth?auth=${tokens.OAuthToken}`);
+    }
 
     // 기존 회원의 경우 토큰 반환
     res.cookie('refreshToken', tokens.refreshToken, {
@@ -80,7 +82,7 @@ export default class AuthController {
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
 
-    return res.json({ accessToken: tokens.accessToken });
+    return res.redirect(`${process.env.CLIENT_REDIRECT}?auth=${tokens.accessToken}`);
   }
 
   @Public()
@@ -93,10 +95,12 @@ export default class AuthController {
   @Public()
   @UseGuards(AuthGuard('kakao'))
   @Get('kakao/callback')
-  async loginByKakao(@User() user: OAuthProperties, @Res() res: Response): Promise<Response> {
+  async loginByKakao(@User() user: OAuthProperties, @Res() res: Response): Promise<void> {
     const tokens = await this.service.socialLogin(user);
 
-    if (!tokens) return res.json(user);
+    if ('OAuthToken' in tokens) {
+      return res.redirect(`${process.env.CLIENT_REDIRECT}/signup/oauth?auth=${tokens.OAuthToken}`);
+    }
 
     res.cookie('refreshToken', tokens.refreshToken, {
       path: '/user/token/refresh',
@@ -106,7 +110,7 @@ export default class AuthController {
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
 
-    return res.json({ accessToken: tokens.accessToken });
+    return res.redirect(`${process.env.CLIENT_REDIRECT}?auth=${tokens.accessToken}`);
   }
 
   @Public()

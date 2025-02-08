@@ -68,9 +68,11 @@ export default class AuthService {
     return user.toClient();
   }
 
-  async socialLogin(data: OAuthProperties) {
+  async socialLogin(
+    data: OAuthProperties
+  ): Promise<{ accessToken: string; refreshToken: string } | { OAuthToken: string }> {
     const user = await this.repository.findByProviderId(data.providerId);
-    if (!user) return null;
+    if (!user) return this.createOAuthToken({ provider: data.provider, providerId: data.providerId });
 
     return this.createTokens({ userId: user.getId(), role: user.getRole() });
   }
