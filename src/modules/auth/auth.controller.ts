@@ -18,6 +18,7 @@ import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from 'src/common/decorators/user.decorator';
 import { OAuthProperties } from 'src/common/types/user/user.types';
+import { OAuthProvider } from 'src/common/constants/oauth.type';
 
 @Controller('auth')
 export default class AuthController {
@@ -29,8 +30,18 @@ export default class AuthController {
   @ApiBody({ type: SignupDTO })
   @ApiCreatedResponse({ description: '회원가입 성공' })
   @ApiBadRequestResponse({ description: '이미 존재하는 닉네임 또는 이메일입니다' })
-  async signup(@Body() data: SignupDTO) {
-    return await this.service.createUser(data);
+  async signup(@Body() data: SignupDTO, @User() oauth: { provider: OAuthProvider; providerId: string }) {
+    const { user, profile } = data;
+
+    if (oauth) return await this.service.createUser({ ...oauth, ...user }, profile);
+
+    return await this.service.createUser(user, profile);
+  }
+
+  @Public()
+  @Post('tokenmaker')
+  tokenMaker() {
+    return this.service.createOAuthToken({ provider: 'KAKAO', providerId: 'q3984hf09qawefiubq2i' });
   }
 
   @Public()
