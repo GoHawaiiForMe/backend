@@ -32,7 +32,7 @@ export default class QuoteController {
     return quote;
   }
 
-  @Patch(':id')
+  @Patch(':id/confirm')
   async patchQuote(
     @UserId() userId: string,
     @Param('id') id: string,
