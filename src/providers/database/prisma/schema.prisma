@@ -25,7 +25,7 @@ model User {
   password    String?
   coconut     Int           @default(0)
   provider    OAuthProvider @default(LOCAL)
-  providerId  String?       @unique
+  providerId  String?
 
   role            Role
   receivedReviews Review[] @relation("owner")
@@ -39,6 +39,8 @@ model User {
   dreamerProfile DreamerProfile?
   makerProfile   MakerProfile?
   stats          UserStats?
+
+  @@unique([provider, providerId])
 }
 
 model DreamerProfile {
@@ -49,7 +51,7 @@ model DreamerProfile {
   serviceArea ServiceArea[]
   image       ProfileImage
   user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String        @unique
+  userId      String        @id
 }
 
 model MakerProfile {
@@ -63,12 +65,12 @@ model MakerProfile {
   description       String
   detailDescription String
   user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId            String        @unique
+  userId            String        @id
 }
 
 model UserStats {
   user          User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId        String @unique
+  userId        String @id
   averageRating Float  @default(0)
   totalReviews  Int    @default(0)
   totalFollows  Int    @default(0)
@@ -138,6 +140,8 @@ model Quote {
   makerId     String?
   isConfirmed Boolean @default(false)
   isAssigned  Boolean @default(false)
+
+  @@index([planId])
 }
 
 enum ProfileImage {

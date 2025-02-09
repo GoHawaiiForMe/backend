@@ -18,6 +18,7 @@ import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from 'src/common/decorators/user.decorator';
 import { OAuthProperties } from 'src/common/types/user/user.types';
+import { OAuthProvider } from 'src/common/constants/oauth.type';
 
 @Controller('auth')
 export default class AuthController {
@@ -29,8 +30,18 @@ export default class AuthController {
   @ApiBody({ type: SignupDTO })
   @ApiCreatedResponse({ description: '회원가입 성공' })
   @ApiBadRequestResponse({ description: '이미 존재하는 닉네임 또는 이메일입니다' })
-  async signup(@Body() data: SignupDTO) {
-    return await this.service.createUser(data);
+  async signup(@Body() data: SignupDTO, @User() oauth: { provider: OAuthProvider; providerId: string }) {
+    const { user, profile } = data;
+
+    if (oauth) return await this.service.createUser({ ...oauth, ...user }, profile);
+
+    return await this.service.createUser(user, profile);
+  }
+
+  @Public()
+  @Post('tokenmaker')
+  tokenMaker() {
+    return this.service.createOAuthToken({ provider: 'KAKAO', providerId: 'q3984hf09qawefiubq2i' });
   }
 
   @Public()
@@ -96,6 +107,36 @@ export default class AuthController {
   @UseGuards(AuthGuard('kakao'))
   @Get('kakao/callback')
   async loginByKakao(@User() user: OAuthProperties, @Res() res: Response): Promise<void> {
+    const tokens = await this.service.socialLogin(user);
+
+    if ('OAuthToken' in tokens) {
+      return res.redirect(`${process.env.CLIENT_REDIRECT}/signup/oauth?auth=${tokens.OAuthToken}`);
+    }
+
+    res.cookie('refreshToken', tokens.refreshToken, {
+      path: '/user/token/refresh',
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    });
+
+    return res.redirect(`${process.env.CLIENT_REDIRECT}?auth=${tokens.accessToken}`);
+  }
+
+  @Public()
+  @Get('naver')
+  toNaver(): { redirectUrl: string } {
+    const state = Math.random().toString(36).substring(7);
+    const redirectUrl = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.NAVER_CLIENT_ID}&redirect_uri=${process.env.NAVER_REDIRECT}&state=${state}`;
+
+    return { redirectUrl };
+  }
+
+  @Public()
+  @UseGuards(AuthGuard('naver'))
+  @Get('naver/callback')
+  async loginByNaver(@User() user: OAuthProperties, @Res() res: Response): Promise<void> {
     const tokens = await this.service.socialLogin(user);
 
     if ('OAuthToken' in tokens) {

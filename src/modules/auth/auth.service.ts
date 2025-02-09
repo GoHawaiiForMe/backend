@@ -19,18 +19,22 @@ export default class AuthService {
     private readonly userStats: UserStatsService
   ) {}
 
-  async createUser(data: {
-    user: UserProperties;
-    profile: DreamerProfileProperties | MakerProfileProperties;
-  }): Promise<null> {
-    const { user, profile } = data;
+  async createUser(user: UserProperties, profile: DreamerProfileProperties | MakerProfileProperties): Promise<null> {
     // 유저 등록: 소셜 로그인의 경우 이메일이 없어 중복 확인 패스
-    if (!user.provider) {
+    const { provider, providerId } = user;
+
+    if (providerId) {
+      const existingUser = await this.repository.findByProvider({ provider, providerId });
+      if (existingUser) {
+        throw new BadRequestError(ErrorMessage.USER_OAUTH_EXIST);
+      }
+    } else {
       const existingEmail = await this.repository.findByEmail(user.email);
       if (existingEmail) {
         throw new BadRequestError(ErrorMessage.USER_EXIST);
       }
     }
+
     const existingNickName = await this.repository.findByNickName(user.nickName);
     if (existingNickName) {
       throw new BadRequestError(ErrorMessage.USER_NICKNAME_EXIST);
@@ -71,7 +75,7 @@ export default class AuthService {
   async socialLogin(
     data: OAuthProperties
   ): Promise<{ accessToken: string; refreshToken: string } | { OAuthToken: string }> {
-    const user = await this.repository.findByProviderId(data.providerId);
+    const user = await this.repository.findByProvider(data);
     if (!user) return this.createOAuthToken({ provider: data.provider, providerId: data.providerId });
 
     return this.createTokens({ userId: user.getId(), role: user.getRole() });
