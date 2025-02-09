@@ -25,5 +25,5 @@ export default class UserMapper {
       createdAt: this.user.createdAt,
       updatedAt: this.user.updatedAt
     });
-  } // 빈값의 객체가 나옴
+  }
 }

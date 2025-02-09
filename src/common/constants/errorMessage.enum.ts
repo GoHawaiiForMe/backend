@@ -2,6 +2,7 @@ export enum ErrorMessage {
   USER_UNAUTHORIZED = '접근 권한이 없습니다.',
   USER_NOT_FOUND = '해당 유저를 찾을 수 없습니다.',
   USER_EXIST = '이미 존재하는 이메일입니다.',
+  USER_OAUTH_EXIST = '이미 존재하는 소셜 로그인 유저입니다.',
   USER_NICKNAME_EXIST = '이미 존재하는 닉네임입니다.',
   USER_UNAUTHORIZED_ID = '존재하지 않는 email 입니다.',
   USER_BAD_REQUEST_PW = '비밀번호가 일치하지 않습니다.',

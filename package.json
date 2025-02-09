@@ -54,6 +54,8 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.1",
     "passport-kakao": "^1.0.1",
+    "passport-naver": "^1.0.6",
+    "passport-oauth2": "^1.8.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "uuid": "^11.0.4"
@@ -71,6 +73,8 @@
     "@types/passport-google-oauth20": "^2.0.16",
     "@types/passport-jwt": "^4.0.1",
     "@types/passport-kakao": "^1.0.3",
+    "@types/passport-naver": "^1.0.4",
+    "@types/passport-oauth2": "^1.4.17",
     "@types/supertest": "^6.0.0",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
