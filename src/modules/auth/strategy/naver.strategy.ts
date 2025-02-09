@@ -19,14 +19,10 @@ export class NaverStrategy extends PassportStrategy(Strategy, 'naver') {
   }
 
   async validate(accessToken: string, refreshToken: string, profile: Profile) {
-    try {
-      if (!profile) throw new InternalServerError(ErrorMessage.OAUTH_NAVER_SERVER_ERROR);
+    if (!profile) throw new InternalServerError(ErrorMessage.OAUTH_NAVER_SERVER_ERROR);
 
-      const user = { provider: OAuthProviderValues.NAVER, providerId: profile.id };
+    const user = { provider: OAuthProviderValues.NAVER, providerId: profile.id };
 
-      return user;
-    } catch (e) {
-      throw new InternalServerError('왜 오류가 날까??');
-    }
+    return user;
   }
 }
