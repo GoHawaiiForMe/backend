@@ -67,8 +67,8 @@ export default class UserController {
 
   @Public()
   @Get('makers')
-  async getMakerList(@Query() options: GetMakerListQueryDTO) {
-    return await this.service.getMakers(options);
+  async getMakerList(@UserId() userId: string, @Query() options: GetMakerListQueryDTO) {
+    return await this.service.getMakers(options, userId);
   }
 
   @Patch('update')

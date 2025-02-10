@@ -64,7 +64,7 @@ export default class UserRepository {
           serviceType ? { makerProfile: { serviceTypes: { has: serviceType } } } : {}
         ]
       },
-      include: { makerProfile: true, stats: true },
+      include: { makerProfile: true, stats: true, followers: { select: { dreamerId: true } } },
       orderBy: sortOption,
       take: pageSize,
       skip: pageSize * (page - 1)
