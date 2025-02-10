@@ -38,10 +38,16 @@ export default class UserService {
   }
 
   async getMakers(
-    options: GetMakerListQueryDTO
+    options: GetMakerListQueryDTO,
+    userId?: string
   ): Promise<{ totalCount: number; list: Partial<MakerInfoAndProfileProperties>[] }> {
     const users = await this.repository.findMany(options);
-    const list = users.map((user) => ({ ...user.getWithMakerProfile(true), ...user.getStats() }));
+    const list = users.map((user) => ({
+      ...user.getWithMakerProfile(true),
+      isFollowed: user.isFollowed(userId),
+      ...user.getStats()
+    }));
+
     const totalCount = await this.repository.count(options);
 
     return { totalCount, list };
@@ -103,7 +109,7 @@ export default class UserService {
     const { totalCount, followData } = await this.follow.get(userId, options);
     const list = await Promise.all(
       followData.map(async (follow) => {
-        const profile = await this.getProfileCardData(follow.makerId, userId);
+        const profile = await this.getProfileCardData(follow.makerId, userId, true);
         return { ...follow, maker: { ...profile } };
       })
     );
