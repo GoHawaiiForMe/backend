@@ -86,7 +86,10 @@ export default class QuoteRepository {
             }
           : {}
       },
-      include: { plan: { select: { id: true, title: true, tripDate: true, dreamer: { select: { id: true } } } } }
+      include: {
+        maker: { select: { id: true, nickName: true } },
+        plan: { select: { id: true, title: true, tripDate: true, dreamer: { select: { id: true } } } }
+      }
     });
 
     const domainQuote = new QuoteMapper(quote).toDomain();

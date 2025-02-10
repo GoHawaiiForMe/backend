@@ -90,11 +90,11 @@ export default class ChatRoomService {
     return { totalCount, list };
   }
 
-  async postChatRoom(data: ChatRoomProperties): Promise<ChatRoomProperties> {
+  async postChatRoom(data: ChatRoomProperties): Promise<void> {
     const chatRoomData = ChatRoom.create(data);
-
-    const chatRoom = await this.chatRoomRepository.createChatRoom(chatRoomData);
-    return chatRoom.toClient();
+    const isChatRoom = await this.chatRoomRepository.findChatRoom({ planId: data.planId });
+    if (!isChatRoom) await this.chatRoomRepository.createChatRoom(chatRoomData);
+    //NOTE. 로직상 채팅방이 이미 있으면 안되지만 개발상의 편의를 위해 추가
   }
 
   async postChat(data: ChatCreateData): Promise<ChatToClientProperties> {
