@@ -103,7 +103,7 @@ export default class UserService {
     const { totalCount, followData } = await this.follow.get(userId, options);
     const list = await Promise.all(
       followData.map(async (follow) => {
-        const profile = await this.getProfileCardData(follow.makerId, userId);
+        const profile = await this.getProfileCardData(follow.makerId, userId, true);
         return { ...follow, maker: { ...profile } };
       })
     );
