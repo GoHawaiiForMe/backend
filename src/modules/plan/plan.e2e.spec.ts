@@ -42,15 +42,14 @@ describe('PlanController (e2e)', () => {
     app.useGlobalPipes(new ValidationPipe({ transform: true })).useGlobalFilters(new GlobalExceptionFilter());
     await app.init();
 
-    console.log('NODE_ENV:', process.env.NODE_ENV);
-
     const prismaDB = app.get<DBClient>(DBClient);
+    const userService = app.get<UserService>(UserService);
     const authService = app.get<AuthService>(AuthService);
-    console.log(process.env.EXAMPLE);
+    const planRepository = app.get<PlanRepository>(PlanRepository);
     // await prismaDB.seedForTestEnvironment();
-
-    // makerToken = authService.createTokens({ userId: makerId, role: RoleValues.MAKER }).accessToken;
-    // dreamerToken = authService.createTokens({ userId: dreamerId, role: RoleValues.DREAMER }).accessToken;
+    makerToken = authService.createTokens({ userId: makerId, role: RoleValues.MAKER }).accessToken;
+    dreamerToken = authService.createTokens({ userId: dreamerId, role: RoleValues.DREAMER }).accessToken;
+    console.log(process.env.EXAMPLE);
   });
 
   afterAll(async () => {
