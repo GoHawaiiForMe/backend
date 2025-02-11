@@ -24,7 +24,7 @@ import S3Module from './providers/storage/s3/s3.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: process.env.NODE_ENV === 'test' ? 'test.env' : '.env' }),
     MongooseModule.forRootAsync({
       useFactory: async () => getMongoConfig(process.env.MONGO_URI),
       connectionName: process.env.CONNECTION_NAME
