@@ -8,5 +8,3 @@ export interface PointLogProperties {
   createdAt?: Date;
   updatedAt?: Date;
 }
-
-export interface QueryOptions {}

@@ -7,10 +7,10 @@ export class PointLog {
   @Prop({ default: null })
   isDeletedAt: Date | null;
 
-  @Prop({ isRequired: true, type: String, unique: true, index: true })
+  @Prop({ isRequired: true, type: String, index: true, unique: false })
   userId: string | null;
 
-  @Prop({ type: String, enum: PointEventEnum })
+  @Prop({ isRequired: true, type: String, enum: PointEventEnum })
   event: PointEventEnum;
 
   @Prop({ isRequired: true })

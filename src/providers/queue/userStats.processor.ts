@@ -1,5 +1,5 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
-import RedisService from './redis.service';
+import RedisService from '../cache/redis.service';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import { Job } from 'bullmq';
 import UserStatsService from 'src/modules/userStats/userStats.service';
