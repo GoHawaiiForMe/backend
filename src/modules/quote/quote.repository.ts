@@ -11,14 +11,18 @@ export default class QuoteRepository {
   constructor(private readonly db: DBClient) {}
 
   async findMany(options: QuoteQueryOptions): Promise<IQuote[]> {
-    const { page, pageSize } = options;
+    const { page, pageSize, isSent } = options;
     const whereConditions = this.buildWhereConditions(options);
     const includeConditions = this.buildIncludeConditions(options);
+    const orderBy =
+      isSent === true
+        ? [{ plan: { status: SortOrder.ASC } }, { createdAt: SortOrder.DESC }]
+        : { createdAt: SortOrder.DESC };
     const quotes = await this.db.quote.findMany({
       where: whereConditions,
       take: pageSize,
       skip: (page - 1) * pageSize,
-      orderBy: { createdAt: SortOrder.DESC },
+      orderBy,
       include: includeConditions
     });
 
