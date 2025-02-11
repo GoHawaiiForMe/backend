@@ -68,13 +68,9 @@ export default class User implements IUser {
       });
     }
 
-    if (data.coconut < 0) {
-      throw new BadRequestError(ErrorMessage.USER_COCONUT_INVALID);
-    }
-
     this.nickName = data.nickName || this.nickName;
     this.phoneNumber = data.phoneNumber || this.phoneNumber;
-    this.coconut = data.coconut || this.coconut;
+    this.coconut += data.coconut;
 
     return this.toClient();
   }

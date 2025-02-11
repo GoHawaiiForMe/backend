@@ -1,5 +1,5 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
-import RedisService from './redis.service';
+import RedisService from '../cache/redis.service';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import { Job } from 'bullmq';
 import UserStatsService from 'src/modules/userStats/userStats.service';
@@ -57,8 +57,8 @@ export class UserStatsProcessor extends WorkerHost {
         attempt++;
 
         if (attempt === retries) {
-          console.error('UserStats 데이터 저장 실패/임시 에러 문구');
-          //로그추가 TODO. 스케줄러: 일정 시간에 쌓인 것 재시도
+          console.error(ErrorMessage.QUEUE_MAX_RETRY_EXCEEDED);
+          // retry 시도 실패한 작업은 자정에 다시 시도하도록 scheduler 등록함
         }
       }
     }

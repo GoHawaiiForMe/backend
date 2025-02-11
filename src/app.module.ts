@@ -12,7 +12,7 @@ import FollowModule from './modules/follow/follow.module';
 import PlanModule from './modules/plan/plan.module';
 import QuoteModule from './modules/quote/quote.module';
 import PaymentModule from './modules/payment/payment.module';
-import { BullmqModule } from './providers/cache/bullmq.module';
+import { BullmqModule } from './providers/queue/bullmq.module';
 import ChatModule from './modules/chat/chat.module';
 import UserStatsModule from './modules/userStats/userStats.module';
 import TaskModule from './modules/task/task.module';
@@ -21,6 +21,7 @@ import ReviewModule from './modules/review/review.module';
 import ChatRoomModule from './modules/chatRoom/chatRoom.module';
 import AuthModule from './modules/auth/auth.module';
 import S3Module from './providers/storage/s3/s3.module';
+import PointLogModule from './modules/pointLog/pointLog.module';
 
 @Module({
   imports: [
@@ -45,7 +46,8 @@ import S3Module from './providers/storage/s3/s3.module';
     ChatRoomModule,
     ChatModule,
     ReviewModule,
-    S3Module
+    S3Module,
+    PointLogModule
   ],
   providers: [
     {

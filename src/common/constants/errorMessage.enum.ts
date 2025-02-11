@@ -86,6 +86,8 @@ export enum ErrorMessage {
 
   INTERNAL_SERVER_ERROR = '내부 서버 오류',
   INTERNAL_SERVER_ERROR_CHAT_ROOM_UPDATE = '채팅방 업데이트 실패',
-  INTERNAL_SERVER_ERROR_MONGOOSE = '내부 서버 몽구스 오류'
+  INTERNAL_SERVER_ERROR_MONGOOSE = '내부 서버 몽구스 오류',
+
+  QUEUE_MAX_RETRY_EXCEEDED = '최대 재시도 횟수를 초과했습니다.'
 }
 export default ErrorMessage;

@@ -55,7 +55,7 @@ export default class UserService {
 
   async updateUser(
     userId: string,
-    data: Partial<UserProperties> & PasswordProperties
+    data: Partial<UserProperties & PasswordProperties>
   ): Promise<FilteredUserProperties> {
     const user = await this.repository.findById(userId);
     if (!user) {

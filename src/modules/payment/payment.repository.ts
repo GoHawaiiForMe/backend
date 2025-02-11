@@ -23,8 +23,8 @@ export default class PaymentRepository {
     return new PaymentMapper(payment).toDomain();
   }
 
-  async update(data: Partial<PaymentProperties>) {
-    const payment = await this.payment.findByIdAndUpdate(data.id, { $set: data }, { new: true });
+  async update(data: IPayment) {
+    const payment = await this.payment.findByIdAndUpdate(data.getId(), { $set: data.toDB() }, { new: true });
 
     return new PaymentMapper(payment).toDomain();
   }
