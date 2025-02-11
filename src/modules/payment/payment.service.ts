@@ -9,10 +9,14 @@ import InternalServerError from 'src/common/errors/internalServerError';
 import BadRequestError from 'src/common/errors/badRequestError';
 import { SavePaymentDTO } from 'src/common/types/payment/payment.dto';
 import { PGService } from 'src/providers/pg/pg.service';
+import { Queue } from 'bullmq';
+import { InjectQueue } from '@nestjs/bullmq';
+import { PointEventEnum } from 'src/common/constants/pointEvent.type';
 
 @Injectable()
 export default class PaymentService {
   constructor(
+    @InjectQueue('points') private readonly queue: Queue,
     private readonly repository: PaymentRepository,
     private readonly pg: PGService
   ) {}
@@ -59,6 +63,13 @@ export default class PaymentService {
     payment.update(PaymentStatusEnum.PAID);
 
     const updatedPayment = await this.repository.update(payment);
+
+    await this.queue.add('points', {
+      userId: updatedPayment.getUserId(),
+      event: PointEventEnum.CHARGE,
+      value: updatedPayment.getAmount()
+    });
+
     return updatedPayment.toClient();
   }
 }

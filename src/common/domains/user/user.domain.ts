@@ -74,7 +74,7 @@ export default class User implements IUser {
 
     this.nickName = data.nickName || this.nickName;
     this.phoneNumber = data.phoneNumber || this.phoneNumber;
-    this.coconut = data.coconut || this.coconut;
+    this.coconut += data.coconut;
 
     return this.toClient();
   }

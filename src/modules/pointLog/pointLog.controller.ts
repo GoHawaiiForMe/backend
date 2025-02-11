@@ -10,12 +10,6 @@ export default class PointLogController {
 
   @Get()
   async get(@UserId() userId: string, @Query() options: GetPointLogQueryDTO): Promise<PointLogProperties[]> {
-    console.log('코코넛 로그', options);
     return await this.service.get(userId, options);
-  }
-
-  @Post()
-  async create(@UserId() userId: string, @Body() data: PointLogProperties) {
-    return await this.service.create({ userId, event: data.event, value: data.value });
   }
 }
