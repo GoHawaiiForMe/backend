@@ -67,7 +67,7 @@ export default class PaymentService {
     await this.queue.add('points', {
       userId: updatedPayment.getUserId(),
       event: PointEventEnum.CHARGE,
-      value: updatedPayment.getAmount()
+      value: updatedPayment.getAmount() / 100
     });
 
     return updatedPayment.toClient();
