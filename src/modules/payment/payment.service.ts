@@ -57,6 +57,8 @@ export default class PaymentService {
       throw new InternalServerError(ErrorMessage.PAYMENT_AMOUNT_ERROR);
     }
     payment.update(PaymentStatusEnum.PAID);
-    return payment.toClient();
+
+    const updatedPayment = await this.repository.update(payment);
+    return updatedPayment.toClient();
   }
 }
