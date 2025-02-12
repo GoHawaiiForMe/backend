@@ -211,7 +211,7 @@ export default class PlanService {
 
     await this.pointQueue.add('points', {
       userId: plan.getConfirmedMakerId(),
-      event: PointEventEnum.CHARGE,
+      event: PointEventEnum.EARN,
       value: plan.getConfirmedPrice()
     });
 
@@ -251,6 +251,14 @@ export default class PlanService {
       await this.planRepository.updateMany({ ids: planIds, status: updateStatus });
       if (status === StatusValues.CONFIRMED) {
         await this.chatRoomService.deActive({ planIds });
+
+        plans.map(async (plan) => {
+          await this.pointQueue.add('points', {
+            userId: plan.getConfirmedMakerId(),
+            event: PointEventEnum.EARN,
+            value: plan.getConfirmedPrice()
+          });
+        });
       }
     }
   }
