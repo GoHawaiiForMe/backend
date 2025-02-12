@@ -149,4 +149,8 @@ export default class Quote implements IQuote {
   getIsConfirmed(): boolean {
     return this.isConfirmed;
   }
+
+  getConfirmedPrice(): number {
+    return this.price;
+  }
 }
