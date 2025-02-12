@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsDate, IsEnum, IsNotEmpty, IsInt, IsArray, Min } from 'class-validator';
+import { IsString, IsOptional, IsDate, IsEnum, IsNotEmpty, IsInt, IsArray, Min, IsIn } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import PlanOrder from 'src/common/constants/planOrder.enum';
 import validateBooleanValue from 'src/common/utilities/validateBooleanValue';
@@ -102,7 +102,9 @@ export class PlanQueryOptionDTO {
   pageSize: number = 5;
 }
 
-export type GroupByCount = {
-  tripType: TripType;
-  count: number;
-}[];
+export class ServiceAreaDTO {
+  @Transform(({ value }) => ServiceAreaValues[value] ?? value)
+  @IsIn(Object.values(ServiceAreaValues))
+  @IsOptional()
+  serviceArea: ServiceArea;
+}
