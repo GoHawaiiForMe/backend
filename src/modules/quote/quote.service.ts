@@ -84,6 +84,11 @@ export default class QuoteService {
       throw new ForbiddenError(ErrorMessage.QUOTE_FORBIDDEN_DREAMER);
     }
 
+    const dreamer = await this.userService.getUser(quote.getDreamerId());
+    if (dreamer.coconut < quote.getPrice()) {
+      throw new BadRequestError(ErrorMessage.INSUFFICIENT_COCONUTS);
+    }
+
     const planStatus = quote.getPlanStatus();
     if (planStatus !== StatusValues.PENDING) {
       throw new BadRequestError(ErrorMessage.QUOTE_BAD_REQUEST_UPDATE_NOT_PENDING);
