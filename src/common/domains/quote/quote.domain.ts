@@ -150,7 +150,7 @@ export default class Quote implements IQuote {
     return this.isConfirmed;
   }
 
-  getPrice(): number {
+  getConfirmedPrice(): number {
     return this.price;
   }
 }
