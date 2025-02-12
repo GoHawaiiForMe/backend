@@ -9,5 +9,6 @@ module.exports = {
   moduleNameMapper: {
     '^src/(.*)$': '<rootDir>/src/$1'
   },
-  setupFilesAfterEnv: ['tsconfig-paths/register'] // tsconfig-paths/register 추가
+  setupFiles: ['<rootDir>/jest.setup.ts'],
+  setupFilesAfterEnv: ['tsconfig-paths/register']
 };

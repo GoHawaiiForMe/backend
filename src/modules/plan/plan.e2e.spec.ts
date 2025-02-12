@@ -3,22 +3,12 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import request from 'supertest';
 import AppModule from 'src/app.module';
 import GlobalExceptionFilter from 'src/common/filters/globalExceptionFilter';
-import Plan from 'src/common/domains/plan/plan.domain';
 import DBClient from 'src/providers/database/prisma/DB.client';
 import PlanRepository from './plan.repository';
-import { StatusValues } from 'src/common/constants/status.type';
 import IPlan from 'src/common/domains/plan/plan.interface';
-import { TripTypeValues } from 'src/common/constants/tripType.type';
-import { ServiceAreaValues } from 'src/common/constants/serviceArea.type';
-import UserRepository from '../user/user.repository';
 import { IUser } from 'src/common/domains/user/user.interface';
-import User from 'src/common/domains/user/user.domain';
 import { RoleValues } from 'src/common/constants/role.type';
-import AuthRepository from '../auth/auth.repository';
-import { DreamerProfile, MakerProfile } from 'src/common/domains/user/profile.domain';
-import { ProfileImage } from '@prisma/client';
 import AuthService from '../auth/auth.service';
-import UserService from '../user/user.service';
 
 describe('PlanController (e2e)', () => {
   let app: INestApplication;
@@ -43,13 +33,11 @@ describe('PlanController (e2e)', () => {
     await app.init();
 
     const prismaDB = app.get<DBClient>(DBClient);
-    const userService = app.get<UserService>(UserService);
     const authService = app.get<AuthService>(AuthService);
     const planRepository = app.get<PlanRepository>(PlanRepository);
-    // await prismaDB.seedForTestEnvironment();
+    await prismaDB.seedForTestEnvironment();
     makerToken = authService.createTokens({ userId: makerId, role: RoleValues.MAKER }).accessToken;
     dreamerToken = authService.createTokens({ userId: dreamerId, role: RoleValues.DREAMER }).accessToken;
-    console.log(process.env.EXAMPLE);
   });
 
   afterAll(async () => {
@@ -59,11 +47,12 @@ describe('PlanController (e2e)', () => {
 
   describe('[GET /plans/dreamer]', () => {
     it('should get my plan List', async () => {
-      const { statusCode } = await request(app.getHttpServer())
+      const { body, statusCode } = await request(app.getHttpServer())
         .get('/plans/dreamer')
         .set('authorization', `Bearer ${dreamerToken}`);
 
       expect(statusCode).toBe(200);
+      expect(body).toBeDefined();
     });
 
     it('드리머의 토큰이 아니라면 403에러', async () => {
@@ -77,7 +66,7 @@ describe('PlanController (e2e)', () => {
 
   describe('[GET /plans/maker]', () => {
     it('메이커의 플랜 리스트', async () => {
-      const { statusCode } = await request(app.getHttpServer())
+      const { statusCode, error } = await request(app.getHttpServer())
         .get('/plans/maker')
         .set('authorization', `Bearer ${makerToken}`);
 
