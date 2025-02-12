@@ -46,3 +46,7 @@ Authorization: Bearer {{DREAMER2_TOKEN}}
 ###
 PATCH {{HOST_NAME}}/{{CONFIRMED_PLAN4}}/complete
 Authorization: Bearer {{DREAMER2_TOKEN}}
+###
+GET {{HOST_NAME}}/serviceArea-group-count
+###
+GET {{HOST_NAME}}/tripType-group-count/SEOUL
