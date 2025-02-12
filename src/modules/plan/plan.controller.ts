@@ -1,17 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Param,
-  Patch,
-  Post,
-  Query,
-  UsePipes,
-  ValidationPipe
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common';
 import { UserId } from 'src/common/decorators/user.decorator';
 import { CreatePlanDataDTO, MyPlanQueryDTO, PlanQueryOptionDTO, ServiceAreaDTO } from 'src/common/types/plan/plan.dto';
 import PlanService from './plan.service';
@@ -21,11 +8,19 @@ import { QuoteToClientProperties } from 'src/common/types/quote/quoteProperties'
 import { Role } from 'src/common/decorators/roleGuard.decorator';
 import { PlanToClientProperties } from 'src/common/types/plan/plan.properties';
 import { Public } from 'src/common/decorators/public.decorator';
-import { ServiceArea } from 'src/common/constants/serviceArea.type';
 
 @Controller('plans')
 export default class PlanController {
   constructor(private readonly service: PlanService) {}
+
+  @Public()
+  @Get('groupCount')
+  async getPlanGroupCount(
+    @Query() options: ServiceAreaDTO
+  ): Promise<{ totalCount: number; groupByCount: GroupByCount }> {
+    const { totalCount, groupByCount } = await this.service.getPlanGroupCount(options.serviceArea);
+    return { totalCount, groupByCount };
+  }
 
   @Public()
   @Get('serviceArea-group-count')
@@ -36,7 +31,6 @@ export default class PlanController {
 
   @Public()
   @Get('tripType-group-count/:serviceArea')
-  @UsePipes(new ValidationPipe({ transform: true, forbidNonWhitelisted: true }))
   async getPlanTripTypeGroupCount(
     @Param() params: ServiceAreaDTO
   ): Promise<{ totalCount: number; groupByCount: GroupByCount }> {

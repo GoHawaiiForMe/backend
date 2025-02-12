@@ -103,13 +103,8 @@ export class PlanQueryOptionDTO {
 }
 
 export class ServiceAreaDTO {
-  @Transform(({ value }) => ServiceAreaValues[value])
+  @Transform(({ value }) => ServiceAreaValues[value] ?? value)
   @IsIn(Object.values(ServiceAreaValues))
+  @IsOptional()
   serviceArea: ServiceArea;
 }
-
-export type GroupByCount = {
-  serviceArea?: ServiceArea;
-  tripType?: TripType;
-  count: number;
-}[];

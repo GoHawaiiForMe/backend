@@ -49,4 +49,6 @@ Authorization: Bearer {{DREAMER2_TOKEN}}
 ###
 GET {{HOST_NAME}}/serviceArea-group-count
 ###
-GET {{HOST_NAME}}/tripType-group-count/SEOUL
+GET {{HOST_NAME}}/tripType-group-count/SEOU
+###
+GET {{HOST_NAME}}/groupCount?serviceArea=SEOUL

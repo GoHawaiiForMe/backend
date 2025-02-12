@@ -30,6 +30,19 @@ export default class PlanService {
     private readonly eventEmitter: EventEmitter2
   ) {}
 
+  async getPlanGroupCount(serviceArea: ServiceArea): Promise<{ totalCount: number; groupByCount: GroupByCount }> {
+    const totalCountOptions = serviceArea ? { serviceArea: [serviceArea] } : {};
+    const groupCountOptions = serviceArea
+      ? { groupByField: GroupField.TRIP_TYPE, serviceArea: [serviceArea] }
+      : { groupByField: GroupField.SERVICE_AREA };
+
+    const [totalCount, groupByCount] = await Promise.all([
+      this.repository.totalCount(totalCountOptions),
+      this.repository.groupByCount(groupCountOptions)
+    ]);
+    return { totalCount, groupByCount };
+  }
+
   async getPlanServiceAreaGroupCount(): Promise<{ totalCount: number; groupByCount: GroupByCount }> {
     const [totalCount, groupByCount] = await Promise.all([
       this.repository.totalCount({}),
