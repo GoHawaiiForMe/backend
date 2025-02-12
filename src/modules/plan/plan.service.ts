@@ -19,10 +19,14 @@ import { NotificationEventName } from 'src/common/types/notification/notificatio
 import UserService from '../user/user.service';
 import Plan from 'src/common/domains/plan/plan.domain';
 import ChatRoomService from '../chatRoom/chatRoom.service';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
+import { PointEventEnum } from 'src/common/constants/pointEvent.type';
 
 @Injectable()
 export default class PlanService {
   constructor(
+    @InjectQueue('points') private readonly pointQueue: Queue,
     private readonly planRepository: PlanRepository,
     private readonly quoteService: QuoteService,
     private readonly userService: UserService,
@@ -204,6 +208,13 @@ export default class PlanService {
     const updatedPlan = await this.planRepository.update(plan);
     const planId = plan.getId();
     await this.chatRoomService.deActive({ planId });
+
+    await this.pointQueue.add('points', {
+      userId: plan.getConfirmedMakerId(),
+      event: PointEventEnum.CHARGE,
+      value: plan.getConfirmedPrice()
+    });
+
     return updatedPlan.toClient();
   }
 
