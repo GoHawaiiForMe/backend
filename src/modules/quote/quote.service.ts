@@ -85,7 +85,7 @@ export default class QuoteService {
     }
 
     const dreamer = await this.userService.getUser(quote.getDreamerId());
-    if (dreamer.coconut < quote.getPrice()) {
+    if (dreamer.coconut < quote.getConfirmedPrice()) {
       throw new BadRequestError(ErrorMessage.INSUFFICIENT_COCONUTS);
     }
 
@@ -101,7 +101,7 @@ export default class QuoteService {
     await this.pointQueue.add('points', {
       userId: quote.getDreamerId(),
       event: PointEventEnum.SPEND,
-      value: -quote.getPrice()
+      value: -quote.getConfirmedPrice()
     });
 
     return updatedQuote.toClient();
