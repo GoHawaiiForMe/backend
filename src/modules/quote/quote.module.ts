@@ -4,9 +4,10 @@ import QuoteService from './quote.service';
 import QuoteRepository from './quote.repository';
 import UserModule from '../user/user.module';
 import ChatRoomModule from '../chatRoom/chatRoom.module';
+import { BullModule } from '@nestjs/bullmq';
 
 @Module({
-  imports: [UserModule, ChatRoomModule],
+  imports: [BullModule.registerQueue({ name: 'points' }), UserModule, ChatRoomModule],
   controllers: [QuoteController],
   providers: [QuoteService, QuoteRepository],
   exports: [QuoteService]

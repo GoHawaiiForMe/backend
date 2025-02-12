@@ -13,10 +13,14 @@ import { Role, RoleValues } from 'src/common/constants/role.type';
 import Quote from 'src/common/domains/quote/quote.domain';
 import UserService from '../user/user.service';
 import ChatRoomService from '../chatRoom/chatRoom.service';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
+import { PointEventEnum } from 'src/common/constants/pointEvent.type';
 
 @Injectable()
 export default class QuoteService {
   constructor(
+    @InjectQueue('points') private readonly pointQueue: Queue,
     private readonly quoteRepository: QuoteRepository,
     private readonly userService: UserService,
     private readonly chatRoomService: ChatRoomService
@@ -88,6 +92,12 @@ export default class QuoteService {
     const updatedQuote = await this.quoteRepository.update(quote.update(data));
 
     await this.chatRoomService.postChatRoom(updatedQuote.toChatRoom());
+
+    await this.pointQueue.add('points', {
+      userId: quote.getDreamerId(),
+      event: PointEventEnum.SPEND,
+      value: -quote.getPrice()
+    });
 
     return updatedQuote.toClient();
   }
