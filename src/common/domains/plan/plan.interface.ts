@@ -16,6 +16,7 @@ export default interface IPlan {
   getQuoteIds(): string[];
   getQuoteMakerIds(): string[];
   getConfirmedMakerId(): string;
+  getConfirmedPrice(): number;
   getAssigneeIds(): string[];
   getDreamerId(): string;
   getStatus(): Status;

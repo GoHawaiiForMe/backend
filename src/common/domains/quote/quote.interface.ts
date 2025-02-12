@@ -16,4 +16,5 @@ export default interface IQuote {
   getPlanId(): string;
   getPlanStatus(): Status;
   getIsConfirmed(): boolean;
+  getConfirmedPrice(): number;
 }

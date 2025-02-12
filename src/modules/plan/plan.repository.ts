@@ -82,7 +82,7 @@ export default class PlanRepository {
       include: {
         dreamer: { select: { id: true, nickName: true } },
         assignees: { select: { id: true, nickName: true } },
-        quotes: { select: { id: true, makerId: true, isConfirmed: true } }
+        quotes: { select: { id: true, makerId: true, price: true, isConfirmed: true } }
       }
     });
 

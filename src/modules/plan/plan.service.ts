@@ -19,10 +19,14 @@ import UserService from '../user/user.service';
 import Plan from 'src/common/domains/plan/plan.domain';
 import ChatRoomService from '../chatRoom/chatRoom.service';
 import GroupField from 'src/common/constants/groupByField.enum';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
+import { PointEventEnum } from 'src/common/constants/pointEvent.type';
 
 @Injectable()
 export default class PlanService {
   constructor(
+    @InjectQueue('points') private readonly pointQueue: Queue,
     private readonly repository: PlanRepository,
     private readonly quoteService: QuoteService,
     private readonly userService: UserService,
@@ -236,6 +240,13 @@ export default class PlanService {
     const updatedPlan = await this.repository.update(plan);
     const planId = plan.getId();
     await this.chatRoomService.deActive({ planId });
+
+    await this.pointQueue.add('points', {
+      userId: plan.getConfirmedMakerId(),
+      event: PointEventEnum.EARN,
+      value: plan.getConfirmedPrice()
+    });
+
     return updatedPlan.toClient();
   }
 
@@ -272,6 +283,14 @@ export default class PlanService {
       await this.repository.updateMany({ ids: planIds, status: updateStatus });
       if (status === StatusValues.CONFIRMED) {
         await this.chatRoomService.deActive({ planIds });
+
+        plans.map(async (plan) => {
+          await this.pointQueue.add('points', {
+            userId: plan.getConfirmedMakerId(),
+            event: PointEventEnum.EARN,
+            value: plan.getConfirmedPrice()
+          });
+        });
       }
     }
   }
