@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import UserStatsModule from 'src/modules/userStats/userStats.module';
 import RedisService from '../cache/redis.service';
 import { UserStatsProcessor } from './userStats.processor';
-import { PointLogProcessor } from './pointLog.processor';
+import { PointsProcessor } from './points.processor';
 import PointLogModule from 'src/modules/pointLog/pointLog.module';
 import UserModule from 'src/modules/user/user.module';
 
@@ -15,10 +15,11 @@ import UserModule from 'src/modules/user/user.module';
         port: Number(process.env.REDIS_PORT)
       }
     }),
+    BullModule.registerQueue({ name: 'points' }),
     UserModule,
     UserStatsModule,
     PointLogModule
   ],
-  providers: [PointLogProcessor, UserStatsProcessor, RedisService]
+  providers: [PointsProcessor, UserStatsProcessor, RedisService]
 })
 export class BullmqModule {}
