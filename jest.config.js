@@ -10,5 +10,8 @@ module.exports = {
     '^src/(.*)$': '<rootDir>/src/$1'
   },
   setupFiles: ['<rootDir>/jest.setup.ts'],
-  setupFilesAfterEnv: ['tsconfig-paths/register']
+  setupFilesAfterEnv: ['tsconfig-paths/register'],
+  collectCoverage: true,
+  coverageDirectory: '<rootDir>/coverage',
+  coverageReporters: ['text', 'lcov', 'html']
 };

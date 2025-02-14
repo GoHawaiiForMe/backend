@@ -24,7 +24,7 @@ export default class UserService {
   async getUser(userId: string): Promise<Omit<UserProperties, 'password'>> {
     const user = await this.repository.findById(userId);
 
-    return user.toClientAll();
+    return user?.toClientAll();
   }
 
   async getProfile(role: string, userId: string): Promise<DreamerProfileProperties | MakerProfileProperties> {

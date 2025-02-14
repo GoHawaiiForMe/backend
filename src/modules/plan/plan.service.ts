@@ -153,7 +153,7 @@ export default class PlanService {
 
     const assignee = await this.userService.getUser(assigneeId);
 
-    if (!assignee) throw new NotFoundError(ErrorMessage.USER_NOT_FOUND);
+    if (!assignee) throw new BadRequestError(ErrorMessage.USER_NOT_FOUND);
     if (assignee.role !== RoleValues.MAKER) {
       throw new BadRequestError(ErrorMessage.PLAN_ASSIGN_NOT_MAKER);
     }
