@@ -8,8 +8,8 @@
 @CONFIRMED_PLAN3=068eb509-ab56-4a95-b750-09be1e8db28e
 @CONFIRMED_PLAN4=07cb9492-2685-4890-806c-c0e502b9853e
 @QUOTE1_ID=1c9cde67-ccbf-4c00-a53a-63d79f4772c3
-GET {{HOST_NAME}}/maker?pageSize=5
-Authorization: BeaRER {{MAKER1_TOKEN}}
+GET {{HOST_NAME}}/maker
+Authorization: Bearer {{MAKER1_TOKEN}}
 ###
 GET {{HOST_NAME}}/dreamer?pageSize=2&hasReview=false
 Authorization: Bearer {{DREAMER1_TOKEN}}
@@ -47,8 +47,19 @@ Authorization: Bearer {{DREAMER2_TOKEN}}
 PATCH {{HOST_NAME}}/{{CONFIRMED_PLAN4}}/complete
 Authorization: Bearer {{DREAMER2_TOKEN}}
 ###
-GET {{HOST_NAME}}/serviceArea-group-count
+DELETE {{HOST_NAME}}/16865772-f792-4bb6-8ac8-504fcb4064e3
+Authorization: Bearer {{DREAMER2_TOKEN}}
 ###
-GET {{HOST_NAME}}/tripType-group-count/SEOU
+POST {{HOST_NAME}}/16865772-f792-4bb6-8ac8-504fcb4064e3/assign
+Authorization: Bearer {{DREAMER1_TOKEN}}
+Content-Type: application/json
+
+{
+    "assigneeId": "ef846519-2b73-4be4-807e-f6ef1c07eb60"
+}
 ###
-GET {{HOST_NAME}}/groupCount?serviceArea=SEOUL
+DELETE {{HOST_NAME}}/16865772-f792-4bb6-8ac8-504fcb4064e3/assign
+Authorization: Bearer {{MAKER1_TOKEN}}
+###
+PATCH {{HOST_NAME}}/{{CONFIRMED_PLAN1}}/complete
+Authorization: Bearer {{DREAMER1_TOKEN}}

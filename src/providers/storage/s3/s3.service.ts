@@ -9,7 +9,7 @@ export class S3Service {
   async uploadFile(data: ChatToS3Properties) {
     const { file, chatRoomId } = data;
     const timestamp = new Date().toISOString().replace(/[-:T.]/g, '');
-    const s3key = `${chatRoomId}/${file.originalname}/${timestamp}`;
+    const s3key = `${timestamp}/${chatRoomId}/${file.originalname}`;
 
     const command = new PutObjectCommand({
       Bucket: process.env.BUCKET_NAME,

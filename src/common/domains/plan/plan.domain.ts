@@ -152,7 +152,7 @@ export default class Plan implements IPlan {
     const { assigneeId } = data;
 
     if (!this.getAssigneeIds().includes(assigneeId)) {
-      throw new ConflictError(ErrorMessage.PLAN_ASSIGN_BAD_REQUEST);
+      throw new BadRequestError(ErrorMessage.PLAN_ASSIGN_BAD_REQUEST);
     } //NOTE. 지정경적 요청을 받은사람이 맞는지 체크
 
     if (this.getStatus() !== StatusValues.PENDING) {

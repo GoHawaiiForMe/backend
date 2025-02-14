@@ -47,24 +47,6 @@ export default class PlanService {
     return { totalCount, groupByCount };
   }
 
-  async getPlanServiceAreaGroupCount(): Promise<{ totalCount: number; groupByCount: GroupByCount }> {
-    const [totalCount, groupByCount] = await Promise.all([
-      this.repository.totalCount({}),
-      this.repository.groupByCount({ groupByField: GroupField.SERVICE_AREA })
-    ]);
-    return { totalCount, groupByCount };
-  }
-
-  async getPlanTripTypeGroupCount(
-    serviceArea: ServiceArea
-  ): Promise<{ totalCount: number; groupByCount: GroupByCount }> {
-    const [totalCount, groupByCount] = await Promise.all([
-      this.repository.totalCount({ serviceArea: [serviceArea] }),
-      this.repository.groupByCount({ groupByField: GroupField.TRIP_TYPE, serviceArea: [serviceArea] })
-    ]);
-    return { totalCount, groupByCount };
-  }
-
   async getPlansByMaker(
     userId: string,
     options: PlanQueryOptions
@@ -189,7 +171,7 @@ export default class PlanService {
 
     const assignee = await this.userService.getUser(assigneeId);
 
-    if (!assignee) throw new NotFoundError(ErrorMessage.USER_NOT_FOUND);
+    if (!assignee) throw new BadRequestError(ErrorMessage.USER_NOT_FOUND);
     if (assignee.role !== RoleValues.MAKER) {
       throw new BadRequestError(ErrorMessage.PLAN_ASSIGN_NOT_MAKER);
     }

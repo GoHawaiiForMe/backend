@@ -22,22 +22,6 @@ export default class PlanController {
     return { totalCount, groupByCount };
   }
 
-  @Public()
-  @Get('serviceArea-group-count')
-  async getPlanServiceAreaGroupCount(): Promise<{ totalCount: number; groupByCount: GroupByCount }> {
-    const { totalCount, groupByCount } = await this.service.getPlanServiceAreaGroupCount();
-    return { totalCount, groupByCount };
-  }
-
-  @Public()
-  @Get('tripType-group-count/:serviceArea')
-  async getPlanTripTypeGroupCount(
-    @Param() params: ServiceAreaDTO
-  ): Promise<{ totalCount: number; groupByCount: GroupByCount }> {
-    const { totalCount, groupByCount } = await this.service.getPlanTripTypeGroupCount(params.serviceArea);
-    return { totalCount, groupByCount };
-  }
-
   @Get('maker')
   @Role('MAKER')
   async getPlanByMaker(

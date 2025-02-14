@@ -61,9 +61,6 @@ export default class ChatRoom implements IChatRoom {
   }
 
   update(): void {
-    if (this.isActive === false) {
-      throw new ConflictError(ErrorMessage.CHAT_ROOM_IS_ACTIVE_CONFLICT);
-    }
     this.isActive = false;
   }
 
