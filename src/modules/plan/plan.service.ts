@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import PlanRepository from './plan.repository';
 import QuoteService from 'src/modules/quote/quote.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { AssignData, PlanQueryOptions } from 'src/common/types/plan/plan.type';
+import { AssignData, GroupByCount, PlanQueryOptions } from 'src/common/types/plan/plan.type';
 import { PlanToClientProperties } from 'src/common/types/plan/plan.properties';
 import NotFoundError from 'src/common/errors/notFoundError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
@@ -14,21 +14,38 @@ import { ServiceArea } from 'src/common/constants/serviceArea.type';
 import { RoleValues } from 'src/common/constants/role.type';
 import BadRequestError from 'src/common/errors/badRequestError';
 import { StatusValues } from 'src/common/constants/status.type';
-import { GroupByCount } from 'src/common/types/plan/plan.dto';
 import { NotificationEventName } from 'src/common/types/notification/notification.types';
 import UserService from '../user/user.service';
 import Plan from 'src/common/domains/plan/plan.domain';
 import ChatRoomService from '../chatRoom/chatRoom.service';
+import GroupField from 'src/common/constants/groupByField.enum';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
+import { PointEventEnum } from 'src/common/constants/pointEvent.type';
 
 @Injectable()
 export default class PlanService {
   constructor(
-    private readonly planRepository: PlanRepository,
+    @InjectQueue('points') private readonly pointQueue: Queue,
+    private readonly repository: PlanRepository,
     private readonly quoteService: QuoteService,
     private readonly userService: UserService,
     private readonly chatRoomService: ChatRoomService,
     private readonly eventEmitter: EventEmitter2
   ) {}
+
+  async getPlanGroupCount(serviceArea: ServiceArea): Promise<{ totalCount: number; groupByCount: GroupByCount }> {
+    const totalCountOptions = serviceArea ? { serviceArea: [serviceArea] } : {};
+    const groupCountOptions = serviceArea
+      ? { groupByField: GroupField.TRIP_TYPE, serviceArea: [serviceArea] }
+      : { groupByField: GroupField.SERVICE_AREA };
+
+    const [totalCount, groupByCount] = await Promise.all([
+      this.repository.totalCount(totalCountOptions),
+      this.repository.groupByCount(groupCountOptions)
+    ]);
+    return { totalCount, groupByCount };
+  }
 
   async getPlansByMaker(
     userId: string,
@@ -41,13 +58,14 @@ export default class PlanService {
     options.userId = userId;
     options.status = [StatusValues.PENDING];
     options.role = RoleValues.MAKER;
+    options.groupByField = GroupField.TRIP_TYPE;
 
     const groupOptions = { ...options, tripType: undefined };
 
     const [totalCount, groupByCount, list] = await Promise.all([
-      this.planRepository.totalCount(options),
-      this.planRepository.groupByCount(groupOptions),
-      this.planRepository.findMany(options)
+      this.repository.totalCount(options),
+      this.repository.groupByCount(groupOptions),
+      this.repository.findMany(options)
     ]);
 
     const toClientList = list.map((plan) => plan.toClient());
@@ -74,8 +92,8 @@ export default class PlanService {
     }
 
     const [totalCount, list] = await Promise.all([
-      this.planRepository.totalCount(options),
-      this.planRepository.findMany(options)
+      this.repository.totalCount(options),
+      this.repository.findMany(options)
     ]);
 
     const toClientList = list.map((plan) => (isWithQuote ? plan.toClientWithQuotes() : plan.toClient()));
@@ -83,7 +101,7 @@ export default class PlanService {
   }
 
   async getPlanById(id: string, userId?: string): Promise<PlanToClientProperties> {
-    const plan = await this.planRepository.findById(id);
+    const plan = await this.repository.findById(id);
 
     if (!plan) {
       throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
@@ -102,7 +120,7 @@ export default class PlanService {
     options: QuoteQueryOptions,
     userId: string
   ): Promise<{ totalCount: number; list: QuoteToClientProperties[] }> {
-    const plan = await this.planRepository.findById(options.planId);
+    const plan = await this.repository.findById(options.planId);
 
     if (!plan) {
       throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
@@ -119,12 +137,12 @@ export default class PlanService {
 
   async postPlan(data: CreatePlanData): Promise<PlanToClientProperties> {
     const domainData = Plan.create(data);
-    const plan = await this.planRepository.create(domainData);
+    const plan = await this.repository.create(domainData);
     return plan.toClientWithAddress();
   }
 
   async postQuote(data: CreateOptionalQuoteData, userId: string, planId: string): Promise<QuoteToClientProperties> {
-    const plan = await this.planRepository.findById(planId);
+    const plan = await this.repository.findById(planId);
 
     if (!plan) throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
 
@@ -145,7 +163,7 @@ export default class PlanService {
 
   async requestPlanAssign(data: AssignData): Promise<PlanToClientProperties> {
     const { id, userId, assigneeId } = data;
-    const plan = await this.planRepository.findById(data.id);
+    const plan = await this.repository.findById(data.id);
 
     if (!plan) {
       throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
@@ -159,7 +177,7 @@ export default class PlanService {
     }
 
     plan.requestAssign(data);
-    const updatedPlan = await this.planRepository.update(plan);
+    const updatedPlan = await this.repository.update(plan);
 
     const nickName = updatedPlan.getDreamerNickName();
     const tripType = updatedPlan.getTripType();
@@ -173,14 +191,14 @@ export default class PlanService {
   }
 
   async rejectPlanAssign(data: AssignData): Promise<PlanToClientProperties> {
-    const plan = await this.planRepository.findById(data.id);
+    const plan = await this.repository.findById(data.id);
 
     if (!plan) {
       throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
     }
 
     plan.rejectAssign(data);
-    const updatedPlan = await this.planRepository.update(plan);
+    const updatedPlan = await this.repository.update(plan);
 
     const makerNickName = plan.getAssigneeNickName(data.assigneeId);
     const planTitle = plan.getTitle();
@@ -194,16 +212,23 @@ export default class PlanService {
   }
 
   async updatePlanComplete(id: string, userId: string): Promise<PlanToClientProperties> {
-    const plan = await this.planRepository.findById(id);
+    const plan = await this.repository.findById(id);
 
     if (!plan) throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
 
     if (plan.getDreamerId() !== userId) throw new ForbiddenError(ErrorMessage.USER_FORBIDDEN_NOT_OWNER);
 
     plan.updateComplete();
-    const updatedPlan = await this.planRepository.update(plan);
+    const updatedPlan = await this.repository.update(plan);
     const planId = plan.getId();
     await this.chatRoomService.deActive({ planId });
+
+    await this.pointQueue.add('points', {
+      userId: plan.getConfirmedMakerId(),
+      event: PointEventEnum.EARN,
+      value: plan.getConfirmedPrice()
+    });
+
     return updatedPlan.toClient();
   }
 
@@ -226,7 +251,7 @@ export default class PlanService {
 
     let hasMoreData = true;
     while (hasMoreData) {
-      const plans = await this.planRepository.findMany(options);
+      const plans = await this.repository.findMany(options);
 
       if (plans.length === 0) {
         hasMoreData = false;
@@ -237,15 +262,23 @@ export default class PlanService {
         return plan.getId();
       });
 
-      await this.planRepository.updateMany({ ids: planIds, status: updateStatus });
+      await this.repository.updateMany({ ids: planIds, status: updateStatus });
       if (status === StatusValues.CONFIRMED) {
         await this.chatRoomService.deActive({ planIds });
+
+        plans.map(async (plan) => {
+          await this.pointQueue.add('points', {
+            userId: plan.getConfirmedMakerId(),
+            event: PointEventEnum.EARN,
+            value: plan.getConfirmedPrice()
+          });
+        });
       }
     }
   }
 
   async deletePlan(id: string, userId: string): Promise<PlanToClientProperties> {
-    const plan = await this.planRepository.findById(id);
+    const plan = await this.repository.findById(id);
 
     if (!plan) throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
 
@@ -257,7 +290,7 @@ export default class PlanService {
       throw new BadRequestError(ErrorMessage.PLAN_DELETE_BAD_REQUEST);
     }
 
-    const deletedPlan = await this.planRepository.delete(id);
+    const deletedPlan = await this.repository.delete(id);
 
     const dreamerNickName = deletedPlan.getDreamerNickName();
     const planTitle = deletedPlan.getTitle();

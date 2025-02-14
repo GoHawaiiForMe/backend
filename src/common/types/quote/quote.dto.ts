@@ -1,6 +1,6 @@
 import { Optional } from '@nestjs/common';
 import { Transform, Type } from 'class-transformer';
-import { IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, Min } from 'class-validator';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import validateBooleanValue from 'src/common/utilities/validateBooleanValue';
 
@@ -13,10 +13,12 @@ import validateBooleanValue from 'src/common/utilities/validateBooleanValue';
 export class DreamerQuoteQueryOptionsDTO {
   @IsOptional()
   @Type(() => Number)
+  @Min(1)
   page: number = 1;
 
   @IsOptional()
   @Type(() => Number)
+  @Min(1)
   pageSize: number = 2;
 
   @IsOptional()
@@ -27,12 +29,12 @@ export class MakerQuoteQueryOptionsDTO {
   /**
    * NOTE. 보낸견적 조회, 취소된 플랜
    */
-  @IsOptional()
   @Type(() => Number)
+  @Min(1)
   page: number = 1;
 
-  @IsOptional()
   @Type(() => Number)
+  @Min(1)
   pageSize: number = 2;
 
   //NOTE. NestJS에서는 DTO에서 boolean값으로 변환이 이상함

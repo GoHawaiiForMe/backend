@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import GroupByField from 'src/common/constants/groupByField.enum';
 import PlanOrder from 'src/common/constants/planOrder.enum';
 import { RoleValues } from 'src/common/constants/role.type';
 import SortOrder from 'src/common/constants/sortOrder.enum';
 import { Status, StatusValues } from 'src/common/constants/status.type';
 import IPlan from 'src/common/domains/plan/plan.interface';
 import PlanMapper from 'src/common/domains/plan/plan.mapper';
-import { GroupByCount } from 'src/common/types/plan/plan.dto';
-import { PlanWhereConditions } from 'src/common/types/plan/plan.type';
+import { GroupByCount, PlanWhereConditions } from 'src/common/types/plan/plan.type';
 import { PlanOrderByField } from 'src/common/types/plan/plan.type';
 import { PlanQueryOptions } from 'src/common/types/plan/plan.type';
 import DBClient from 'src/providers/database/prisma/DB.client';
@@ -50,7 +50,6 @@ export default class PlanRepository {
 
   async totalCount(options: PlanQueryOptions): Promise<number> {
     const whereConditions = this.buildWhereConditions(options);
-
     const totalCount = await this.db.plan.count({
       where: whereConditions
     });
@@ -59,7 +58,8 @@ export default class PlanRepository {
   }
 
   async groupByCount(options: PlanQueryOptions): Promise<GroupByCount> {
-    const groupByField = 'tripType';
+    const groupByField =
+      options.groupByField === GroupByField.TRIP_TYPE ? GroupByField.TRIP_TYPE : GroupByField.SERVICE_AREA;
     const whereConditions = this.buildWhereConditions(options);
 
     const groupByCount = await this.db.plan.groupBy({
@@ -69,7 +69,7 @@ export default class PlanRepository {
     });
 
     const formattedGroupByCount = groupByCount.map((group) => ({
-      tripType: group.tripType,
+      [groupByField]: group[groupByField],
       count: group._count.id
     }));
 
@@ -82,7 +82,7 @@ export default class PlanRepository {
       include: {
         dreamer: { select: { id: true, nickName: true } },
         assignees: { select: { id: true, nickName: true } },
-        quotes: { select: { id: true, makerId: true, isConfirmed: true } }
+        quotes: { select: { id: true, makerId: true, price: true, isConfirmed: true } }
       }
     });
 

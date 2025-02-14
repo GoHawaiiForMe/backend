@@ -11,7 +11,7 @@ import { UserStatsToClientProperties } from 'src/common/types/userStats/userStat
 
 export interface IUser {
   validatePassword(password: string): Promise<boolean>;
-  update(data: Partial<UserProperties> & PasswordProperties): Promise<FilteredUserProperties>;
+  update(data: Partial<UserProperties & PasswordProperties>): Promise<FilteredUserProperties>;
   updatePassword(data: PasswordProperties): Promise<void>;
   get(): UserProperties;
   toClient(): FilteredUserProperties;

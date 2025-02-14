@@ -13,10 +13,14 @@ import { Role, RoleValues } from 'src/common/constants/role.type';
 import Quote from 'src/common/domains/quote/quote.domain';
 import UserService from '../user/user.service';
 import ChatRoomService from '../chatRoom/chatRoom.service';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
+import { PointEventEnum } from 'src/common/constants/pointEvent.type';
 
 @Injectable()
 export default class QuoteService {
   constructor(
+    @InjectQueue('points') private readonly pointQueue: Queue,
     private readonly quoteRepository: QuoteRepository,
     private readonly userService: UserService,
     private readonly chatRoomService: ChatRoomService
@@ -80,6 +84,11 @@ export default class QuoteService {
       throw new ForbiddenError(ErrorMessage.QUOTE_FORBIDDEN_DREAMER);
     }
 
+    const dreamer = await this.userService.getUser(quote.getDreamerId());
+    if (dreamer.coconut < quote.getConfirmedPrice()) {
+      throw new BadRequestError(ErrorMessage.INSUFFICIENT_COCONUTS);
+    }
+
     const planStatus = quote.getPlanStatus();
     if (planStatus !== StatusValues.PENDING) {
       throw new BadRequestError(ErrorMessage.QUOTE_BAD_REQUEST_UPDATE_NOT_PENDING);
@@ -88,6 +97,12 @@ export default class QuoteService {
     const updatedQuote = await this.quoteRepository.update(quote.update(data));
 
     await this.chatRoomService.postChatRoom(updatedQuote.toChatRoom());
+
+    await this.pointQueue.add('points', {
+      userId: quote.getDreamerId(),
+      event: PointEventEnum.SPEND,
+      value: -quote.getConfirmedPrice()
+    });
 
     return updatedQuote.toClient();
   }

@@ -38,6 +38,7 @@ export interface PlanQueryOptions {
   role?: Role;
   reviewed?: boolean;
   readyToComplete?: boolean;
+  groupByField?: string;
 }
 
 export interface CreatePlanData {
@@ -69,3 +70,9 @@ export interface AssignData {
   assigneeId: string;
   isAssigned?: boolean;
 }
+
+export type GroupByCount = {
+  serviceArea?: ServiceArea;
+  tripType?: TripType;
+  count: number;
+}[];

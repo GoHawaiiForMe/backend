@@ -192,6 +192,11 @@ export default class Plan implements IPlan {
     return confirmedQuote?.makerId ?? null;
   }
 
+  getConfirmedPrice(): number {
+    const confirmedQuote = this.quotes?.find((quote) => quote.isConfirmed === true);
+    return confirmedQuote?.price ?? null;
+  }
+
   getId(): string {
     return this.id;
   }

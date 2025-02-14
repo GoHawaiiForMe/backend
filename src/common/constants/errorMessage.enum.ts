@@ -10,7 +10,6 @@ export enum ErrorMessage {
   USER_FORBIDDEN_NOT_OWNER = 'Plan을 등록한 본인만 수정, 삭제할 수 있습니다. 권한을 확인해주세요.',
   USER_FORBIDDEN_NOT_MAKER = 'Maker 역할을 가진 사용자만 이 리소스에 접근할 수 있습니다. 권한을 확인해 주세요.',
   USER_FORBIDDEN_NOT_DREAMER = 'Dreamer 역할을 가진 사용자만 Plan을 생성할 수 있습니다. 권한을 확인해 주세요.',
-  USER_COCONUT_INVALID = '포인트는 0코코넛 이상이어야 합니다.',
 
   OAUTH_GOOGLE_SERVER_ERROR = '구글 프로필 정보를 가져올 수 없습니다.',
   OAUTH_KAKAO_SERVER_ERROR = '카카오 프로필 정보를 가져올 수 없습니다.',
@@ -52,6 +51,7 @@ export enum ErrorMessage {
   QUOTE_BAD_REQUEST_UPDATE_NOT_PENDING = 'PENDING 상태인 플랜의 견적만 업데이트 할 수 있습니다.',
   QUOTE_CONFLICT = '해당 플랜에 이미 견적서를 작성하셨습니다. 하나의 플랜에는 하나의 견적서만 쓸 수 있습니다.',
   QUOTE_DELETE_BAD_REQUEST_STATUS = '견적의 플랜이 PENDING 상태 일 때만 삭제할 수 있습니다.',
+  INSUFFICIENT_COCONUTS = '유저의 코코넛이 부족합니다.',
 
   PAYMENT_BAD_REQUEST = '결제 정보가 잘못되어 결제를 완료할 수 없습니다.',
   PAYMENT_AMOUNT_ERROR = '실제 결제한 금액이 결제 요청한 금액과 맞지 않습니다.',
@@ -86,6 +86,8 @@ export enum ErrorMessage {
 
   INTERNAL_SERVER_ERROR = '내부 서버 오류',
   INTERNAL_SERVER_ERROR_CHAT_ROOM_UPDATE = '채팅방 업데이트 실패',
-  INTERNAL_SERVER_ERROR_MONGOOSE = '내부 서버 몽구스 오류'
+  INTERNAL_SERVER_ERROR_MONGOOSE = '내부 서버 몽구스 오류',
+
+  QUEUE_MAX_RETRY_EXCEEDED = '최대 재시도 횟수를 초과했습니다.'
 }
 export default ErrorMessage;

@@ -1,12 +1,7 @@
-import { Type } from 'class-transformer';
-import { IsInt } from 'class-validator';
+import { IsMongoId, IsString } from 'class-validator';
 
-export class ChatRoomQueryDTO {
-  @Type(() => Number)
-  @IsInt()
-  page: number = 1;
-
-  @Type(() => Number)
-  @IsInt()
-  pageSize: number = 5;
+export class ChatIdDTO {
+  @IsString()
+  @IsMongoId()
+  id: string;
 }

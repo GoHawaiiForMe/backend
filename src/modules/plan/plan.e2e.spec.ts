@@ -49,21 +49,21 @@ describe('PlanController (e2e)', () => {
     await app.close();
   });
 
-  // describe('[GET /plans/groupCount]', () => {
-  //   it('should get serviceArea count', async () => {
-  //     const { body, statusCode } = await request(app.getHttpServer()).get('/plans/groupCount');
+  describe('[GET /plans/groupCount]', () => {
+    it('should get serviceArea count', async () => {
+      const { body, statusCode } = await request(app.getHttpServer()).get('/plans/groupCount');
 
-  //     expect(statusCode).toBe(200);
-  //     expect(body).toBeDefined();
-  //   });
+      expect(statusCode).toBe(200);
+      expect(body).toBeDefined();
+    });
 
-  //   it('should get tripType count', async () => {
-  //     const { body, statusCode } = await request(app.getHttpServer()).get('/plans/groupCount?serviceArea=SEOUL');
+    it('should get tripType count', async () => {
+      const { body, statusCode } = await request(app.getHttpServer()).get('/plans/groupCount?serviceArea=SEOUL');
 
-  //     expect(statusCode).toBe(200);
-  //     expect(body).toBeDefined();
-  //   });
-  // });
+      expect(statusCode).toBe(200);
+      expect(body).toBeDefined();
+    });
+  });
 
   describe('[GET /plans/dreamer]', () => {
     it('should get my plan List', async () => {

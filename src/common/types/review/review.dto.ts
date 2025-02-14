@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsPositive, IsString, IsUUID } from 'class-validator';
+import { IsInt, IsNotEmpty, IsPositive, IsString, IsUUID, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ReviewAllProperties } from './review.types';
 
@@ -24,10 +24,12 @@ export class CreateReviewDTO {
 export class GetReviewsQueryDTO {
   @Type(() => Number)
   @IsInt()
+  @Min(1)
   page: number = 1;
 
   @Type(() => Number)
   @IsInt()
+  @Min(1)
   pageSize: number = 5;
 }
 
