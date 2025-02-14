@@ -10,17 +10,18 @@ import AuthService from '../auth/auth.service';
 describe('PlanController (e2e)', () => {
   let app: INestApplication;
 
-  let makerId = process.env.MAKER1_ID;
-  let makerToken: string;
+  const makerId = process.env.MAKER1_ID;
 
-  let dreamerId1 = process.env.DREAMER1_ID;
-  let dreamerId2 = process.env.DREAMER2_ID;
+  const dreamerId1 = process.env.DREAMER1_ID;
+  const dreamerId2 = process.env.DREAMER2_ID;
+
+  const pendingPlanId = process.env.PENDING_PLAN_ID;
+  const confirmedPlanId = process.env.CONFIRMED_PLAN_ID;
+  const toBeCompletedPlanId = process.env.TO_BE_COMPLETED_PLAN_ID;
+
+  let makerToken: string;
   let dreamerToken1: string;
   let dreamerToken2: string;
-
-  let pendingPlanId = process.env.PENDING_PLAN_ID;
-  let confirmedPlanId = process.env.CONFIRMED_PLAN_ID;
-  let toBeCompletedPlanId = process.env.TO_BE_COMPLETED_PLAN_ID;
 
   jest.setTimeout(100000);
 
