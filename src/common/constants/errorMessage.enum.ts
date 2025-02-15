@@ -82,6 +82,7 @@ export enum ErrorMessage {
   CHAT_FORBIDDEN_DELETE = '채팅 메시지를 작성한 당사자만 삭제할 수 있습니다.',
   CHAT_CONFLICT_DELETE = '이미 삭제된 메시지입니다.',
   CHAT_IS_DELETE_FILE = '이미 삭제된 파일입니다.',
+  CHAT_IS_NOT_FILE = '요청한 채팅 id는 파일이 아닙니다.',
 
   CLIENT_NOT_CONNECTED = '연결되지 않은 클라이언트입니다.',
 

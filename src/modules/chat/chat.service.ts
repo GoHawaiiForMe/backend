@@ -53,7 +53,10 @@ export default class ChatService {
 
   async getOriginFile(data: { id: string; userId: string }): Promise<string> {
     const chat = await this.getChatDomain(data);
+
     if (chat.getIsDeleted()) throw new BadRequestError(ErrorMessage.CHAT_IS_DELETE_FILE);
+    if (chat.getChatType() === ChatType.TEXT) throw new BadRequestError(ErrorMessage.CHAT_IS_NOT_FILE);
+
     const presignedUrl = await this.updateContent({ type: chat.getChatType(), content: chat.getChatContent() }, true);
     return presignedUrl;
   }
