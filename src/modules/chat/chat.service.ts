@@ -106,7 +106,7 @@ export default class ChatService {
 
     return {
       ...chatData,
-      content: deletedMessages[chatData.type] || '삭제된 콘텐츠입니다.',
+      content: deletedMessages[chatData.type],
       isDeleted: true
     };
   }
