@@ -81,12 +81,15 @@ export enum ErrorMessage {
   CHAT_FILE_TYPE_NOT_SUPPORTED = '지원하지 않는 파일 형식입니다',
   CHAT_FORBIDDEN_DELETE = '채팅 메시지를 작성한 당사자만 삭제할 수 있습니다.',
   CHAT_CONFLICT_DELETE = '이미 삭제된 메시지입니다.',
+  CHAT_IS_DELETE_FILE = '이미 삭제된 파일입니다.',
+  CHAT_IS_NOT_FILE = '요청한 채팅 id는 파일이 아닙니다.',
 
   CLIENT_NOT_CONNECTED = '연결되지 않은 클라이언트입니다.',
 
   INTERNAL_SERVER_ERROR = '내부 서버 오류',
   INTERNAL_SERVER_ERROR_CHAT_ROOM_UPDATE = '채팅방 업데이트 실패',
   INTERNAL_SERVER_ERROR_MONGOOSE = '내부 서버 몽구스 오류',
+  INTERNAL_SERVER_ERROR_S3_FILE = 'S3 파일 요청 실패.',
 
   QUEUE_MAX_RETRY_EXCEEDED = '최대 재시도 횟수를 초과했습니다.'
 }

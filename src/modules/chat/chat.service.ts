@@ -12,6 +12,7 @@ import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import NotFoundError from 'src/common/errors/notFoundError';
 import ForbiddenError from 'src/common/errors/forbiddenError';
 import ConflictError from 'src/common/errors/conflictError';
+import { ORIGIN, RESIZE } from 'src/common/constants/s3.constants';
 
 @Injectable()
 export default class ChatService {
@@ -50,6 +51,16 @@ export default class ChatService {
     return chat;
   }
 
+  async getOriginFile(data: { id: string; userId: string }): Promise<string> {
+    const chat = await this.getChatDomain(data);
+
+    if (chat.getIsDeleted()) throw new BadRequestError(ErrorMessage.CHAT_IS_DELETE_FILE);
+    if (chat.getChatType() === ChatType.TEXT) throw new BadRequestError(ErrorMessage.CHAT_IS_NOT_FILE);
+
+    const presignedUrl = await this.updateContent({ type: chat.getChatType(), content: chat.getChatContent() }, true);
+    return presignedUrl;
+  }
+
   async postChat(data: ChatCreateData): Promise<ChatToClientProperties> {
     const chatData = Chat.create(data);
     const chat = await this.chatRepository.createChat(chatData);
@@ -63,7 +74,7 @@ export default class ChatService {
     const s3key = await this.s3Service.uploadFile(chatData.toS3());
     chatData.setS3Key(s3key);
     const chat = await this.chatRepository.createChat(chatData);
-    const convertChat = await this.convertToClient(chat.toClient());
+    const convertChat = await this.convertToClient(chat.toClient(), true);
     return convertChat;
   }
 
@@ -75,7 +86,7 @@ export default class ChatService {
       throw new ForbiddenError(ErrorMessage.CHAT_FORBIDDEN_DELETE);
     }
 
-    if (chatDomain.getIsDeletedAt()) {
+    if (chatDomain.getIsDeleted()) {
       throw new ConflictError(ErrorMessage.CHAT_CONFLICT_DELETE);
     }
 
@@ -86,32 +97,46 @@ export default class ChatService {
     await this.chatRepository.delete(id); //TODO. transaction
   }
 
-  private async convertToClient(chatData: ChatToClientProperties): Promise<ChatToClientProperties> {
+  private handleDeletedMessage(chatData: ChatToClientProperties): ChatToClientProperties {
+    const deletedMessages = {
+      [ChatType.TEXT]: '삭제된 메시지입니다.',
+      [ChatType.IMAGE]: '삭제된 이미지입니다.',
+      [ChatType.VIDEO]: '삭제된 동영상입니다.'
+    };
+
+    return {
+      ...chatData,
+      content: deletedMessages[chatData.type],
+      isDeleted: true
+    };
+  }
+
+  private async updateContent(chatData: { type: ChatType; content: string }, isOrigin?: boolean): Promise<string> {
+    const { type, content } = chatData;
+
+    switch (type) {
+      case ChatType.TEXT:
+        return content;
+
+      case ChatType.IMAGE:
+        return isOrigin === true
+          ? await this.s3Service.generatePresignedUrl(content, ORIGIN)
+          : await this.s3Service.generatePresignedUrl(content, RESIZE);
+
+      case ChatType.VIDEO:
+        return await this.s3Service.generatePresignedUrl(content, ORIGIN);
+    }
+  }
+
+  private async convertToClient(chatData: ChatToClientProperties, isOrigin?: boolean): Promise<ChatToClientProperties> {
     const { content, isDeletedAt, ...rest } = chatData;
-    let updatedContent = content;
 
     if (isDeletedAt) {
-      rest.isDeleted = true;
-      switch (chatData.type) {
-        case ChatType.TEXT:
-          updatedContent = '삭제된 메시지입니다.';
-          break;
-        case ChatType.IMAGE:
-          updatedContent = '삭제된 이미지입니다.';
-          break;
-        case ChatType.VIDEO:
-          updatedContent = '삭제된 동영상입니다.';
-          break;
-      }
-    } else {
-      rest.isDeleted = false;
-      if (chatData.type === ChatType.TEXT) {
-        updatedContent = content;
-      } else {
-        updatedContent = await this.s3Service.generatePresignedUrl(content);
-      }
+      const deletedMessage = this.handleDeletedMessage(chatData);
+      return deletedMessage;
     }
 
-    return { ...rest, content: updatedContent };
+    const updatedContent = await this.updateContent(chatData, isOrigin);
+    return { ...rest, content: updatedContent, isDeleted: false };
   }
 }

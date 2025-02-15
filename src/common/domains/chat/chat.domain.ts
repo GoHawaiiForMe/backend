@@ -71,7 +71,16 @@ export default class Chat implements IChat {
     return this.senderId;
   }
 
-  getIsDeletedAt(): Date {
-    return this.isDeletedAt;
+  getIsDeleted(): boolean {
+    if (this.isDeletedAt) return true;
+    else return false;
+  }
+
+  getChatType(): ChatType {
+    return this.type;
+  }
+
+  getChatContent(): string {
+    return this.content;
   }
 }
