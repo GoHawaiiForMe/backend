@@ -1,2 +1,2 @@
-export const ORIGIN_BUCKET_NAME = 'ORIGIN_BUCKET_NAME';
-export const RESIZE_BUCKET_NAME = 'RESIZE_BUCKET_NAME';
+export const ORIGIN = 'ORIGIN';
+export const RESIZE = 'RESIZE';

@@ -12,6 +12,7 @@ import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import NotFoundError from 'src/common/errors/notFoundError';
 import ForbiddenError from 'src/common/errors/forbiddenError';
 import ConflictError from 'src/common/errors/conflictError';
+import { ORIGIN, RESIZE } from 'src/common/constants/s3.constants';
 
 @Injectable()
 export default class ChatService {
@@ -70,7 +71,7 @@ export default class ChatService {
     const s3key = await this.s3Service.uploadFile(chatData.toS3());
     chatData.setS3Key(s3key);
     const chat = await this.chatRepository.createChat(chatData);
-    const convertChat = await this.convertToClient(chat.toClient());
+    const convertChat = await this.convertToClient(chat.toClient(), true);
     return convertChat;
   }
 
@@ -116,21 +117,23 @@ export default class ChatService {
 
       case ChatType.IMAGE:
         return isOrigin === true
-          ? await this.s3Service.generateOriginPresignedUrl(content)
-          : await this.s3Service.generateResizePresignedUrl(content);
+          ? await this.s3Service.generatePresignedUrl(content, ORIGIN)
+          : await this.s3Service.generatePresignedUrl(content, RESIZE);
 
       case ChatType.VIDEO:
-      default:
-        return await this.s3Service.generateOriginPresignedUrl(content);
+        return await this.s3Service.generatePresignedUrl(content, ORIGIN);
     }
   }
 
-  private async convertToClient(chatData: ChatToClientProperties, isSocket?: boolean): Promise<ChatToClientProperties> {
+  private async convertToClient(chatData: ChatToClientProperties, isOrigin?: boolean): Promise<ChatToClientProperties> {
     const { content, isDeletedAt, ...rest } = chatData;
 
-    if (isDeletedAt) this.handleDeletedMessage(chatData);
-    const updatedContent = await this.updateContent(chatData, isSocket);
+    if (isDeletedAt) {
+      const deletedMessage = this.handleDeletedMessage(chatData);
+      return deletedMessage;
+    }
 
+    const updatedContent = await this.updateContent(chatData, isOrigin);
     return { ...rest, content: updatedContent, isDeleted: false };
   }
 }

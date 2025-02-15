@@ -1,16 +1,15 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { ChatToS3Properties } from 'src/common/domains/chat/chat.properties';
-import { ORIGIN_BUCKET_NAME, RESIZE_BUCKET_NAME } from 'src/common/constants/s3.constants';
+import { ORIGIN } from 'src/common/constants/s3.constants';
 import { v4 as uuidV4 } from 'uuid';
+import InternalServerError from 'src/common/errors/internalServerError';
+import ErrorMessage from 'src/common/constants/errorMessage.enum';
 
 @Injectable()
 export class S3Service {
-  constructor(
-    @Inject(ORIGIN_BUCKET_NAME) private readonly originBucket: S3Client,
-    @Inject(RESIZE_BUCKET_NAME) private readonly resizeBucket: S3Client
-  ) {}
+  constructor(private readonly s3Client: S3Client) {}
 
   async uploadFile(data: ChatToS3Properties) {
     const { file, chatRoomId } = data;
@@ -18,43 +17,37 @@ export class S3Service {
     const s3key = `${chatRoomId}/${uniqueKey}_${file.originalname}`;
 
     const command = new PutObjectCommand({
-      Bucket: process.env.BUCKET_NAME,
+      Bucket: process.env.ORIGIN_BUCKET_NAME,
       Body: file.buffer,
       Key: s3key,
       ContentDisposition: 'inline'
     });
 
-    await this.originBucket.send(command);
+    await this.s3Client.send(command);
     return s3key;
   }
 
-  async generateOriginPresignedUrl(filename: string, expiresIn: number = 3600) {
+  async generatePresignedUrl(filename: string, bucket: string, expiresIn: number = 3600) {
+    const finalFilename = bucket === ORIGIN ? filename : filename.replace(/\.[^/.]+$/, '.jpeg');
+    const bucketName = bucket === ORIGIN ? process.env.ORIGIN_BUCKET_NAME : process.env.RESIZE_BUCKET_NAME;
+
     const command = new GetObjectCommand({
-      Bucket: process.env.BUCKET_NAME,
-      Key: filename
+      Bucket: bucketName,
+      Key: finalFilename
     });
 
-    const presignedUrl = await getSignedUrl(this.originBucket, command, { expiresIn });
-    return presignedUrl;
-  }
-
-  async generateResizePresignedUrl(filename: string, expiresIn: number = 3600) {
-    const modifiedFilename = filename.replace(/\.[^/.]+$/, '.jpeg');
     try {
-      const command = new GetObjectCommand({
-        Bucket: process.env.BUCKET_NAME,
-        Key: modifiedFilename
-      });
-
-      const presignedUrl = await getSignedUrl(this.resizeBucket, command, { expiresIn });
+      const presignedUrl = await getSignedUrl(this.s3Client, command, { expiresIn });
       return presignedUrl;
     } catch (e) {
-      const command = new GetObjectCommand({
-        Bucket: process.env.BUCKET_NAME,
+      if (bucket === ORIGIN) throw new InternalServerError(ErrorMessage.INTERNAL_SERVER_ERROR_S3_FILE);
+
+      const originCommand = new GetObjectCommand({
+        Bucket: process.env.ORIGIN_BUCKET_NAME,
         Key: filename
       });
 
-      const presignedUrl = await getSignedUrl(this.originBucket, command, { expiresIn });
+      const presignedUrl = await getSignedUrl(this.s3Client, originCommand, { expiresIn });
       return presignedUrl;
     }
   }

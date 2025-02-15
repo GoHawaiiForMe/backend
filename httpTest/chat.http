@@ -35,5 +35,8 @@ GET http://localhost:4000/chats/6792f34d2f7696df3e742d33
 GET http://localhost:4000/chatRooms/67a1abf23f71fe22f15b7639/chats?pageSize=30
 Authorization: Bearer {{DREAMER1_TOKEN}}
 ###
-GET http://localhost:4000/chats/67b04655753c1b334ac8de71/downloadFile
+GET http://localhost:4000/chats/67b09c4dfb9313f91285cd83/downloadFile
+Authorization: Bearer {{DREAMER1_TOKEN}}
+###
+GET http://localhost:4000/chatRooms
 Authorization: Bearer {{DREAMER1_TOKEN}}
