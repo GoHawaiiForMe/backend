@@ -1,3 +1,4 @@
+@CHAT_HOST_NAME=http://localhost:4000/chats
 @DREAMER1_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Njg4NWEzYy01MGY0LTQyN2ItOGE5Mi0zNzAyYzY5NzZmYjAiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNzk4MzQ1MSwiZXhwIjoxNzQxNDM5NDUxfQ.V2qa2oB-m757NnAXYkefAWL_Vewwh526s97SYh2LuJc
 @CHATROOM1_ID=67a4e29ba4b7b6ddc6ef5ac6
 @EXAMPLE_CHAT_ROOM=67a4e29ba4b7b6ddc6ef5ac6
@@ -32,4 +33,7 @@ Content-Type: application/json
 GET http://localhost:4000/chats/6792f34d2f7696df3e742d33
 ###
 GET http://localhost:4000/chatRooms/67a1abf23f71fe22f15b7639/chats?pageSize=30
+Authorization: Bearer {{DREAMER1_TOKEN}}
+###
+GET http://localhost:4000/chats/67b04655753c1b334ac8de71/downloadFile
 Authorization: Bearer {{DREAMER1_TOKEN}}

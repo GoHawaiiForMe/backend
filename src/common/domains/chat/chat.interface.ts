@@ -1,3 +1,4 @@
+import { ChatType } from 'src/common/constants/chat.type';
 import { ChatProperties, ChatToClientProperties, ChatToS3Properties } from './chat.properties';
 
 export default interface IChat {
@@ -7,5 +8,7 @@ export default interface IChat {
   setS3Key(s3key: string): void;
   getChatRoomId(): string;
   getSenderId(): string;
-  getIsDeletedAt(): Date;
+  getIsDeleted(): boolean;
+  getChatType(): ChatType;
+  getChatContent(): string;
 }

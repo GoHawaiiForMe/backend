@@ -50,6 +50,13 @@ export default class ChatService {
     return chat;
   }
 
+  async getOriginFile(data: { id: string; userId: string }): Promise<string> {
+    const chat = await this.getChatDomain(data);
+    if (chat.getIsDeleted()) throw new BadRequestError(ErrorMessage.CHAT_IS_DELETE_FILE);
+    const presignedUrl = await this.updateContent({ type: chat.getChatType(), content: chat.getChatContent() }, true);
+    return presignedUrl;
+  }
+
   async postChat(data: ChatCreateData): Promise<ChatToClientProperties> {
     const chatData = Chat.create(data);
     const chat = await this.chatRepository.createChat(chatData);
@@ -75,7 +82,7 @@ export default class ChatService {
       throw new ForbiddenError(ErrorMessage.CHAT_FORBIDDEN_DELETE);
     }
 
-    if (chatDomain.getIsDeletedAt()) {
+    if (chatDomain.getIsDeleted()) {
       throw new ConflictError(ErrorMessage.CHAT_CONFLICT_DELETE);
     }
 
@@ -86,32 +93,44 @@ export default class ChatService {
     await this.chatRepository.delete(id); //TODO. transaction
   }
 
-  private async convertToClient(chatData: ChatToClientProperties): Promise<ChatToClientProperties> {
-    const { content, isDeletedAt, ...rest } = chatData;
-    let updatedContent = content;
+  private handleDeletedMessage(chatData: ChatToClientProperties): ChatToClientProperties {
+    const deletedMessages = {
+      [ChatType.TEXT]: '삭제된 메시지입니다.',
+      [ChatType.IMAGE]: '삭제된 이미지입니다.',
+      [ChatType.VIDEO]: '삭제된 동영상입니다.'
+    };
 
-    if (isDeletedAt) {
-      rest.isDeleted = true;
-      switch (chatData.type) {
-        case ChatType.TEXT:
-          updatedContent = '삭제된 메시지입니다.';
-          break;
-        case ChatType.IMAGE:
-          updatedContent = '삭제된 이미지입니다.';
-          break;
-        case ChatType.VIDEO:
-          updatedContent = '삭제된 동영상입니다.';
-          break;
-      }
-    } else {
-      rest.isDeleted = false;
-      if (chatData.type === ChatType.TEXT) {
-        updatedContent = content;
-      } else {
-        updatedContent = await this.s3Service.generatePresignedUrl(content);
-      }
+    return {
+      ...chatData,
+      content: deletedMessages[chatData.type] || '삭제된 콘텐츠입니다.',
+      isDeleted: true
+    };
+  }
+
+  private async updateContent(chatData: { type: ChatType; content: string }, isOrigin?: boolean): Promise<string> {
+    const { type, content } = chatData;
+
+    switch (type) {
+      case ChatType.TEXT:
+        return content;
+
+      case ChatType.IMAGE:
+        return isOrigin === true
+          ? await this.s3Service.generateOriginPresignedUrl(content)
+          : await this.s3Service.generateResizePresignedUrl(content);
+
+      case ChatType.VIDEO:
+      default:
+        return await this.s3Service.generateOriginPresignedUrl(content);
     }
+  }
 
-    return { ...rest, content: updatedContent };
+  private async convertToClient(chatData: ChatToClientProperties, isSocket?: boolean): Promise<ChatToClientProperties> {
+    const { content, isDeletedAt, ...rest } = chatData;
+
+    if (isDeletedAt) this.handleDeletedMessage(chatData);
+    const updatedContent = await this.updateContent(chatData, isSocket);
+
+    return { ...rest, content: updatedContent, isDeleted: false };
   }
 }
