@@ -16,8 +16,8 @@ export default class PlanRepository {
   constructor(private readonly db: DBClient) {}
 
   async findMany(options: PlanQueryOptions): Promise<IPlan[]> {
-    const { orderBy, page, pageSize, reviewed } = options || {};
-    const isReviewed = reviewed === true || reviewed === false;
+    const { orderBy, page, pageSize, reviewed, readyToComplete } = options || {};
+    const withQuote = reviewed !== null || readyToComplete === true;
 
     const whereConditions = this.buildWhereConditions(options);
     const orderByField: PlanOrderByField =
@@ -31,16 +31,17 @@ export default class PlanRepository {
       include: {
         dreamer: { select: { id: true, nickName: true } },
         assignees: { select: { id: true, nickName: true } },
-        quotes: isReviewed
+        quotes: withQuote
           ? {
               where: { isConfirmed: true },
               select: {
                 id: true,
                 price: true,
+                isConfirmed: true,
                 maker: { select: { id: true, nickName: true, makerProfile: { select: { image: true } } } }
               }
             }
-          : {}
+          : false
       }
     });
 
