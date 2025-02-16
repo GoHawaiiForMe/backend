@@ -34,8 +34,7 @@ describe('QuoteController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    app.useGlobalPipes(new ValidationPipe({ transform: true }));
-    //.useGlobalFilters(new GlobalExceptionFilter());
+    app.useGlobalPipes(new ValidationPipe({ transform: true })).useGlobalFilters(new GlobalExceptionFilter());
     await app.init();
 
     const prismaDB = app.get<DBClient>(DBClient);
