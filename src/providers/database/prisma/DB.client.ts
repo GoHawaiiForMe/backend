@@ -1,10 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
-import { USERS } from './mock/test.mock';
+import { QUOTES, PLANS, USERS, MAKER_PROFILES, DREAMER_PROFILES } from './mock/test.mock';
 import { HashingPassword } from 'src/common/utilities/hashingPassword';
-import { MAKER_PROFILES } from './mock/test.mock';
-import { DREAMER_PROFILES } from './mock/test.mock';
-import { PLANS } from './mock/test.mock';
 
 @Injectable()
 class DBClient extends PrismaClient implements OnModuleInit {
@@ -56,6 +53,11 @@ class DBClient extends PrismaClient implements OnModuleInit {
           }
         });
       }
+
+      await this.quote.createMany({
+        data: QUOTES,
+        skipDuplicates: true
+      });
 
       console.log('TestDatabase seeding complete!');
     } catch (error) {

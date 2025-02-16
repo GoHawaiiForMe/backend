@@ -67,7 +67,10 @@ export default class QuoteRepository {
         isAssigned,
         price,
         content
-      }
+      },
+      include: {
+        maker: { select: { id: true, nickName: true } }
+      } //NOTE. 알람을 위해 추가
     });
 
     const domainQuote = new QuoteMapper(quote);

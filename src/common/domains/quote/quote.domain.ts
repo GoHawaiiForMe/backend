@@ -43,9 +43,6 @@ export default class Quote implements IQuote {
   }
 
   update(data: Partial<QuoteProperties>): IQuote {
-    if (this.isConfirmed === data.isConfirmed) {
-      throw new ConflictError(ErrorMessage.QUOTE_CONFLICT_IS_CONFIRMED);
-    }
     this.isConfirmed = data.isConfirmed;
     return this;
   }
