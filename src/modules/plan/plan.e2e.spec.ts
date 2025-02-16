@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import request from 'supertest';
 import AppModule from 'src/app.module';
 import GlobalExceptionFilter from 'src/common/filters/globalExceptionFilter';
@@ -51,30 +51,28 @@ describe('PlanController (e2e)', () => {
   });
 
   describe('[GET /plans/groupCount]', () => {
-    it('should get serviceArea count', async () => {
+    it('플랜의 지역 통계', async () => {
       const { body, statusCode } = await request(app.getHttpServer()).get('/plans/groupCount');
 
-      expect(statusCode).toBe(200);
+      expect(statusCode).toBe(HttpStatus.OK);
       expect(body).toBeDefined();
     });
 
-    it('should get tripType count', async () => {
+    it('해당 지역의 tripType 통계', async () => {
       const { body, statusCode } = await request(app.getHttpServer()).get('/plans/groupCount?serviceArea=SEOUL');
 
-      expect(statusCode).toBe(200);
+      expect(statusCode).toBe(HttpStatus.OK);
       expect(body).toBeDefined();
     });
   });
 
   describe('[GET /plans/dreamer]', () => {
-    it('should get my plan List', async () => {
+    it('dreamer의 플랜 리스트', async () => {
       const { body, statusCode } = await request(app.getHttpServer())
         .get('/plans/dreamer')
         .set('authorization', `Bearer ${dreamerToken1}`);
 
-      const { list, totalCount } = body;
-
-      expect(statusCode).toBe(200);
+      expect(statusCode).toBe(HttpStatus.OK);
       expect(body).toBeDefined();
     });
 
@@ -83,7 +81,7 @@ describe('PlanController (e2e)', () => {
         .get('/plans/dreamer')
         .set('authorization', `Bearer ${makerToken}`);
 
-      expect(statusCode).toBe(403);
+      expect(statusCode).toBe(HttpStatus.FORBIDDEN);
     });
   });
 
@@ -93,7 +91,7 @@ describe('PlanController (e2e)', () => {
         .get('/plans/maker')
         .set('authorization', `Bearer ${makerToken}`);
 
-      expect(statusCode).toBe(200);
+      expect(statusCode).toBe(HttpStatus.OK);
       expect(body).toBeDefined();
     });
 
@@ -102,7 +100,7 @@ describe('PlanController (e2e)', () => {
         .get('/plans/maker')
         .set('authorization', `Bearer ${dreamerToken1}`);
 
-      expect(statusCode).toBe(403);
+      expect(statusCode).toBe(HttpStatus.FORBIDDEN);
     });
   });
 
@@ -112,7 +110,7 @@ describe('PlanController (e2e)', () => {
         .get(`/plans/${pendingPlanId}`)
         .set('authorization', `Bearer ${dreamerToken1}`);
 
-      expect(statusCode).toBe(200);
+      expect(statusCode).toBe(HttpStatus.OK);
       expect(body).toBeDefined();
     });
 
@@ -121,7 +119,7 @@ describe('PlanController (e2e)', () => {
         .get('/plans/1111111111111111111111')
         .set('authorization', `Bearer ${dreamerToken1}`);
 
-      expect(statusCode).toBe(404);
+      expect(statusCode).toBe(HttpStatus.NOT_FOUND);
     });
   });
 
@@ -141,7 +139,7 @@ describe('PlanController (e2e)', () => {
         .set('authorization', `Bearer ${dreamerToken1}`)
         .send(dto);
 
-      expect(statusCode).toBe(201);
+      expect(statusCode).toBe(HttpStatus.CREATED);
       expect(body).toBeDefined();
     });
 
@@ -151,7 +149,7 @@ describe('PlanController (e2e)', () => {
         .set('authorization', `Bearer ${makerToken}`)
         .send(dto);
 
-      expect(statusCode).toBe(403);
+      expect(statusCode).toBe(HttpStatus.FORBIDDEN);
     });
   });
 
@@ -162,7 +160,7 @@ describe('PlanController (e2e)', () => {
         .set('authorization', `Bearer ${dreamerToken1}`)
         .send({ assigneeId: makerId });
 
-      expect(statusCode).toBe(201);
+      expect(statusCode).toBe(HttpStatus.CREATED);
       expect(body).toBeDefined();
     });
 
@@ -172,7 +170,7 @@ describe('PlanController (e2e)', () => {
         .set('authorization', `Bearer ${dreamerToken2}`)
         .send({ assigneeId: makerId });
 
-      expect(statusCode).toBe(403);
+      expect(statusCode).toBe(HttpStatus.FORBIDDEN);
     });
 
     it('없는 플랜 id로 지정견적 요청하기, 404에러', async () => {
@@ -181,7 +179,7 @@ describe('PlanController (e2e)', () => {
         .set('authorization', `Bearer ${dreamerToken1}`)
         .send({ assigneeId: makerId });
 
-      expect(statusCode).toBe(404);
+      expect(statusCode).toBe(HttpStatus.NOT_FOUND);
     });
 
     it('메이커가 아닌 유저에게 지정견적 요청하기, 400에러', async () => {
@@ -190,7 +188,7 @@ describe('PlanController (e2e)', () => {
         .set('authorization', `Bearer ${dreamerToken1}`)
         .send({ assigneeId: dreamerId2 });
 
-      expect(statusCode).toBe(400);
+      expect(statusCode).toBe(HttpStatus.BAD_REQUEST);
     });
 
     it('메이커가 아닌 유저에게 지정견적 요청하기, 400에러', async () => {
@@ -199,7 +197,7 @@ describe('PlanController (e2e)', () => {
         .set('authorization', `Bearer ${dreamerToken1}`)
         .send({ assigneeId: dreamerId2 });
 
-      expect(statusCode).toBe(400);
+      expect(statusCode).toBe(HttpStatus.BAD_REQUEST);
     });
 
     it('존재하지 않는 유저의 id로 지정견적 요청하기, 400에러', async () => {
@@ -208,7 +206,7 @@ describe('PlanController (e2e)', () => {
         .set('authorization', `Bearer ${dreamerToken1}`)
         .send({ assigneeId: '11111111111' });
 
-      expect(statusCode).toBe(400);
+      expect(statusCode).toBe(HttpStatus.BAD_REQUEST);
     });
 
     it('지정견적 중복 요청하기, 409에러', async () => {
@@ -217,7 +215,7 @@ describe('PlanController (e2e)', () => {
         .set('authorization', `Bearer ${dreamerToken1}`)
         .send({ assigneeId: makerId });
 
-      expect(statusCode).toBe(409);
+      expect(statusCode).toBe(HttpStatus.CONFLICT);
     });
 
     it('PENDING이 아닌 플랜으로 지정견적 요청하기, 400에러', async () => {
@@ -226,7 +224,7 @@ describe('PlanController (e2e)', () => {
         .set('authorization', `Bearer ${dreamerToken1}`)
         .send({ assigneeId: dreamerId2 });
 
-      expect(statusCode).toBe(400);
+      expect(statusCode).toBe(HttpStatus.BAD_REQUEST);
     });
   });
 
@@ -236,7 +234,7 @@ describe('PlanController (e2e)', () => {
         .delete(`/plans/${pendingPlanId}/assign`)
         .set('authorization', `Bearer ${makerToken}`);
 
-      expect(statusCode).toBe(204);
+      expect(statusCode).toBe(HttpStatus.NO_CONTENT);
       expect(body).toEqual({});
     });
 
@@ -245,7 +243,7 @@ describe('PlanController (e2e)', () => {
         .delete(`/plans/${confirmedPlanId}/assign`)
         .set('authorization', `Bearer ${dreamerToken1}`);
 
-      expect(statusCode).toBe(403);
+      expect(statusCode).toBe(HttpStatus.FORBIDDEN);
     });
 
     it('지정견적 요청 받은적 없는 플랜의 지정견적 요청 거부하기, 400에러', async () => {
@@ -253,7 +251,7 @@ describe('PlanController (e2e)', () => {
         .delete(`/plans/${pendingPlanId}/assign`)
         .set('authorization', `Bearer ${makerToken}`);
 
-      expect(statusCode).toBe(400);
+      expect(statusCode).toBe(HttpStatus.BAD_REQUEST);
     });
 
     it('없는 플랜 id로 지정견적 요청 거부하기, 404에러', async () => {
@@ -261,7 +259,7 @@ describe('PlanController (e2e)', () => {
         .delete(`/plans/123123123123/assign`)
         .set('authorization', `Bearer ${makerToken}`);
 
-      expect(statusCode).toBe(404);
+      expect(statusCode).toBe(HttpStatus.NOT_FOUND);
     });
 
     it('PENDING이 아닌 플랜의 지정견적 요청 거부, 400에러', async () => {
@@ -269,7 +267,7 @@ describe('PlanController (e2e)', () => {
         .delete(`/plans/${confirmedPlanId}/assign`)
         .set('authorization', `Bearer ${makerToken}`);
 
-      expect(statusCode).toBe(400);
+      expect(statusCode).toBe(HttpStatus.BAD_REQUEST);
     });
   });
 
@@ -279,7 +277,7 @@ describe('PlanController (e2e)', () => {
         .patch(`/plans/${toBeCompletedPlanId}/complete`)
         .set('authorization', `Bearer ${dreamerToken1}`);
 
-      expect(statusCode).toBe(200);
+      expect(statusCode).toBe(HttpStatus.OK);
       expect(body).toBeDefined();
     });
 
@@ -288,7 +286,7 @@ describe('PlanController (e2e)', () => {
         .patch(`/plans/${pendingPlanId}/complete`)
         .set('authorization', `Bearer ${dreamerToken1}`);
 
-      expect(statusCode).toBe(400);
+      expect(statusCode).toBe(HttpStatus.BAD_REQUEST);
     });
 
     it('없는 Plan의 id로 완료 요청, 400에러', async () => {
@@ -296,7 +294,7 @@ describe('PlanController (e2e)', () => {
         .patch(`/plans/1123123123/complete`)
         .set('authorization', `Bearer ${dreamerToken1}`);
 
-      expect(statusCode).toBe(404);
+      expect(statusCode).toBe(HttpStatus.NOT_FOUND);
     });
 
     it('다른사람 플랜의 완료 요청, 403에러', async () => {
@@ -304,7 +302,7 @@ describe('PlanController (e2e)', () => {
         .patch(`/plans/${toBeCompletedPlanId}/complete`)
         .set('authorization', `Bearer ${dreamerToken2}`);
 
-      expect(statusCode).toBe(403);
+      expect(statusCode).toBe(HttpStatus.FORBIDDEN);
     });
   });
 
@@ -314,7 +312,7 @@ describe('PlanController (e2e)', () => {
         .delete(`/plans/${pendingPlanId}`)
         .set('authorization', `Bearer ${dreamerToken1}`);
 
-      expect(statusCode).toBe(204);
+      expect(statusCode).toBe(HttpStatus.NO_CONTENT);
       expect(body).toEqual({});
     });
 
@@ -323,7 +321,7 @@ describe('PlanController (e2e)', () => {
         .delete(`/plans/${confirmedPlanId}`)
         .set('authorization', `Bearer ${dreamerToken1}`);
 
-      expect(statusCode).toBe(400);
+      expect(statusCode).toBe(HttpStatus.BAD_REQUEST);
     });
 
     it('다른사람의 플랜 삭제하기 403에러', async () => {
@@ -331,7 +329,7 @@ describe('PlanController (e2e)', () => {
         .delete(`/plans/${toBeCompletedPlanId}`)
         .set('authorization', `Bearer ${dreamerToken2}`);
 
-      expect(statusCode).toBe(403);
+      expect(statusCode).toBe(HttpStatus.FORBIDDEN);
     });
   });
 });

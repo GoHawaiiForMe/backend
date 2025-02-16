@@ -56,5 +56,8 @@ export class CreateQuoteDataDTO {
 export class UpdateQuoteDataDTO {
   @Optional()
   @IsBoolean()
+  @Transform(({ value }) => {
+    if (value === true || undefined) return value;
+  })
   isConfirmed: boolean = true;
 }

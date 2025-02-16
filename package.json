@@ -19,7 +19,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./jest-e2e.json",
-    "test:e2e:plan": "jest src/modules/plan/plan.e2e.spec.ts --detectOpenHandles --coverage"
+    "test:e2e:plan": "jest src/modules/plan/plan.e2e.spec.ts --detectOpenHandles --coverage",
+    "test:e2e:quote": "jest src/modules/quote/quote.e2e.spec.ts --detectOpenHandles --coverage"
   },
   "prisma": {
     "schema": "src/providers/database/prisma/schema.prisma"
