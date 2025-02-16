@@ -7,11 +7,10 @@ import AuthService from '../auth/auth.service';
 import { RoleValues } from 'src/common/constants/role.type';
 import request from 'supertest';
 
-describe('QuoteController (e2e)', () => {
+describe('Quote Test (e2e)', () => {
   let app: INestApplication;
 
   const makerId1 = process.env.MAKER1_ID;
-  const makerId2 = process.env.MAKER2_ID;
   const dreamerId1 = process.env.DREAMER1_ID;
   const dreamerId2 = process.env.DREAMER2_ID;
 
@@ -109,7 +108,7 @@ describe('QuoteController (e2e)', () => {
     });
   });
 
-  describe('[GET /quotes/{quoteId} 견적 단일조회', () => {
+  describe('[GET /quotes/{quoteId}', () => {
     it('견적 단일 조회', async () => {
       const { body, statusCode } = await request(app.getHttpServer())
         .get(`/quotes/${quoteId1}`)

@@ -7,7 +7,7 @@ import DBClient from 'src/providers/database/prisma/DB.client';
 import { RoleValues } from 'src/common/constants/role.type';
 import AuthService from '../auth/auth.service';
 
-describe('PlanController (e2e)', () => {
+describe('Plan Test (e2e)', () => {
   let app: INestApplication;
 
   const makerId = process.env.MAKER1_ID;
