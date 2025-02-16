@@ -17,7 +17,7 @@ export default class PlanRepository {
 
   async findMany(options: PlanQueryOptions): Promise<IPlan[]> {
     const { orderBy, page, pageSize, reviewed, readyToComplete } = options || {};
-    const withQuote = reviewed === true || reviewed === false || readyToComplete === true;
+    const withQuote = reviewed !== null || readyToComplete === true;
 
     const whereConditions = this.buildWhereConditions(options);
     const orderByField: PlanOrderByField =
