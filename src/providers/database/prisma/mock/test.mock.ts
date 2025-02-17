@@ -1,4 +1,5 @@
 import { ProfileImageValues } from 'src/common/constants/image.type';
+import { OAuthProviderValues } from 'src/common/constants/oauth.type';
 import { RoleValues } from 'src/common/constants/role.type';
 import { ServiceAreaValues } from 'src/common/constants/serviceArea.type';
 import { StatusValues } from 'src/common/constants/status.type';
@@ -40,6 +41,15 @@ export const USERS = [
     password: '12345678',
     role: RoleValues.MAKER,
     coconut: 1000
+  },
+  {
+    id: 'ad3436a3-f163-4af7-8892-3a19f61894d0',
+    nickName: '구글메이커',
+    phoneNumber: '01012341234',
+    role: RoleValues.MAKER,
+    coconut: 1000,
+    provider: OAuthProviderValues.GOOGLE,
+    providerId: '1234'
   }
 ];
 export const MAKER_PROFILES = [

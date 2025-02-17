@@ -13,7 +13,7 @@ class DBClient extends PrismaClient implements OnModuleInit {
     const users = await Promise.all(
       USERS.map(async (user) => ({
         ...user,
-        password: await HashingPassword(user.password)
+        password: user.password ? await HashingPassword(user.password) : null
       }))
     );
 

@@ -10,6 +10,7 @@ import AuthRepository from './auth.repository';
 import { Role, RoleValues } from 'src/common/constants/role.type';
 import { DreamerProfileProperties, MakerProfileProperties } from 'src/common/types/user/profile.types';
 import { OAuthProvider } from 'src/common/constants/oauth.type';
+import UnauthorizedError from 'src/common/errors/unauthorizedError';
 
 @Injectable()
 export default class AuthService {
@@ -89,8 +90,13 @@ export default class AuthService {
   }
 
   createNewToken(oldToken: string) {
-    const { userId, role } = this.jwt.verify(oldToken);
-    return this.createTokens({ userId, role });
+    try {
+      const user = this.jwt.verify<{ userId: string; role: Role }>(oldToken);
+
+      return this.createTokens({ userId: user.userId, role: user.role });
+    } catch {
+      throw new UnauthorizedError(ErrorMessage.TOKEN_UNAUTHORIZED_VALIDATION);
+    }
   }
 
   createOAuthToken(payload: { provider: OAuthProvider; providerId: string }) {

@@ -39,12 +39,6 @@ export default class AuthController {
   }
 
   @Public()
-  @Post('tokenmaker')
-  tokenMaker() {
-    return this.service.createOAuthToken({ provider: 'KAKAO', providerId: 'q3984hf09qawefiubq2i' });
-  }
-
-  @Public()
   @Post('login')
   @ApiOperation({ summary: '로그인', description: '이메일과 비밀번호로 유저 로그인 요청을 보냅니다' })
   @ApiBody({ type: LoginDTO })

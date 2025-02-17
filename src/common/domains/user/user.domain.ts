@@ -49,7 +49,7 @@ export default class User implements IUser {
   }
 
   static async create(data: UserPropertiesFromDB): Promise<IUser> {
-    let hashedPassword: string;
+    let hashedPassword: string | null = null;
     if (data.password) {
       hashedPassword = await HashingPassword(data.password);
     }
