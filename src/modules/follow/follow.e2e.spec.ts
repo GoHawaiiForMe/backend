@@ -27,18 +27,14 @@ describe('Review Test (e2e)', () => {
     app.useGlobalPipes(new ValidationPipe({ transform: true })).useGlobalFilters(new GlobalExceptionFilter());
     await app.init();
 
-    const prismaDB = app.get<DBClient>(DBClient);
     const authService = app.get<AuthService>(AuthService);
 
-    await prismaDB.seedForTestEnvironment();
     dreamerToken = authService.createTokens({ userId: dreamerId, role: RoleValues.DREAMER }).accessToken;
     makerToken = authService.createTokens({ userId: makerId, role: RoleValues.MAKER }).accessToken;
   });
 
   afterAll(async () => {
-    const prismaDB = app.get<DBClient>(DBClient);
     await new Promise((resolve) => setTimeout(resolve, 500));
-    await prismaDB.$disconnect();
     await app.close();
   });
 
