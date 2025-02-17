@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Types } from 'mongoose';
+import mongoose, { HydratedDocument, Types } from 'mongoose';
 import { ChatType } from 'src/common/constants/chat.type';
 
 @Schema({ timestamps: true })
@@ -32,4 +32,5 @@ export type ChatDocument = HydratedDocument<Chat> & {
 };
 
 const ChatSchema = SchemaFactory.createForClass(Chat);
+export const ChatModel = mongoose.model('Chat', ChatSchema);
 export default ChatSchema;
