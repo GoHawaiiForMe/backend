@@ -10,7 +10,8 @@ import { Public } from 'src/common/decorators/public.decorator';
 export default class ReviewController {
   constructor(private readonly service: ReviewService) {}
 
-  @Get('')
+  @Get('me')
+  @Role('DREAMER')
   async getReviewByDreamer(
     @UserId() dreamerId: string,
     @Query() options: GetReviewsQueryDTO

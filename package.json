@@ -23,7 +23,8 @@
     "test:e2e": "jest --config ./jest-e2e.json",
     "test:e2e:plan": "jest src/modules/plan/plan.e2e.spec.ts --detectOpenHandles --coverage",
     "test:e2e:quote": "jest src/modules/quote/quote.e2e.spec.ts --detectOpenHandles --coverage",
-    "test:e2e:auth": "jest src/modules/auth/auth.e2e.spec.ts --detectOpenHandles"
+    "test:e2e:auth": "jest src/modules/auth/auth.e2e.spec.ts --detectOpenHandles --coverage",
+    "test:e2e:review": "jest src/modules/review/review.e2e.spec.ts --detectOpenHandles"
   },
   "prisma": {
     "schema": "src/providers/database/prisma/schema.prisma"

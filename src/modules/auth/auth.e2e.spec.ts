@@ -91,7 +91,7 @@ describe('Auth Test (e2e)', () => {
       expect(statusCode).toBe(HttpStatus.CREATED);
     });
 
-    it('새로운 소셜 로그인 유저 생성', async () => {
+    it('새로운 유저 생성, 새로운 소셜 로그인 유저 생성', async () => {
       const { statusCode } = await request(app.getHttpServer())
         .post('/auth/signup')
         .set('authorization', `Bearer ${googleToken}`)
@@ -100,7 +100,7 @@ describe('Auth Test (e2e)', () => {
       expect(statusCode).toBe(HttpStatus.CREATED);
     });
 
-    it('기존 소셜 로그인 유저인 경우 400에러', async () => {
+    it('새로운 유저 생성, 기존 소셜 로그인 유저인 경우 400에러', async () => {
       const { statusCode } = await request(app.getHttpServer())
         .post('/auth/signup')
         .send(socialDto)
@@ -109,14 +109,14 @@ describe('Auth Test (e2e)', () => {
       expect(statusCode).toBe(HttpStatus.BAD_REQUEST);
     });
 
-    it('이메일이 중복인 경우 400에러', async () => {
+    it('새로운 유저 생성, 이메일이 중복인 경우 400에러', async () => {
       email = existEmail;
       const { statusCode } = await request(app.getHttpServer()).post('/auth/signup').send(dto);
 
       expect(statusCode).toBe(HttpStatus.BAD_REQUEST);
     });
 
-    it('닉네임이 중복인 경우 400에러', async () => {
+    it('새로운 유저 생성, 닉네임이 중복인 경우 400에러', async () => {
       email = 'e2e@test.com';
       nickName = existNickName;
       const { statusCode } = await request(app.getHttpServer()).post('/auth/signup').send(dto);
@@ -135,7 +135,7 @@ describe('Auth Test (e2e)', () => {
       expect(body).toBeDefined();
     });
 
-    it('존재하지 않는 ID인 경우 400에러', async () => {
+    it('유저 로그인 요청, 존재하지 않는 ID인 경우 400에러', async () => {
       const { statusCode } = await request(app.getHttpServer())
         .post('/auth/login')
         .send({ ...dto, email: 'wrong' });
@@ -143,7 +143,7 @@ describe('Auth Test (e2e)', () => {
       expect(statusCode).toBe(HttpStatus.BAD_REQUEST);
     });
 
-    it('잘못된 비밀번호인 경우 400에러', async () => {
+    it('유저 로그인 요청, 잘못된 비밀번호인 경우 400에러', async () => {
       const { statusCode } = await request(app.getHttpServer())
         .post('/auth/login')
         .send({ ...dto, password: 'wrong' });
@@ -189,13 +189,13 @@ describe('Auth Test (e2e)', () => {
       expect(body).toBeDefined();
     });
 
-    it('리프레시토큰이 없는 경우 401에러', async () => {
+    it('리프레시토큰을 통해 토큰 재발급, 토큰이 없는 경우 401에러', async () => {
       const { statusCode } = await request(app.getHttpServer()).post(`/auth/refresh/token`);
 
       expect(statusCode).toBe(HttpStatus.UNAUTHORIZED);
     });
 
-    it('리프레시토큰이 유효하지 않은 경우 401에러', async () => {
+    it('리프레시토큰을 통해 토큰 재발급, 토큰이 유효하지 않은 경우 401에러', async () => {
       const { statusCode } = await request(app.getHttpServer())
         .post(`/auth/refresh/token`)
         .set('Cookie', `refreshToken=111`);
