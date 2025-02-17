@@ -5,13 +5,7 @@ import CHAT_ROOMS from './mock/chatRoom.mock';
 import 'dotenv/config';
 
 async function connectDB() {
-  try {
-    console.log(`process.env.MONGO_URI: ${process.env.MONGO_URI}`);
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log('MongoDB 연결 성공');
-  } catch (error) {
-    console.error('MongoDB 연결 실패', error);
-  }
+  await mongoose.connect(process.env.MONGO_URI);
 }
 
 export async function seed() {
@@ -22,11 +16,11 @@ export async function seed() {
 
   await ChatRoomModel.insertMany(CHAT_ROOMS);
 
-  console.log('Mongoose 시딩 완료!');
+  console.log('🌱 Mongoose Seeding completed!');
   mongoose.connection.close();
 }
 
-seed().catch((error) => {
-  console.error('시딩 실패', error);
+seed().catch((e) => {
+  console.error(e);
   mongoose.connection.close();
 });

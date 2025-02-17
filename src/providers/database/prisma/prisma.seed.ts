@@ -111,7 +111,7 @@ async function main(prisma: PrismaDBClient) {
   //     skipDuplicates: true
   //   });
   // });
-  console.log('🌱 Seeding completed!');
+  console.log('🌱 prisma Seeding completed!');
 }
 
 async function bootstrap() {
