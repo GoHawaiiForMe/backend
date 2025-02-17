@@ -54,7 +54,7 @@ describe('Review Test (e2e)', () => {
       expect(body).toBeDefined();
     });
 
-    it('리뷰 전체 목록 조회 - DREAMER가 아닌 경우 403에러', async () => {
+    it('리뷰 전체 목록 조회, DREAMER가 아닌 경우 403에러', async () => {
       const { statusCode } = await request(app.getHttpServer())
         .get('/reviews/me')
         .set('authorization', `Bearer ${makerToken}`);
@@ -93,7 +93,7 @@ describe('Review Test (e2e)', () => {
       expect(body).toBeDefined();
     });
 
-    it('리뷰 생성하기 - DREAMER가 아닌 경우 403에러', async () => {
+    it('리뷰 생성하기, DREAMER가 아닌 경우 403에러', async () => {
       const { statusCode } = await request(app.getHttpServer())
         .post('/reviews')
         .set('authorization', `Bearer ${makerToken}`)
@@ -102,7 +102,7 @@ describe('Review Test (e2e)', () => {
       expect(statusCode).toBe(HttpStatus.FORBIDDEN);
     });
 
-    it('리뷰 생성하기 - 플랜이 COMPLETED 상태가 아닌 경우 400에러', async () => {
+    it('리뷰 생성하기, 플랜이 COMPLETED 상태가 아닌 경우 400에러', async () => {
       const { statusCode } = await request(app.getHttpServer())
         .post('/reviews')
         .set('authorization', `Bearer ${dreamerToken}`)
