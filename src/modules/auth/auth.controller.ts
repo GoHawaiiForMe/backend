@@ -39,12 +39,6 @@ export default class AuthController {
   }
 
   @Public()
-  @Post('tokenmaker')
-  tokenMaker() {
-    return this.service.createOAuthToken({ provider: 'KAKAO', providerId: 'q3984hf09qawefiubq2i' });
-  }
-
-  @Public()
   @Post('login')
   @ApiOperation({ summary: '로그인', description: '이메일과 비밀번호로 유저 로그인 요청을 보냅니다' })
   @ApiBody({ type: LoginDTO })
@@ -165,7 +159,10 @@ export default class AuthController {
       throw new UnauthorizedError(ErrorMessage.REFRESH_TOKEN_NOT_FOUND);
     }
 
+    console.log('리프레시토큰 받음', refreshToken);
+
     const { accessToken, refreshToken: newRefreshToken } = this.service.createNewToken(refreshToken);
+    console.log('토큰 재발급 완료', accessToken);
 
     res.cookie('refreshToken', newRefreshToken, {
       path: '/user/token/refresh',
