@@ -27,7 +27,7 @@ import PointLogModule from './modules/pointLog/pointLog.module';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRootAsync({
-      useFactory: async () => getMongoConfig(process.env.MONGO_URI),
+      useFactory: async () => getMongoConfig(),
       connectionName: process.env.CONNECTION_NAME
     }),
     EventEmitterModule.forRoot(),

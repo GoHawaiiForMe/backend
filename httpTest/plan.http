@@ -67,3 +67,9 @@ Authorization: Bearer {{DREAMER1_TOKEN}}
 ###
 GET {{HOST_NAME}}/dreamer?readyToComplete=true
 Authorization: Bearer {{DREAMER1_TOKEN}}
+###
+GET {{HOST_NAME}}/dreamer?readyToComplete=true
+Authorization: Bearer {{DREAMER1_TOKEN}}
+###
+GET https://www.goforme.duckdns.org/plans/dreamer?readyToComplete=true
+Authorization: Bearer {{DREAMER1_TOKEN}}
