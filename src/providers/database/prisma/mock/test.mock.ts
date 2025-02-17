@@ -146,6 +146,17 @@ export const PLANS = [
     details: '플랜14디테일',
     status: StatusValues.CONFIRMED,
     dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0'
+  },
+  {
+    id: 'ded63481-0cbb-4556-acc5-9c193fd1643b',
+    createdAt: '2024-12-27T00:00:00.000Z',
+    title: '잠실 스카이타워 대신 올라가주세요',
+    tripDate: '2025-01-27T00:00:00.000Z',
+    tripType: TripTypeValues.ACTIVITY,
+    serviceArea: ServiceAreaValues.SEOUL,
+    details: '고소공포증이 있어서 메이커님이 대신 제가 스카이타워 올라가는 것처럼 영상 찍어주세요',
+    status: StatusValues.COMPLETED,
+    dreamerId: '66885a3c-50f4-427b-8a92-3702c6976fb0'
   }
 ];
 
@@ -178,6 +189,16 @@ export const QUOTES = [
     planId: '415037fb-b4da-43dc-a9e0-a68399fd5667',
     makerId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
     isConfirmed: false,
+    isAssigned: false
+  },
+  {
+    id: '7f6babc8-5f5c-47e3-a626-bc9da5687b16',
+    createdAt: '2024-12-28T00:00:00.000Z',
+    price: 100,
+    content: '높은 곳 좋아합니다!',
+    planId: 'ded63481-0cbb-4556-acc5-9c193fd1643b',
+    makerId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
+    isConfirmed: true,
     isAssigned: false
   }
 ];
