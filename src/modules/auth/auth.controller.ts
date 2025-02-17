@@ -159,10 +159,7 @@ export default class AuthController {
       throw new UnauthorizedError(ErrorMessage.REFRESH_TOKEN_NOT_FOUND);
     }
 
-    console.log('리프레시토큰 받음', refreshToken);
-
     const { accessToken, refreshToken: newRefreshToken } = this.service.createNewToken(refreshToken);
-    console.log('토큰 재발급 완료', accessToken);
 
     res.cookie('refreshToken', newRefreshToken, {
       path: '/user/token/refresh',
