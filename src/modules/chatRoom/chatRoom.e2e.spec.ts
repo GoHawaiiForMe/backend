@@ -3,10 +3,9 @@ import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import request from 'supertest';
 import AppModule from 'src/app.module';
 import GlobalExceptionFilter from 'src/common/filters/globalExceptionFilter';
-import DBClient from 'src/providers/database/prisma/DB.client';
 import { RoleValues } from 'src/common/constants/role.type';
 import AuthService from '../auth/auth.service';
-import { seed } from 'src/providers/database/mongoose/mongoose.seed';
+import { mongooseSeed } from 'src/providers/database/mongoose/mongoose.seed';
 
 describe('ChatRoom Test (e2e)', () => {
   let app: INestApplication;
@@ -33,7 +32,7 @@ describe('ChatRoom Test (e2e)', () => {
     await app.init();
 
     const authService = app.get<AuthService>(AuthService);
-    await seed();
+    await mongooseSeed();
 
     makerToken = authService.createTokens({ userId: makerId, role: RoleValues.MAKER }).accessToken;
     dreamerToken1 = authService.createTokens({ userId: dreamerId1, role: RoleValues.DREAMER }).accessToken;
@@ -89,6 +88,14 @@ describe('ChatRoom Test (e2e)', () => {
         .set('authorization', `Bearer ${dreamerToken2}`);
 
       expect(statusCode).toBe(HttpStatus.FORBIDDEN);
+    });
+
+    it('채팅방 단일조회, 없는 채팅방의 id으로 요청할 경우 404에러', async () => {
+      const { statusCode } = await request(app.getHttpServer())
+        .get(`/chatRooms/67a4bd750881d4415b0f3055`)
+        .set('authorization', `Bearer ${dreamerToken2}`);
+
+      expect(statusCode).toBe(HttpStatus.NOT_FOUND);
     });
   });
 });

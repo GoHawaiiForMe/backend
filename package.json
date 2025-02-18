@@ -29,6 +29,7 @@
     "test:e2e:notification": "jest src/modules/notification/notification.e2e.spec.ts --detectOpenHandles --coverage",
     "test:e2e:payment": "jest src/modules/payment/payment.e2e.spec.ts --detectOpenHandles --coverage",
     "test:e2e:chatRoom": "jest src/modules/chatRoom/chatRoom.e2e.spec.ts --detectOpenHandles --coverage",
+    "test:e2e:chat": "jest src/modules/chat/chat.e2e.spec.ts --detectOpenHandles --coverage",
     "test:e2e:review": "jest src/modules/review/review.e2e.spec.ts --detectOpenHandles --coverage"
   },
   "prisma": {
