@@ -23,10 +23,14 @@
     "test:e2e": "jest --config ./jest-e2e.json",
     "test:e2e:plan": "jest src/modules/plan/plan.e2e.spec.ts --detectOpenHandles --coverage",
     "test:e2e:quote": "jest src/modules/quote/quote.e2e.spec.ts --detectOpenHandles --coverage",
-    "test:e2e:auth": "jest src/modules/auth/auth.e2e.spec.ts --detectOpenHandles",
+    "test:e2e:auth": "jest src/modules/auth/auth.e2e.spec.ts --detectOpenHandles --coverage",
+    "test:e2e:user": "jest src/modules/user/user.e2e.spec.ts --detectOpenHandles --coverage",
+    "test:e2e:follow": "jest src/modules/follow/follow.e2e.spec.ts --detectOpenHandles --coverage",
+    "test:e2e:notification": "jest src/modules/notification/notification.e2e.spec.ts --detectOpenHandles --coverage",
+    "test:e2e:payment": "jest src/modules/payment/payment.e2e.spec.ts --detectOpenHandles --coverage",
     "test:e2e:chatRoom": "jest src/modules/chatRoom/chatRoom.e2e.spec.ts --detectOpenHandles --coverage",
     "test:e2e:chat": "jest src/modules/chat/chat.e2e.spec.ts --detectOpenHandles --coverage",
-    "test:e2e:review": "jest src/modules/review/review.e2e.spec.ts --detectOpenHandles"
+    "test:e2e:review": "jest src/modules/review/review.e2e.spec.ts --detectOpenHandles --coverage"
   },
   "prisma": {
     "schema": "src/providers/database/prisma/schema.prisma"
