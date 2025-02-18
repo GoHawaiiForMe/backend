@@ -5,7 +5,7 @@ const CHATS = [
     _id: '67b32df2e96b9068eb17deae',
     type: ChatType.TEXT,
     senderId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
-    chatRoomId: '67a4bd750881d4415b0f304e',
+    chatRoomId: '67b43a3c80d1dac1d2567382',
     content: '안녕하세요! 이 채팅방에 오신 걸 환영합니다.'
   },
   {

@@ -2,10 +2,10 @@ import 'dotenv/config';
 
 const TEST_CHAT_ROOMS = [
   {
-    _id: '67a4bd750881d4415b0f304e',
+    _id: '67b43a3c80d1dac1d2567382',
     isDeletedAt: null,
     planId: '6d201a98-1d06-4497-806a-fa123599019a',
-    planTitle: '서울 플랜13 견적',
+    planTitle: '테스트용!',
     planTripDate: '2024-10-06T00:00:00.000Z',
     quotePrice: 170,
     userIds: ['032d7bd4-116c-467b-9352-a14b0d494ef9', '66885a3c-50f4-427b-8a92-3702c6976fb0'],

@@ -6,8 +6,6 @@ import GlobalExceptionFilter from 'src/common/filters/globalExceptionFilter';
 import { RoleValues } from 'src/common/constants/role.type';
 import AuthService from '../auth/auth.service';
 import { mongooseSeed } from 'src/providers/database/mongoose/mongoose.seed';
-import path from 'path';
-import fs from 'fs';
 import { ChatType } from 'src/common/constants/chat.type';
 
 describe('Chat Test (e2e)', () => {
@@ -27,6 +25,8 @@ describe('Chat Test (e2e)', () => {
   let imageChatId: string;
 
   jest.setTimeout(100000);
+  jest.mock('fs');
+  jest.mock('path');
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -78,15 +78,13 @@ describe('Chat Test (e2e)', () => {
   });
 
   describe('[POST /chatRooms/{chatRoomId}/chats]', () => {
+    const mockFile = Buffer.from('T');
     it('채팅방 파일 업로드', async () => {
-      const filePath = path.join(__dirname, '../../../test/test.png');
-      const fileBuffer = fs.readFileSync(filePath);
-
       const { body, statusCode } = await request(app.getHttpServer())
         .post(`/chatRooms/${chatRoomId}/chats`)
         .set('authorization', `Bearer ${dreamerToken1}`)
         .field('type', ChatType.IMAGE)
-        .attach('file', fileBuffer, 'test.png');
+        .attach('file', mockFile, 'test.png');
 
       imageChatId = body.id;
       expect(statusCode).toBe(HttpStatus.CREATED);
@@ -94,40 +92,32 @@ describe('Chat Test (e2e)', () => {
     });
 
     it('채팅방 파일 업로드, 권한이 없는 채팅방에 업로드할 경우 403 에러', async () => {
-      const filePath = path.join(__dirname, '../../../test/test.png');
-      const fileBuffer = fs.readFileSync(filePath);
-
       const { statusCode } = await request(app.getHttpServer())
         .post(`/chatRooms/${chatRoomId}/chats`)
         .set('authorization', `Bearer ${dreamerToken2}`)
         .field('type', ChatType.IMAGE)
-        .attach('file', fileBuffer, 'test.png');
+        .attach('file', mockFile, 'test.png');
 
       expect(statusCode).toBe(HttpStatus.FORBIDDEN);
     });
 
     it('채팅방 파일 업로드, 비활성화 된 채팅방에 요청할 경우 400 에러', async () => {
-      const filePath = path.join(__dirname, '../../../test/test.png');
-      const fileBuffer = fs.readFileSync(filePath);
-
       const { statusCode } = await request(app.getHttpServer())
         .post(`/chatRooms/${deActiveChatRoomId}/chats`)
         .set('authorization', `Bearer ${dreamerToken1}`)
         .field('type', ChatType.IMAGE)
-        .attach('file', fileBuffer, 'test.png');
+        .attach('file', mockFile, 'test.png');
 
       expect(statusCode).toBe(HttpStatus.BAD_REQUEST);
     });
 
     it('채팅방 파일 업로드, 용량 초과 파일 업로드 요청할 경우 400 에러', async () => {
-      const filePath = path.join(__dirname, '../../../test/oversize.jpg');
-      const fileBuffer = fs.readFileSync(filePath);
-
+      const oversizedMockFile = Buffer.alloc(50 * 1024 * 1024);
       const { statusCode } = await request(app.getHttpServer())
         .post(`/chatRooms/${chatRoomId}/chats`)
         .set('authorization', `Bearer ${dreamerToken1}`)
         .field('type', ChatType.IMAGE)
-        .attach('file', fileBuffer, 'oversize.jpg');
+        .attach('file', oversizedMockFile, 'oversize.jpg');
 
       expect(statusCode).toBe(HttpStatus.BAD_REQUEST);
     });
