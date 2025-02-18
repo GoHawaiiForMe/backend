@@ -38,7 +38,6 @@ export default class NotificationController {
   }
 
   // 로그인 시 알림 SSE stream 연결 요청
-  @Public()
   @Sse('stream')
   stream(@UserId() userId: string): Observable<{ data: string }> {
     console.log(`SSE connection for userId: ${userId}`);
