@@ -14,6 +14,7 @@ describe('Review Test (e2e)', () => {
   const makerId = process.env.MAKER1_ID;
   const dreamerId = process.env.DREAMER1_ID;
   const dreamerPassword = process.env.DREAMER1_PASSWORD;
+  const dreamerNickName = process.env.DREAMER1_NICKNAME;
 
   let makerToken: string;
   let dreamerToken: string;
@@ -126,6 +127,15 @@ describe('Review Test (e2e)', () => {
       expect(body).toBeDefined();
     });
 
+    it('메이커 목록 조회-평점 높은순 정렬', async () => {
+      const { body, statusCode } = await request(app.getHttpServer())
+        .get('/users/makers?orderBy=RATINGS')
+        .set('authorization', `Bearer ${dreamerToken}`);
+
+      expect(statusCode).toBe(HttpStatus.OK);
+      expect(body).toBeDefined();
+    });
+
     it('메이커 목록 조회, 잘못된 ServiceArea인 경우 400에러', async () => {
       const { statusCode } = await request(app.getHttpServer()).get('/users/makers?serviceType=KOREA');
 
@@ -135,6 +145,7 @@ describe('Review Test (e2e)', () => {
 
   describe('[PATCH /users/update]', () => {
     const dto = { password: dreamerPassword, newPassword: '123456789' };
+    const nickNameDto = { nickName: dreamerNickName };
     const wrongDto = { ...dto, password: '1' };
 
     it('나의 정보 수정', async () => {
@@ -152,6 +163,15 @@ describe('Review Test (e2e)', () => {
         .patch('/users/update')
         .set('authorization', `Bearer ${dreamerToken}`)
         .send(wrongDto);
+
+      expect(statusCode).toBe(HttpStatus.BAD_REQUEST);
+    });
+
+    it('나의 정보 수정, 이미 존재하는 닉네임인 경우 400에러', async () => {
+      const { statusCode } = await request(app.getHttpServer())
+        .patch('/users/update')
+        .set('authorization', `Bearer ${makerToken}`)
+        .send(nickNameDto);
 
       expect(statusCode).toBe(HttpStatus.BAD_REQUEST);
     });
