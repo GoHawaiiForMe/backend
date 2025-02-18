@@ -70,7 +70,7 @@ export default class UserService {
     }
 
     await user.update(data);
-    const newUser = await this.repository.update(userId, user);
+    const newUser = await this.repository.update(user);
     return newUser.toClient();
   }
 

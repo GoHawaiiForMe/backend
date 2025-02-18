@@ -122,6 +122,7 @@ export default class User implements IUser {
 
   toDB(): UserProperties {
     return {
+      id: this.id,
       role: this.role,
       nickName: this.nickName,
       email: this.email,

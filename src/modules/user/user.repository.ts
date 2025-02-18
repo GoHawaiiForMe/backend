@@ -94,10 +94,10 @@ export default class UserRepository {
     });
   }
 
-  async update(id: string, data: IUser): Promise<IUser> {
+  async update(data: IUser): Promise<IUser> {
     const user = await this.db.user.update({
       where: {
-        id
+        id: data.getId()
       },
       data: data.toDB()
     });
