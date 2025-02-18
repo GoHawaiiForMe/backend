@@ -10,8 +10,12 @@ export default class ChatRoomMapper {
     if (!this.chatRoom) return null;
 
     let lastChat: string;
-
-    if (this.chatRoom.chatIds && this.chatRoom.chatIds[0] && 'content' in this.chatRoom.chatIds[0]) {
+    if (
+      this.chatRoom.chatIds &&
+      this.chatRoom.chatIds[0] &&
+      typeof this.chatRoom.chatIds[0] === 'object' &&
+      'content' in this.chatRoom.chatIds[0]
+    ) {
       switch (this.chatRoom.chatIds[0].type) {
         case ChatType.VIDEO:
           lastChat = '동영상';

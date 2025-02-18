@@ -9,7 +9,7 @@ const TEST_CHAT_ROOMS = [
     planTripDate: '2024-10-06T00:00:00.000Z',
     quotePrice: 170,
     userIds: ['032d7bd4-116c-467b-9352-a14b0d494ef9', '66885a3c-50f4-427b-8a92-3702c6976fb0'],
-    chatIds: [],
+    chatIds: ['67b32df2e96b9068eb17deae', '67b32e0199d100acacbad373'],
     isActive: true
   },
   {
@@ -20,7 +20,7 @@ const TEST_CHAT_ROOMS = [
     planTripDate: '2024-10-08T00:00:00.000Z',
     quotePrice: 175,
     userIds: ['032d7bd4-116c-467b-9352-a14b0d494ef9', '66885a3c-50f4-427b-8a92-3702c6976fb0'],
-    chatIds: [],
+    chatIds: ['67a4bd750881d4415b0f304f'],
     isActive: false
   }
 ];
@@ -116,4 +116,5 @@ const PRODUCTION_CHAT_ROOMS = [
 ];
 
 const CHAT_ROOMS = process.env.ENV === 'test' ? TEST_CHAT_ROOMS : PRODUCTION_CHAT_ROOMS;
+
 export default CHAT_ROOMS;
