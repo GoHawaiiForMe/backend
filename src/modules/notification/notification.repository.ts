@@ -18,9 +18,8 @@ export default class NotificationRepository {
 
   async findById(id: string): Promise<INotification> {
     const notification = await this.notification.findById(id).exec();
-    const data = { ...notification.toObject(), id: notification._id.toString() };
 
-    return new NotificationMapper(data).toDomain();
+    return new NotificationMapper(notification).toDomain();
   }
 
   async create(data: NotificationProperties): Promise<INotification> {

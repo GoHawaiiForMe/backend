@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Types } from 'mongoose';
+import mongoose, { HydratedDocument, Types } from 'mongoose';
 import { NotificationEvent } from 'src/common/types/notification/notification.types';
 
 @Schema({ timestamps: true })
@@ -19,7 +19,9 @@ export class Notification {
   @Prop({ default: false })
   isRead: boolean;
 }
-export type NotificationDocument = HydratedDocument<Notification>;
+export type NotificationDocument = HydratedDocument<Notification> & { createdAt?: Date; updatedAt?: Date };
 
 const NotificationSchema = SchemaFactory.createForClass(Notification);
+export const NotificationModel = mongoose.model('Notification', NotificationSchema);
+
 export default NotificationSchema;
