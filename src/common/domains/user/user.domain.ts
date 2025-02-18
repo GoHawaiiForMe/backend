@@ -70,7 +70,9 @@ export default class User implements IUser {
 
     this.nickName = data.nickName || this.nickName;
     this.phoneNumber = data.phoneNumber || this.phoneNumber;
-    this.coconut += data.coconut;
+    if (data.coconut) {
+      this.coconut += data.coconut;
+    }
 
     return this.toClient();
   }
@@ -114,6 +116,17 @@ export default class User implements IUser {
       id: this.id,
       role: this.role,
       nickName: this.nickName,
+      coconut: this.coconut
+    };
+  }
+
+  toDB(): UserProperties {
+    return {
+      role: this.role,
+      nickName: this.nickName,
+      email: this.email,
+      password: this.password,
+      phoneNumber: this.phoneNumber,
       coconut: this.coconut
     };
   }

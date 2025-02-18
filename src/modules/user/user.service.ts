@@ -41,7 +41,7 @@ export default class UserService {
     options: GetMakerListQueryDTO,
     userId?: string
   ): Promise<{ totalCount: number; list: Partial<MakerInfoAndProfileProperties>[] }> {
-    const users = await this.repository.findMany(options);
+    const users = await this.repository.findManyMakers(options);
     const list = users.map((user) => ({
       ...user.getWithMakerProfile(true),
       isFollowed: user.isFollowed(userId),
@@ -62,8 +62,15 @@ export default class UserService {
       throw new BadRequestError(ErrorMessage.USER_NOT_FOUND);
     }
 
+    if (data.nickName) {
+      const existNickName = this.repository.findByNickName(data.nickName);
+      if (existNickName) {
+        throw new BadRequestError(ErrorMessage.USER_NICKNAME_EXIST);
+      }
+    }
+
     await user.update(data);
-    const newUser = await this.repository.update(userId, user.get());
+    const newUser = await this.repository.update(userId, user);
     return newUser.toClient();
   }
 
@@ -92,6 +99,11 @@ export default class UserService {
 
   async getProfileCardData(makerId: string, dreamerId: string, withDetails?: boolean): Promise<ProfileCardResponseDTO> {
     const user = await this.repository.findByIdWithProfileAndFollow(makerId);
+
+    if (!user) {
+      throw new BadRequestError(ErrorMessage.USER_NOT_FOUND);
+    }
+
     const userData = user.getWithMakerProfile(withDetails);
     const stats = await this.userStats.get(makerId);
 
