@@ -52,6 +52,7 @@ export const USERS = [
     providerId: '1234'
   }
 ];
+
 export const MAKER_PROFILES = [
   {
     userId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
@@ -65,6 +66,16 @@ export const MAKER_PROFILES = [
   },
   {
     userId: 'ef846519-2b73-4be4-807e-f6ef1c07eb60',
+    image: ProfileImageValues.DEFAULT_3,
+    serviceTypes: [TripTypeValues.RELAXATION, TripTypeValues.SHOPPING],
+    serviceArea: [ServiceAreaValues.SEOUL],
+    gallery: 'https://www.instagram.com/codeit_kr/',
+    description: '여행의 꿈을 대신 이루어 드립니다!',
+    detailDescription:
+      '안녕하세요! 여행을 좋아하고, 저희 지역을 소개하고 싶은 드림 메이커입니다 :) 드리머 여러분이 꿈꾸는 여행을 대신해서 이루어 드릴게요!'
+  },
+  {
+    userId: 'ad3436a3-f163-4af7-8892-3a19f61894d0',
     image: ProfileImageValues.DEFAULT_3,
     serviceTypes: [TripTypeValues.RELAXATION, TripTypeValues.SHOPPING],
     serviceArea: [ServiceAreaValues.SEOUL],
@@ -87,6 +98,30 @@ export const DREAMER_PROFILES = [
     tripTypes: [TripTypeValues.FOOD_TOUR, TripTypeValues.SHOPPING],
     serviceArea: [ServiceAreaValues.CHUNGNAM, ServiceAreaValues.SEOUL],
     image: ProfileImageValues.DEFAULT_2
+  }
+];
+
+export const STATS = [
+  {
+    userId: '032d7bd4-116c-467b-9352-a14b0d494ef9',
+    averageRating: 3.6875,
+    totalReviews: 16,
+    totalFollows: 10,
+    totalConfirms: 20
+  },
+  {
+    userId: 'ef846519-2b73-4be4-807e-f6ef1c07eb60',
+    averageRating: 3.6875,
+    totalReviews: 16,
+    totalFollows: 10,
+    totalConfirms: 20
+  },
+  {
+    userId: 'ad3436a3-f163-4af7-8892-3a19f61894d0',
+    averageRating: 3.6875,
+    totalReviews: 16,
+    totalFollows: 10,
+    totalConfirms: 20
   }
 ];
 

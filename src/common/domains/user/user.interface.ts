@@ -16,6 +16,7 @@ export interface IUser {
   get(): UserProperties;
   toClient(): FilteredUserProperties;
   toClientAll(): Omit<UserProperties, 'password'>;
+  toDB(): UserProperties;
   signupData(): SignupProperties;
   OAuthData(): OAuthProperties;
   getId(): string;

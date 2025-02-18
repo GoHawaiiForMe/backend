@@ -22,9 +22,5 @@ export default class UpdateUserDTO {
 
   @IsString()
   @IsOptional()
-  confirmNewPassword: string;
-
-  @IsString()
-  @IsOptional()
   phoneNumber: string;
 }

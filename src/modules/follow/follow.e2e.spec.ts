@@ -3,11 +3,10 @@ import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import request from 'supertest';
 import AppModule from 'src/app.module';
 import GlobalExceptionFilter from 'src/common/filters/globalExceptionFilter';
-import DBClient from 'src/providers/database/prisma/DB.client';
 import { RoleValues } from 'src/common/constants/role.type';
 import AuthService from '../auth/auth.service';
 
-describe('Review Test (e2e)', () => {
+describe('Follow Test (e2e)', () => {
   let app: INestApplication;
 
   const makerId = process.env.MAKER1_ID;

@@ -20,6 +20,12 @@ export default class UserRepository {
     return new UserMapper(data).toDomain();
   }
 
+  async findByNickName(nickName: string): Promise<IUser> {
+    const data = await this.db.user.findUnique({ where: { nickName } });
+
+    return new UserMapper(data).toDomain();
+  }
+
   async findByIdWithProfileAndFollow(id: string) {
     const user = await this.db.user.findUnique({
       where: { id },
@@ -38,7 +44,7 @@ export default class UserRepository {
     return new UserMapper(user).toDomain();
   }
 
-  async findMany(options: GetMakerListQueryDTO): Promise<IUser[]> {
+  async findManyMakers(options: GetMakerListQueryDTO): Promise<IUser[]> {
     // 검색어, 지역 필터, 서비스 필터, 정렬(리뷰 많은순, 평점 높은순, 확정 많은순)
     const { page, pageSize, orderBy, serviceArea, serviceType, keyword } = options;
 
@@ -88,12 +94,12 @@ export default class UserRepository {
     });
   }
 
-  async update(id: string, data: Partial<UserProperties>): Promise<IUser> {
+  async update(data: IUser): Promise<IUser> {
     const user = await this.db.user.update({
       where: {
-        id
+        id: data.getId()
       },
-      data
+      data: data.toDB()
     });
 
     return new UserMapper(user).toDomain();
