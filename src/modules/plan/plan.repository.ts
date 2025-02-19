@@ -10,10 +10,16 @@ import { GroupByCount, PlanWhereConditions } from 'src/common/types/plan/plan.ty
 import { PlanOrderByField } from 'src/common/types/plan/plan.type';
 import { PlanQueryOptions } from 'src/common/types/plan/plan.type';
 import DBClient from 'src/providers/database/prisma/DB.client';
+import TransactionManager from 'src/providers/database/transaction/transaction.manager';
 
 @Injectable()
 export default class PlanRepository {
   constructor(private readonly db: DBClient) {}
+
+  private getPrismaClient() {
+    const prismaClient = TransactionManager.getPrismaClient();
+    return prismaClient || this.db; // 트랜잭션 클라이언트가 없으면 일반 DB 클라이언트를 반환
+  }
 
   async findMany(options: PlanQueryOptions): Promise<IPlan[]> {
     const { orderBy, page, pageSize, reviewed, readyToComplete } = options || {};
@@ -78,7 +84,7 @@ export default class PlanRepository {
   }
 
   async findById(id: string): Promise<IPlan> {
-    const plan = await this.db.plan.findUnique({
+    const plan = await this.getPrismaClient().plan.findUnique({
       where: { id, isDeletedAt: null },
       include: {
         dreamer: { select: { id: true, nickName: true } },
@@ -147,7 +153,7 @@ export default class PlanRepository {
   }
 
   async delete(id: string): Promise<IPlan> {
-    const plan = await this.db.plan.update({
+    const plan = await this.getPrismaClient().plan.update({
       where: { id, isDeletedAt: null },
       data: {
         isDeletedAt: new Date(),

@@ -22,6 +22,8 @@ import GroupField from 'src/common/constants/groupByField.enum';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import { PointEventEnum } from 'src/common/constants/pointEvent.type';
+import TransactionManager from 'src/providers/database/transaction/transaction.manager';
+import Transactional from 'src/common/decorators/transaction.decorator';
 
 @Injectable()
 export default class PlanService {
@@ -31,6 +33,7 @@ export default class PlanService {
     private readonly quoteService: QuoteService,
     private readonly userService: UserService,
     private readonly chatRoomService: ChatRoomService,
+    private readonly transactionManager: TransactionManager,
     private readonly eventEmitter: EventEmitter2
   ) {}
 
@@ -277,6 +280,7 @@ export default class PlanService {
     }
   }
 
+  @Transactional()
   async deletePlan(id: string, userId: string): Promise<PlanToClientProperties> {
     const plan = await this.repository.findById(id);
 
@@ -303,6 +307,7 @@ export default class PlanService {
         payload: { nickName: dreamerNickName, planTitle }
       })
     );
+    //throw new Error('임시에러');
 
     return deletedPlan.toClient();
   }

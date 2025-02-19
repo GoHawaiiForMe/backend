@@ -22,13 +22,14 @@ import ChatRoomModule from './modules/chatRoom/chatRoom.module';
 import AuthModule from './modules/auth/auth.module';
 import S3Module from './providers/storage/s3/s3.module';
 import PointLogModule from './modules/pointLog/pointLog.module';
+import TransactionModule from './providers/database/transaction/transaction.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRootAsync({
-      useFactory: async () => getMongoConfig(),
-      connectionName: process.env.CONNECTION_NAME
+      useFactory: async () => getMongoConfig()
+      //connectionName: process.env.CONNECTION_NAME
     }),
     EventEmitterModule.forRoot(),
     BullmqModule,
@@ -47,7 +48,8 @@ import PointLogModule from './modules/pointLog/pointLog.module';
     ChatModule,
     ReviewModule,
     S3Module,
-    PointLogModule
+    PointLogModule,
+    TransactionModule
   ],
   providers: [
     {
