@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import AppModule from './app.module';
 import GlobalExceptionFilter from './common/filters/globalExceptionFilter';
+import { logMiddleware } from './common/logger/log.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -44,6 +45,8 @@ async function bootstrap() {
 
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, documentFactory);
+
+  app.use(logMiddleware);
 
   await app.listen(process.env.PORT ?? 3000);
 }
