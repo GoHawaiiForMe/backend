@@ -22,6 +22,8 @@ import GroupField from 'src/common/constants/groupByField.enum';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import { PointEventEnum } from 'src/common/constants/pointEvent.type';
+import TransactionManager from 'src/providers/database/transaction/transaction.manager';
+import Transactional from 'src/common/decorators/transaction.decorator';
 
 @Injectable()
 export default class PlanService {
@@ -31,6 +33,7 @@ export default class PlanService {
     private readonly quoteService: QuoteService,
     private readonly userService: UserService,
     private readonly chatRoomService: ChatRoomService,
+    private readonly transactionManager: TransactionManager,
     private readonly eventEmitter: EventEmitter2
   ) {}
 
@@ -211,17 +214,17 @@ export default class PlanService {
     return updatedPlan.toClient();
   }
 
+  @Transactional()
   async updatePlanComplete(id: string, userId: string): Promise<PlanToClientProperties> {
     const plan = await this.repository.findById(id);
 
     if (!plan) throw new NotFoundError(ErrorMessage.PLAN_NOT_FOUND);
-
     if (plan.getDreamerId() !== userId) throw new ForbiddenError(ErrorMessage.USER_FORBIDDEN_NOT_OWNER);
 
     plan.updateComplete();
     const updatedPlan = await this.repository.update(plan);
     const planId = plan.getId();
-    await this.chatRoomService.deActive({ planId });
+    await this.chatRoomService.deActive(planId);
 
     await this.pointQueue.add('points', {
       userId: plan.getConfirmedMakerId(),
@@ -264,7 +267,7 @@ export default class PlanService {
 
       await this.repository.updateMany({ ids: planIds, status: updateStatus });
       if (status === StatusValues.CONFIRMED) {
-        await this.chatRoomService.deActive({ planIds });
+        await this.chatRoomService.deActiveMany(planIds);
 
         plans.map(async (plan) => {
           await this.pointQueue.add('points', {
@@ -277,6 +280,7 @@ export default class PlanService {
     }
   }
 
+  @Transactional()
   async deletePlan(id: string, userId: string): Promise<PlanToClientProperties> {
     const plan = await this.repository.findById(id);
 
@@ -303,7 +307,6 @@ export default class PlanService {
         payload: { nickName: dreamerNickName, planTitle }
       })
     );
-
     return deletedPlan.toClient();
   }
 }

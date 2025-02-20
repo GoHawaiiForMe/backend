@@ -10,10 +10,16 @@ import { GroupByCount, PlanWhereConditions } from 'src/common/types/plan/plan.ty
 import { PlanOrderByField } from 'src/common/types/plan/plan.type';
 import { PlanQueryOptions } from 'src/common/types/plan/plan.type';
 import DBClient from 'src/providers/database/prisma/DB.client';
+import TransactionManager from 'src/providers/database/transaction/transaction.manager';
 
 @Injectable()
 export default class PlanRepository {
   constructor(private readonly db: DBClient) {}
+
+  private getPrismaClient() {
+    const prismaClient = TransactionManager.getPrismaClient();
+    return prismaClient || this.db; // 트랜잭션 클라이언트가 없으면 일반 DB 클라이언트를 반환
+  }
 
   async findMany(options: PlanQueryOptions): Promise<IPlan[]> {
     const { orderBy, page, pageSize, reviewed, readyToComplete } = options || {};
@@ -23,7 +29,7 @@ export default class PlanRepository {
     const orderByField: PlanOrderByField =
       orderBy === PlanOrder.RECENT ? { createdAt: SortOrder.DESC } : { tripDate: SortOrder.ASC };
 
-    const plans = await this.db.plan.findMany({
+    const plans = await this.getPrismaClient().plan.findMany({
       where: whereConditions,
       orderBy: orderByField,
       take: pageSize,
@@ -51,7 +57,7 @@ export default class PlanRepository {
 
   async totalCount(options: PlanQueryOptions): Promise<number> {
     const whereConditions = this.buildWhereConditions(options);
-    const totalCount = await this.db.plan.count({
+    const totalCount = await this.getPrismaClient().plan.count({
       where: whereConditions
     });
 
@@ -63,7 +69,7 @@ export default class PlanRepository {
       options.groupByField === GroupByField.TRIP_TYPE ? GroupByField.TRIP_TYPE : GroupByField.SERVICE_AREA;
     const whereConditions = this.buildWhereConditions(options);
 
-    const groupByCount = await this.db.plan.groupBy({
+    const groupByCount = await this.getPrismaClient().plan.groupBy({
       by: [groupByField],
       where: whereConditions,
       _count: { id: true }
@@ -78,7 +84,7 @@ export default class PlanRepository {
   }
 
   async findById(id: string): Promise<IPlan> {
-    const plan = await this.db.plan.findUnique({
+    const plan = await this.getPrismaClient().plan.findUnique({
       where: { id, isDeletedAt: null },
       include: {
         dreamer: { select: { id: true, nickName: true } },
@@ -93,7 +99,7 @@ export default class PlanRepository {
 
   async create(data: IPlan): Promise<IPlan> {
     const { title, tripDate, tripType, serviceArea, details, address, dreamerId } = data.toDB();
-    const plan = await this.db.plan.create({
+    const plan = await this.getPrismaClient().plan.create({
       data: {
         title,
         tripDate,
@@ -116,7 +122,7 @@ export default class PlanRepository {
 
   async update(data: IPlan): Promise<IPlan> {
     const { id, status, assigneeId, isAssigned } = data.toDB();
-    const plan = await this.db.plan.update({
+    const plan = await this.getPrismaClient().plan.update({
       where: { id },
       data: {
         ...(status && { status }),
@@ -138,7 +144,7 @@ export default class PlanRepository {
 
   async updateMany(data: { ids: string[]; status: Status }): Promise<number> {
     const { ids, status } = data;
-    const results = await this.db.plan.updateMany({
+    const results = await this.getPrismaClient().plan.updateMany({
       where: { id: { in: ids } },
       data: { status }
     });
@@ -147,7 +153,7 @@ export default class PlanRepository {
   }
 
   async delete(id: string): Promise<IPlan> {
-    const plan = await this.db.plan.update({
+    const plan = await this.getPrismaClient().plan.update({
       where: { id, isDeletedAt: null },
       data: {
         isDeletedAt: new Date(),

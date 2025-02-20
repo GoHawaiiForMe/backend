@@ -1,6 +1,9 @@
 @CHAT_HOST_NAME=http://localhost:4000/chats
 @DREAMER1_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Njg4NWEzYy01MGY0LTQyN2ItOGE5Mi0zNzAyYzY5NzZmYjAiLCJyb2xlIjoiRFJFQU1FUiIsImlhdCI6MTczNzk4MzQ1MSwiZXhwIjoxNzQxNDM5NDUxfQ.V2qa2oB-m757NnAXYkefAWL_Vewwh526s97SYh2LuJc
+@MAKER1_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMzJkN2JkNC0xMTZjLTQ2N2ItOTM1Mi1hMTRiMGQ0OTRlZjkiLCJyb2xlIjoiTUFLRVIiLCJpYXQiOjE3Mzc5ODM0MjYsImV4cCI6MTc0MTQzOTQyNn0.v5caBNbWAusy25h275WtSiJwYXPqyFC8vWPG3fO6r7E
+
 @CHATROOM1_ID=67a4e29ba4b7b6ddc6ef5ac6
+
 @EXAMPLE_CHAT_ROOM=67a4e29ba4b7b6ddc6ef5ac6
 GET http://localhost:4000/chatRooms
 Authorization: Bearer {{DREAMER1_TOKEN}}
@@ -11,8 +14,8 @@ Authorization: Bearer {{DREAMER1_TOKEN}}
 GET http://localhost:4000/chatRooms/{{CHATROOM1_ID}}/chats
 Authorization: Bearer {{DREAMER1_TOKEN}}
 ###
-DELETE http://localhost:4000/chats/67a5beeed80a6a8eb3a6c3d6
-Authorization: Bearer {{DREAMER1_TOKEN}}
+DELETE http://localhost:4000/chats/67b32df2e96b9068eb17deae
+Authorization: Bearer MAKER
 ###
 POST http://localhost:4000/chatRooms
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMzJkN2JkNC0xMTZjLTQ2N2ItOTM1Mi1hMTRiMGQ0OTRlZjkiLCJyb2xlIjoiTUFLRVIiLCJpYXQiOjE3Mzc3MjU0NzUsImV4cCI6MTczNzgxMTg3NX0.Q6afR4kJ1KtTbabL9dqtHEtT9cYSoF698ngtulSy0yY
