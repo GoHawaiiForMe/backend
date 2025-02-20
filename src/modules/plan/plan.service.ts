@@ -55,6 +55,7 @@ export default class PlanService {
     options: PlanQueryOptions
   ): Promise<{ totalCount: number; groupByCount: GroupByCount; list: PlanToClientProperties[] }> {
     const makerProfile = await this.userService.getProfile(RoleValues.MAKER, userId);
+
     const serviceArea: ServiceArea[] = makerProfile.serviceArea;
 
     options.serviceArea = serviceArea; //NOTE. 메이커의 서비스지역 필터링
@@ -179,7 +180,13 @@ export default class PlanService {
       throw new BadRequestError(ErrorMessage.PLAN_ASSIGN_NOT_MAKER);
     }
 
+    const assigneeServiceArea = (await this.userService.getProfile(RoleValues.MAKER, assigneeId)).serviceArea;
+    if (!assigneeServiceArea.includes(plan.getServiceArea())) {
+      throw new BadRequestError(ErrorMessage.PLAN_MAKER_NOT_IN_SERVICE_AREA);
+    }
+
     plan.requestAssign(data);
+
     const updatedPlan = await this.repository.update(plan);
 
     const nickName = updatedPlan.getDreamerNickName();
