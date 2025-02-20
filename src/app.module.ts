@@ -22,6 +22,7 @@ import ChatRoomModule from './modules/chatRoom/chatRoom.module';
 import AuthModule from './modules/auth/auth.module';
 import S3Module from './providers/storage/s3/s3.module';
 import PointLogModule from './modules/pointLog/pointLog.module';
+import { LoggerModule } from './common/logger/winston/logger.module';
 import TransactionModule from './providers/database/transaction/transaction.module';
 
 @Module({
@@ -32,6 +33,7 @@ import TransactionModule from './providers/database/transaction/transaction.modu
       //connectionName: process.env.CONNECTION_NAME
     }),
     EventEmitterModule.forRoot(),
+    LoggerModule,
     BullmqModule,
     RedisModule,
     PrismaModule,
