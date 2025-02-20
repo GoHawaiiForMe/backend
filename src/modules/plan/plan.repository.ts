@@ -17,8 +17,7 @@ export default class PlanRepository {
   constructor(private readonly db: DBClient) {}
 
   private getPrismaClient() {
-    const prismaClient = TransactionManager.getPrismaClient();
-    return prismaClient || this.db; // 트랜잭션 클라이언트가 없으면 일반 DB 클라이언트를 반환
+    return TransactionManager.getPrismaClient() || this.db;
   }
 
   async findMany(options: PlanQueryOptions): Promise<IPlan[]> {
