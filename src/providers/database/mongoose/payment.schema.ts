@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Types } from 'mongoose';
+import mongoose, { HydratedDocument, Types } from 'mongoose';
 import { PaymentStatusEnum } from 'src/common/types/payment/payment.type';
 
 @Schema({ timestamps: true })
@@ -29,7 +29,9 @@ export class Payment {
   status: PaymentStatusEnum;
 }
 
-export type PaymentDocument = HydratedDocument<Payment>;
+export type PaymentDocument = HydratedDocument<Payment> & { createdAt?: Date; updatedAt?: Date };
 
 const PaymentSchema = SchemaFactory.createForClass(Payment);
+export const PaymentModel = mongoose.model('Payment', PaymentSchema);
+
 export default PaymentSchema;

@@ -11,8 +11,7 @@ export default class PaymentRepository {
   constructor(@InjectModel(Payment.name) private payment: Model<Payment>) {}
 
   async findById(id: string): Promise<IPayment> {
-    const data = await this.payment.findById(id).exec();
-    const payment = { ...data.toObject(), id: data._id.toString() };
+    const payment = await this.payment.findById(id).exec();
 
     return new PaymentMapper(payment).toDomain();
   }

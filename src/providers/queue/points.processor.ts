@@ -37,12 +37,11 @@ export class PointsProcessor extends WorkerHost {
       attempt++;
     }
 
-    console.error(ErrorMessage.QUEUE_MAX_RETRY_EXCEEDED);
-
     // 자정에 다시 시도하는 scheduler에서 실패한 작업만 실행하도록 큐에 추가
     if (jobs.length > 0) {
       const failedJobKeys = jobs.map((job) => job.key);
       await job.updateData({ ...job.data, retry: failedJobKeys });
+      console.error(ErrorMessage.QUEUE_MAX_RETRY_EXCEEDED);
     }
   }
 }

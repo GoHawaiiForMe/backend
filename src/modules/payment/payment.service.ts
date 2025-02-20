@@ -5,13 +5,12 @@ import Payment from 'src/common/domains/payment/payment.domain';
 import UnauthorizedError from 'src/common/errors/unauthorizedError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import NotFoundError from 'src/common/errors/notFoundError';
-import InternalServerError from 'src/common/errors/internalServerError';
-import BadRequestError from 'src/common/errors/badRequestError';
 import { SavePaymentDTO } from 'src/common/types/payment/payment.dto';
 import { PGService } from 'src/providers/pg/pg.service';
 import { Queue } from 'bullmq';
 import { InjectQueue } from '@nestjs/bullmq';
 import { PointEventEnum } from 'src/common/constants/pointEvent.type';
+import ConflictError from 'src/common/errors/conflictError';
 
 @Injectable()
 export default class PaymentService {
@@ -50,7 +49,7 @@ export default class PaymentService {
     const actualPayment = await this.pg.getPayment(paymentId);
 
     if (actualPayment.status !== PaymentStatusEnum.PAID) {
-      throw new BadRequestError(ErrorMessage.PAYMENT_STATUS_BAD_REQUEST);
+      throw new ConflictError(ErrorMessage.PAYMENT_STATUS_CONFLICT);
     }
 
     // 실결제 정보와 DB 결제 정보 검증 및 동기화
@@ -58,7 +57,7 @@ export default class PaymentService {
     if (!isValidPayment) {
       const reason = ErrorMessage.PAYMENT_AMOUNT_ERROR;
       await this.pg.cancelPayment(paymentId, reason);
-      throw new InternalServerError(ErrorMessage.PAYMENT_AMOUNT_ERROR);
+      throw new ConflictError(reason);
     }
     payment.update(PaymentStatusEnum.PAID);
 

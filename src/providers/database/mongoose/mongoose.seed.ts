@@ -6,6 +6,8 @@ import CHAT_ROOMS from './mock/chatRoom.mock';
 import { NotificationModel } from './notification.schema';
 import NOTIFICATIONS from './mock/notification.mock';
 import CHATS from './mock/chat.mock';
+import { PaymentModel } from './payment.schema';
+import PAYMENTS from './mock/payment.mock';
 
 async function connectDB() {
   await mongoose.connect(process.env.MONGO_URI);
@@ -19,10 +21,12 @@ export async function mongooseSeed() {
   await ChatModel.deleteMany();
   await ChatRoomModel.deleteMany();
   await NotificationModel.deleteMany();
+  await PaymentModel.deleteMany();
 
   await ChatRoomModel.insertMany(CHAT_ROOMS);
   await ChatModel.insertMany(CHATS);
   await NotificationModel.insertMany(NOTIFICATIONS);
+  await PaymentModel.insertMany(PAYMENTS);
 
   console.log('🌱 Mongoose Seeding completed!');
   isSeeded = true;

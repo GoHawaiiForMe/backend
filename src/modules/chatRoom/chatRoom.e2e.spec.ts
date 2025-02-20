@@ -10,12 +10,9 @@ import { mongooseSeed } from 'src/providers/database/mongoose/mongoose.seed';
 describe('ChatRoom Test (e2e)', () => {
   let app: INestApplication;
 
-  const makerId = process.env.MAKER1_ID;
-
   const dreamerId1 = process.env.DREAMER1_ID;
   const dreamerId2 = process.env.DREAMER2_ID;
 
-  let makerToken: string;
   let dreamerToken1: string;
   let dreamerToken2: string;
   let chatRoomId: string;
@@ -34,7 +31,6 @@ describe('ChatRoom Test (e2e)', () => {
     const authService = app.get<AuthService>(AuthService);
     await mongooseSeed();
 
-    makerToken = authService.createTokens({ userId: makerId, role: RoleValues.MAKER }).accessToken;
     dreamerToken1 = authService.createTokens({ userId: dreamerId1, role: RoleValues.DREAMER }).accessToken;
     dreamerToken2 = authService.createTokens({ userId: dreamerId2, role: RoleValues.DREAMER }).accessToken;
   });

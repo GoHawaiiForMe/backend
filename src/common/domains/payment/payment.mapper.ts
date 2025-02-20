@@ -1,16 +1,14 @@
-import { PaymentProperties } from 'src/common/types/payment/payment.type';
 import Payment from './payment.domain';
+import { PaymentDocument } from 'src/providers/database/mongoose/payment.schema';
 
 export default class PaymentMapper {
-  constructor(private readonly payment: PaymentProperties) {}
+  constructor(private readonly payment: PaymentDocument) {}
 
   toDomain() {
-    if (!this.payment) {
-      return null;
-    }
+    if (!this.payment) return null;
 
     return new Payment({
-      id: this.payment.id,
+      id: this.payment._id.toString(),
       paymentId: this.payment.paymentId,
       userId: this.payment.userId,
       orderName: this.payment.orderName,
