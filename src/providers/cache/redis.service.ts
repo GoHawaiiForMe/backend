@@ -32,6 +32,6 @@ export default class RedisService {
       totalFollows: stats.totalFollows.toString(),
       totalConfirms: stats.totalConfirms.toString()
     });
-    await this.redis.expire(key, 86400); // 캐싱 데이터 만료 임시 설정: 24시간
+    await this.redis.expire(key, 3600); // 캐싱 데이터 만료 설정: 1시간
   }
 }
