@@ -40,7 +40,7 @@ export default class TransactionManager {
   }
 
   static getPrismaClient(): PrismaClient {
-    return asyncLocalStorage.getStore().get('prisma');
+    return asyncLocalStorage?.getStore()?.get('prisma');
   }
 
   static getMongoSession(): mongoose.ClientSession {
