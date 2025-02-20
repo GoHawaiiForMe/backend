@@ -20,13 +20,7 @@ export default class ChatRepository {
   async findChatsByChatRoomId(options: ChatQueryOptions): Promise<IChat[]> {
     const { chatRoomId, page, pageSize } = options;
     const skip = (page - 1) * pageSize;
-    const session = TransactionManager.getMongoSession();
-    const chats = await this.chat
-      .find({ chatRoomId })
-      .skip(skip)
-      .limit(pageSize)
-      .sort({ createdAt: -1 })
-      .session(session);
+    const chats = await this.chat.find({ chatRoomId }).skip(skip).limit(pageSize).sort({ createdAt: -1 });
 
     const domainChats = chats.map((chat) => new ChatMapper(chat).toDomain());
 
@@ -34,8 +28,7 @@ export default class ChatRepository {
   }
 
   async totalCount(chatRoomId: string): Promise<number> {
-    const session = TransactionManager.getMongoSession();
-    const totalCount = await this.chat.countDocuments({ chatRoomId }).session(session);
+    const totalCount = await this.chat.countDocuments({ chatRoomId });
     return totalCount;
   }
 
