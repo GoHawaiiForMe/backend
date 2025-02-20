@@ -13,12 +13,15 @@ import NotFoundError from 'src/common/errors/notFoundError';
 import ForbiddenError from 'src/common/errors/forbiddenError';
 import ConflictError from 'src/common/errors/conflictError';
 import { ORIGIN, RESIZE } from 'src/common/constants/s3.constants';
+import TransactionManager from 'src/providers/database/transaction/transaction.manager';
+import Transactional from 'src/common/decorators/transaction.decorator';
 
 @Injectable()
 export default class ChatService {
   constructor(
     private readonly chatRepository: ChatRepository,
     private readonly s3Service: S3Service,
+    private readonly transactionManager: TransactionManager,
     @Inject(forwardRef(() => ChatRoomService)) private readonly chatRoomService: ChatRoomService
   ) {}
 
@@ -78,6 +81,7 @@ export default class ChatService {
     return convertChat;
   }
 
+  @Transactional()
   async deleteChat(data: { id: string; userId: string }): Promise<void> {
     const { id, userId } = data;
     const chatDomain = await this.getChatDomain({ id });
@@ -94,7 +98,7 @@ export default class ChatService {
     const isActive = await this.chatRoomService.getIsActiveById(chatRoomId);
     if (!isActive) throw new BadRequestError(ErrorMessage.CHAT_ROOM_NOT_IS_ACTIVE);
 
-    await this.chatRepository.delete(id); //TODO. transaction
+    await this.chatRepository.delete(id);
   }
 
   private handleDeletedMessage(chatData: ChatToClientProperties): ChatToClientProperties {

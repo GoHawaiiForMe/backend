@@ -13,6 +13,7 @@ import { ChatReference, FileUploadData, FindChatRoomByIdOptions } from 'src/comm
 import NotFoundError from 'src/common/errors/notFoundError';
 import IChatRoom from 'src/common/domains/chatRoom/chatRoom.interface';
 import BadRequestError from 'src/common/errors/badRequestError';
+import Transactional from 'src/common/decorators/transaction.decorator';
 
 @Injectable()
 export default class ChatRoomService {
@@ -120,14 +121,15 @@ export default class ChatRoomService {
     return chatData;
   }
 
-  async deActive(data: { planId?: string; planIds?: string[] }): Promise<void> {
-    const { planId, planIds } = data || {};
-    if (planId) {
-      const chatRoom = await this.getChatRoomDomain({ planId });
-      chatRoom.update();
-      await this.chatRoomRepository.update(chatRoom);
-    }
-    if (planIds) await this.chatRoomRepository.updateMany(planIds);
+  @Transactional()
+  async deActive(planId: string): Promise<void> {
+    const chatRoom = await this.getChatRoomDomain({ planId });
+    chatRoom.update();
+    await this.chatRoomRepository.update(chatRoom);
+  }
+
+  async deActiveMany(planIds: string[]): Promise<void> {
+    await this.chatRoomRepository.updateMany(planIds);
   }
 
   async sendMessageToChatRoom(chat: ChatReference) {
