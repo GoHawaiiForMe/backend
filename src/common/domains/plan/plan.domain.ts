@@ -228,4 +228,8 @@ export default class Plan implements IPlan {
   getTripType(): TripType {
     return this.tripType;
   }
+
+  getServiceArea(): ServiceArea {
+    return this.serviceArea;
+  }
 }

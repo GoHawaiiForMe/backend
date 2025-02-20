@@ -192,7 +192,7 @@ export default class PlanRepository {
 
     if (role === RoleValues.MAKER) {
       whereConditions.status = { in: status }; //NOTE. Maker 전용 api 조건
-      whereConditions.quotes = { some: { makerId: { not: userId } } };
+      whereConditions.quotes = { none: { makerId: userId } };
       if (isAssigned === true) whereConditions.assignees = { some: { id: userId } }; //NOTE. 지정견적 조회 API
     } else if (userId) {
       whereConditions.dreamerId = userId; //NOTE. Dreamer 전용 api 조건

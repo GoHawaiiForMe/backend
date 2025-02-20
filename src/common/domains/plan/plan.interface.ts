@@ -2,6 +2,7 @@ import { PlanProperties, PlanToClientProperties } from 'src/common/types/plan/pl
 import { Status } from 'src/common/constants/status.type';
 import { AssignData } from 'src/common/types/plan/plan.type';
 import { TripType } from 'src/common/constants/tripType.type';
+import { ServiceArea } from 'src/common/constants/serviceArea.type';
 
 export default interface IPlan {
   toClient(): PlanToClientProperties;
@@ -24,4 +25,5 @@ export default interface IPlan {
   getAssigneeNickName(makerId: string): string;
   getTitle(): string;
   getTripType(): TripType;
+  getServiceArea(): ServiceArea;
 }
