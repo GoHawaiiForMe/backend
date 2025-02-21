@@ -1,7 +1,3 @@
-<<<<<<< HEAD:src/common/domains/payment/payment.mapper.ts
-=======
-import { PaymentProperties } from 'src/modules/payment/types/payment.type';
->>>>>>> dev:src/modules/payment/domain/payment.mapper.ts
 import Payment from './payment.domain';
 import { PaymentDocument } from 'src/providers/database/mongoose/payment.schema';
 

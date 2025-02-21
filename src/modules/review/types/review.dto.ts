@@ -1,6 +1,6 @@
 import { IsInt, IsNotEmpty, IsPositive, IsString, IsUUID, Min } from 'class-validator';
 import { Type } from 'class-transformer';
-import { ReviewAllProperties } from './review.types';
+import { ReviewAllProperties, ReviewGroupByCount } from './review.types';
 
 export class CreateReviewDTO {
   @IsUUID()
@@ -35,6 +35,6 @@ export class GetReviewsQueryDTO {
 
 export class GetReviewsResponseDTO {
   totalCount: number;
-  groupByCount?: { rating: number; count: number }[];
+  groupByCount?: ReviewGroupByCount[];
   list: ReviewAllProperties[];
 }
