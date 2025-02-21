@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument, Types } from 'mongoose';
-import { NotificationEvent } from 'src/common/types/notification/notification.types';
+import { NotificationEvent } from 'src/modules/notification/types/notification.types';
 
 @Schema({ timestamps: true })
 export class Notification {

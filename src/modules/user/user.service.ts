@@ -2,16 +2,12 @@ import { Injectable } from '@nestjs/common';
 import UserRepository from './user.repository';
 import BadRequestError from 'src/common/errors/badRequestError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
-import { FilteredUserProperties, PasswordProperties, UserProperties } from '../../common/types/user/user.types';
-import {
-  DreamerProfileProperties,
-  MakerInfoAndProfileProperties,
-  MakerProfileProperties
-} from '../../common/types/user/profile.types';
+import { FilteredUserProperties, PasswordProperties, UserProperties } from './types/user.types';
+import { DreamerProfileProperties, MakerInfoAndProfileProperties, MakerProfileProperties } from './types/profile.types';
 import UserStatsService from '../userStats/userStats.service';
 import FollowService from '../follow/follow.service';
-import { GetMakerListQueryDTO, PaginationQueryDTO } from 'src/common/types/user/query.dto';
-import { followResponseDTO, ProfileCardResponseDTO } from 'src/common/types/user/user.response.dto';
+import { GetMakerListQueryDTO, PaginationQueryDTO } from 'src/modules/user/types/query.dto';
+import { followResponseDTO, ProfileCardResponseDTO } from 'src/modules/user/types/user.response.dto';
 
 @Injectable()
 export default class UserService {

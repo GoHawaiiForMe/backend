@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Notification } from 'src/providers/database/mongoose/notification.schema';
 import { Model } from 'mongoose';
-import { NotificationProperties } from '../../common/types/notification/notification.types';
-import INotification from 'src/common/domains/notification/notification.interface';
-import NotificationMapper from 'src/common/domains/notification/notification.mapper';
+import { NotificationProperties } from './types/notification.types';
+import INotification from './domain/notification.interface';
+import NotificationMapper from './domain/notification.mapper';
 
 @Injectable()
 export default class NotificationRepository {

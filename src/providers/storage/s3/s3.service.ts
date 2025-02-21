@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { ChatToS3Properties } from 'src/common/domains/chat/chat.properties';
+import { ChatToS3Properties } from 'src/modules/chat/domain/chat.properties';
 import { ORIGIN } from 'src/common/constants/s3.constants';
 import { v4 as uuidV4 } from 'uuid';
 import InternalServerError from 'src/common/errors/internalServerError';

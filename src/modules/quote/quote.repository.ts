@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import DBClient from 'src/providers/database/prisma/DB.client';
 import SortOrder from 'src/common/constants/sortOrder.enum';
-import { QuoteIncludeConditions, QuoteQueryOptions, QuoteWhereConditions } from '../../common/types/quote/quote.type';
-import IQuote from 'src/common/domains/quote/quote.interface';
-import QuoteMapper from 'src/common/domains/quote/quote.mapper';
+import { QuoteIncludeConditions, QuoteQueryOptions, QuoteWhereConditions } from './types/quote.type';
+import IQuote from './domain/quote.interface';
+import QuoteMapper from './domain/quote.mapper';
 import { StatusValues } from 'src/common/constants/status.type';
 
 @Injectable()

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import DBClient from 'src/providers/database/prisma/DB.client';
-import FollowMapper from '../../common/domains/follow/follow.mapper';
-import IFollow from '../../common/domains/follow/follow.interface';
-import { PaginationQueryDTO } from 'src/common/types/user/query.dto';
+import FollowMapper from './domain/follow.mapper';
+import IFollow from './domain/follow.interface';
+import { PaginationQueryDTO } from 'src/modules/user/types/query.dto';
 
 @Injectable()
 export default class FollowRepository {

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { IPayment } from 'src/common/domains/payment/payment.interface';
-import PaymentMapper from 'src/common/domains/payment/payment.mapper';
-import { PaymentProperties } from 'src/common/types/payment/payment.type';
+import { IPayment } from './domain/payment.interface';
+import PaymentMapper from './domain/payment.mapper';
+import { PaymentProperties } from 'src/modules/payment/types/payment.type';
 import { Payment } from 'src/providers/database/mongoose/payment.schema';
 
 @Injectable()

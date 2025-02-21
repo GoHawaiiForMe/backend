@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
-import { PaymentStatusEnum } from 'src/common/types/payment/payment.type';
+import { PaymentStatusEnum } from 'src/modules/payment/types/payment.type';
 
 @Schema({ timestamps: true })
 export class Payment {

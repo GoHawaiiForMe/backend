@@ -1,7 +1,7 @@
 import { Controller, Delete, Get, HttpCode, HttpStatus, Param, UsePipes, ValidationPipe } from '@nestjs/common';
 import ChatService from './chat.service';
 import { UserId } from 'src/common/decorators/user.decorator';
-import { ChatIdDTO } from 'src/common/types/chat/chat.dto';
+import { ChatIdDTO } from 'src/modules/chat/types/chat.dto';
 
 @Controller('chats')
 export default class ChatController {

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import IReview from 'src/common/domains/review/review.interface';
-import ReviewMapper from 'src/common/domains/review/review.mapper';
-import { GetReviewsQueryDTO } from 'src/common/types/review/review.dto';
-import { ReviewSelect } from 'src/common/types/review/review.types';
+import IReview from './domain/review.interface';
+import ReviewMapper from './domain/review.mapper';
+import { GetReviewsQueryDTO } from 'src/modules/review/types/review.dto';
+import { ReviewSelect } from 'src/modules/review/types/review.types';
 import DBClient from 'src/providers/database/prisma/DB.client';
 
 @Injectable()

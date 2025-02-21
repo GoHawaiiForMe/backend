@@ -3,7 +3,7 @@ import RedisService from '../cache/redis.service';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import { Job } from 'bullmq';
 import UserStatsService from 'src/modules/userStats/userStats.service';
-import { UserStatsProperties } from 'src/common/types/userStats/userStats.types';
+import { UserStatsProperties } from 'src/modules/userStats/types/userStats.types';
 import CustomError from 'src/common/errors/customError';
 import { HttpStatus } from '@nestjs/common';
 import { EventType } from 'src/common/constants/event.type';

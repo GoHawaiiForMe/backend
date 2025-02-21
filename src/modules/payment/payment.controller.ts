@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import PaymentService from './payment.service';
 import { UserId } from 'src/common/decorators/user.decorator';
-import { PaymentToClientProperties } from 'src/common/types/payment/payment.type';
-import { SavePaymentDTO } from 'src/common/types/payment/payment.dto';
+import { PaymentToClientProperties } from 'src/modules/payment/types/payment.type';
+import { SavePaymentDTO } from 'src/modules/payment/types/payment.dto';
 
 @Controller('payments')
 export default class PaymentController {
