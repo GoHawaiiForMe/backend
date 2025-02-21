@@ -44,6 +44,6 @@ export default class TransactionManager {
   }
 
   static getMongoSession(): mongoose.ClientSession {
-    return asyncLocalStorage.getStore().get('mongoSession');
+    return asyncLocalStorage?.getStore()?.get('mongoSession');
   }
 }
