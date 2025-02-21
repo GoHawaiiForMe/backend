@@ -2,21 +2,21 @@ import { Injectable } from '@nestjs/common';
 import PlanRepository from './plan.repository';
 import QuoteService from 'src/modules/quote/quote.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { AssignData, GroupByCount, PlanQueryOptions } from 'src/common/types/plan/plan.type';
-import { PlanToClientProperties } from 'src/common/types/plan/plan.properties';
+import { AssignData, GroupByCount, PlanQueryOptions } from 'src/modules/plan/types/plan.type';
+import { PlanToClientProperties } from 'src/modules/plan/types/plan.properties';
 import NotFoundError from 'src/common/errors/notFoundError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
-import { CreateOptionalQuoteData, QuoteQueryOptions } from 'src/common/types/quote/quote.type';
-import { QuoteToClientProperties } from 'src/common/types/quote/quoteProperties';
-import { CreatePlanData } from 'src/common/types/plan/plan.type';
+import { CreateOptionalQuoteData, QuoteQueryOptions } from 'src/modules/quote/types/quote.type';
+import { QuoteToClientProperties } from 'src/modules/quote/types/quoteProperties';
+import { CreatePlanData } from 'src/modules/plan/types/plan.type';
 import ForbiddenError from 'src/common/errors/forbiddenError';
 import { ServiceArea } from 'src/common/constants/serviceArea.type';
 import { RoleValues } from 'src/common/constants/role.type';
 import BadRequestError from 'src/common/errors/badRequestError';
 import { StatusValues } from 'src/common/constants/status.type';
-import { NotificationEventName } from 'src/common/types/notification/notification.types';
+import { NotificationEventName } from 'src/modules/notification/types/notification.types';
 import UserService from '../user/user.service';
-import Plan from 'src/common/domains/plan/plan.domain';
+import Plan from './domain/plan.domain';
 import ChatRoomService from '../chatRoom/chatRoom.service';
 import GroupField from 'src/common/constants/groupByField.enum';
 import { InjectQueue } from '@nestjs/bullmq';
@@ -55,6 +55,7 @@ export default class PlanService {
     options: PlanQueryOptions
   ): Promise<{ totalCount: number; groupByCount: GroupByCount; list: PlanToClientProperties[] }> {
     const makerProfile = await this.userService.getProfile(RoleValues.MAKER, userId);
+
     const serviceArea: ServiceArea[] = makerProfile.serviceArea;
 
     options.serviceArea = serviceArea; //NOTE. 메이커의 서비스지역 필터링
@@ -179,7 +180,13 @@ export default class PlanService {
       throw new BadRequestError(ErrorMessage.PLAN_ASSIGN_NOT_MAKER);
     }
 
+    const assigneeServiceArea = (await this.userService.getProfile(RoleValues.MAKER, assigneeId)).serviceArea;
+    if (!assigneeServiceArea.includes(plan.getServiceArea())) {
+      throw new BadRequestError(ErrorMessage.PLAN_MAKER_NOT_IN_SERVICE_AREA);
+    }
+
     plan.requestAssign(data);
+
     const updatedPlan = await this.repository.update(plan);
 
     const nickName = updatedPlan.getDreamerNickName();

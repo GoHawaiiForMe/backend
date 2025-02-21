@@ -1,9 +1,9 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import ChatRepository from './chat.repository';
-import { ChatCreateData, ChatQueryOptions } from 'src/common/types/chat/chat.type';
-import Chat from 'src/common/domains/chat/chat.domain';
-import { ChatToClientProperties } from 'src/common/domains/chat/chat.properties';
-import { FileUploadData } from 'src/common/types/chatRoom/chatRoom.type';
+import { ChatCreateData, ChatQueryOptions } from 'src/modules/chat/types/chat.type';
+import Chat from './domain/chat.domain';
+import { ChatToClientProperties } from './domain/chat.properties';
+import { FileUploadData } from 'src/modules/chatRoom/types/chatRoom.type';
 import { S3Service } from 'src/providers/storage/s3/s3.service';
 import { ChatType } from 'src/common/constants/chat.type';
 import ChatRoomService from '../chatRoom/chatRoom.service';

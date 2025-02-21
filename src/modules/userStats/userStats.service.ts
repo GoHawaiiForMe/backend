@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import UserStatsRepository from './userStats.repository';
-import UserStats from 'src/common/domains/userStats/userStats.domain';
-import { UserStatsProperties, UserStatsToClientProperties } from 'src/common/types/userStats/userStats.types';
+
+import { UserStatsProperties, UserStatsToClientProperties } from 'src/modules/userStats/types/userStats.types';
 import RedisService from 'src/providers/cache/redis.service';
-import UserStatsMapper from 'src/common/domains/userStats/userStats.mapper';
-import { IUserStats } from 'src/common/domains/userStats/userStats.interface';
+import { IUserStats } from './domain/userStats.interface';
+import UserStatsMapper from './domain/userStats.mapper';
+import UserStats from './domain/userStats.domain';
 
 @Injectable()
 export default class UserStatsService {

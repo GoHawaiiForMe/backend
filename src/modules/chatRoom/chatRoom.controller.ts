@@ -11,13 +11,13 @@ import {
   ValidationPipe
 } from '@nestjs/common';
 import { UserId } from 'src/common/decorators/user.decorator';
-import { ChatRoomWithUserInfo } from 'src/common/domains/chatRoom/chatRoom.properties';
+import { ChatRoomWithUserInfo } from './domain/chatRoom.properties';
 import ChatRoomService from './chatRoom.service';
-import { ChatProperties } from 'src/common/domains/chat/chat.properties';
+import { ChatProperties } from '../chat/domain/chat.properties';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ChatType, MB } from 'src/common/constants/chat.type';
 import { FileValidationPipe } from 'src/common/pipes/fileValidation.pipe';
-import { ChatRoomIdDTO, ChatRoomQueryDTO } from 'src/common/types/chatRoom/chatRoom.dto';
+import { ChatRoomIdDTO, ChatRoomQueryDTO } from 'src/modules/chatRoom/types/chatRoom.dto';
 
 @Controller('chatRooms')
 export default class ChatRoomController {

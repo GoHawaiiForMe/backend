@@ -3,7 +3,7 @@ import NotificationService from './notification.service';
 import { UserId } from 'src/common/decorators/user.decorator';
 import { map, Observable } from 'rxjs';
 import { Public } from 'src/common/decorators/public.decorator';
-import { NotificationEventName, NotificationProperties } from '../../common/types/notification/notification.types';
+import { NotificationEventName, NotificationProperties } from './types/notification.types';
 
 @Controller('notifications')
 export default class NotificationController {

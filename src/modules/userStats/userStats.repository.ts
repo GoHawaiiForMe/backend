@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { IUserStats } from 'src/common/domains/userStats/userStats.interface';
-import UserStatsMapper from 'src/common/domains/userStats/userStats.mapper';
-import { UserStatsProperties } from 'src/common/types/userStats/userStats.types';
+
+import { UserStatsProperties } from 'src/modules/userStats/types/userStats.types';
 import DBClient from 'src/providers/database/prisma/DB.client';
+import { IUserStats } from './domain/userStats.interface';
+import UserStatsMapper from './domain/userStats.mapper';
 
 @Injectable()
 export default class UserStatsRepository {

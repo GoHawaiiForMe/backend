@@ -1,12 +1,12 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common';
 import { UserId } from 'src/common/decorators/user.decorator';
-import { CreatePlanDataDTO, MyPlanQueryDTO, PlanQueryOptionDTO, ServiceAreaDTO } from 'src/common/types/plan/plan.dto';
+import { CreatePlanDataDTO, MyPlanQueryDTO, PlanQueryOptionDTO, ServiceAreaDTO } from 'src/modules/plan/types/plan.dto';
 import PlanService from './plan.service';
-import { CreatePlanData, GroupByCount } from 'src/common/types/plan/plan.type';
-import { CreateQuoteDataDTO, DreamerQuoteQueryOptionsDTO } from 'src/common/types/quote/quote.dto';
-import { QuoteToClientProperties } from 'src/common/types/quote/quoteProperties';
+import { CreatePlanData, GroupByCount } from 'src/modules/plan/types/plan.type';
+import { CreateQuoteDataDTO, DreamerQuoteQueryOptionsDTO } from 'src/modules/quote/types/quote.dto';
+import { QuoteToClientProperties } from 'src/modules/quote/types/quoteProperties';
 import { Role } from 'src/common/decorators/roleGuard.decorator';
-import { PlanToClientProperties } from 'src/common/types/plan/plan.properties';
+import { PlanToClientProperties } from 'src/modules/plan/types/plan.properties';
 import { Public } from 'src/common/decorators/public.decorator';
 
 @Controller('plans')

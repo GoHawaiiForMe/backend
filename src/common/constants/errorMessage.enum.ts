@@ -39,6 +39,7 @@ export enum ErrorMessage {
   PLAN_DELETE_BAD_REQUEST = 'CONFIRMED 상태의 진행중인 플랜은 삭제할 수 없습니다.',
   PLAN_IS_ASSIGNED_BAD_REQUEST = 'IS_ASSIGNED 값은 true와 false 혹은 입력하지 않아야 합니다.',
   PLAN_CANNOT_CREATE_CHATROOM_BAD_REQUEST = '해당 플랜은 채팅방을 만들 수 없습니다. CONFIRMED상태의 플랜만 가능합니다.',
+  PLAN_MAKER_NOT_IN_SERVICE_AREA = '메이커의 서비스지역이 플랜의 서비스지역과 일치하지 않습니다.',
 
   QUOTE_NOT_FOUND = '해당 견적서를 찾을 수 없습니다.',
   QUOTE_FORBIDDEN_ID = '해당 견적서의 Maker와 Dreamer만 조회할 수 있습니다.',

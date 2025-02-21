@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import FollowRepository from './follow.repository';
 import BadRequestError from 'src/common/errors/badRequestError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
-import Follow from '../../common/domains/follow/follow.domain';
-import { FollowProperties } from 'src/common/types/follow/follow.types';
+import Follow from './domain/follow.domain';
+import { FollowProperties } from 'src/modules/follow/types/follow.types';
 import { Queue } from 'bullmq';
 import { InjectQueue } from '@nestjs/bullmq';
 import { EventType } from 'src/common/constants/event.type';
-import { PaginationQueryDTO } from 'src/common/types/user/query.dto';
+import { PaginationQueryDTO } from 'src/modules/user/types/query.dto';
 
 @Injectable()
 export default class FollowService {

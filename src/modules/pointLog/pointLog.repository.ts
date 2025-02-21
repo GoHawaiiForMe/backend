@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import IPointLog from 'src/common/domains/pointLog/pointLog.interface';
-import PointLogMapper from 'src/common/domains/pointLog/pointLog.mapper';
-import { GetPointLogQueryDTO } from 'src/common/types/pointLog/pointLog.dto';
+import IPointLog from './domain//pointLog.interface';
+import PointLogMapper from './domain//pointLog.mapper';
+import { GetPointLogQueryDTO } from 'src/modules/pointLog/types/pointLog.dto';
 import { PointLog } from 'src/providers/database/mongoose/pointLog.schema';
 
 @Injectable()

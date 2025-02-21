@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import PointLogRepository from './pointLog.repository';
-import { PointLogProperties } from 'src/common/types/pointLog/pointLog.type';
-import PointLog from 'src/common/domains/pointLog/pointLog.domain';
-import { GetPointLogQueryDTO } from 'src/common/types/pointLog/pointLog.dto';
+import { PointLogProperties } from 'src/modules/pointLog/types/pointLog.type';
+import PointLog from './domain/pointLog.domain';
+import { GetPointLogQueryDTO } from 'src/modules/pointLog/types/pointLog.dto';
 
 @Injectable()
 export default class PointLogService {

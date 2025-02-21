@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { ChatCreateData, ChatQueryOptions } from 'src/common/types/chat/chat.type';
+import { ChatCreateData, ChatQueryOptions } from 'src/modules/chat/types/chat.type';
 import ChatRoomRepository from './chatRoom.repository';
-import { ChatRoomProperties, ChatRoomWithUserInfo } from 'src/common/domains/chatRoom/chatRoom.properties';
+import { ChatRoomProperties, ChatRoomWithUserInfo } from './domain/chatRoom.properties';
 import ForbiddenError from 'src/common/errors/forbiddenError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
-import ChatRoom from 'src/common/domains/chatRoom/chatRoom.domain';
+import ChatRoom from './domain/chatRoom.domain';
 import ChatService from '../chat/chat.service';
-import { ChatProperties, ChatToClientProperties } from 'src/common/domains/chat/chat.properties';
+import { ChatProperties, ChatToClientProperties } from '../chat/domain/chat.properties';
 import UserService from '../user/user.service';
 import { Socket } from 'socket.io';
-import { ChatReference, FileUploadData, FindChatRoomByIdOptions } from 'src/common/types/chatRoom/chatRoom.type';
+import { ChatReference, FileUploadData, FindChatRoomByIdOptions } from 'src/modules/chatRoom/types/chatRoom.type';
 import NotFoundError from 'src/common/errors/notFoundError';
-import IChatRoom from 'src/common/domains/chatRoom/chatRoom.interface';
+import IChatRoom from './domain/chatRoom.interface';
 import BadRequestError from 'src/common/errors/badRequestError';
 import Transactional from 'src/common/decorators/transaction.decorator';
 

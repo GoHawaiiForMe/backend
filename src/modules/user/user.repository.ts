@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import DBClient from 'src/providers/database/prisma/DB.client';
-import UserMapper from '../../common/domains/user/user.mapper';
-import { MakerOrderBy, MakerOrderByField, UserProperties } from '../../common/types/user/user.types';
-import { DreamerProfileProperties, MakerProfileProperties } from '../../common/types/user/profile.types';
-import { DreamerProfileMapper, MakerProfileMapper } from '../../common/domains/user/profile.mapper';
-import { IUser } from '../../common/domains/user/user.interface';
-import { IDreamerProfile, IMakerProfile } from '../../common/domains/user/profile.interface';
+import UserMapper from './domain/user.mapper';
+import { MakerOrderBy, MakerOrderByField, UserProperties } from './types/user.types';
+import { DreamerProfileProperties, MakerProfileProperties } from './types/profile.types';
+import { DreamerProfileMapper, MakerProfileMapper } from './domain/profile.mapper';
+import { IUser } from './domain/user.interface';
+import { IDreamerProfile, IMakerProfile } from './domain/profile.interface';
 import { RoleValues } from 'src/common/constants/role.type';
 import SortOrder from 'src/common/constants/sortOrder.enum';
-import { GetMakerListQueryDTO } from 'src/common/types/user/query.dto';
+import { GetMakerListQueryDTO } from 'src/modules/user/types/query.dto';
 
 @Injectable()
 export default class UserRepository {
