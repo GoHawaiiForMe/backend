@@ -62,3 +62,8 @@ export interface ReviewSelect {
     };
   };
 }
+
+export interface ReviewGroupByCount {
+  rating: number;
+  count: number;
+}

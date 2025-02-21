@@ -5,13 +5,7 @@ import Payment from './domain/payment.domain';
 import UnauthorizedError from 'src/common/errors/unauthorizedError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import NotFoundError from 'src/common/errors/notFoundError';
-<<<<<<< HEAD
-import { SavePaymentDTO } from 'src/common/types/payment/payment.dto';
-=======
-import InternalServerError from 'src/common/errors/internalServerError';
-import BadRequestError from 'src/common/errors/badRequestError';
 import { SavePaymentDTO } from 'src/modules/payment/types/payment.dto';
->>>>>>> dev
 import { PGService } from 'src/providers/pg/pg.service';
 import { Queue } from 'bullmq';
 import { InjectQueue } from '@nestjs/bullmq';
