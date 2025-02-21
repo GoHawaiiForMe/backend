@@ -56,7 +56,7 @@ export enum ErrorMessage {
 
   PAYMENT_BAD_REQUEST = '결제 정보가 잘못되어 결제를 완료할 수 없습니다.',
   PAYMENT_AMOUNT_ERROR = '실제 결제한 금액이 결제 요청한 금액과 맞지 않습니다.',
-  PAYMENT_STATUS_BAD_REQUEST = 'PG사에서 결제가 아직 진행 중이거나 문제가 발생했습니다.',
+  PAYMENT_STATUS_CONFLICT = 'PG사에서 결제가 아직 진행 중이거나 문제가 발생했습니다.',
   PAYMENT_NOT_FOUND = '해당 결제 정보를 찾을 수 없습니다',
   PAYMENT_CANCEL_SERVER_ERROR = 'PG사에서 결제를 취소하지 못했습니다.',
   PAYMENT_SERVER_ERROR = 'PG사에서 해당 결제 정보를 찾는 데 오류가 발생했습니다.',
