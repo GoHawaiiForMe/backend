@@ -2,13 +2,13 @@ import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import BadRequestError from 'src/common/errors/badRequestError';
 import { JwtService } from '@nestjs/jwt';
 import { Injectable } from '@nestjs/common';
-import User from 'src/common/domains/user/user.domain';
-import { DreamerProfile, MakerProfile } from 'src/common/domains/user/profile.domain';
+import User from 'src/modules/user/domain/user.domain';
+import { DreamerProfile, MakerProfile } from 'src/modules/user/domain/profile.domain';
 import UserStatsService from '../userStats/userStats.service';
-import { FilteredUserProperties, OAuthProperties, UserProperties } from 'src/common/types/user/user.types';
+import { FilteredUserProperties, OAuthProperties, UserProperties } from 'src/modules/user/types/user.types';
 import AuthRepository from './auth.repository';
 import { Role, RoleValues } from 'src/common/constants/role.type';
-import { DreamerProfileProperties, MakerProfileProperties } from 'src/common/types/user/profile.types';
+import { DreamerProfileProperties, MakerProfileProperties } from 'src/modules/user/types/profile.types';
 import { OAuthProvider } from 'src/common/constants/oauth.type';
 import UnauthorizedError from 'src/common/errors/unauthorizedError';
 

@@ -16,14 +16,14 @@ import {
   followResponseDTO,
   MakerProfileResponseDTO,
   UserResponseDTO
-} from '../../common/types/user/user.response.dto';
-import UpdateProfileDTO from '../../common/types/user/updateProfile.dto';
-import { DreamerProfileProperties, MakerProfileProperties } from '../../common/types/user/profile.types';
-import { FilteredUserProperties, UserProperties } from '../../common/types/user/user.types';
-import UpdateUserDTO from '../../common/types/user/updateUser.dto';
+} from './types/user.response.dto';
+import UpdateProfileDTO from './types/updateProfile.dto';
+import { DreamerProfileProperties, MakerProfileProperties } from './types/profile.types';
+import { FilteredUserProperties, UserProperties } from './types/user.types';
+import UpdateUserDTO from './types/updateUser.dto';
 import { UserRole } from 'src/common/decorators/role.decorator';
 import { Role } from 'src/common/decorators/roleGuard.decorator';
-import { GetMakerListQueryDTO, PaginationQueryDTO } from 'src/common/types/user/query.dto';
+import { GetMakerListQueryDTO, PaginationQueryDTO } from 'src/modules/user/types/query.dto';
 
 @Controller('users')
 export default class UserController {

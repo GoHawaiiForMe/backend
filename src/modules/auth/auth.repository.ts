@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { IDreamerProfile, IMakerProfile } from 'src/common/domains/user/profile.interface';
-import { DreamerProfileMapper, MakerProfileMapper } from 'src/common/domains/user/profile.mapper';
-import { IUser } from 'src/common/domains/user/user.interface';
-import UserMapper from 'src/common/domains/user/user.mapper';
-import { DreamerProfileProperties, MakerProfileProperties } from 'src/common/types/user/profile.types';
-import { OAuthProperties, SignupProperties } from 'src/common/types/user/user.types';
+import { IDreamerProfile, IMakerProfile } from 'src/modules/user/domain/profile.interface';
+import { DreamerProfileMapper, MakerProfileMapper } from 'src/modules/user/domain/profile.mapper';
+import { IUser } from 'src/modules/user/domain/user.interface';
+import UserMapper from 'src/modules/user/domain/user.mapper';
+import { DreamerProfileProperties, MakerProfileProperties } from 'src/modules/user/types/profile.types';
+import { OAuthProperties, SignupProperties } from 'src/modules/user/types/user.types';
 import DBClient from 'src/providers/database/prisma/DB.client';
 
 @Injectable()

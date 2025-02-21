@@ -4,11 +4,11 @@ import PlanOrder from 'src/common/constants/planOrder.enum';
 import { RoleValues } from 'src/common/constants/role.type';
 import SortOrder from 'src/common/constants/sortOrder.enum';
 import { Status, StatusValues } from 'src/common/constants/status.type';
-import IPlan from 'src/common/domains/plan/plan.interface';
-import PlanMapper from 'src/common/domains/plan/plan.mapper';
-import { GroupByCount, PlanWhereConditions } from 'src/common/types/plan/plan.type';
-import { PlanOrderByField } from 'src/common/types/plan/plan.type';
-import { PlanQueryOptions } from 'src/common/types/plan/plan.type';
+import IPlan from './domain/plan.interface';
+import PlanMapper from './domain/plan.mapper';
+import { GroupByCount, PlanWhereConditions } from 'src/modules/plan/types/plan.type';
+import { PlanOrderByField } from 'src/modules/plan/types/plan.type';
+import { PlanQueryOptions } from 'src/modules/plan/types/plan.type';
 import DBClient from 'src/providers/database/prisma/DB.client';
 import TransactionManager from 'src/providers/database/transaction/transaction.manager';
 

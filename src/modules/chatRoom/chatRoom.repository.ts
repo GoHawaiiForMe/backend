@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import IChatRoom from 'src/common/domains/chatRoom/chatRoom.interface';
-import ChatRoomMapper from 'src/common/domains/chatRoom/chatRoom.mapper';
-import { ChatQueryOptions } from 'src/common/types/chat/chat.type';
-import { FindChatRoomByIdOptions } from 'src/common/types/chatRoom/chatRoom.type';
+import IChatRoom from './domain/chatRoom.interface';
+import ChatRoomMapper from './domain/chatRoom.mapper';
+import { ChatQueryOptions } from 'src/modules/chat/types/chat.type';
+import { FindChatRoomByIdOptions } from 'src/modules/chatRoom/types/chatRoom.type';
 import { ChatRoom } from 'src/providers/database/mongoose/chatRoom.schema';
 import { ObjectId } from 'mongodb';
 

@@ -1,8 +1,8 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Patch, Query } from '@nestjs/common';
 import QuoteService from './quote.service';
-import { QuoteToClientProperties } from '../../common/types/quote/quoteProperties';
+import { QuoteToClientProperties } from './types/quoteProperties';
 import { UserId } from 'src/common/decorators/user.decorator';
-import { MakerQuoteQueryOptionsDTO, UpdateQuoteDataDTO } from '../../common/types/quote/quote.dto';
+import { MakerQuoteQueryOptionsDTO, UpdateQuoteDataDTO } from './types/quote.dto';
 import { Role } from 'src/common/decorators/roleGuard.decorator';
 import { UserRole } from 'src/common/decorators/role.decorator';
 import { Role as RoleType } from 'src/common/constants/role.type';

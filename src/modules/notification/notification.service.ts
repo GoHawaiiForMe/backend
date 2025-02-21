@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import NotificationRepository from './notification.repository';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { NotificationEvent, NotificationProperties } from '../../common/types/notification/notification.types';
+import { NotificationEvent, NotificationProperties } from './types/notification.types';
 import BadRequestError from 'src/common/errors/badRequestError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import { Observable } from 'rxjs';

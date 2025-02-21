@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import Redis from 'ioredis';
-import { UserStatsToClientProperties } from 'src/common/types/userStats/userStats.types';
+import { UserStatsToClientProperties } from 'src/modules/userStats/types/userStats.types';
 
 @Injectable()
 export default class RedisService {

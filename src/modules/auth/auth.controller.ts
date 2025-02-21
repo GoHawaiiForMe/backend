@@ -9,15 +9,15 @@ import {
   ApiOperation,
   ApiUnauthorizedResponse
 } from '@nestjs/swagger';
-import SignupDTO from 'src/common/types/user/signup.dto';
-import LoginDTO from 'src/common/types/user/login.dto';
+import SignupDTO from 'src/modules/user/types/signup.dto';
+import LoginDTO from 'src/modules/user/types/login.dto';
 import { Cookies } from 'src/common/decorators/cookie.decorator';
 import UnauthorizedError from 'src/common/errors/unauthorizedError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from 'src/common/decorators/user.decorator';
-import { OAuthProperties } from 'src/common/types/user/user.types';
+import { OAuthProperties } from 'src/modules/user/types/user.types';
 import { OAuthProvider } from 'src/common/constants/oauth.type';
 
 @Controller('auth')
