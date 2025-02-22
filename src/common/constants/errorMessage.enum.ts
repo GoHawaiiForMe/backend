@@ -37,7 +37,7 @@ export enum ErrorMessage {
   PLAN_READY_TO_REVIEW_BAD_REQUEST = '완료할 수 있는 플랜 필터링은 CONFIRMED 상태만 가능합니다.',
   PLAN_REVIEW_FILTER_BAD_REQUEST = '리뷰는 OVERDUE와 PENDING 상태의 플랜에는 있을 수 없습니다.',
   PLAN_DELETE_BAD_REQUEST = 'CONFIRMED 상태의 진행중인 플랜은 삭제할 수 없습니다.',
-  PLAN_IS_ASSIGNED_BAD_REQUEST = 'IS_ASSIGNED 값은 true와 false 혹은 입력하지 않아야 합니다.',
+  PLAN_IS_ASSIGNED_BAD_REQUEST = 'isAssigned 쿼리의 값은 true와 false 혹은 쿼리를입력하지 않아야 합니다.',
   PLAN_CANNOT_CREATE_CHATROOM_BAD_REQUEST = '해당 플랜은 채팅방을 만들 수 없습니다. CONFIRMED상태의 플랜만 가능합니다.',
   PLAN_MAKER_NOT_IN_SERVICE_AREA = '메이커의 서비스지역이 플랜의 서비스지역과 일치하지 않습니다.',
 

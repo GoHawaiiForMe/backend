@@ -55,8 +55,7 @@ export default class PlanService {
     options: PlanQueryOptions
   ): Promise<{ totalCount: number; groupByCount: GroupByCount; list: PlanToClientProperties[] }> {
     const makerProfile = await this.userService.getProfile(RoleValues.MAKER, userId);
-
-    const serviceArea: ServiceArea[] = makerProfile.serviceArea;
+    const serviceArea: ServiceArea[] = options.isAssigned === true ? undefined : makerProfile.serviceArea;
 
     options.serviceArea = serviceArea; //NOTE. 메이커의 서비스지역 필터링
     options.userId = userId;
