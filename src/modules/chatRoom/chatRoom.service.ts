@@ -121,11 +121,13 @@ export default class ChatRoomService {
     return chatData;
   }
 
-  @Transactional()
   async deActive(planId: string): Promise<void> {
-    const chatRoom = await this.getChatRoomDomain({ planId });
-    chatRoom.update();
-    await this.chatRoomRepository.update(chatRoom);
+    const chatRoom = await this.chatRoomRepository.findChatRoom({ planId });
+    //NOTE. 일단 임시로 트랜젝션을 제외
+    if (chatRoom) {
+      chatRoom.update();
+      await this.chatRoomRepository.update(chatRoom);
+    } //NOTE. 채팅방 목데이터가 없어서 나는 에러 처리
   }
 
   async deActiveMany(planIds: string[]): Promise<void> {

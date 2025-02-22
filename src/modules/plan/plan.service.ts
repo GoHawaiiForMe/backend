@@ -230,8 +230,8 @@ export default class PlanService {
     plan.updateComplete();
     const updatedPlan = await this.repository.update(plan);
     const planId = plan.getId();
-    await this.chatRoomService.deActive(planId);
 
+    await this.chatRoomService.deActive(planId);
     await this.pointQueue.add('points', {
       userId: plan.getConfirmedMakerId(),
       event: PointEventEnum.EARN,
