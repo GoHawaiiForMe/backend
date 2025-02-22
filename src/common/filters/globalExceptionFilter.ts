@@ -24,6 +24,8 @@ class GlobalExceptionFilter implements ExceptionFilter {
       message = ErrorMessage.INTERNAL_SERVER_ERROR;
     }
 
+    response.locals.errorMessage = message;
+
     response.status(status).json({
       statusCode: status,
       timestamp: new Date().toISOString(),

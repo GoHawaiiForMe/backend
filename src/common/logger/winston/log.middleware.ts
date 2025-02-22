@@ -13,9 +13,9 @@ export function LogMiddleware(logger: LoggerService) {
         method: req.method,
         path: req.originalUrl,
         status: res.statusCode,
-        responseTime: `${duration}ms`,
+        responseTime: duration,
         request: { headers: req.headers, body: req.body },
-        response: { headers: res.getHeaders() }
+        response: { headers: res.getHeaders(), errorMessage: res.locals.errorMessage || undefined }
       };
 
       if (res.statusCode >= 400) {
