@@ -52,7 +52,7 @@ export default class AuthController {
     res.cookie('refreshToken', refreshToken, {
       path: '/user/token/refresh',
       httpOnly: true,
-      sameSite: 'none',
+      sameSite: 'lax',
       secure: true,
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
@@ -82,7 +82,7 @@ export default class AuthController {
     res.cookie('refreshToken', tokens.refreshToken, {
       path: '/user/token/refresh',
       httpOnly: true,
-      sameSite: 'none',
+      sameSite: 'lax',
       secure: true,
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
@@ -110,7 +110,7 @@ export default class AuthController {
     res.cookie('refreshToken', tokens.refreshToken, {
       path: '/user/token/refresh',
       httpOnly: true,
-      sameSite: 'none',
+      sameSite: 'lax',
       secure: true,
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
@@ -140,7 +140,7 @@ export default class AuthController {
     res.cookie('refreshToken', tokens.refreshToken, {
       path: '/user/token/refresh',
       httpOnly: true,
-      sameSite: 'none',
+      sameSite: 'lax',
       secure: true,
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
@@ -164,7 +164,7 @@ export default class AuthController {
     res.cookie('refreshToken', newRefreshToken, {
       path: '/user/token/refresh',
       httpOnly: true,
-      sameSite: 'none',
+      sameSite: 'lax',
       secure: true,
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
