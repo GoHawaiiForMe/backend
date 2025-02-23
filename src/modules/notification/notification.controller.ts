@@ -1,8 +1,8 @@
 import { Controller, Get, Param, Patch, Post, Sse } from '@nestjs/common';
 import NotificationService from './notification.service';
 import { UserId } from 'src/common/decorators/user.decorator';
-import { map, Observable } from 'rxjs';
-import { Public } from 'src/common/decorators/public.decorator';
+import { interval, merge, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { NotificationEventName, NotificationProperties } from './types/notification.types';
 
 @Controller('notifications')
@@ -41,10 +41,16 @@ export default class NotificationController {
   @Sse('stream')
   stream(@UserId() userId: string): Observable<{ data: string }> {
     console.log(`SSE connection for userId: ${userId}`);
-    return this.service.stream(userId).pipe(
+
+    // 40초마다 Heartbeat 전송하여 연결 유지
+    const heartbeat$ = interval(40000).pipe(map(() => ({ data: 'ping' })));
+    const notification$ = this.service.stream(userId).pipe(
       map((content: string) => {
         return { data: content };
       })
     );
+
+    // Heartbeat와 알림 stream 병합
+    return merge(heartbeat$, notification$);
   }
 }
