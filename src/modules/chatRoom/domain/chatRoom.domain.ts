@@ -15,6 +15,7 @@ export default class ChatRoom implements IChatRoom {
   private chatIds: string[];
   private lastChat: string;
   private isActive?: boolean;
+  private addChatId: string;
 
   constructor(private chatRoom: ChatRoomProperties) {
     this.id = chatRoom.id;
@@ -41,7 +42,8 @@ export default class ChatRoom implements IChatRoom {
       planTitle: this.planTitle,
       planTripDate: this.planTripDate,
       quotePrice: this.quotePrice,
-      isActive: this.isActive
+      isActive: this.isActive,
+      addChatId: this.addChatId
     };
   }
 
@@ -60,8 +62,9 @@ export default class ChatRoom implements IChatRoom {
     };
   }
 
-  update(): void {
-    this.isActive = false;
+  update(data: { deActive: boolean; chatId: string }): void {
+    if (data.deActive) this.isActive = false;
+    if (data.chatId) this.addChatId = data.chatId;
   }
 
   getId(): string {

@@ -7,6 +7,7 @@ import { ChatQueryOptions } from 'src/modules/chat/types/chat.type';
 import { FindChatRoomByIdOptions } from 'src/modules/chatRoom/types/chatRoom.type';
 import { ChatRoom } from 'src/providers/database/mongoose/chatRoom.schema';
 import { ObjectId } from 'mongodb';
+import TransactionManager from 'src/providers/database/transaction/transaction.manager';
 
 @Injectable()
 export default class ChatRoomRepository {
@@ -36,11 +37,13 @@ export default class ChatRoomRepository {
 
   async findChatRoom(options: FindChatRoomByIdOptions): Promise<IChatRoom> {
     const { chatRoomId, planId } = options || {};
+    const session = TransactionManager.getMongoSession();
 
     const chatRoom = await this.chatRoom
       .findOne({
         $or: [{ _id: chatRoomId }, { planId }]
       })
+      .session(session)
       .exec();
 
     const domainChatRoom = new ChatRoomMapper(chatRoom).toDomain();
@@ -53,23 +56,33 @@ export default class ChatRoomRepository {
   }
 
   async createChatRoom(data: IChatRoom): Promise<IChatRoom> {
+    const session = TransactionManager.getMongoSession();
     const { userIds, planId, planTitle, planTripDate, quotePrice } = data.toDB();
-    const chatRoom = await this.chatRoom.create({
-      planId,
-      planTitle,
-      planTripDate,
-      quotePrice,
-      userIds,
-      chatIds: []
-    });
+    const [chatRoom] = await this.chatRoom.create(
+      [
+        {
+          planId,
+          planTitle,
+          planTripDate,
+          quotePrice,
+          userIds,
+          chatIds: []
+        }
+      ],
+      { session }
+    );
 
     const domainChatRoom = new ChatRoomMapper(chatRoom).toDomain();
     return domainChatRoom;
   }
 
   async update(data: IChatRoom): Promise<IChatRoom> {
-    const { planId, isActive } = data.toDB();
-    const chatRoom = await this.chatRoom.findOneAndUpdate({ planId }, { isActive }, { new: true });
+    const session = TransactionManager.getMongoSession();
+    const { planId, isActive, addChatId } = data.toDB();
+
+    const chatRoom = await this.chatRoom
+      .findOneAndUpdate({ planId }, { isActive, $addToSet: { chatIds: { $each: [addChatId] } } }, { new: true })
+      .session(session);
     const domainChatRoom = new ChatRoomMapper(chatRoom).toDomain();
     return domainChatRoom;
   }

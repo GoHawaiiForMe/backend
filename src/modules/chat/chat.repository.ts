@@ -12,10 +12,7 @@ import TransactionManager from 'src/providers/database/transaction/transaction.m
 
 @Injectable()
 export default class ChatRepository {
-  constructor(
-    @InjectModel(ChatRoom.name) private chatRoom: Model<ChatRoom>,
-    @InjectModel(Chat.name) private chat: Model<Chat>
-  ) {}
+  constructor(@InjectModel(Chat.name) private chat: Model<Chat>) {}
 
   async findChatsByChatRoomId(options: ChatQueryOptions): Promise<IChat[]> {
     const { chatRoomId, page, pageSize } = options;
@@ -44,7 +41,7 @@ export default class ChatRepository {
     const { senderId, chatRoomId, content, type } = data.toDB();
     const session = TransactionManager.getMongoSession();
 
-    const chat = await this.chat.create(
+    const [chat] = await this.chat.create(
       [
         {
           senderId,
@@ -56,17 +53,7 @@ export default class ChatRepository {
       { session }
     );
 
-    const chatRoom = await this.chatRoom.updateOne(
-      { _id: chatRoomId },
-      { $push: { chatIds: chat[0]._id } },
-      { session }
-    );
-    if (chatRoom.modifiedCount === 0) {
-      throw new InternalServerError(ErrorMessage.INTERNAL_SERVER_ERROR_CHAT_ROOM_UPDATE);
-    }
-
-    const domainChat = new ChatMapper(chat[0]).toDomain();
-
+    const domainChat = new ChatMapper(chat).toDomain();
     return domainChat;
   }
 
