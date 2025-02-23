@@ -60,7 +60,6 @@ export default class UserService {
 
     if (data.nickName && data.nickName !== user.getNickName()) {
       const existNickName = await this.repository.findByNickName(data.nickName);
-      console.log(typeof existNickName, existNickName);
       if (existNickName) {
         throw new BadRequestError(ErrorMessage.USER_NICKNAME_EXIST);
       }
