@@ -58,8 +58,8 @@ export default class UserService {
       throw new BadRequestError(ErrorMessage.USER_NOT_FOUND);
     }
 
-    if (data.nickName) {
-      const existNickName = this.repository.findByNickName(data.nickName);
+    if (data.nickName && data.nickName !== user.getNickName()) {
+      const existNickName = await this.repository.findByNickName(data.nickName);
       if (existNickName) {
         throw new BadRequestError(ErrorMessage.USER_NICKNAME_EXIST);
       }

@@ -21,6 +21,7 @@ export interface IUser {
   OAuthData(): OAuthProperties;
   getId(): string;
   getRole(): Role | null;
+  getNickName(): string;
   isFollowed(dreamerId: string): boolean;
   getWithMakerProfile(withDetails?: boolean): Partial<MakerInfoAndProfileProperties>;
   getStats(): UserStatsToClientProperties;
