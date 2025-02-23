@@ -24,6 +24,7 @@ import S3Module from './providers/storage/s3/s3.module';
 import PointLogModule from './modules/pointLog/pointLog.module';
 import { LoggerModule } from './common/logger/winston/logger.module';
 import TransactionModule from './providers/database/transaction/transaction.module';
+import ProfileModule from './modules/profile/profile.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import TransactionModule from './providers/database/transaction/transaction.modu
     PrismaModule,
     AuthModule,
     UserModule,
+    ProfileModule,
     NotificationModule,
     FollowModule,
     PlanModule,

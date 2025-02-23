@@ -1,11 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import DBClient from 'src/providers/database/prisma/DB.client';
 import UserMapper from './domain/user.mapper';
-import { MakerOrderBy, MakerOrderByField, UserProperties } from './types/user.types';
-import { DreamerProfileProperties, MakerProfileProperties } from './types/profile.types';
-import { DreamerProfileMapper, MakerProfileMapper } from './domain/profile.mapper';
+import { MakerOrderBy, MakerOrderByField } from './types/user.types';
 import { IUser } from './domain/user.interface';
-import { IDreamerProfile, IMakerProfile } from './domain/profile.interface';
 import { RoleValues } from 'src/common/constants/role.type';
 import SortOrder from 'src/common/constants/sortOrder.enum';
 import { GetMakerListQueryDTO } from 'src/modules/user/types/query.dto';
@@ -103,51 +100,5 @@ export default class UserRepository {
     });
 
     return new UserMapper(user).toDomain();
-  }
-
-  async findDreamerProfile(userId: string): Promise<IDreamerProfile> {
-    const data = await this.db.dreamerProfile.findUnique({
-      where: {
-        userId
-      }
-    });
-
-    if (data) {
-      return new DreamerProfileMapper(data).toDomain();
-    }
-  }
-
-  async findMakerProfile(userId: string): Promise<IMakerProfile> {
-    const data = await this.db.makerProfile.findUnique({
-      where: {
-        userId
-      }
-    });
-
-    if (data) {
-      return new MakerProfileMapper(data).toDomain();
-    }
-  }
-
-  async updateDreamerProfile(userId: string, data: Partial<DreamerProfileProperties>): Promise<IDreamerProfile> {
-    const profile = await this.db.dreamerProfile.update({
-      where: {
-        userId
-      },
-      data
-    });
-
-    return new DreamerProfileMapper(profile).toDomain();
-  }
-
-  async updateMakerProfile(userId: string, data: Partial<MakerProfileProperties>): Promise<IMakerProfile> {
-    const profile = await this.db.makerProfile.update({
-      where: {
-        userId
-      },
-      data
-    });
-
-    return new MakerProfileMapper(profile).toDomain();
   }
 }

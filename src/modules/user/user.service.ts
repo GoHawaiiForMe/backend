@@ -3,7 +3,7 @@ import UserRepository from './user.repository';
 import BadRequestError from 'src/common/errors/badRequestError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import { FilteredUserProperties, PasswordProperties, UserProperties } from './types/user.types';
-import { DreamerProfileProperties, MakerInfoAndProfileProperties, MakerProfileProperties } from './types/profile.types';
+import { MakerInfoAndProfileProperties } from '../profile/types/profile.types';
 import UserStatsService from '../userStats/userStats.service';
 import FollowService from '../follow/follow.service';
 import { GetMakerListQueryDTO, PaginationQueryDTO } from 'src/modules/user/types/query.dto';
@@ -21,16 +21,6 @@ export default class UserService {
     const user = await this.repository.findById(userId);
 
     return user?.toClientAll();
-  }
-
-  async getProfile(role: string, userId: string): Promise<DreamerProfileProperties | MakerProfileProperties> {
-    if (role === 'DREAMER') {
-      const profile = await this.repository.findDreamerProfile(userId);
-      return profile.get();
-    }
-
-    const profile = await this.repository.findMakerProfile(userId);
-    return profile.get();
   }
 
   async getMakers(
@@ -68,29 +58,6 @@ export default class UserService {
     await user.update(data);
     const newUser = await this.repository.update(user);
     return newUser.toClient();
-  }
-
-  async updateDreamerProfile(
-    userId: string,
-    data: Partial<DreamerProfileProperties>
-  ): Promise<DreamerProfileProperties> {
-    const profile = await this.repository.findDreamerProfile(userId);
-    if (!profile) {
-      throw new BadRequestError(ErrorMessage.USER_NOT_FOUND);
-    }
-
-    const newProfile = await this.repository.updateDreamerProfile(userId, profile.update(data));
-    return newProfile.get();
-  }
-
-  async updateMakerProfile(userId: string, data: Partial<MakerProfileProperties>): Promise<MakerProfileProperties> {
-    const profile = await this.repository.findMakerProfile(userId);
-    if (!profile) {
-      throw new BadRequestError(ErrorMessage.USER_NOT_FOUND);
-    }
-
-    const newProfile = await this.repository.updateMakerProfile(userId, profile.update(data));
-    return newProfile.get();
   }
 
   async getProfileCardData(makerId: string, dreamerId: string, withDetails?: boolean): Promise<ProfileCardResponseDTO> {

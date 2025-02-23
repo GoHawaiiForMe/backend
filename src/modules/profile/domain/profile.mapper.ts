@@ -1,5 +1,5 @@
 import { DreamerProfileProperties, MakerProfileProperties } from '../types/profile.types';
-import { DreamerProfile, MakerProfile } from './profile.domain';
+import { DreamerProfile, MakerProfile } from '../../profile/domain/profile.domain';
 
 export class DreamerProfileMapper {
   constructor(private readonly dreamer: DreamerProfileProperties) {}

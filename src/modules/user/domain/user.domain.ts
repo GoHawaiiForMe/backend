@@ -11,7 +11,7 @@ import { ComparePassword, HashingPassword } from '../../../common/utilities/hash
 import { IUser } from './user.interface';
 import BadRequestError from 'src/common/errors/badRequestError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
-import { MakerInfoAndProfileProperties, MakerProfileProperties } from 'src/modules/user/types/profile.types';
+import { MakerInfoAndProfileProperties, MakerProfileProperties } from 'src/modules/profile/types/profile.types';
 import { UserStatsProperties, UserStatsToClientProperties } from 'src/modules/userStats/types/userStats.types';
 import { OAuthProvider } from 'src/common/constants/oauth.type';
 

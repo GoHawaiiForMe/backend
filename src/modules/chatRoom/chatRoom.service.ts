@@ -13,7 +13,7 @@ import { ChatReference, FileUploadData, FindChatRoomByIdOptions } from 'src/modu
 import NotFoundError from 'src/common/errors/notFoundError';
 import IChatRoom from './domain/chatRoom.interface';
 import BadRequestError from 'src/common/errors/badRequestError';
-import Transactional from 'src/common/decorators/transaction.decorator';
+import ProfileService from '../profile/profile.service';
 
 @Injectable()
 export default class ChatRoomService {
@@ -21,7 +21,8 @@ export default class ChatRoomService {
   constructor(
     private readonly chatRoomRepository: ChatRoomRepository,
     private readonly chatService: ChatService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly profileService: ProfileService
   ) {}
 
   registerClient(userId: string, client: Socket) {
@@ -147,7 +148,7 @@ export default class ChatRoomService {
     const users = await Promise.all(
       userIds?.map(async (userId) => {
         const userData = await this.userService.getUser(userId);
-        const userProfile = await this.userService.getProfile(userData.role, userId);
+        const userProfile = await this.profileService.getProfile(userData.role, userId);
 
         const user = {
           id: userId,

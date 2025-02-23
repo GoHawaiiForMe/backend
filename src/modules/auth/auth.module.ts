@@ -9,6 +9,7 @@ import { GoogleStrategy } from './strategy/google.strategy';
 import AuthController from './auth.controller';
 import { KakaoStrategy } from './strategy/kakao.strategy';
 import { NaverStrategy } from './strategy/naver.strategy';
+import ProfileModule from '../profile/profile.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { NaverStrategy } from './strategy/naver.strategy';
     JwtModule.register({
       secret: process.env.JWT_SECRET
     }),
+    ProfileModule,
     UserStatsModule
   ],
   controllers: [AuthController],
