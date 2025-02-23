@@ -5,7 +5,7 @@ import AppModule from 'src/app.module';
 import GlobalExceptionFilter from 'src/common/filters/globalExceptionFilter';
 import { RoleValues } from 'src/common/constants/role.type';
 import AuthService from '../auth/auth.service';
-import { seed } from 'src/providers/database/mongoose/mongoose.seed';
+import { mongooseSeed } from 'src/providers/database/mongoose/mongoose.seed';
 
 describe('Notification Test (e2e)', () => {
   let app: INestApplication;
@@ -27,7 +27,7 @@ describe('Notification Test (e2e)', () => {
     await app.init();
 
     const authService = app.get<AuthService>(AuthService);
-    await seed();
+    await mongooseSeed();
 
     dreamerToken = authService.createTokens({ userId: dreamerId, role: RoleValues.DREAMER }).accessToken;
   });

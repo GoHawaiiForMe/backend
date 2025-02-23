@@ -1,0 +1,93 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.18.0'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run E2E Tests
+        env:
+          ENV: ${{ secrets.ENV }}
+          ACCESS_TOKEN_EXPIRY: ${{ secrets.ACCESS_TOKEN_EXPIRY }}
+          BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+          CHAT_ROOM_ID: ${{ secrets.CHAT_ROOM_ID }}
+          CLIENT_REDIRECT: ${{ secrets.CLIENT_REDIRECT }}
+          COMPLETED_PLAN_ID: ${{ secrets.COMPLETED_PLAN_ID }}
+          CONFIRMED_PLAN_ID: ${{ secrets.CONFIRMED_PLAN_ID }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DE_ACTIVE_CHAT_ROOM_ID: ${{ secrets.DE_ACTIVE_CHAT_ROOM_ID }}
+          DREAMER1_EMAIL: ${{ secrets.DREAMER1_EMAIL }}
+          DREAMER1_ID: ${{ secrets.DREAMER1_ID }}
+          DREAMER1_NICKNAME: ${{ secrets.DREAMER1_NICKNAME }}
+          DREAMER1_PASSWORD: ${{ secrets.DREAMER1_PASSWORD }}
+          DREAMER2_ID: ${{ secrets.DREAMER2_ID }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REDIRECT: ${{ secrets.GOOGLE_REDIRECT }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          KAKAO_CLIENT_ID: ${{ secrets.KAKAO_CLIENT_ID }}
+          KAKAO_CLIENT_SECRET: ${{ secrets.KAKAO_CLIENT_SECRET }}
+          KAKAO_REDIRECT: ${{ secrets.KAKAO_REDIRECT }}
+          MAKER1_ID: ${{ secrets.MAKER1_ID }}
+          MONGO_AUTH_SOURCE: ${{ secrets.MONGO_AUTH_SOURCE }}
+          MONGO_DB_NAME: ${{ secrets.MONGO_DB_NAME }}
+          MONGO_PASS: ${{ secrets.MONGO_PASS }}
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          MONGO_USER: ${{ secrets.MONGO_USER }}
+          NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
+          NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
+          NAVER_REDIRECT: ${{ secrets.NAVER_REDIRECT }}
+          NOTIFICATION_ID: ${{ secrets.NOTIFICATION_ID }}
+          OAUTH_GOOGLE_PROVIDER_ID: ${{ secrets.OAUTH_GOOGLE_PROVIDER_ID }}
+          OVERDUE_PLAN_ID: ${{ secrets.OVERDUE_PLAN_ID }}
+          PAYMENT_ID: ${{ secrets.PAYMENT_ID }}
+          PENDING_PLAN_ID: ${{ secrets.PENDING_PLAN_ID }}
+          PORT: ${{ secrets.PORT }}
+          QUOTE1_ID: ${{ secrets.QUOTE1_ID }}
+          QUOTE2_ID: ${{ secrets.QUOTE2_ID }}
+          REDIS_HOST: ${{ secrets.REDIS_HOST }}
+          REDIS_PORT: ${{ secrets.REDIS_PORT }}
+          REFRESH_TOKEN_EXPIRY: ${{ secrets.REFRESH_TOKEN_EXPIRY }}
+          S3_ACCESSKEY: ${{ secrets.S3_ACCESSKEY }}
+          S3_REGION: ${{ secrets.S3_REGION }}
+          S3_SECRET_ACCESSKEY: ${{ secrets.S3_SECRET_ACCESSKEY }}
+          TOKEN_NAME: ${{ secrets.TOKEN_NAME }}
+          TO_BE_COMPLETED_PLAN_ID: ${{ secrets.TO_BE_COMPLETED_PLAN_ID }}
+          TO_BE_DELETE_QUOTE_ID: ${{ secrets.TO_BE_DELETE_QUOTE_ID }}
+          V2_API_SECRET: ${{ secrets.V2_API_SECRET }}
+        run: npm run test:e2e
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: arn:aws:iam::${{ AWS_USER_ID }}:role/${{ AWS_IAM_ROLE }}
+          aws-region: ap-northeast-2
+
+      - name: Set Up SSH
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy to EC2 via SSH
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_PUBLIC_IP }} "cd /var/www/app && git pull origin main && npm install && npm run build && pm2 start ecosystem.json"
