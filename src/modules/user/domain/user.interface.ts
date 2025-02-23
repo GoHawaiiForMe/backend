@@ -1,12 +1,6 @@
 import { Role } from 'src/common/constants/role.type';
 import { MakerInfoAndProfileProperties } from 'src/modules/profile/types/profile.types';
-import {
-  FilteredUserProperties,
-  OAuthProperties,
-  PasswordProperties,
-  SignupProperties,
-  UserProperties
-} from 'src/modules/user/types/user.types';
+import { FilteredUserProperties, PasswordProperties, UserProperties } from 'src/modules/user/types/user.types';
 import { UserStatsToClientProperties } from 'src/modules/userStats/types/userStats.types';
 
 export interface IUser {
@@ -17,8 +11,6 @@ export interface IUser {
   toClient(): FilteredUserProperties;
   toClientAll(): Omit<UserProperties, 'password'>;
   toDB(): UserProperties;
-  signupData(): SignupProperties;
-  OAuthData(): OAuthProperties;
   getId(): string;
   getRole(): Role | null;
   getNickName(): string;

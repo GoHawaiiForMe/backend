@@ -1,40 +1,40 @@
 import { Injectable } from '@nestjs/common';
-import { IUser } from 'src/modules/user/domain/user.interface';
-import UserMapper from 'src/modules/user/domain/user.mapper';
-import { OAuthProperties, SignupProperties } from 'src/modules/user/types/user.types';
+import { IAuth } from 'src/modules/auth/domain/auth.interface';
+import AuthMapper from 'src/modules/auth/domain/auth.mapper';
 import DBClient from 'src/providers/database/prisma/DB.client';
+import { OAuthProperties, SignupProperties } from './types/auth.types';
 
 @Injectable()
 export default class AuthRepository {
   constructor(private readonly db: DBClient) {}
 
-  async findByEmail(email: string): Promise<IUser> {
+  async findByEmail(email: string): Promise<IAuth> {
     const data = await this.db.user.findUnique({ where: { email } });
 
-    return new UserMapper(data).toDomain();
+    return new AuthMapper(data).toDomain();
   }
 
-  async findByNickName(nickName: string): Promise<IUser> {
+  async findByNickName(nickName: string): Promise<IAuth> {
     const data = await this.db.user.findUnique({ where: { nickName } });
 
-    return new UserMapper(data).toDomain();
+    return new AuthMapper(data).toDomain();
   }
 
-  async findById(id: string): Promise<IUser> {
+  async findById(id: string): Promise<IAuth> {
     const data = await this.db.user.findUnique({ where: { id } });
 
-    return new UserMapper(data).toDomain();
+    return new AuthMapper(data).toDomain();
   }
 
-  async findByProvider(providerData: OAuthProperties): Promise<IUser> {
+  async findByProvider(providerData: OAuthProperties): Promise<IAuth> {
     const data = await this.db.user.findUnique({ where: { provider_providerId: providerData } });
 
-    return new UserMapper(data).toDomain();
+    return new AuthMapper(data).toDomain();
   }
 
-  async create(user: SignupProperties): Promise<IUser> {
+  async create(user: SignupProperties): Promise<IAuth> {
     const data = await this.db.user.create({ data: user });
 
-    return new UserMapper(data).toDomain();
+    return new AuthMapper(data).toDomain();
   }
 }

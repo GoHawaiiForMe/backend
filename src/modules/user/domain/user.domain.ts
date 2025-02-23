@@ -1,12 +1,5 @@
 import { Role } from 'src/common/constants/role.type';
-import {
-  FilteredUserProperties,
-  OAuthProperties,
-  PasswordProperties,
-  SignupProperties,
-  UserProperties,
-  UserPropertiesFromDB
-} from '../types/user.types';
+import { FilteredUserProperties, PasswordProperties, UserProperties, UserPropertiesFromDB } from '../types/user.types';
 import { ComparePassword, HashingPassword } from '../../../common/utilities/hashingPassword';
 import { IUser } from './user.interface';
 import BadRequestError from 'src/common/errors/badRequestError';
@@ -46,14 +39,6 @@ export default class User implements IUser {
     this.stats = user?.stats;
     this.createdAt = user?.createdAt;
     this.updatedAt = user?.updatedAt;
-  }
-
-  static async create(data: UserPropertiesFromDB): Promise<IUser> {
-    let hashedPassword: string | null = null;
-    if (data.password) {
-      hashedPassword = await HashingPassword(data.password);
-    }
-    return new User({ ...data, password: hashedPassword });
   }
 
   async validatePassword(password: string): Promise<boolean> {
@@ -129,25 +114,6 @@ export default class User implements IUser {
       password: this.password,
       phoneNumber: this.phoneNumber,
       coconut: this.coconut
-    };
-  }
-
-  signupData(): SignupProperties {
-    return {
-      role: this.role,
-      email: this?.email,
-      nickName: this.nickName,
-      password: this?.password,
-      phoneNumber: this.phoneNumber,
-      provider: this?.provider,
-      providerId: this?.providerId
-    };
-  }
-
-  OAuthData(): OAuthProperties {
-    return {
-      provider: this.provider,
-      providerId: this.providerId
     };
   }
 

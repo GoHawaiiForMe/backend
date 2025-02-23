@@ -9,16 +9,16 @@ import {
   ApiOperation,
   ApiUnauthorizedResponse
 } from '@nestjs/swagger';
-import SignupDTO from 'src/modules/user/types/signup.dto';
-import LoginDTO from 'src/modules/user/types/login.dto';
 import { Cookies } from 'src/common/decorators/cookie.decorator';
 import UnauthorizedError from 'src/common/errors/unauthorizedError';
 import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from 'src/common/decorators/user.decorator';
-import { OAuthProperties } from 'src/modules/user/types/user.types';
+import { OAuthProperties } from 'src/modules/auth/types/auth.types';
 import { OAuthProvider } from 'src/common/constants/oauth.type';
+import SignupDTO from './types/signup.dto';
+import LoginDTO from './types/login.dto';
 
 @Controller('auth')
 export default class AuthController {
@@ -58,6 +58,44 @@ export default class AuthController {
     });
 
     return res.json({ accessToken });
+  }
+
+  @Public()
+  @Post('refresh/token')
+  @ApiCookieAuth('refreshToken')
+  @ApiOperation({ summary: '토큰 재발급', description: '유저의 Refresh Token을 확인하여 토큰을 재발급합니다' })
+  @ApiCreatedResponse({ description: '{ accessToken }' })
+  @ApiUnauthorizedResponse({ description: 'Refresh Token이 없거나 만료되었습니다' })
+  async getNewToken(@Cookies('refreshToken') refreshToken: string, @Res() res: Response): Promise<Response> {
+    if (!refreshToken) {
+      throw new UnauthorizedError(ErrorMessage.REFRESH_TOKEN_NOT_FOUND);
+    }
+
+    const { accessToken, refreshToken: newRefreshToken } = this.service.createNewToken(refreshToken);
+
+    res.cookie('refreshToken', newRefreshToken, {
+      path: '/auth/refresh/token',
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: true,
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    });
+
+    return res.json({ accessToken });
+  }
+
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Post('check/email')
+  async checkEmail(@Body() body: { email: string }): Promise<boolean> {
+    return await this.service.checkEmail(body.email);
+  }
+
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Post('check/nickname')
+  async checkNickName(@Body() body: { nickName: string }): Promise<boolean> {
+    return await this.service.checkNickName(body.nickName);
   }
 
   @Public()
@@ -146,43 +184,5 @@ export default class AuthController {
     });
 
     return res.redirect(`${process.env.CLIENT_REDIRECT}?auth=${tokens.accessToken}`);
-  }
-
-  @Public()
-  @Post('refresh/token')
-  @ApiCookieAuth('refreshToken')
-  @ApiOperation({ summary: '토큰 재발급', description: '유저의 Refresh Token을 확인하여 토큰을 재발급합니다' })
-  @ApiCreatedResponse({ description: '{ accessToken }' })
-  @ApiUnauthorizedResponse({ description: 'Refresh Token이 없거나 만료되었습니다' })
-  async getNewToken(@Cookies('refreshToken') refreshToken: string, @Res() res: Response): Promise<Response> {
-    if (!refreshToken) {
-      throw new UnauthorizedError(ErrorMessage.REFRESH_TOKEN_NOT_FOUND);
-    }
-
-    const { accessToken, refreshToken: newRefreshToken } = this.service.createNewToken(refreshToken);
-
-    res.cookie('refreshToken', newRefreshToken, {
-      path: '/auth/refresh/token',
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: true,
-      maxAge: 7 * 24 * 60 * 60 * 1000
-    });
-
-    return res.json({ accessToken });
-  }
-
-  @Public()
-  @HttpCode(HttpStatus.OK)
-  @Post('check/email')
-  async checkEmail(@Body() body: { email: string }): Promise<boolean> {
-    return await this.service.checkEmail(body.email);
-  }
-
-  @Public()
-  @HttpCode(HttpStatus.OK)
-  @Post('check/nickname')
-  async checkNickName(@Body() body: { nickName: string }): Promise<boolean> {
-    return await this.service.checkNickName(body.nickName);
   }
 }

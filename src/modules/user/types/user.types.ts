@@ -1,10 +1,10 @@
-import { ProfileImage } from 'src/common/constants/image.type';
 import { Role } from 'src/common/constants/role.type';
-import { TripType } from 'src/common/constants/tripType.type';
 import { MakerProfileProperties } from '../../profile/types/profile.types';
-import SortOrder from 'src/common/constants/sortOrder.enum';
 import { UserStatsProperties } from '../../userStats/types/userStats.types';
 import { OAuthProvider } from 'src/common/constants/oauth.type';
+import { ProfileImage } from 'src/common/constants/image.type';
+import { TripType } from 'src/common/constants/tripType.type';
+import SortOrder from 'src/common/constants/sortOrder.enum';
 
 export interface UserProperties {
   id?: string;
@@ -18,21 +18,6 @@ export interface UserProperties {
   providerId?: string;
   createdAt?: Date;
   updatedAt?: Date;
-}
-
-export interface SignupProperties {
-  role: Role;
-  email?: string;
-  nickName: string;
-  password?: string;
-  phoneNumber: string;
-  provider?: OAuthProvider;
-  providerId?: string;
-}
-
-export interface OAuthProperties {
-  provider: OAuthProvider;
-  providerId: string;
 }
 
 export interface UserPropertiesFromDB {
