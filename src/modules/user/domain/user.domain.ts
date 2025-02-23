@@ -159,6 +159,10 @@ export default class User implements IUser {
     return this.role ?? null;
   }
 
+  getNickName(): string {
+    return this.nickName;
+  }
+
   isFollowed(dreamerId: string): boolean {
     return this.followers?.some((follower) => follower.dreamerId === dreamerId);
   }
