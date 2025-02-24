@@ -1,5 +1,5 @@
 import { DreamerProfileProperties, MakerProfileProperties } from '../types/profile.types';
-import { DreamerProfile, MakerProfile } from './profile.domain';
+import { DreamerProfile, MakerProfile } from '../../profile/domain/profile.domain';
 
 export class DreamerProfileMapper {
   constructor(private readonly dreamer: DreamerProfileProperties) {}
@@ -21,6 +21,7 @@ export class MakerProfileMapper {
   constructor(private readonly maker: MakerProfileProperties) {}
 
   toDomain() {
+    if (!this.maker) return null;
     return new MakerProfile({
       userId: this.maker.userId,
       image: this.maker.image,

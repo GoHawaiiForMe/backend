@@ -3,20 +3,22 @@ import BadRequestError from 'src/common/errors/badRequestError';
 import { JwtService } from '@nestjs/jwt';
 import { Injectable } from '@nestjs/common';
 import User from 'src/modules/user/domain/user.domain';
-import { DreamerProfile, MakerProfile } from 'src/modules/user/domain/profile.domain';
+import { DreamerProfile, MakerProfile } from 'src/modules/profile/domain/profile.domain';
 import UserStatsService from '../userStats/userStats.service';
 import { FilteredUserProperties, OAuthProperties, UserProperties } from 'src/modules/user/types/user.types';
 import AuthRepository from './auth.repository';
 import { Role, RoleValues } from 'src/common/constants/role.type';
-import { DreamerProfileProperties, MakerProfileProperties } from 'src/modules/user/types/profile.types';
+import { DreamerProfileProperties, MakerProfileProperties } from 'src/modules/profile/types/profile.types';
 import { OAuthProvider } from 'src/common/constants/oauth.type';
 import UnauthorizedError from 'src/common/errors/unauthorizedError';
+import ProfileService from '../profile/profile.service';
 
 @Injectable()
 export default class AuthService {
   constructor(
     private readonly repository: AuthRepository,
     private readonly jwt: JwtService,
+    private readonly profile: ProfileService,
     private readonly userStats: UserStatsService
   ) {}
 
@@ -44,14 +46,7 @@ export default class AuthService {
     const userData = await User.create(user);
     const savedUser = await this.repository.create(userData.signupData());
 
-    // 역할에 따라 프로필 등록
-    if (savedUser.getRole() === RoleValues.DREAMER) {
-      const profileData = DreamerProfile.create({ ...profile, userId: savedUser.getId() });
-      await this.repository.createDreamer(profileData);
-    } else {
-      const profileData = MakerProfile.create({ ...profile, userId: savedUser.getId() });
-      await this.repository.createMaker(profileData.get());
-    }
+    await this.profile.createProfile(savedUser.getId(), savedUser.getRole(), profile);
 
     // 유저 생성시 기본값으로 UserStats 생성
     await this.userStats.create(savedUser.getId(), {});

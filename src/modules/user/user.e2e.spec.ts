@@ -61,10 +61,10 @@ describe('Review Test (e2e)', () => {
     });
   });
 
-  describe('[GET /users/profile]', () => {
+  describe('[GET /profile]', () => {
     it('DREAMER의 프로필 조회', async () => {
       const { body, statusCode } = await request(app.getHttpServer())
-        .get('/users/profile')
+        .get('/profile')
         .set('authorization', `Bearer ${dreamerToken}`);
 
       expect(statusCode).toBe(HttpStatus.OK);
@@ -73,7 +73,7 @@ describe('Review Test (e2e)', () => {
 
     it('MAKER의 프로필 조회', async () => {
       const { body, statusCode } = await request(app.getHttpServer())
-        .get('/users/profile')
+        .get('/profile')
         .set('authorization', `Bearer ${makerToken}`);
 
       expect(statusCode).toBe(HttpStatus.OK);
@@ -81,10 +81,10 @@ describe('Review Test (e2e)', () => {
     });
   });
 
-  describe('[GET /users/profile/{makerId}]', () => {
+  describe('[GET /users/maker/{makerId}]', () => {
     it('메이커 정보 조회', async () => {
       const { body, statusCode } = await request(app.getHttpServer())
-        .get(`/users/profile/${makerId}`)
+        .get(`/users/maker/${makerId}`)
         .set('authorization', `Bearer ${dreamerToken}`);
 
       expect(statusCode).toBe(HttpStatus.OK);
@@ -92,7 +92,7 @@ describe('Review Test (e2e)', () => {
     });
 
     it('메이커 정보 조회, 존재하지 않는 MAKER인 경우 400에러', async () => {
-      const { statusCode } = await request(app.getHttpServer()).get(`/users/profile/1`);
+      const { statusCode } = await request(app.getHttpServer()).get(`/users/maker/1`);
 
       expect(statusCode).toBe(HttpStatus.BAD_REQUEST);
     });
@@ -186,12 +186,12 @@ describe('Review Test (e2e)', () => {
     });
   });
 
-  describe('[PATCH /users/update/profile]', () => {
+  describe('[PATCH /profile/update]', () => {
     const dto = { image: ProfileImageValues.DEFAULT_4 };
 
     it('나의 프로필 수정-DREAMER', async () => {
       const { body, statusCode } = await request(app.getHttpServer())
-        .patch('/users/update/profile')
+        .patch('/profile/update')
         .set('authorization', `Bearer ${dreamerToken}`)
         .send(dto);
 
@@ -201,7 +201,7 @@ describe('Review Test (e2e)', () => {
 
     it('나의 프로필 수정-MAKER', async () => {
       const { body, statusCode } = await request(app.getHttpServer())
-        .patch('/users/update/profile')
+        .patch('/profile/update')
         .set('authorization', `Bearer ${makerToken}`)
         .send(dto);
 
@@ -211,7 +211,7 @@ describe('Review Test (e2e)', () => {
 
     it('나의 프로필 수정-DREAMER, 유저 프로필이 없는 경우 400에러', async () => {
       const { body, statusCode } = await request(app.getHttpServer())
-        .patch('/users/update/profile')
+        .patch('/profile/update')
         .set('authorization', `Bearer ${noUserToken}`)
         .send(dto);
 

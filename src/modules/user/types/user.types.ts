@@ -1,7 +1,7 @@
 import { ProfileImage } from 'src/common/constants/image.type';
 import { Role } from 'src/common/constants/role.type';
 import { TripType } from 'src/common/constants/tripType.type';
-import { MakerProfileProperties } from './profile.types';
+import { MakerProfileProperties } from '../../profile/types/profile.types';
 import SortOrder from 'src/common/constants/sortOrder.enum';
 import { UserStatsProperties } from '../../userStats/types/userStats.types';
 import { OAuthProvider } from 'src/common/constants/oauth.type';

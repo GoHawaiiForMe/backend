@@ -50,7 +50,7 @@ export default class AuthController {
     const { accessToken, refreshToken } = this.service.createTokens(tokenPayload);
 
     res.cookie('refreshToken', refreshToken, {
-      path: '/user/token/refresh',
+      path: '/auth/refresh/token',
       httpOnly: true,
       sameSite: 'lax',
       secure: true,
@@ -80,7 +80,7 @@ export default class AuthController {
 
     // 기존 회원의 경우 토큰 반환
     res.cookie('refreshToken', tokens.refreshToken, {
-      path: '/user/token/refresh',
+      path: '/auth/refresh/token',
       httpOnly: true,
       sameSite: 'lax',
       secure: true,
@@ -108,7 +108,7 @@ export default class AuthController {
     }
 
     res.cookie('refreshToken', tokens.refreshToken, {
-      path: '/user/token/refresh',
+      path: '/auth/refresh/token',
       httpOnly: true,
       sameSite: 'lax',
       secure: true,
@@ -138,7 +138,7 @@ export default class AuthController {
     }
 
     res.cookie('refreshToken', tokens.refreshToken, {
-      path: '/user/token/refresh',
+      path: '/auth/refresh/token',
       httpOnly: true,
       sameSite: 'lax',
       secure: true,
@@ -162,7 +162,7 @@ export default class AuthController {
     const { accessToken, refreshToken: newRefreshToken } = this.service.createNewToken(refreshToken);
 
     res.cookie('refreshToken', newRefreshToken, {
-      path: '/user/token/refresh',
+      path: '/auth/refresh/token',
       httpOnly: true,
       sameSite: 'lax',
       secure: true,

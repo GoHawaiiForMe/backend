@@ -9,6 +9,7 @@ import ChatModule from '../chat/chat.module';
 import ChatRoomGateway from './chatRoom.gateway';
 import WebSocketJwtGuard from 'src/common/guards/webSocket.guard';
 import UserModule from '../user/user.module';
+import ProfileModule from '../profile/profile.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import UserModule from '../user/user.module';
     }),
     MongooseModule.forFeature([{ name: ChatRoom.name, schema: ChatRoomSchema }]),
     ChatModule,
-    UserModule
+    UserModule,
+    ProfileModule
   ],
   controllers: [ChatRoomController],
 

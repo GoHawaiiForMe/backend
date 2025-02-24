@@ -13,6 +13,7 @@ import { ChatReference, FileUploadData, FindChatRoomByIdOptions } from 'src/modu
 import NotFoundError from 'src/common/errors/notFoundError';
 import IChatRoom from './domain/chatRoom.interface';
 import BadRequestError from 'src/common/errors/badRequestError';
+import ProfileService from '../profile/profile.service';
 import TransactionManager from 'src/providers/database/transaction/transaction.manager';
 import Transactional from 'src/common/decorators/transaction.decorator';
 
@@ -23,6 +24,7 @@ export default class ChatRoomService {
     private readonly repository: ChatRoomRepository,
     private readonly chatService: ChatService,
     private readonly userService: UserService,
+    private readonly profileService: ProfileService,
     private readonly transactionManager: TransactionManager
   ) {}
 
@@ -153,7 +155,7 @@ export default class ChatRoomService {
     const users = await Promise.all(
       userIds?.map(async (userId) => {
         const userData = await this.userService.getUser(userId);
-        const userProfile = await this.userService.getProfile(userData.role, userId);
+        const userProfile = await this.profileService.getProfile(userData.role, userId);
 
         const user = {
           id: userId,

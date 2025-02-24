@@ -24,6 +24,7 @@ import { Queue } from 'bullmq';
 import { PointEventEnum } from 'src/common/constants/pointEvent.type';
 import TransactionManager from 'src/providers/database/transaction/transaction.manager';
 import Transactional from 'src/common/decorators/transaction.decorator';
+import ProfileService from '../profile/profile.service';
 
 @Injectable()
 export default class PlanService {
@@ -32,6 +33,7 @@ export default class PlanService {
     private readonly repository: PlanRepository,
     private readonly quoteService: QuoteService,
     private readonly userService: UserService,
+    private readonly profileService: ProfileService,
     private readonly chatRoomService: ChatRoomService,
     private readonly transactionManager: TransactionManager,
     private readonly eventEmitter: EventEmitter2
@@ -54,7 +56,7 @@ export default class PlanService {
     userId: string,
     options: PlanQueryOptions
   ): Promise<{ totalCount: number; groupByCount: GroupByCount; list: PlanToClientProperties[] }> {
-    const makerProfile = await this.userService.getProfile(RoleValues.MAKER, userId);
+    const makerProfile = await this.profileService.getProfile(RoleValues.MAKER, userId);
     const serviceArea: ServiceArea[] = options.isAssigned === true ? undefined : makerProfile.serviceArea;
 
     options.serviceArea = serviceArea; //NOTE. 메이커의 서비스지역 필터링
@@ -181,7 +183,7 @@ export default class PlanService {
       throw new BadRequestError(ErrorMessage.PLAN_ASSIGN_NOT_MAKER);
     }
 
-    const assigneeServiceArea = (await this.userService.getProfile(RoleValues.MAKER, assigneeId)).serviceArea;
+    const assigneeServiceArea = (await this.profileService.getProfile(RoleValues.MAKER, assigneeId)).serviceArea;
     if (!assigneeServiceArea.includes(plan.getServiceArea())) {
       throw new BadRequestError(ErrorMessage.PLAN_MAKER_NOT_IN_SERVICE_AREA);
     }

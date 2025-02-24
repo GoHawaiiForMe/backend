@@ -1,5 +1,5 @@
 import { Role } from 'src/common/constants/role.type';
-import { MakerInfoAndProfileProperties } from 'src/modules/user/types/profile.types';
+import { MakerInfoAndProfileProperties } from 'src/modules/profile/types/profile.types';
 import {
   FilteredUserProperties,
   OAuthProperties,

@@ -1,4 +1,4 @@
-import { DreamerProfileProperties, MakerProfileProperties } from 'src/modules/user/types/profile.types';
+import { DreamerProfileProperties, MakerProfileProperties } from 'src/modules/profile/types/profile.types';
 
 export interface IDreamerProfile {
   update(data: Partial<DreamerProfileProperties>): DreamerProfileProperties;

@@ -6,9 +6,10 @@ import PlanRepository from './plan.repository';
 import PlanService from './plan.service';
 import ChatRoomModule from '../chatRoom/chatRoom.module';
 import { BullModule } from '@nestjs/bullmq';
+import ProfileModule from '../profile/profile.module';
 
 @Module({
-  imports: [BullModule.registerQueue({ name: 'points' }), UserModule, QuoteModule, ChatRoomModule],
+  imports: [BullModule.registerQueue({ name: 'points' }), UserModule, ProfileModule, QuoteModule, ChatRoomModule],
   controllers: [PlanController],
   providers: [PlanRepository, PlanService],
   exports: [PlanRepository, PlanService]
