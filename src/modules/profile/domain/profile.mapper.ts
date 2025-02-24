@@ -21,6 +21,7 @@ export class MakerProfileMapper {
   constructor(private readonly maker: MakerProfileProperties) {}
 
   toDomain() {
+    if (!this.maker) return null;
     return new MakerProfile({
       userId: this.maker.userId,
       image: this.maker.image,

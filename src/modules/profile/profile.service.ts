@@ -11,7 +11,7 @@ export default class ProfileService {
   constructor(private readonly repository: ProfileRepository) {}
 
   async getProfile(role: string, userId: string): Promise<DreamerProfileProperties | MakerProfileProperties> {
-    if (role === 'DREAMER') {
+    if (role === RoleValues.DREAMER) {
       const profile = await this.repository.findDreamerProfile(userId);
       return profile.get();
     }

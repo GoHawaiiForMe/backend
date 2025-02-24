@@ -15,9 +15,7 @@ export default class ProfileRepository {
       }
     });
 
-    if (data) {
-      return new DreamerProfileMapper(data).toDomain();
-    }
+    return new DreamerProfileMapper(data).toDomain();
   }
 
   async findMakerProfile(userId: string): Promise<IMakerProfile> {
@@ -27,9 +25,7 @@ export default class ProfileRepository {
       }
     });
 
-    if (data) {
-      return new MakerProfileMapper(data).toDomain();
-    }
+    return new MakerProfileMapper(data).toDomain();
   }
 
   async createDreamer(user: Partial<DreamerProfileProperties>): Promise<IDreamerProfile> {
