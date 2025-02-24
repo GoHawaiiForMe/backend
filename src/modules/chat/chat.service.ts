@@ -19,7 +19,7 @@ import Transactional from 'src/common/decorators/transaction.decorator';
 @Injectable()
 export default class ChatService {
   constructor(
-    private readonly chatRepository: ChatRepository,
+    private readonly repository: ChatRepository,
     private readonly s3Service: S3Service,
     private readonly transactionManager: TransactionManager,
     @Inject(forwardRef(() => ChatRoomService)) private readonly chatRoomService: ChatRoomService
@@ -29,8 +29,8 @@ export default class ChatService {
     options: ChatQueryOptions
   ): Promise<{ totalCount: number; list: ChatToClientProperties[] }> {
     const [totalCount, list] = await Promise.all([
-      this.chatRepository.totalCount(options.chatRoomId),
-      this.chatRepository.findChatsByChatRoomId(options)
+      this.repository.totalCount(options.chatRoomId),
+      this.repository.findChatsByChatRoomId(options)
     ]);
 
     const toClientListPromise = list?.map((chat) => this.convertToClient(chat.toClient()));
@@ -40,7 +40,7 @@ export default class ChatService {
 
   async getChatDomain(data: { id: string; userId?: string }) {
     const { id, userId } = data || {};
-    const chat = await this.chatRepository.findChatById(id);
+    const chat = await this.repository.findChatById(id);
 
     if (!chat) {
       throw new NotFoundError(ErrorMessage.CHAT_NOT_FOUND_ERROR);
@@ -66,7 +66,7 @@ export default class ChatService {
 
   async postChat(data: ChatCreateData): Promise<ChatToClientProperties> {
     const chatData = Chat.create(data);
-    const chat = await this.chatRepository.createChat(chatData);
+    const chat = await this.repository.createChat(chatData);
     const convertChat = await this.convertToClient(chat.toClient());
 
     return convertChat;
@@ -76,7 +76,7 @@ export default class ChatService {
     const chatData = Chat.create(data);
     const s3key = await this.s3Service.uploadFile(chatData.toS3());
     chatData.setS3Key(s3key);
-    const chat = await this.chatRepository.createChat(chatData);
+    const chat = await this.repository.createChat(chatData);
     const convertChat = await this.convertToClient(chat.toClient(), true);
     return convertChat;
   }
@@ -98,7 +98,7 @@ export default class ChatService {
     const isActive = await this.chatRoomService.getIsActiveById(chatRoomId);
     if (!isActive) throw new BadRequestError(ErrorMessage.CHAT_ROOM_NOT_IS_ACTIVE);
 
-    await this.chatRepository.delete(id);
+    await this.repository.delete(id);
   }
 
   private handleDeletedMessage(chatData: ChatToClientProperties): ChatToClientProperties {

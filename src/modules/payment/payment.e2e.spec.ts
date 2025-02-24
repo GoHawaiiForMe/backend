@@ -7,7 +7,7 @@ import { RoleValues } from 'src/common/constants/role.type';
 import AuthService from '../auth/auth.service';
 import { mongooseSeed } from 'src/providers/database/mongoose/mongoose.seed';
 import PaymentService from './payment.service';
-import { PaymentStatusEnum } from 'src/common/types/payment/payment.type';
+import { PaymentStatusEnum } from './types/payment.type';
 
 describe('Payment Test (e2e)', () => {
   let app: INestApplication;

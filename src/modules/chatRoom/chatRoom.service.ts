@@ -14,15 +14,18 @@ import NotFoundError from 'src/common/errors/notFoundError';
 import IChatRoom from './domain/chatRoom.interface';
 import BadRequestError from 'src/common/errors/badRequestError';
 import ProfileService from '../profile/profile.service';
+import TransactionManager from 'src/providers/database/transaction/transaction.manager';
+import Transactional from 'src/common/decorators/transaction.decorator';
 
 @Injectable()
 export default class ChatRoomService {
   private readonly connectedClients = new Map<string, Socket>();
   constructor(
-    private readonly chatRoomRepository: ChatRoomRepository,
+    private readonly repository: ChatRoomRepository,
     private readonly chatService: ChatService,
     private readonly userService: UserService,
-    private readonly profileService: ProfileService
+    private readonly profileService: ProfileService,
+    private readonly transactionManager: TransactionManager
   ) {}
 
   registerClient(userId: string, client: Socket) {
@@ -45,21 +48,21 @@ export default class ChatRoomService {
   }
 
   async getChatRooms(options: ChatQueryOptions): Promise<{ totalCount: number; list: ChatRoomWithUserInfo[] }> {
-    const totalCount = await this.chatRoomRepository.totalCount(options.userId);
-    const list = await this.chatRoomRepository.findManyChatRooms(options);
+    const totalCount = await this.repository.totalCount(options.userId);
+    const list = await this.repository.findManyChatRooms(options);
     const toClientList = await Promise.all(list?.map((chatRoom) => this.fetchAndFormatUserInfo(chatRoom.toClient())));
 
     return { list: toClientList, totalCount };
   }
 
   async getActiveChatRoomIds(userId: string): Promise<string[]> {
-    const chatRoomIds = await this.chatRoomRepository.findActiveChatRoomIdsByUserId(userId);
+    const chatRoomIds = await this.repository.findActiveChatRoomIdsByUserId(userId);
     return chatRoomIds;
   }
 
   async getChatRoomDomain(options: FindChatRoomByIdOptions): Promise<IChatRoom> {
     const { userId } = options || {};
-    const chatRoom = await this.chatRoomRepository.findChatRoom(options);
+    const chatRoom = await this.repository.findChatRoom(options);
 
     if (!chatRoom) {
       throw new NotFoundError(ErrorMessage.CHAT_ROOM_NOTFOUND);
@@ -92,13 +95,15 @@ export default class ChatRoomService {
     return { totalCount, list };
   }
 
+  @Transactional()
   async postChatRoom(data: ChatRoomProperties): Promise<void> {
     const chatRoomData = ChatRoom.create(data);
-    const isChatRoom = await this.chatRoomRepository.findChatRoom({ planId: data.planId });
-    if (!isChatRoom) await this.chatRoomRepository.createChatRoom(chatRoomData);
+    const isChatRoom = await this.repository.findChatRoom({ planId: data.planId });
+    if (!isChatRoom) await this.repository.createChatRoom(chatRoomData);
     //NOTE. 로직상 채팅방이 이미 있으면 안되지만 개발상의 편의를 위해 추가
   }
 
+  @Transactional()
   async postChat(data: ChatCreateData): Promise<ChatToClientProperties> {
     const { senderId, chatRoomId } = data;
 
@@ -107,6 +112,8 @@ export default class ChatRoomService {
     if (chatRoom.getIsActive() === false) throw new BadRequestError(ErrorMessage.CHAT_ROOM_NOT_IS_ACTIVE);
 
     const chatData = await this.chatService.postChat(data);
+    chatRoom.update({ chatId: chatData.id });
+    await this.repository.update(chatRoom);
     await this.sendMessageToChatRoom(chatData);
 
     return chatData;
@@ -122,17 +129,17 @@ export default class ChatRoomService {
     return chatData;
   }
 
+  @Transactional()
   async deActive(planId: string): Promise<void> {
-    const chatRoom = await this.chatRoomRepository.findChatRoom({ planId });
-    //NOTE. 일단 임시로 트랜젝션을 제외
+    const chatRoom = await this.repository.findChatRoom({ planId });
     if (chatRoom) {
-      chatRoom.update();
-      await this.chatRoomRepository.update(chatRoom);
+      chatRoom.update({ deActive: true });
+      await this.repository.update(chatRoom);
     } //NOTE. 채팅방 목데이터가 없어서 나는 에러 처리
   }
 
   async deActiveMany(planIds: string[]): Promise<void> {
-    await this.chatRoomRepository.updateMany(planIds);
+    await this.repository.updateMany(planIds);
   }
 
   async sendMessageToChatRoom(chat: ChatReference) {

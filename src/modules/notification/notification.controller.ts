@@ -1,32 +1,13 @@
-import { Controller, Get, Param, Patch, Post, Sse } from '@nestjs/common';
+import { Controller, Get, Param, Patch, Sse } from '@nestjs/common';
 import NotificationService from './notification.service';
 import { UserId } from 'src/common/decorators/user.decorator';
 import { interval, merge, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { NotificationEventName, NotificationProperties } from './types/notification.types';
+import { NotificationProperties } from './types/notification.types';
 
 @Controller('notifications')
 export default class NotificationController {
   constructor(private readonly service: NotificationService) {}
-
-  @Post()
-  async createNotification(@UserId() userId: string) {
-    return await this.service.create({
-      userId,
-      event: NotificationEventName.CONFIRM_QUOTE,
-      payload: { nickName: '테스트' }
-    });
-  }
-
-  @Post('2')
-  async createNotification2(@UserId() userId: string) {
-    return await this.service.create({
-      userId,
-      event: NotificationEventName.SCHEDULE,
-      payload: { planTitle: '가현님이 좋아하는 플랜' }
-    });
-  }
-
   @Get()
   async getNotifications(@UserId() userId: string): Promise<NotificationProperties[]> {
     return await this.service.get(userId);

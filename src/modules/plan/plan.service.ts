@@ -146,6 +146,7 @@ export default class PlanService {
     return plan.toClientWithAddress();
   }
 
+  @Transactional()
   async postQuote(data: CreateOptionalQuoteData, userId: string, planId: string): Promise<QuoteToClientProperties> {
     const plan = await this.repository.findById(planId);
 
@@ -166,6 +167,7 @@ export default class PlanService {
     return quote;
   }
 
+  @Transactional()
   async requestPlanAssign(data: AssignData): Promise<PlanToClientProperties> {
     const { id, userId, assigneeId } = data;
     const plan = await this.repository.findById(data.id);
@@ -201,6 +203,7 @@ export default class PlanService {
     return updatedPlan.toClient();
   }
 
+  @Transactional()
   async rejectPlanAssign(data: AssignData): Promise<PlanToClientProperties> {
     const plan = await this.repository.findById(data.id);
 
@@ -212,11 +215,18 @@ export default class PlanService {
     const updatedPlan = await this.repository.update(plan);
 
     const makerNickName = plan.getAssigneeNickName(data.assigneeId);
+    const dreamerNickName = plan.getDreamerNickName();
+    const dreamerId = plan.getDreamerId();
     const planTitle = plan.getTitle();
+    // this.eventEmitter.emit('notification', {
+    //   userId: data.assigneeId,
+    //   event: NotificationEventName.REJECT_REQUEST,
+    //   payload: { nickName: makerNickName, planTitle }
+    // });
     this.eventEmitter.emit('notification', {
-      userId: data.assigneeId,
+      userId: dreamerId,
       event: NotificationEventName.REJECT_REQUEST,
-      payload: { nickName: makerNickName, planTitle }
+      payload: { nickName: dreamerNickName, planTitle }
     });
 
     return updatedPlan.toClient();
@@ -301,7 +311,9 @@ export default class PlanService {
     if (plan.getStatus() === StatusValues.CONFIRMED) {
       throw new BadRequestError(ErrorMessage.PLAN_DELETE_BAD_REQUEST);
     }
+    const quotes = plan.getQuoteIds();
 
+    await this.quoteService.deleteManyQuotes(id);
     const deletedPlan = await this.repository.delete(id);
 
     const dreamerNickName = deletedPlan.getDreamerNickName();
