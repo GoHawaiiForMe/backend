@@ -2,16 +2,15 @@ import ErrorMessage from 'src/common/constants/errorMessage.enum';
 import BadRequestError from 'src/common/errors/badRequestError';
 import { JwtService } from '@nestjs/jwt';
 import { Injectable } from '@nestjs/common';
-import User from 'src/modules/user/domain/user.domain';
-import { DreamerProfile, MakerProfile } from 'src/modules/profile/domain/profile.domain';
 import UserStatsService from '../userStats/userStats.service';
-import { FilteredUserProperties, OAuthProperties, UserProperties } from 'src/modules/user/types/user.types';
+import { FilteredAuthProperties, OAuthProperties, AuthProperties } from 'src/modules/auth/types/auth.types';
 import AuthRepository from './auth.repository';
-import { Role, RoleValues } from 'src/common/constants/role.type';
+import { Role } from 'src/common/constants/role.type';
 import { DreamerProfileProperties, MakerProfileProperties } from 'src/modules/profile/types/profile.types';
 import { OAuthProvider } from 'src/common/constants/oauth.type';
 import UnauthorizedError from 'src/common/errors/unauthorizedError';
 import ProfileService from '../profile/profile.service';
+import Auth from './domain/auth.domain';
 
 @Injectable()
 export default class AuthService {
@@ -22,7 +21,7 @@ export default class AuthService {
     private readonly userStats: UserStatsService
   ) {}
 
-  async createUser(user: UserProperties, profile: DreamerProfileProperties | MakerProfileProperties): Promise<null> {
+  async createUser(user: AuthProperties, profile: DreamerProfileProperties | MakerProfileProperties): Promise<null> {
     // 유저 등록: 소셜 로그인의 경우 이메일이 없어 중복 확인 패스
     const { provider, providerId } = user;
 
@@ -43,7 +42,7 @@ export default class AuthService {
       throw new BadRequestError(ErrorMessage.USER_NICKNAME_EXIST);
     }
 
-    const userData = await User.create(user);
+    const userData = await Auth.create(user);
     const savedUser = await this.repository.create(userData.signupData());
 
     await this.profile.createProfile(savedUser.getId(), savedUser.getRole(), profile);
@@ -54,7 +53,7 @@ export default class AuthService {
     return;
   }
 
-  async login(email: string, password: string): Promise<FilteredUserProperties> {
+  async login(email: string, password: string): Promise<FilteredAuthProperties> {
     const user = await this.repository.findByEmail(email);
     if (!user) {
       throw new BadRequestError(ErrorMessage.USER_UNAUTHORIZED_ID);
