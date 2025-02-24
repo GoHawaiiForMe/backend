@@ -13,6 +13,7 @@ export interface ChatRoomProperties {
   chatIds?: string[] | { content: string; type: ChatType };
   lastChat?: string;
   isActive?: boolean;
+  addChatId?: string;
 }
 
 export interface ChatRoomWithUserInfo {

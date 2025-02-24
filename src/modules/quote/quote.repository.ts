@@ -5,10 +5,15 @@ import { QuoteIncludeConditions, QuoteQueryOptions, QuoteWhereConditions } from 
 import IQuote from './domain/quote.interface';
 import QuoteMapper from './domain/quote.mapper';
 import { StatusValues } from 'src/common/constants/status.type';
+import TransactionManager from 'src/providers/database/transaction/transaction.manager';
 
 @Injectable()
 export default class QuoteRepository {
   constructor(private readonly db: DBClient) {}
+
+  private getPrismaClient() {
+    return TransactionManager.getPrismaClient() || this.db;
+  }
 
   async findMany(options: QuoteQueryOptions): Promise<IQuote[]> {
     const { page, pageSize, isSent } = options;
@@ -18,7 +23,7 @@ export default class QuoteRepository {
       isSent === true
         ? [{ plan: { status: SortOrder.ASC } }, { createdAt: SortOrder.DESC }]
         : { createdAt: SortOrder.DESC };
-    const quotes = await this.db.quote.findMany({
+    const quotes = await this.getPrismaClient().quote.findMany({
       where: whereConditions,
       take: pageSize,
       skip: (page - 1) * pageSize,
@@ -32,7 +37,7 @@ export default class QuoteRepository {
 
   async totalCount(options: QuoteQueryOptions): Promise<number> {
     const whereConditions = this.buildWhereConditions(options);
-    const totalCount = await this.db.quote.count({
+    const totalCount = await this.getPrismaClient().quote.count({
       where: whereConditions
     });
     return totalCount;
@@ -41,7 +46,7 @@ export default class QuoteRepository {
   async findById(id: string): Promise<IQuote> {
     const includeConditions = this.buildIncludeConditions();
 
-    const quote = await this.db.quote.findUnique({
+    const quote = await this.getPrismaClient().quote.findUnique({
       where: { id, isDeletedAt: null },
       include: includeConditions
     });
@@ -52,7 +57,7 @@ export default class QuoteRepository {
 
   async exists(options: { planId: string; userId: string }): Promise<Boolean> {
     const whereConditions = this.buildWhereConditions(options);
-    const quote = await this.db.quote.findFirst({
+    const quote = await this.getPrismaClient().quote.findFirst({
       where: whereConditions
     });
     return quote !== null;
@@ -60,7 +65,7 @@ export default class QuoteRepository {
 
   async create(data: IQuote): Promise<IQuote> {
     const { planId, makerId, isAssigned, price, content } = data.toDB();
-    const quote = await this.db.quote.create({
+    const quote = await this.getPrismaClient().quote.create({
       data: {
         plan: { connect: { id: planId } },
         maker: { connect: { id: makerId } },
@@ -81,7 +86,7 @@ export default class QuoteRepository {
   async update(data: IQuote): Promise<IQuote> {
     const { id, isConfirmed } = data.toDBForUpdate();
 
-    const quote = await this.db.quote.update({
+    const quote = await this.getPrismaClient().quote.update({
       where: { id },
       data: {
         isConfirmed,
@@ -105,7 +110,7 @@ export default class QuoteRepository {
   }
 
   async delete(id: string): Promise<IQuote> {
-    const quote = await this.db.quote.update({
+    const quote = await this.getPrismaClient().quote.update({
       where: { id },
       data: { isDeletedAt: new Date() }
     });
@@ -113,6 +118,14 @@ export default class QuoteRepository {
     const domainQuote = new QuoteMapper(quote);
 
     return domainQuote.toDomain();
+  }
+
+  async deleteMany(planId: string): Promise<{ count: number }> {
+    const deleteCount = await this.getPrismaClient().quote.updateMany({
+      where: { planId, isDeletedAt: null },
+      data: { isDeletedAt: new Date() }
+    });
+    return deleteCount;
   }
 
   private buildWhereConditions(options: Partial<QuoteQueryOptions>): QuoteWhereConditions {

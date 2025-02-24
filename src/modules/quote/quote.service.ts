@@ -16,22 +16,25 @@ import ChatRoomService from '../chatRoom/chatRoom.service';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import { PointEventEnum } from 'src/common/constants/pointEvent.type';
+import Transactional from 'src/common/decorators/transaction.decorator';
+import TransactionManager from 'src/providers/database/transaction/transaction.manager';
 
 @Injectable()
 export default class QuoteService {
   constructor(
     @InjectQueue('points') private readonly pointQueue: Queue,
-    private readonly quoteRepository: QuoteRepository,
+    private readonly repository: QuoteRepository,
     private readonly userService: UserService,
-    private readonly chatRoomService: ChatRoomService
+    private readonly chatRoomService: ChatRoomService,
+    private readonly transactionManager: TransactionManager
   ) {}
 
   async getQuotesByPlanId(
     options: QuoteQueryOptions
   ): Promise<{ totalCount: number; list: QuoteToClientProperties[] }> {
     const [totalCount, list] = await Promise.all([
-      this.quoteRepository.totalCount(options),
-      this.quoteRepository.findMany(options)
+      this.repository.totalCount(options),
+      this.repository.findMany(options)
     ]);
 
     const toClientList = await Promise.all(list.map(async (quote) => await this.mapToMakerProfile(quote, false)));
@@ -41,8 +44,8 @@ export default class QuoteService {
 
   async getQuotesByMaker(options: QuoteQueryOptions): Promise<{ totalCount: number; list: QuoteToClientProperties[] }> {
     const [list, totalCount] = await Promise.all([
-      this.quoteRepository.findMany(options),
-      this.quoteRepository.totalCount(options)
+      this.repository.findMany(options),
+      this.repository.totalCount(options)
     ]);
 
     const toClientList = list.map((quote) => quote.toMaker());
@@ -51,7 +54,7 @@ export default class QuoteService {
   }
 
   async getQuoteById(id: string, userId: string, role: Role): Promise<QuoteToClientProperties> {
-    const quote = await this.quoteRepository.findById(id);
+    const quote = await this.repository.findById(id);
 
     if (!quote) throw new NotFoundError(ErrorMessage.QUOTE_NOT_FOUND);
 
@@ -64,20 +67,22 @@ export default class QuoteService {
     return this.mapToMakerProfile(quote, true);
   }
 
+  @Transactional()
   async createQuote(data: QuoteProperties): Promise<QuoteToClientProperties> {
     const planId = data.planId;
     const makerId = data.makerId;
-    const isQuote = await this.quoteRepository.exists({ planId, userId: makerId });
+    const isQuote = await this.repository.exists({ planId, userId: makerId });
 
     if (isQuote) throw new ConflictError(ErrorMessage.QUOTE_CONFLICT);
 
     const quoteData = Quote.create(data);
-    const quote = await this.quoteRepository.create(quoteData);
+    const quote = await this.repository.create(quoteData);
     return quote.toClient();
   }
 
+  @Transactional()
   async update(id: string, userId: string, data: { isConfirmed: boolean }): Promise<QuoteToClientProperties> {
-    const quote = await this.quoteRepository.findById(id);
+    const quote = await this.repository.findById(id);
 
     if (!quote) throw new NotFoundError(ErrorMessage.QUOTE_NOT_FOUND);
     if (userId !== quote.getDreamerId()) {
@@ -94,7 +99,7 @@ export default class QuoteService {
       throw new BadRequestError(ErrorMessage.QUOTE_BAD_REQUEST_UPDATE_NOT_PENDING);
     }
 
-    const updatedQuote = await this.quoteRepository.update(quote.update(data));
+    const updatedQuote = await this.repository.update(quote.update(data));
 
     await this.chatRoomService.postChatRoom(updatedQuote.toChatRoom());
 
@@ -107,8 +112,9 @@ export default class QuoteService {
     return updatedQuote.toClient();
   }
 
+  @Transactional()
   async deleteQuote(id: string, userId: string): Promise<void> {
-    const quote = await this.quoteRepository.findById(id);
+    const quote = await this.repository.findById(id);
 
     if (!quote) throw new NotFoundError(ErrorMessage.QUOTE_NOT_FOUND);
     if (userId !== quote.getMakerId()) throw new ForbiddenError(ErrorMessage.QUOTE_FORBIDDEN_MAKER);
@@ -117,7 +123,11 @@ export default class QuoteService {
       throw new BadRequestError(ErrorMessage.QUOTE_DELETE_BAD_REQUEST_STATUS);
     }
 
-    await this.quoteRepository.delete(id);
+    await this.repository.delete(id);
+  }
+
+  async deleteManyQuotes(planId: string): Promise<void> {
+    await this.repository.deleteMany(planId);
   }
 
   private async mapToMakerProfile(quote: IQuote, isPlan: boolean): Promise<QuoteToClientProperties> {

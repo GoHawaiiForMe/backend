@@ -26,6 +26,7 @@ export default class TransactionManager {
           asyncLocalStorage.getStore().set('prisma', prisma);
           const callbackResult = await callback();
           await session.commitTransaction();
+
           return callbackResult;
         });
 
