@@ -3,7 +3,8 @@
 ![logo](https://i.imgur.com/bvVO9xc.png)
 
 > 2025.01.07 - 2025.02.26 </br>
-> 코드잇 스프린트 풀스택 2기 고급 프로젝트 2팀 (Backend) </br> > [Frontend Github 바로가기 🔗](https://github.com/GoHawaiiForMe/frontend)
+> 코드잇 스프린트 풀스택 2기 고급 프로젝트 2팀 (Backend)
+> </br> > [Frontend Github 바로가기 🔗](https://github.com/GoHawaiiForMe/frontend)
 
 </br>
 
@@ -14,20 +15,6 @@
 </br>
 
 ## 🛠️ 기술스택
-
-1. **NestJS**: TypeScript 기반 서버 프레임워크 (Express 위에서 동작)
-2. **Prisma**: 관계형 DB를 위한 ORM
-3. **Mongoose**: MongoDB와의 ODM
-4. **BullMQ**: Redis 기반의 큐 시스템
-5. **Passport.js**: OAuth 인증 (Google, Kakao, Naver 등)
-6. **AWS S3**: 파일 업로드 및 저장
-7. **AWS Lambda**: 서버리스 함수 실행
-8. **Winston**: 로그 수집 및 관리
-9. **Grafana & Kibana**: 성능 모니터링 및 시각화
-10. **WebSocket (Socket.io)**: 실시간 채팅 처리
-11. **Jest & Supertest**: 테스트 프레임워크 및 API 테스트 라이브러리
-12. **Cron jobs**: 주기적인 작업 처리
-13. **Nginx**
 
 <img src="https://img.shields.io/badge/NestJS-000000?style=for-the-badge&logo=nestjs&logoColor=E0234E"> ![Typescript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white) <img src="https://img.shields.io/badge/Passport-000000?style=for-the-badge&logo=passport&logoColor=34E27A"> ![JWT](https://img.shields.io/badge/json%20web%20tokens-323330?style=for-the-badge&logo=json-web-tokens&logoColor=pink) ![Jest](https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=Jest&logoColor=white) ![Socketio](https://img.shields.io/badge/Socket.io-010101?style=for-the-badge&logo=socketdotio&logoColor=white)
 
@@ -52,7 +39,7 @@
 
 ## 📋 팀원별 구현 기능 상세
 
-### 김영은
+### [김영은]
 
 - Auth API 구현
   - 인증/인가 guard 및 decorator
@@ -76,9 +63,7 @@
 - GitHub Actions CI/CD 구현
 - Swagger 설정 세팅
 
-</br>
-
-### 김태연
+### [김태연]
 
 - 기초세팅
 - 테스트 파일 구현
