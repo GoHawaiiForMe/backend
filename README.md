@@ -84,7 +84,7 @@
 
 ## ⚓️ 백엔드 전략
 
-- **도메인 모델 설계**: 도메인 주도 설계(DDD)를 통해 주요 개념을 도메인 모델로 추상화하여 복잡한 비즈니스 로직을 관리.
+- **도메인 모델**: 주요 개념을 도메인 모델로 추상화하여 복잡한 비즈니스 로직을 관리.
 
 - **트랜잭션 처리**:
   - Prisma와 MongoDB 모두에 적용할 수 있는 데코레이터 구현 및 적용.
@@ -104,7 +104,8 @@
 ## 🍰 프로젝트 회고
 
 - 백엔드 결과물: https://www.goforme.duckdns.org
-- 발표 자료 및 시연 영상 :
+- 발표 자료: https://spotless-file-76e.notion.site/PPT-15f9b6a2707e814d83c7f076795d184f?pvs=4
+- 시연 영상: https://spotless-file-76e.notion.site/19f9b6a2707e8076beafcb085587d0d7?pvs=4
 
 </br>
 
